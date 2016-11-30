@@ -1,0 +1,3 @@
+export GOPATH=$HOME/code/valgo
+export PATH=$HOME/code/valgo/bin:$PATH
+#export GOBIN=$GOPATH/bin
