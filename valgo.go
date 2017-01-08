@@ -1,4 +1,4 @@
-package main
+package valgo
 
 import (
   "fmt"
@@ -32,6 +32,25 @@ func (this *Validator) Empty() *Validator {
   return this
 }
 
+func (this *Validator) NotEmpty() *Validator {
+  value := this.ensureString()
+  if (len(value) == 0) {
+    this.valid = false
+    this.errors = append(this.errors, "Is empty")
+  }
+  return this
+}
+
+func Is(value interface{}) *Validator {
+  validator := &Validator{
+    value: value,
+    errors: make([]string, 0, 0),
+    valid: true,
+  }
+  return validator
+}
+
+
 func (this *Validator) ensureString() string {
   switch v := this.value.(type) {
   case uint8, uint16, uint32, uint64:
@@ -46,13 +65,4 @@ func (this *Validator) ensureString() string {
     fmt.Printf("unexpected type %T", v)
     return ""
   }
-}
-
-func Is(value interface{}) *Validator {
-  validator := &Validator{
-    value: value,
-    errors: make([]string, 0, 0),
-    valid: true,
-  }
-  return validator
 }
