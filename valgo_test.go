@@ -1,18 +1,21 @@
 package valgo
 
 import (
-  "testing"
-  "github.com/stretchr/testify/assert"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEmpty(t *testing.T) {
-  var name = "Elon Musk"
-  assert.False(t, Is(name).Empty().Valid(), "Expected name was not empty")
+	assert.False(t, Is("Elon Musk").Empty().Valid())
 
-  name = ""
-  assert.True(t, Is(name).Empty().Valid(), "Expected name was empty")
+	assert.True(t, Is("").Empty().Valid())
 }
 
 func TestBlank(t *testing.T) {
+	assert.False(t, Is("Elon Musk").Blank().Valid())
 
+	assert.True(t, Is(" ").Blank().Valid())
+
+	assert.True(t, Is("").Blank().Valid())
 }

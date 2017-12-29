@@ -1,97 +1,91 @@
 package valgo
 
 import (
+	"errors"
 	"fmt"
-	"strconv"
-	"strings"
+	"io/ioutil"
+	"os"
+	"path"
+	"path/filepath"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
-type Validator struct {
-	value  interface{}
-	errors *Errors
-	valid  bool
-}
+var locales map[string]locale
 
-func (this *Validator) Valid() bool {
-	return this.valid
-}
+var defaultLocale locale
 
-func (this *Validator) Errors() *Errors {
-	if this.errors.Messages != nil && len(this.errors.Messages) > 0 {
-		return this.errors
-	} else {
-		return nil
-	}
-}
-
-func (this *Validator) ValidAndErrors() (bool, *Errors) {
-	return this.valid, this.errors
-}
-
-func (this *Validator) Empty() *Validator {
-	value := this.ensureString()
-	if len(value) > 0 {
-		this.valid = false
-		this.errors.Add("Is not empty")
-	}
-	return this
-}
-
-func (this *Validator) NotEmpty() *Validator {
-	value := this.ensureString()
-	if len(value) == 0 {
-		this.valid = false
-		this.errors.Add("Is empty")
-	}
-	return this
-}
-
-func (this *Validator) Blank() *Validator {
-	value := strings.Trim(this.ensureString(), " ")
-
-	if len(value) > 0 {
-		this.valid = false
-		this.errors.Add("Is not blank")
-	}
-	return this
-}
-
-func (this *Validator) NotBlank() *Validator {
-	value := strings.Trim(this.ensureString(), " ")
-
-	if len(value) == 0 {
-		this.valid = false
-		this.errors.Add("Is blank")
-	}
-	return this
+func init() {
+	locales = map[string]locale{}
+	SetDefaultLocale("en")
 }
 
 func Is(value interface{}) *Validator {
+	return newValidator(defaultLocale, value)
+}
+
+func newValidator(_locale locale, value interface{}) *Validator {
 	validator := &Validator{
-		value:  value,
-		errors: &Errors{Field: "field"},
-		valid:  true,
+		currentIndex: 0,
+		currentValue: value,
+		currentValid: true,
+		valid:        true,
+		_locale:      defaultLocale,
 	}
+	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
+	validator.currentTitle = validator.currentName
 	return validator
 }
 
-func (this *Validator) Called(name string) *Validator {
-	this.errors.Field = name
-	return this
+func SetDefaultLocale(code string) {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	dir := filepath.Dir(ex)
+
+	if _locale, exist := locales[code]; exist {
+		defaultLocale = _locale
+
+		// Parse config yml file
+		filePath, _ := filepath.Abs(path.Join(dir, "messages", fmt.Sprintf("%s.yml", code)))
+
+		yamlFile, _ := ioutil.ReadFile(filePath)
+
+		defaultLocale := locale{}
+		err = yaml.Unmarshal(yamlFile, &defaultLocale)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		filePath, _ := filepath.Abs(path.Join(dir, "messages", fmt.Sprintf("%s.yml", code)))
+		AddOrReplaceLocale(filePath, code)
+
+		defaultLocale = locales[code]
+	}
+
 }
 
-func (this *Validator) ensureString() string {
-	switch v := this.value.(type) {
-	case uint8, uint16, uint32, uint64:
-		return strconv.FormatUint(this.value.(uint64), 10)
-	case int8, int16, int32, int64:
-		return strconv.FormatInt(this.value.(int64), 10)
-	case float32, float64:
-		return strconv.FormatFloat(this.value.(float64), 'f', -1, 64)
-	case string:
-		return this.value.(string)
-	default:
-		fmt.Printf("unexpected type %T", v)
-		return ""
+func AddOrReplaceLocale(code string, filePath string) error {
+	yamlFile, _ := ioutil.ReadFile(filePath)
+
+	_locale := locale{}
+	err := yaml.Unmarshal(yamlFile, &_locale)
+	if err != nil {
+		return err
+	}
+
+	locales[code] = _locale
+
+	return nil
+}
+
+func Localized(code string) (*localized, error) {
+	if _locale, exist := locales[code]; exist {
+		return &localized{
+			_locale: _locale,
+		}, nil
+	} else {
+		return nil, errors.New(fmt.Sprintf("Doesn't exist a registered locale with code '%s'", code))
 	}
 }

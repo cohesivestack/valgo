@@ -1,0 +1,5 @@
+messages:
+  blank: {{title}} should be blank
+  not_blank: {{title}} should not be blank
+  empty: {{title}} should be empty
+  not_empty: {{title}} should not be empty
