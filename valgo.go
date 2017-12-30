@@ -4,9 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
-	"path"
-	"path/filepath"
+	"log"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -16,8 +14,17 @@ var locales map[string]locale
 var defaultLocale locale
 
 func init() {
-	locales = map[string]locale{}
-	SetDefaultLocale("en")
+	err := SetDefaultLocale("en")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func getLocales() map[string]locale {
+	if locales == nil {
+		locales = map[string]locale{}
+	}
+	return locales
 }
 
 func Is(value interface{}) *Validator {
@@ -37,51 +44,45 @@ func newValidator(_locale locale, value interface{}) *Validator {
 	return validator
 }
 
-func SetDefaultLocale(code string) {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	dir := filepath.Dir(ex)
+func SetDefaultLocale(code string) error {
 
-	if _locale, exist := locales[code]; exist {
+	if _locale, exist := getLocales()[code]; exist {
 		defaultLocale = _locale
-
-		// Parse config yml file
-		filePath, _ := filepath.Abs(path.Join(dir, "messages", fmt.Sprintf("%s.yml", code)))
-
-		yamlFile, _ := ioutil.ReadFile(filePath)
-
-		defaultLocale := locale{}
-		err = yaml.Unmarshal(yamlFile, &defaultLocale)
-		if err != nil {
-			panic(err)
-		}
+		return nil
 	} else {
-		filePath, _ := filepath.Abs(path.Join(dir, "messages", fmt.Sprintf("%s.yml", code)))
-		AddOrReplaceLocale(filePath, code)
-
-		defaultLocale = locales[code]
+		return errors.New(fmt.Sprintf("There is not a locale registered with code %s", code))
 	}
 
 }
 
-func AddOrReplaceLocale(code string, filePath string) error {
-	yamlFile, _ := ioutil.ReadFile(filePath)
+func AddOrReplaceLocaleFromYaml(code string, filePath string) error {
+	yamlFile, err := ioutil.ReadFile(filePath)
 
-	_locale := locale{}
-	err := yaml.Unmarshal(yamlFile, &_locale)
 	if err != nil {
 		return err
 	}
 
-	locales[code] = _locale
+	_locale := locale{}
+	err = yaml.Unmarshal(yamlFile, &_locale)
+	if err != nil {
+		return err
+	}
+
+	getLocales()[code] = _locale
 
 	return nil
 }
 
+func AddOrReplaceLocale(code string, messages map[string]string) {
+	_locale := locale{
+		Messages: messages,
+	}
+
+	getLocales()[code] = _locale
+}
+
 func Localized(code string) (*localized, error) {
-	if _locale, exist := locales[code]; exist {
+	if _locale, exist := getLocales()[code]; exist {
 		return &localized{
 			_locale: _locale,
 		}, nil

@@ -1,5 +1,0 @@
-messages:
-  blank: {{title}} debería estar en blanco
-  not_blank: {{title}} no debería estar en blanco
-  empty: {{title}} debería estar vacío
-  not_empty: {{title}} no debería estar vacío

@@ -69,7 +69,7 @@ func (validator *Validator) ensureString() string {
 }
 
 func (validator *Validator) invalidate(key string, values map[string]interface{}) {
-	templateString := validator._locale.messages[key]
+	templateString := validator._locale.Messages[key]
 	template := fasttemplate.New(templateString, "{{", "}}")
 	message := template.ExecuteString(values)
 

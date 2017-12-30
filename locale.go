@@ -1,5 +1,5 @@
 package valgo
 
 type locale struct {
-	messages map[string]string
+	Messages map[string]string `yaml:"messages"`
 }
