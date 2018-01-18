@@ -17,7 +17,7 @@ type Validator struct {
 
 	_locale locale
 	valid   bool
-	errors  []Error
+	errors  []*Error
 }
 
 func (validator *Validator) Is(value interface{}) *Validator {
@@ -46,7 +46,7 @@ func (validator *Validator) Valid() bool {
 	return validator.valid
 }
 
-func (validator *Validator) Errors() []Error {
+func (validator *Validator) Errors() []*Error {
 	return validator.errors
 }
 
@@ -85,9 +85,9 @@ func (validator *Validator) invalidate(key string, values map[string]interface{}
 		validator.valid = false
 
 		if validator.errors == nil {
-			validator.errors = []Error{*validator.currentError}
+			validator.errors = []*Error{validator.currentError}
 		} else {
-			validator.errors = append(validator.errors, *validator.currentError)
+			validator.errors = append(validator.errors, validator.currentError)
 		}
 	} else {
 		validator.currentError.Messages = append(
