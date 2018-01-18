@@ -27,23 +27,6 @@ func getLocales() map[string]locale {
 	return locales
 }
 
-func Is(value interface{}) *Validator {
-	return newValidator(defaultLocale, value)
-}
-
-func newValidator(_locale locale, value interface{}) *Validator {
-	validator := &Validator{
-		currentIndex: 0,
-		currentValue: value,
-		currentValid: true,
-		valid:        true,
-		_locale:      defaultLocale,
-	}
-	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
-	validator.currentTitle = validator.currentName
-	return validator
-}
-
 func SetDefaultLocale(code string) error {
 
 	if _locale, exist := getLocales()[code]; exist {
@@ -89,4 +72,21 @@ func Localized(code string) (*localized, error) {
 	} else {
 		return nil, errors.New(fmt.Sprintf("Doesn't exist a registered locale with code '%s'", code))
 	}
+}
+
+func newValidator(_locale locale, value interface{}) *Validator {
+	validator := &Validator{
+		currentIndex: 0,
+		currentValue: value,
+		currentValid: true,
+		valid:        true,
+		_locale:      defaultLocale,
+	}
+	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
+	validator.currentTitle = validator.currentName
+	return validator
+}
+
+func Is(value interface{}) *Validator {
+	return newValidator(defaultLocale, value)
 }
