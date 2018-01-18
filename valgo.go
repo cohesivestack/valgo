@@ -80,7 +80,7 @@ func newValidator(_locale locale, value interface{}) *Validator {
 		currentValue: value,
 		currentValid: true,
 		valid:        true,
-		_locale:      defaultLocale,
+		_locale:      _locale,
 	}
 	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
 	validator.currentTitle = validator.currentName
