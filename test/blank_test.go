@@ -13,7 +13,7 @@ func TestBlank(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
-		assert.Contains(t, v.Errors()[0].Messages, "value0 should be blank")
+		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be blank")
 	}
 
 	for _, value := range []string{"", " "} {
@@ -35,7 +35,7 @@ func TestNotBlank(t *testing.T) {
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {
 			assert.Len(t, v.Errors(), 1, fmt.Sprintf("not assert using %s", value))
-			assert.Contains(t, v.Errors()[0].Messages, "value0 should not be blank", fmt.Sprintf("not assert using %s", value))
+			assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be blank", fmt.Sprintf("not assert using %s", value))
 		}
 	}
 }

@@ -19,7 +19,7 @@ func TestEmpty(t *testing.T) {
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {
 			assert.Len(t, v.Errors(), 1, fmt.Sprintf("not assert using %s", value))
-			assert.Contains(t, v.Errors()[0].Messages, "value0 should be empty", fmt.Sprintf("not assert using %s", value))
+			assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be empty", fmt.Sprintf("not assert using %s", value))
 		}
 	}
 }
@@ -29,7 +29,7 @@ func TestNotEmpty(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
-		assert.Contains(t, v.Errors()[0].Messages, "value0 should not be empty")
+		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be empty")
 	}
 
 	for _, value := range []string{"Vitalik Buterin", " "} {
