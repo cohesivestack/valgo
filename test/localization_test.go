@@ -19,8 +19,9 @@ func TestSeparatedLocalization(t *testing.T) {
 	localized, err := valgo.Localized("es")
 	assert.NoError(t, err)
 
-	v := localized.Is(" ").NotBlank()
+	v := localized.Is(" ").NotBlank().Empty()
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" no puede estar en blanco")
+	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" debe estar vacío")
 
 	v = valgo.Is(" ").NotBlank()
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be blank")
