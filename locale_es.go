@@ -1,6 +1,10 @@
 package valgo
 
 func init() {
+	setDefaultSpanishMessages()
+}
+
+func setDefaultSpanishMessages() {
 	getLocales()["es"] = locale{
 		Messages: map[string]string{
 			"blank":     "\"{{Title}}\" debe estar en blanco",

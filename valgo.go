@@ -8,7 +8,7 @@ import (
 
 var locales map[string]locale
 
-var defaultLocale locale
+var defaultLocaleCode string
 
 func init() {
 	err := SetDefaultLocale("en")
@@ -25,9 +25,8 @@ func getLocales() map[string]locale {
 }
 
 func SetDefaultLocale(code string) error {
-
-	if _locale, exist := getLocales()[code]; exist {
-		defaultLocale = _locale
+	if _, exist := getLocales()[code]; exist {
+		defaultLocaleCode = code
 		return nil
 	} else {
 		return errors.New(fmt.Sprintf("There is not a locale registered with code %s", code))
@@ -41,6 +40,24 @@ func AddOrReplaceLocale(code string, messages map[string]string) {
 	}
 
 	getLocales()[code] = _locale
+}
+
+func GetLocaleCopy(code string) (map[string]string, error) {
+	if locale, ok := getLocales()[code]; ok {
+		messages := map[string]string{}
+		for k, v := range locale.Messages {
+			messages[k] = v
+		}
+		return messages, nil
+	} else {
+		return nil, errors.New(fmt.Sprintf("There is not a locale with the code '%s'", code))
+	}
+}
+
+func ResetMessages() {
+	setDefaultEnglishMessages()
+	setDefaultSpanishMessages()
+	SetDefaultLocale("en")
 }
 
 func Localized(code string) (*localized, error) {
@@ -67,5 +84,5 @@ func newValidator(_locale locale, value interface{}) *Validator {
 }
 
 func Is(value interface{}) *Validator {
-	return newValidator(defaultLocale, value)
+	return newValidator(getLocales()[defaultLocaleCode], value)
 }
