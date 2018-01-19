@@ -3,10 +3,7 @@ package valgo
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
-
-	yaml "gopkg.in/yaml.v2"
 )
 
 var locales map[string]locale
@@ -36,24 +33,6 @@ func SetDefaultLocale(code string) error {
 		return errors.New(fmt.Sprintf("There is not a locale registered with code %s", code))
 	}
 
-}
-
-func AddOrReplaceLocaleFromYaml(code string, filePath string) error {
-	yamlFile, err := ioutil.ReadFile(filePath)
-
-	if err != nil {
-		return err
-	}
-
-	_locale := locale{}
-	err = yaml.Unmarshal(yamlFile, &_locale)
-	if err != nil {
-		return err
-	}
-
-	getLocales()[code] = _locale
-
-	return nil
 }
 
 func AddOrReplaceLocale(code string, messages map[string]string) {
