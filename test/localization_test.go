@@ -11,6 +11,10 @@ func TestDefaultLocalization(t *testing.T) {
 	valgo.SetDefaultLocale("es")
 	v := valgo.Is(" ").NotBlank()
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" no puede estar en blanco")
+
+	// Default localization must be persistent
+	v = valgo.Is(" ").Empty()
+	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" debe estar vacío")
 }
 
 func TestSeparatedLocalization(t *testing.T) {
@@ -23,6 +27,7 @@ func TestSeparatedLocalization(t *testing.T) {
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" no puede estar en blanco")
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" debe estar vacío")
 
+	// Default localization must not be changed
 	v = valgo.Is(" ").NotBlank()
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be blank")
 }
