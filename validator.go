@@ -68,9 +68,14 @@ func (validator *Validator) ensureString() string {
 	}
 }
 
-func (validator *Validator) invalidate(key string, values map[string]interface{}) {
-	templateString := validator._locale.Messages[key]
-	template := fasttemplate.New(templateString, "{{", "}}")
+func (validator *Validator) invalidate(key string, values map[string]interface{}, templateString []string) {
+	var _templateString string
+	if len(templateString) > 0 {
+		_templateString = templateString[0]
+	} else {
+		_templateString = validator._locale.Messages[key]
+	}
+	template := fasttemplate.New(_templateString, "{{", "}}")
 	message := template.ExecuteString(values)
 
 	if validator.currentError == nil {
