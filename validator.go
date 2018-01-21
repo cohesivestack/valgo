@@ -3,6 +3,7 @@ package valgo
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/valyala/fasttemplate"
 )
@@ -83,18 +84,22 @@ func (validator *Validator) ensureString() string {
 	}
 }
 
-func (validator *Validator) invalidate(key string, values map[string]interface{}, templateString []string) {
+func (validator *Validator) invalidate(
+	key string, values map[string]interface{}, templateString []string) {
+
 	validator.valid = false
 	var _templateString string
 	if len(templateString) > 0 {
 		_templateString = templateString[0]
 	} else if ts, ok := validator._locale.Messages[key]; ok {
 		_templateString = ts
-	} else if ts, ok := validator._locale.Messages["invalid"]; ok {
-		_templateString = ts
+	} else if len(strings.TrimSpace(key)) == 0 {
+		_templateString = "ERROR: MISSING MESSAGE KEY OR TEMPLATE STRING!"
 	} else {
-		_templateString = "\"{{Title}}\" is invalid"
+		_templateString = fmt.Sprintf(
+			"ERROR: THERE IS NOT A MESSAGE WITH THE KEY \"%s\"!", key)
 	}
+
 	template := fasttemplate.New(_templateString, "{{", "}}")
 	message := template.ExecuteString(values)
 

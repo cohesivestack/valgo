@@ -79,3 +79,31 @@ func TestGetMessagesIsACopy(t *testing.T) {
 	assert.Contains(t, v.Errors()[0].Messages, "This message is changed for test purposes")
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be empty")
 }
+
+func TestWrongMessageKey(t *testing.T) {
+	valgo.ResetMessages()
+
+	err := valgo.SetDefaultLocale("en")
+	assert.NoError(t, err)
+
+	valgo.AddOrReplaceMessages("en", map[string]string{})
+
+	v := valgo.Is(" ").NotBlank()
+	assert.Contains(t, v.Errors()[0].Messages,
+		"ERROR: THERE IS NOT A MESSAGE WITH THE KEY \"not_blank\"!")
+
+}
+
+func TestMissingMessageKey(t *testing.T) {
+	valgo.ResetMessages()
+
+	v := valgo.Is("USD").Passing(func(_v *valgo.CustomValidator, _t ...string) {
+		if _v.ValueAsString() != "BTC" {
+			// Here the missing key
+			_v.Invalidate(" ", _t, nil)
+		}
+	})
+
+	assert.Contains(t, v.Errors()[0].Messages,
+		"ERROR: MISSING MESSAGE KEY OR TEMPLATE STRING!")
+}
