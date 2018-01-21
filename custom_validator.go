@@ -5,9 +5,17 @@ type CustomValidator struct {
 }
 
 func (customValidator *CustomValidator) Invalidate(
-	key string, values map[string]interface{}, templateString []string) {
+	key string, templateString []string, variables map[string]interface{}) {
 
-	customValidator.validator.invalidate(key, values, templateString)
+	if variables == nil {
+		variables = map[string]interface{}{}
+	}
+
+	if _, ok := variables["Title"]; !ok {
+		variables["Title"] = customValidator.validator.currentTitle
+	}
+
+	customValidator.validator.invalidate(key, variables, templateString)
 }
 
 func (customValidator *CustomValidator) Value() interface{} {

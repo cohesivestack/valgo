@@ -46,6 +46,21 @@ func (validator *Validator) Valid() bool {
 	return validator.valid
 }
 
+func (validator *Validator) Passing(
+	function func(cv *CustomValidator, t ...string), template ...string) *Validator {
+
+	customValidator := CustomValidator{
+		validator: validator,
+	}
+
+	if len(template) > 0 {
+		function(&customValidator, template[0])
+	} else {
+		function(&customValidator)
+	}
+	return validator
+}
+
 func (validator *Validator) Errors() []*Error {
 	return validator.errors
 }
@@ -73,8 +88,12 @@ func (validator *Validator) invalidate(key string, values map[string]interface{}
 	var _templateString string
 	if len(templateString) > 0 {
 		_templateString = templateString[0]
+	} else if ts, ok := validator._locale.Messages[key]; ok {
+		_templateString = ts
+	} else if ts, ok := validator._locale.Messages["invalid"]; ok {
+		_templateString = ts
 	} else {
-		_templateString = validator._locale.Messages[key]
+		_templateString = "\"{{Title}}\" is invalid"
 	}
 	template := fasttemplate.New(_templateString, "{{", "}}")
 	message := template.ExecuteString(values)

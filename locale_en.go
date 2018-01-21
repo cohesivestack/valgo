@@ -11,6 +11,7 @@ func setDefaultEnglishMessages() {
 			"not_blank": "\"{{Title}}\" can't be blank",
 			"empty":     "\"{{Title}}\" must be empty",
 			"not_empty": "\"{{Title}}\" can't be empty",
+			"invalid":   "\"{{Title}}\" is invalid",
 		},
 	}
 }
