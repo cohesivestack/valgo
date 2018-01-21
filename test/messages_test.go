@@ -20,3 +20,62 @@ func TestCustomMessageTemplate(t *testing.T) {
 	v = valgo.Is(" ").NotBlank()
 	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be blank")
 }
+
+func TestCustomMessages(t *testing.T) {
+	valgo.ResetMessages()
+
+	// Add new locale
+	valgo.AddOrReplaceMessages("liberland", map[string]string{
+		"not_blank": "Liberland say \"{{Title}}\" can't be blank",
+		"empty":     "Liberland say \"{{Title}}\" must be empty",
+	})
+
+	localized, err := valgo.Localized("liberland")
+	assert.NoError(t, err)
+
+	v := localized.Is(" ").NotBlank().Empty()
+	assert.Contains(t, v.Errors()[0].Messages, "Liberland say \"value0\" can't be blank")
+	assert.Contains(t, v.Errors()[0].Messages, "Liberland say \"value0\" must be empty")
+
+	// Replace existing locale
+	valgo.AddOrReplaceMessages("en", map[string]string{
+		"not_blank": "An improved english say \"{{Title}}\" can't be blank",
+		"empty":     "An improved english say \"{{Title}}\" must be empty",
+	})
+
+	localized, err = valgo.Localized("en")
+	assert.NoError(t, err)
+
+	v = localized.Is(" ").NotBlank().Empty()
+	assert.Contains(t, v.Errors()[0].Messages, "An improved english say \"value0\" can't be blank")
+	assert.Contains(t, v.Errors()[0].Messages, "An improved english say \"value0\" must be empty")
+
+}
+
+func TestGetMessagesIsACopy(t *testing.T) {
+	valgo.ResetMessages()
+
+	err := valgo.SetDefaultLocale("en")
+	assert.NoError(t, err)
+
+	messages, err := valgo.GetMessagesCopy("en")
+	assert.NoError(t, err)
+
+	assert.True(t, len(messages) > 1)
+
+	// Check that is a real copy
+	messages["not_blank"] = "This message should not be assigned"
+
+	v := valgo.Is(" ").NotBlank()
+	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be blank")
+	assert.NotContains(t, v.Errors()[0].Messages, "This message should not be assigned")
+
+	// Check copy can be used as base to replace a locale
+	messages["not_blank"] = "This message is changed for test purposes"
+
+	valgo.AddOrReplaceMessages("en", messages)
+
+	v = valgo.Is(" ").NotBlank().Empty()
+	assert.Contains(t, v.Errors()[0].Messages, "This message is changed for test purposes")
+	assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be empty")
+}

@@ -34,7 +34,7 @@ func SetDefaultLocale(code string) error {
 
 }
 
-func AddOrReplaceLocale(code string, messages map[string]string) {
+func AddOrReplaceMessages(code string, messages map[string]string) {
 	_locale := locale{
 		Messages: messages,
 	}
@@ -42,7 +42,7 @@ func AddOrReplaceLocale(code string, messages map[string]string) {
 	getLocales()[code] = _locale
 }
 
-func GetLocaleCopy(code string) (map[string]string, error) {
+func GetMessagesCopy(code string) (map[string]string, error) {
 	if locale, ok := getLocales()[code]; ok {
 		messages := map[string]string{}
 		for k, v := range locale.Messages {
