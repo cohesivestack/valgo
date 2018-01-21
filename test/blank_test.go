@@ -9,6 +9,8 @@ import (
 )
 
 func TestBlank(t *testing.T) {
+	valgo.ResetMessages()
+
 	v := valgo.Is("Vitalik Buterin").Blank()
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
@@ -25,6 +27,8 @@ func TestBlank(t *testing.T) {
 }
 
 func TestNotBlank(t *testing.T) {
+	valgo.ResetMessages()
+
 	v := valgo.Is("Vitalik Buterin").NotBlank()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())

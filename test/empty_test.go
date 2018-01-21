@@ -9,6 +9,8 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
+	valgo.ResetMessages()
+
 	v := valgo.Is("").Empty()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
@@ -25,6 +27,8 @@ func TestEmpty(t *testing.T) {
 }
 
 func TestNotEmpty(t *testing.T) {
+	valgo.ResetMessages()
+
 	v := valgo.Is("").NotEmpty()
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {

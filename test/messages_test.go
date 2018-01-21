@@ -8,6 +8,8 @@ import (
 )
 
 func TestCustomMessageTemplate(t *testing.T) {
+	valgo.ResetMessages()
+
 	v := valgo.Is(" ").NotBlank("The field \"{{Title}}\" can't be blank. :-)").Empty()
 	assert.Contains(t, v.Errors()[0].Messages, "The field \"value0\" can't be blank. :-)")
 
