@@ -69,6 +69,7 @@ func (validator *Validator) ensureString() string {
 }
 
 func (validator *Validator) invalidate(key string, values map[string]interface{}, templateString []string) {
+	validator.valid = false
 	var _templateString string
 	if len(templateString) > 0 {
 		_templateString = templateString[0]
