@@ -10,16 +10,37 @@ func empty(value interface{}) bool {
 	}
 
 	switch value.(type) {
-	case uint8, uint16, uint32, uint64, int8, int16, int32, int64, float32, float64:
+	case uint:
+		return value.(uint) == 0
+	case uint8:
+		return value.(uint8) == 0
+	case uint16:
+		return value.(uint16) == 0
+	case uint32:
+		return value.(uint32) == 0
+	case uint64:
+		return value.(uint64) == 0
+	case int:
+		return value.(int) == 0
+	case int8:
+		return value.(int8) == 0
+	case int16:
+		return value.(int16) == 0
+	case int32:
+		return value.(int32) == 0
+	case int64:
+		return value.(int64) == 0
+	case float32:
+		return value.(float32) == 0
+	case float64:
 		return value.(float64) == 0
 	case string:
 		return len(value.(string)) == 0
 	default:
-		switch reflect.TypeOf(value).Kind() {
-		case reflect.Slice:
-			return len(value.([]interface{})) == 0
-		case reflect.Map:
-			return len(value.(map[interface{}]interface{})) == 0
+		_value := reflect.ValueOf(value)
+		switch _value.Kind() {
+		case reflect.Slice, reflect.Map:
+			return _value.Len() == 0
 		}
 	}
 
