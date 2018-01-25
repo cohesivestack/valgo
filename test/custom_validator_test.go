@@ -12,14 +12,14 @@ func TestCustomValidatorAsInvalid(t *testing.T) {
 
 	v := valgo.Is("USD").Passing(func(_v *valgo.CustomValidator, _t ...string) {
 		if _v.ValueAsString() != "BTC" {
-			_v.Invalidate("invalid", _t, nil)
+			_v.Invalidate("equal_to", _t, map[string]interface{}{"Value": "BTC"})
 		}
 	})
 
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
-		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" is invalid")
+		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be equal to \"BTC\"")
 	}
 }
 
@@ -28,7 +28,7 @@ func TestCustomValidatorAsValid(t *testing.T) {
 
 	v := valgo.Is("BTC").Passing(func(_v *valgo.CustomValidator, _t ...string) {
 		if _v.ValueAsString() != "BTC" {
-			_v.Invalidate("invalid", _t, nil)
+			_v.Invalidate("equal_to", _t, nil)
 		}
 	})
 

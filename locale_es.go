@@ -7,11 +7,12 @@ func init() {
 func setDefaultSpanishMessages() {
 	getLocales()["es"] = locale{
 		Messages: map[string]string{
-			"blank":     "\"{{Title}}\" debe estar en blanco",
-			"not_blank": "\"{{Title}}\" no puede estar en blanco",
-			"empty":     "\"{{Title}}\" debe estar vacío",
-			"not_empty": "\"{{Title}}\" no puede estar vacío",
-			"invalid":   "\"{{Title}}\" es inválido",
+			"blank":        "\"{{Title}}\" debe estar en blanco",
+			"not_blank":    "\"{{Title}}\" no puede estar en blanco",
+			"empty":        "\"{{Title}}\" debe estar vacío",
+			"not_empty":    "\"{{Title}}\" no puede estar vacío",
+			"equal_to":     "\"{{Title}}\" debe ser igual a \"{{Value}}\"",
+			"not_equal_to": "\"{{Title}}\" no puede ser igual a \"{{Value}}\"",
 		},
 	}
 }
