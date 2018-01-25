@@ -4,19 +4,20 @@ import (
 	"strings"
 )
 
-func (validator *Validator) Blank(template ...string) *Validator {
-	value := strings.Trim(validator.ensureString(), " ")
+func blank(value interface{}) bool {
+	_value := strings.TrimSpace(convertToString(value))
+	return len(_value) == 0
+}
 
-	if len(value) > 0 {
+func (validator *Validator) Blank(template ...string) *Validator {
+	if !blank(validator.currentValue) {
 		validator.invalidate("blank", map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
 	return validator
 }
 
 func (validator *Validator) NotBlank(template ...string) *Validator {
-	value := strings.Trim(validator.ensureString(), " ")
-
-	if len(value) == 0 {
+	if blank(validator.currentValue) {
 		validator.invalidate("not_blank", map[string]interface{}{
 			"Title": validator.currentTitle}, template)
 	}

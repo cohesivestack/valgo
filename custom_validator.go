@@ -23,5 +23,5 @@ func (customValidator *CustomValidator) Value() interface{} {
 }
 
 func (customValidator *CustomValidator) ValueAsString() string {
-	return customValidator.validator.ensureString()
+	return customValidator.validator.currentValueAsString()
 }

@@ -2,7 +2,6 @@ package valgo
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/valyala/fasttemplate"
@@ -16,6 +15,8 @@ type Validator struct {
 	currentIndex int
 	currentError *Error
 
+	_currentValueAsString *string
+
 	_locale locale
 	valid   bool
 	errors  []*Error
@@ -24,6 +25,11 @@ type Validator struct {
 func (validator *Validator) Is(value interface{}) *Validator {
 	validator.currentIndex += 1
 	validator.currentValue = value
+	switch value.(type) {
+	case string:
+		valueAsString := value.(string)
+		validator._currentValueAsString = &valueAsString
+	}
 	validator.currentValid = true
 	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
 	validator.currentTitle = validator.currentName
@@ -66,22 +72,16 @@ func (validator *Validator) Errors() []*Error {
 	return validator.errors
 }
 
-func (validator *Validator) ensureString() string {
-	cv := validator.currentValue
+func convertToString(value interface{}) string {
+	return fmt.Sprintf("%v", value)
+}
 
-	switch v := validator.currentValue.(type) {
-	case uint8, uint16, uint32, uint64:
-		return strconv.FormatUint(cv.(uint64), 10)
-	case int8, int16, int32, int64:
-		return strconv.FormatInt(cv.(int64), 10)
-	case float32, float64:
-		return strconv.FormatFloat(cv.(float64), 'f', -1, 64)
-	case string:
-		return cv.(string)
-	default:
-		fmt.Printf("unexpected type %T", v)
-		return ""
+func (validator *Validator) currentValueAsString() string {
+	if validator._currentValueAsString == nil {
+		valueAsString := convertToString(validator.currentValue)
+		validator._currentValueAsString = &valueAsString
 	}
+	return *validator._currentValueAsString
 }
 
 func (validator *Validator) invalidate(
