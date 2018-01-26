@@ -13,6 +13,7 @@ func setDefaultSpanishMessages() {
 			"not_empty":    "\"{{Title}}\" no puede estar vacío",
 			"equal_to":     "\"{{Title}}\" debe ser igual a \"{{Value}}\"",
 			"not_equal_to": "\"{{Title}}\" no puede ser igual a \"{{Value}}\"",
+			"a_number":     "\"{{Title}}\" debe ser un número",
 		},
 	}
 }
