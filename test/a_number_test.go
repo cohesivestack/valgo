@@ -11,7 +11,27 @@ import (
 func TestANumberValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	for _, value := range []interface{}{"1", "10", "10.1", "10.10", 10, 10.1} {
+	for _, value := range []interface{}{
+		"1",
+		"10",
+		"10.1",
+		"10.10",
+		10,
+		-10,
+		10.1,
+		-10.1,
+		uint(10),
+		uint8(10),
+		uint16(10),
+		uint32(10),
+		uint64(10),
+		int(10),
+		int8(10),
+		int16(10),
+		int32(10),
+		int64(10),
+		float32(10.1),
+		float64(10.1)} {
 		v := valgo.Is(value).ANumber()
 
 		assert.True(t, v.Valid())

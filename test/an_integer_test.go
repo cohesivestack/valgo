@@ -11,7 +11,22 @@ import (
 func TestAnIntegerValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	for _, value := range []interface{}{"1", "10", "-10", 10, -10} {
+	for _, value := range []interface{}{
+		"1",
+		"10",
+		"-10",
+		10,
+		-10,
+		uint(10),
+		uint8(10),
+		uint16(10),
+		uint32(10),
+		uint64(10),
+		int(10),
+		int8(10),
+		int16(10),
+		int32(10),
+		int64(10)} {
 		v := valgo.Is(value).AnInteger()
 
 		assert.True(t, v.Valid())
@@ -22,7 +37,19 @@ func TestAnIntegerValid(t *testing.T) {
 func TestAnIntegerInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
-	for _, value := range []interface{}{"10.1", "-10.1", "", " ", "a", "a10", ".10", "@1", []int{10}, 10.1} {
+	for _, value := range []interface{}{
+		"10.1",
+		"-10.1",
+		"",
+		" ",
+		"a",
+		"a10",
+		".10",
+		"@1",
+		[]int{10},
+		10.1,
+		float32(10.1),
+		float64(10.1)} {
 		v := valgo.Is(value).AnInteger()
 
 		if assert.NotEmpty(t, v.Errors()) {
