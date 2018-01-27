@@ -8,7 +8,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBlank(t *testing.T) {
+func TestBlankValid(t *testing.T) {
+	valgo.ResetMessages()
+
+	for _, value := range []string{"", " "} {
+		v := valgo.Is(value).Blank()
+
+		assert.True(t, v.Valid())
+		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
+	}
+}
+
+func TestBlankInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is("Vitalik Buterin").Blank()
@@ -17,24 +28,21 @@ func TestBlank(t *testing.T) {
 		assert.Len(t, v.Errors(), 1)
 		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be blank")
 	}
-
-	for _, value := range []string{"", " "} {
-		v = valgo.Is(value).Blank()
-
-		assert.True(t, v.Valid())
-		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
-	}
 }
 
-func TestNotBlank(t *testing.T) {
+func TestNotBlankValid(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is("Vitalik Buterin").NotBlank()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
+}
+
+func TestNotBlankInvalid(t *testing.T) {
+	valgo.ResetMessages()
 
 	for _, value := range []string{" ", ""} {
-		v = valgo.Is(value).NotBlank()
+		v := valgo.Is(value).NotBlank()
 
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {

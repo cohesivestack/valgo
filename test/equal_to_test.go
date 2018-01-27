@@ -7,7 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEqualTo(t *testing.T) {
+func TestEqualToValid(t *testing.T) {
+	valgo.ResetMessages()
+
+	v := valgo.Is(10).EqualTo(10)
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestEqualToInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is(10).EqualTo(11)
@@ -16,13 +24,17 @@ func TestEqualTo(t *testing.T) {
 		assert.Len(t, v.Errors(), 1)
 		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be equal to \"11\"")
 	}
+}
 
-	v = valgo.Is(10).EqualTo(10)
+func TestNotEqualToValid(t *testing.T) {
+	valgo.ResetMessages()
+
+	v := valgo.Is(10).NotEqualTo(11)
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestNotEqualTo(t *testing.T) {
+func TestNotEqualToInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is(10).NotEqualTo(10)
@@ -31,8 +43,4 @@ func TestNotEqualTo(t *testing.T) {
 		assert.Len(t, v.Errors(), 1)
 		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" can't be equal to \"10\"")
 	}
-
-	v = valgo.Is(10).NotEqualTo(11)
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
 }
