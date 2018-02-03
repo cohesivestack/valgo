@@ -16,7 +16,10 @@ func setDefaultEnglishMessages() {
 			"identical_to":     "\"{{Title}}\" must be identical to \"{{Value}}\"",
 			"not_identical_to": "\"{{Title}}\" can't be identical to \"{{Value}}\"",
 			"a_number":         "\"{{Title}}\" must be a number",
+			"a_number_type":    "\"{{Title}}\" must be a number type",
 			"an_integer":       "\"{{Title}}\" must be an integer number",
+			"an_integer_type":  "\"{{Title}}\" must be an integer type",
+			"a_string":         "\"{{Title}}\" must be a text",
 		},
 	}
 }
