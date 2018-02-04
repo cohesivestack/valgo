@@ -43,7 +43,7 @@ func equalTo(valueA interface{}, valueB interface{}) bool {
 func (validator *Validator) EqualTo(value interface{}, template ...string) *Validator {
 
 	if !equalTo(validator.currentValue, value) {
-		validator.invalidate("identical_to",
+		validator.invalidate("equal_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)
@@ -54,7 +54,7 @@ func (validator *Validator) EqualTo(value interface{}, template ...string) *Vali
 func (validator *Validator) NotEqualTo(value interface{}, template ...string) *Validator {
 
 	if equalTo(validator.currentValue, value) {
-		validator.invalidate("not_identical_to",
+		validator.invalidate("not_equal_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)

@@ -77,7 +77,7 @@ func TestEqualToInvalid(t *testing.T) {
 		if assert.NotEmpty(t, v.Errors(), msg) {
 			assert.Len(t, v.Errors(), 1, msg)
 			assert.Contains(t, v.Errors()[0].Messages,
-				fmt.Sprintf("\"value0\" must be identical to \"%v\"", valueB), msg)
+				fmt.Sprintf("\"value0\" must be equal to \"%v\"", valueB), msg)
 		}
 	}
 }
@@ -151,7 +151,7 @@ func TestNotEqualToInvalid(t *testing.T) {
 		if assert.NotEmpty(t, v.Errors(), msg) {
 			assert.Len(t, v.Errors(), 1, msg)
 			assert.Contains(t, v.Errors()[0].Messages,
-				fmt.Sprintf("\"value0\" can't be identical to \"%v\"", valueB), msg)
+				fmt.Sprintf("\"value0\" can't be equal to \"%v\"", valueB), msg)
 		}
 	}
 }
