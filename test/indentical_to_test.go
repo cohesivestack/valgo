@@ -11,16 +11,31 @@ import (
 func TestIdenticalToValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	for _, value := range []interface{}{
-		10,
-		1,
-		"a",
-		"10",
-		&MyStruct{FieldInt: 10},
-		&[]int{10, 20},
-		&map[string]int{"a": 1}} {
-		msg := fmt.Sprintf("not assert using %+v", value)
-		v := valgo.Is(value).IdenticalTo(value)
+	_integer := 10
+	_float := 10.0
+	_string := "a"
+	for description, values := range map[string][]interface{}{
+		"integers":                []interface{}{1, 1},
+		"strings":                 []interface{}{"a", "a"},
+		"float integer":           []interface{}{10.0, 10},
+		"pointer-integer integer": []interface{}{&_integer, 10},
+		"pointer-float float":     []interface{}{&_float, 10.0},
+		"pointer-string string":   []interface{}{&_string, "a"},
+		"array":                   []interface{}{[]int{10}, []int{10}},
+		"pointer-array":           []interface{}{&[]int{10}, &[]int{10}},
+		"pointer-array array":     []interface{}{&[]int{10}, []int{10}},
+		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 10}},
+		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 10}},
+		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+	} {
+		valueA := values[0]
+		valueB := values[1]
+		msg := fmt.Sprintf("not assert with %s", description)
+
+		v := valgo.Is(valueA).IdenticalTo(valueB)
 		assert.True(t, v.Valid(), msg)
 		assert.Empty(t, v.Errors(), msg)
 	}
@@ -29,100 +44,114 @@ func TestIdenticalToValid(t *testing.T) {
 func TestIdenticalToInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
-	funcToTest := func(value1 interface{}, value2 interface{}) {
-		msg := fmt.Sprintf("not assert using %+v", value2)
-		v := valgo.Is(value1).IdenticalTo(value2)
-		assert.False(t, v.Valid(), msg)
+	_integer := 10
+	_float := 10.0
+	_string := "a"
+	for description, values := range map[string][]interface{}{
+		"integers":                []interface{}{1, 2},
+		"strings":                 []interface{}{"ab", "a"},
+		"string integer":          []interface{}{"1", 1},
+		"string float":            []interface{}{"1.0", 1.0},
+		"float integer":           []interface{}{10.0, 10.1},
+		"pointer-integer integer": []interface{}{&_integer, 11},
+		"pointer-integer string":  []interface{}{&_integer, "10.0"},
+		"pointer-float float":     []interface{}{&_float, 10.1},
+		"pointer-float integer":   []interface{}{&_float, "10.0"},
+		"pointer-string string":   []interface{}{&_string, "ab"},
+		"array":                   []interface{}{[]int{10}, []int{11}},
+		"pointer-array":           []interface{}{&[]int{10}, &[]int{11}},
+		"pointer-array array":     []interface{}{&[]int{10}, []int{11}},
+		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 11}},
+		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 11}},
+		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+	} {
+		valueA := values[0]
+		valueB := values[1]
+		v := valgo.Is(valueA).IdenticalTo(valueB)
+		msg := fmt.Sprintf("not assert with %s", description)
+
+		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors(), msg) {
 			assert.Len(t, v.Errors(), 1, msg)
 			assert.Contains(t, v.Errors()[0].Messages,
-				fmt.Sprintf("\"value0\" must be identical to \"%v\"", value2),
-				msg)
+				fmt.Sprintf("\"value0\" must be identical to \"%v\"", valueB), msg)
 		}
 	}
-
-	for key, value := range map[interface{}]interface{}{
-		1:          "1",
-		"a":        "ab",
-		&[]int{10}: &[]int{10},
-		10.0:       10,
-	} {
-		funcToTest(key, value)
-	}
-
-	structA := MyStruct{
-		FieldInt: 1,
-	}
-	structB := structA
-
-	funcToTest(structA, structB)
-
-	arrayA := []int{10}
-	arrayB := arrayA
-	funcToTest(arrayA, arrayB)
-
-	mapA := map[string]int{"a": 1}
-	mapB := mapA
-	funcToTest(mapA, mapB)
-
 }
 
 func TestNotIdenticalToValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	funcToTest := func(value1 interface{}, value2 interface{}) {
-		msg := fmt.Sprintf("not assert using %+v", value2)
-		v := valgo.Is(value1).NotIdenticalTo(value2)
+	_integer := 10
+	_float := 10.0
+	_string := "a"
+	for description, values := range map[string][]interface{}{
+		"integers":                []interface{}{1, 2},
+		"strings":                 []interface{}{"ab", "a"},
+		"string integer":          []interface{}{"1", 1},
+		"string float":            []interface{}{"1.0", 1.0},
+		"float integer":           []interface{}{10.0, 10.1},
+		"pointer-integer integer": []interface{}{&_integer, 11},
+		"pointer-integer string":  []interface{}{&_integer, "10.0"},
+		"pointer-float float":     []interface{}{&_float, 10.1},
+		"pointer-float integer":   []interface{}{&_float, "10.0"},
+		"pointer-string string":   []interface{}{&_string, "ab"},
+		"array":                   []interface{}{[]int{10}, []int{11}},
+		"pointer-array":           []interface{}{&[]int{10}, &[]int{11}},
+		"pointer-array array":     []interface{}{&[]int{10}, []int{11}},
+		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 11}},
+		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 11}},
+		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+	} {
+		valueA := values[0]
+		valueB := values[1]
+		msg := fmt.Sprintf("not assert with %s", description)
+
+		v := valgo.Is(valueA).NotIdenticalTo(valueB)
 		assert.True(t, v.Valid(), msg)
 		assert.Empty(t, v.Errors(), msg)
 	}
-
-	for key, value := range map[interface{}]interface{}{
-		1:          "1",
-		"a":        "ab",
-		&[]int{10}: &[]int{10},
-		10.0:       10,
-	} {
-		funcToTest(key, value)
-	}
-
-	structA := MyStruct{
-		FieldInt: 1,
-	}
-	structB := structA
-
-	funcToTest(structA, structB)
-
-	arrayA := []int{10}
-	arrayB := arrayA
-	funcToTest(arrayA, arrayB)
-
-	mapA := map[string]int{"a": 1}
-	mapB := mapA
-	funcToTest(mapA, mapB)
-
 }
 
 func TestNotIdenticalToInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
-	for _, value := range []interface{}{
-		10,
-		1,
-		"a",
-		"10",
-		&MyStruct{FieldInt: 10},
-		&[]int{10, 20},
-		&map[string]int{"a": 1}} {
-		msg := fmt.Sprintf("not assert using %+v", value)
-		v := valgo.Is(value).NotIdenticalTo(value)
-		assert.False(t, v.Valid(), msg)
+	_integer := 10
+	_float := 10.0
+	_string := "a"
+	for description, values := range map[string][]interface{}{
+		"integers":                []interface{}{1, 1},
+		"strings":                 []interface{}{"a", "a"},
+		"float integer":           []interface{}{10.0, 10},
+		"pointer-integer integer": []interface{}{&_integer, 10},
+		"pointer-float float":     []interface{}{&_float, 10.0},
+		"pointer-string string":   []interface{}{&_string, "a"},
+		"array":                   []interface{}{[]int{10}, []int{10}},
+		"pointer-array":           []interface{}{&[]int{10}, &[]int{10}},
+		"pointer-array array":     []interface{}{&[]int{10}, []int{10}},
+		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 10}},
+		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 10}},
+		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+	} {
+		valueA := values[0]
+		valueB := values[1]
+		v := valgo.Is(valueA).NotIdenticalTo(valueB)
+		msg := fmt.Sprintf("not assert with %s", description)
+
+		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors(), msg) {
 			assert.Len(t, v.Errors(), 1, msg)
 			assert.Contains(t, v.Errors()[0].Messages,
-				fmt.Sprintf("\"value0\" can't be identical to \"%v\"", value),
-				msg)
+				fmt.Sprintf("\"value0\" can't be identical to \"%v\"", valueB), msg)
 		}
 	}
-
 }

@@ -5,18 +5,39 @@ import (
 )
 
 func indenticalTo(valueA interface{}, valueB interface{}) bool {
-	for _, v := range []interface{}{valueA, valueB} {
-		_type := reflect.TypeOf(v)
-		switch _type.Kind() {
-		case reflect.Slice, reflect.Array, reflect.Map, reflect.Struct:
-			return false
-		}
+	if isComparableType(valueA) && isComparableType(valueB) && valueA == valueB {
+		return true
 	}
 
-	if valueA != valueB {
+	// if pass test was not true and one value is nil then just return false
+	if valueA == nil || valueB == nil {
 		return false
 	}
-	return true
+
+	rvA := reflect.ValueOf(valueA)
+	rvB := reflect.ValueOf(valueB)
+
+	if rvA.Kind() == reflect.Ptr {
+		valueA = reflect.Indirect(rvA).Interface()
+	}
+
+	if rvB.Kind() == reflect.Ptr {
+		valueB = reflect.Indirect(rvB).Interface()
+	}
+
+	if aNumberType(valueA) && aNumberType(valueB) {
+		_valueA, err := getNumberAsFloat64(valueA)
+		if err != nil {
+			return false
+		}
+		_valueB, err := getNumberAsFloat64(valueB)
+		if err != nil {
+			return false
+		}
+		return float64(_valueA) == float64(_valueB)
+	}
+
+	return reflect.DeepEqual(valueA, valueB)
 }
 
 func (validator *Validator) IdenticalTo(value interface{}, template ...string) *Validator {
