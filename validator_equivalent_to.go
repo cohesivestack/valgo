@@ -46,7 +46,7 @@ func getNumberAsFloat64(value interface{}) (float64, error) {
 	return 0, errors.New(fmt.Sprintf("'%v' is not a number type", value))
 }
 
-func equalTo(valueA interface{}, valueB interface{}) bool {
+func equivalentTo(valueA interface{}, valueB interface{}) bool {
 	if isComparableType(valueA) && isComparableType(valueB) && valueA == valueB {
 		return true
 	}
@@ -106,9 +106,9 @@ func equalTo(valueA interface{}, valueB interface{}) bool {
 	return reflect.DeepEqual(valueA, valueB)
 }
 
-func (validator *Validator) EqualTo(value interface{}, template ...string) *Validator {
-	if !equalTo(validator.currentValue, value) {
-		validator.invalidate("equal_to",
+func (validator *Validator) EquivalentTo(value interface{}, template ...string) *Validator {
+	if !equivalentTo(validator.currentValue, value) {
+		validator.invalidate("equivalent_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)
@@ -116,9 +116,9 @@ func (validator *Validator) EqualTo(value interface{}, template ...string) *Vali
 	return validator
 }
 
-func (validator *Validator) NotEqualTo(value interface{}, template ...string) *Validator {
-	if equalTo(validator.currentValue, value) {
-		validator.invalidate("not_equal_to",
+func (validator *Validator) NotEquivalentTo(value interface{}, template ...string) *Validator {
+	if equivalentTo(validator.currentValue, value) {
+		validator.invalidate("not_equivalent_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)

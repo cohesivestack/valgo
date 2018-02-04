@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-func indenticalTo(valueA interface{}, valueB interface{}) bool {
+func equalTo(valueA interface{}, valueB interface{}) bool {
 	if isComparableType(valueA) && isComparableType(valueB) && valueA == valueB {
 		return true
 	}
@@ -40,9 +40,9 @@ func indenticalTo(valueA interface{}, valueB interface{}) bool {
 	return reflect.DeepEqual(valueA, valueB)
 }
 
-func (validator *Validator) IdenticalTo(value interface{}, template ...string) *Validator {
+func (validator *Validator) EqualTo(value interface{}, template ...string) *Validator {
 
-	if !indenticalTo(validator.currentValue, value) {
+	if !equalTo(validator.currentValue, value) {
 		validator.invalidate("identical_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
@@ -51,9 +51,9 @@ func (validator *Validator) IdenticalTo(value interface{}, template ...string) *
 	return validator
 }
 
-func (validator *Validator) NotIdenticalTo(value interface{}, template ...string) *Validator {
+func (validator *Validator) NotEqualTo(value interface{}, template ...string) *Validator {
 
-	if indenticalTo(validator.currentValue, value) {
+	if equalTo(validator.currentValue, value) {
 		validator.invalidate("not_identical_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
