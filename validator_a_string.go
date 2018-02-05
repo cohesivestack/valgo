@@ -2,7 +2,7 @@ package valgo
 
 func aString(value interface{}) bool {
 	switch value.(type) {
-	case string:
+	case string, *string:
 		return true
 	}
 	return false
