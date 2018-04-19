@@ -73,7 +73,7 @@ func Localized(code string) (*localized, error) {
 func newValidator(_locale locale, value interface{}) *Validator {
 	validator := &Validator{
 		currentIndex: 0,
-		currentValue: value,
+		currentValue: NewValue(value),
 		currentValid: true,
 		valid:        true,
 		_locale:      _locale,

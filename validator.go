@@ -8,7 +8,7 @@ import (
 )
 
 type Validator struct {
-	currentValue interface{}
+	currentValue *Value
 	currentTitle string
 	currentName  string
 	currentValid bool
@@ -23,8 +23,9 @@ type Validator struct {
 }
 
 func (validator *Validator) Is(value interface{}) *Validator {
+
 	validator.currentIndex += 1
-	validator.currentValue = value
+	validator.currentValue = NewValue(value)
 	switch value.(type) {
 	case string:
 		valueAsString := value.(string)
@@ -70,18 +71,6 @@ func (validator *Validator) Passing(
 
 func (validator *Validator) Errors() []*Error {
 	return validator.errors
-}
-
-func convertToString(value interface{}) string {
-	return fmt.Sprintf("%v", value)
-}
-
-func (validator *Validator) currentValueAsString() string {
-	if validator._currentValueAsString == nil {
-		valueAsString := convertToString(validator.currentValue)
-		validator._currentValueAsString = &valueAsString
-	}
-	return *validator._currentValueAsString
 }
 
 func (validator *Validator) invalidate(

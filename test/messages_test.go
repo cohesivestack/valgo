@@ -125,7 +125,7 @@ func TestMissingMessageKey(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is("USD").Passing(func(_v *valgo.CustomValidator, _t ...string) {
-		if _v.ValueAsString() != "BTC" {
+		if _v.Value().AsString() != "BTC" {
 			// Here the missing key
 			_v.Invalidate(" ", _t, nil)
 		}

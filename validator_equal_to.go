@@ -4,46 +4,29 @@ import (
 	"reflect"
 )
 
-func equalTo(valueA interface{}, valueB interface{}) bool {
-	if isComparableType(valueA) && isComparableType(valueB) && valueA == valueB {
+func (valueA *Value) IsEqualTo(value interface{}) bool {
+	valueB := NewValue(value)
+	if valueA.IsComparableType() && valueB.IsComparableType() && valueA.absolute == valueB.absolute {
 		return true
 	}
 
-	// if pass test was not true and one value is nil then just return false
-	if valueA == nil || valueB == nil {
+	// if previous test was not true and one value is nil then just return false
+	if valueA.absolute == nil || valueB.absolute == nil {
 		return false
 	}
 
-	rvA := reflect.ValueOf(valueA)
-	rvB := reflect.ValueOf(valueB)
-
-	if rvA.Kind() == reflect.Ptr {
-		valueA = reflect.Indirect(rvA).Interface()
+	if (valueA.IsString() && valueB.IsNumberType()) ||
+		(valueB.IsString() && valueA.IsNumberType()) ||
+		(valueB.IsNumberType() && valueA.IsNumberType()) {
+		return valueA.AsFloat64() == valueB.AsFloat64()
 	}
 
-	if rvB.Kind() == reflect.Ptr {
-		valueB = reflect.Indirect(rvB).Interface()
-	}
-
-	if aNumberType(valueA) && aNumberType(valueB) {
-		_valueA, err := getNumberAsFloat64(valueA)
-		if err != nil {
-			return false
-		}
-		_valueB, err := getNumberAsFloat64(valueB)
-		if err != nil {
-			return false
-		}
-		return float64(_valueA) == float64(_valueB)
-	}
-
-	return reflect.DeepEqual(valueA, valueB)
+	return reflect.DeepEqual(valueA.absolute, valueB.absolute)
 }
 
 func (validator *Validator) EqualTo(value interface{}, template ...string) *Validator {
-
-	if !equalTo(validator.currentValue, value) {
-		validator.invalidate("equal_to",
+	if !validator.currentValue.IsEqualTo(value) {
+		validator.invalidate("equivalent_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)
@@ -52,9 +35,8 @@ func (validator *Validator) EqualTo(value interface{}, template ...string) *Vali
 }
 
 func (validator *Validator) NotEqualTo(value interface{}, template ...string) *Validator {
-
-	if equalTo(validator.currentValue, value) {
-		validator.invalidate("not_equal_to",
+	if validator.currentValue.IsEqualTo(value) {
+		validator.invalidate("not_equivalent_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)

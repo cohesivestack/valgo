@@ -17,9 +17,13 @@ func TestEqualToValid(t *testing.T) {
 	for description, values := range map[string][]interface{}{
 		"integers":                []interface{}{1, 1},
 		"strings":                 []interface{}{"a", "a"},
+		"string integer":          []interface{}{"1", 1},
+		"string float":            []interface{}{"1", 1.0},
 		"float integer":           []interface{}{10.0, 10},
 		"pointer-integer integer": []interface{}{&_integer, 10},
+		"pointer-integer string":  []interface{}{&_integer, "10.0"},
 		"pointer-float float":     []interface{}{&_float, 10.0},
+		"pointer-float integer":   []interface{}{&_float, "10"},
 		"pointer-string string":   []interface{}{&_string, "a"},
 		"array":                   []interface{}{[]int{10}, []int{10}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{10}},
@@ -50,13 +54,13 @@ func TestEqualToInvalid(t *testing.T) {
 	for description, values := range map[string][]interface{}{
 		"integers":                []interface{}{1, 2},
 		"strings":                 []interface{}{"ab", "a"},
-		"string integer":          []interface{}{"1", 1},
-		"string float":            []interface{}{"1.0", 1.0},
+		"string integer":          []interface{}{"2", 1},
+		"string float":            []interface{}{"2", 1.0},
 		"float integer":           []interface{}{10.0, 10.1},
-		"pointer-integer integer": []interface{}{&_integer, 11},
-		"pointer-integer string":  []interface{}{&_integer, "10.0"},
+		"pointer-integer integer": []interface{}{&_integer, 10.1},
+		"pointer-integer string":  []interface{}{&_integer, "10.1"},
 		"pointer-float float":     []interface{}{&_float, 10.1},
-		"pointer-float integer":   []interface{}{&_float, "10.0"},
+		"pointer-float integer":   []interface{}{&_float, "10.1"},
 		"pointer-string string":   []interface{}{&_string, "ab"},
 		"array":                   []interface{}{[]int{10}, []int{11}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{11}},
@@ -73,7 +77,7 @@ func TestEqualToInvalid(t *testing.T) {
 		v := valgo.Is(valueA).EqualTo(valueB)
 		msg := fmt.Sprintf("not assert with %s", description)
 
-		assert.False(t, v.Valid())
+		assert.False(t, v.Valid(), msg)
 		if assert.NotEmpty(t, v.Errors(), msg) {
 			assert.Len(t, v.Errors(), 1, msg)
 			assert.Contains(t, v.Errors()[0].Messages,
@@ -91,13 +95,13 @@ func TestNotEqualToValid(t *testing.T) {
 	for description, values := range map[string][]interface{}{
 		"integers":                []interface{}{1, 2},
 		"strings":                 []interface{}{"ab", "a"},
-		"string integer":          []interface{}{"1", 1},
-		"string float":            []interface{}{"1.0", 1.0},
+		"string integer":          []interface{}{"1", 2},
+		"string float":            []interface{}{"1.0", 1.1},
 		"float integer":           []interface{}{10.0, 10.1},
 		"pointer-integer integer": []interface{}{&_integer, 11},
-		"pointer-integer string":  []interface{}{&_integer, "10.0"},
+		"pointer-integer string":  []interface{}{&_integer, "10.1"},
 		"pointer-float float":     []interface{}{&_float, 10.1},
-		"pointer-float integer":   []interface{}{&_float, "10.0"},
+		"pointer-float integer":   []interface{}{&_float, "10.1"},
 		"pointer-string string":   []interface{}{&_string, "ab"},
 		"array":                   []interface{}{[]int{10}, []int{11}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{11}},

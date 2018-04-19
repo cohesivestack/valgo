@@ -4,28 +4,31 @@ import (
 	"strconv"
 )
 
-func anInteger(value interface{}) bool {
-	switch value.(type) {
-	case uint,
-		uint8,
-		uint16,
-		uint32,
-		uint64,
-		int,
-		int8,
-		int16,
-		int32,
-		int64:
-		return true
-	case string:
-		_, err := strconv.ParseInt(value.(string), 10, 64)
-		return err == nil
+func (value *Value) IsInteger() bool {
+	if value.isInteger == nil {
+		value.isInteger = boolPointer(false)
+		switch value.absolute.(type) {
+		case uint,
+			uint8,
+			uint16,
+			uint32,
+			uint64,
+			int,
+			int8,
+			int16,
+			int32,
+			int64:
+			value.isInteger = boolPointer(true)
+		case string:
+			_, err := strconv.ParseInt(value.absolute.(string), 10, 64)
+			value.isInteger = boolPointer(err == nil)
+		}
 	}
-	return false
+	return *value.isInteger
 }
 
 func (validator *Validator) AnInteger(template ...string) *Validator {
-	if !anInteger(validator.currentValue) {
+	if !validator.currentValue.IsInteger() {
 		validator.invalidate("an_integer",
 			map[string]interface{}{"Title": validator.currentTitle}, template)
 	}

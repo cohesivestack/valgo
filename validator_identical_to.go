@@ -1,22 +1,20 @@
 package valgo
 
-import "reflect"
+func (valueA *Value) IsIdenticalTo(value interface{}) bool {
+	valueBOriginal := value
 
-func identicalTo(valueA interface{}, valueB interface{}) bool {
-	if !isComparableType(valueA) || !isComparableType(valueB) {
+	// Value.IsComparableType is not used since we need to check the original
+	// values
+	if !isComparableType(valueA.original) || !isComparableType(valueBOriginal) {
 		return false
 	}
 
-	if reflect.TypeOf(valueA) != reflect.TypeOf(valueB) {
-		return false
-	}
-
-	return valueA == valueB
+	return valueA.original == valueBOriginal
 }
 
 func (validator *Validator) IdenticalTo(value interface{}, template ...string) *Validator {
 
-	if !identicalTo(validator.currentValue, value) {
+	if !validator.currentValue.IsIdenticalTo(value) {
 		validator.invalidate("identical_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
@@ -27,7 +25,7 @@ func (validator *Validator) IdenticalTo(value interface{}, template ...string) *
 
 func (validator *Validator) NotIdenticalTo(value interface{}, template ...string) *Validator {
 
-	if identicalTo(validator.currentValue, value) {
+	if validator.currentValue.IsIdenticalTo(value) {
 		validator.invalidate("not_identical_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,

@@ -4,24 +4,18 @@ import (
 	"regexp"
 )
 
-func matchingTo(value interface{}, pattern string) bool {
-	var _value string
-	switch value.(type) {
-	case string:
-		_value = value.(string)
-	case *string:
-		_value = *value.(*string)
-	default:
+func (value *Value) IsMatchingTo(pattern string) bool {
+	if !value.IsString() {
 		return false
 	}
 
 	var r = regexp.MustCompile(pattern)
-	return r.MatchString(_value)
+	return r.MatchString(value.AsString())
 }
 
 func (validator *Validator) MatchingTo(pattern string, template ...string) *Validator {
 
-	if !matchingTo(validator.currentValue, pattern) {
+	if !validator.currentValue.IsMatchingTo(pattern) {
 		validator.invalidate("matching_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
@@ -32,7 +26,7 @@ func (validator *Validator) MatchingTo(pattern string, template ...string) *Vali
 
 func (validator *Validator) NotMatchingTo(pattern string, template ...string) *Validator {
 
-	if matchingTo(validator.currentValueAsString(), pattern) {
+	if validator.currentValue.IsMatchingTo(pattern) {
 		validator.invalidate("not_matching_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,

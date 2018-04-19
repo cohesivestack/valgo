@@ -18,10 +18,6 @@ func (customValidator *CustomValidator) Invalidate(
 	customValidator.validator.invalidate(key, variables, templateString)
 }
 
-func (customValidator *CustomValidator) Value() interface{} {
+func (customValidator *CustomValidator) Value() *Value {
 	return customValidator.validator.currentValue
-}
-
-func (customValidator *CustomValidator) ValueAsString() string {
-	return customValidator.validator.currentValueAsString()
 }
