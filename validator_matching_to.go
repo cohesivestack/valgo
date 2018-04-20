@@ -14,23 +14,14 @@ func (value *Value) IsMatchingTo(pattern string) bool {
 }
 
 func (validator *Validator) MatchingTo(pattern string, template ...string) *Validator {
-
-	if !validator.currentValue.IsMatchingTo(pattern) {
+	if !validator.assert(validator.currentValue.IsMatchingTo(pattern)) {
 		validator.invalidate("matching_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": pattern}, template)
 	}
-	return validator
-}
 
-func (validator *Validator) NotMatchingTo(pattern string, template ...string) *Validator {
+	validator.resetNegative()
 
-	if validator.currentValue.IsMatchingTo(pattern) {
-		validator.invalidate("not_matching_to",
-			map[string]interface{}{
-				"Title": validator.currentTitle,
-				"Value": pattern}, template)
-	}
 	return validator
 }

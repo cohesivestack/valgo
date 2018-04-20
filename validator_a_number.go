@@ -30,9 +30,12 @@ func (value *Value) IsNumber() bool {
 }
 
 func (validator *Validator) ANumber(template ...string) *Validator {
-	if !validator.currentValue.IsNumber() {
+	if !validator.assert(validator.currentValue.IsNumber()) {
 		validator.invalidate("a_number",
 			map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
+
+	validator.resetNegative()
+
 	return validator
 }

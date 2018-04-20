@@ -13,23 +13,14 @@ func (valueA *Value) IsIdenticalTo(value interface{}) bool {
 }
 
 func (validator *Validator) IdenticalTo(value interface{}, template ...string) *Validator {
-
-	if !validator.currentValue.IsIdenticalTo(value) {
+	if !validator.assert(validator.currentValue.IsIdenticalTo(value)) {
 		validator.invalidate("identical_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)
 	}
-	return validator
-}
 
-func (validator *Validator) NotIdenticalTo(value interface{}, template ...string) *Validator {
+	validator.resetNegative()
 
-	if validator.currentValue.IsIdenticalTo(value) {
-		validator.invalidate("not_identical_to",
-			map[string]interface{}{
-				"Title": validator.currentTitle,
-				"Value": convertToString(value)}, template)
-	}
 	return validator
 }

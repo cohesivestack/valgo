@@ -24,9 +24,12 @@ func (value *Value) IsNumberType() bool {
 }
 
 func (validator *Validator) ANumberType(template ...string) *Validator {
-	if !validator.currentValue.IsNumberType() {
+	if !validator.assert(validator.currentValue.IsNumberType()) {
 		validator.invalidate("a_number_type",
 			map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
+
+	validator.resetNegative()
+
 	return validator
 }

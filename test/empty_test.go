@@ -34,7 +34,7 @@ func TestNotEmptyStringValid(t *testing.T) {
 	valgo.ResetMessages()
 
 	for _, value := range []string{"Vitalik Buterin", " "} {
-		v := valgo.Is(value).NotEmpty()
+		v := valgo.Is(value).Not().Empty()
 
 		assert.True(t, v.Valid())
 		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
@@ -44,7 +44,7 @@ func TestNotEmptyStringValid(t *testing.T) {
 func TestNotEmptyStringInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
-	v := valgo.Is("").NotEmpty()
+	v := valgo.Is("").Not().Empty()
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
@@ -80,7 +80,7 @@ func TestNotEmptyNumberValid(t *testing.T) {
 	valgo.ResetMessages()
 
 	for _, value := range []interface{}{1, 1.1} {
-		v := valgo.Is(value).NotEmpty()
+		v := valgo.Is(value).Not().Empty()
 
 		assert.True(t, v.Valid(), fmt.Sprintf("not assert using %v", value))
 		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %v", value))
@@ -91,7 +91,7 @@ func TestNotEmptyNumberInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
 	for _, value := range []interface{}{0, 0.0} {
-		v := valgo.Is(value).NotEmpty()
+		v := valgo.Is(value).Not().Empty()
 
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {
@@ -123,7 +123,7 @@ func TestEmptySliceInvalid(t *testing.T) {
 func TestNotEmptySliceValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	v := valgo.Is([]int{0}).NotEmpty()
+	v := valgo.Is([]int{0}).Not().Empty()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -131,7 +131,7 @@ func TestNotEmptySliceValid(t *testing.T) {
 func TestNotEmptySliceInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
-	v := valgo.Is([]int{}).NotEmpty()
+	v := valgo.Is([]int{}).Not().Empty()
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
@@ -161,7 +161,7 @@ func TestEmptyMapInvalid(t *testing.T) {
 func TestNotEmptyMapValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	v := valgo.Is(map[string]int{"a": 0}).NotEmpty()
+	v := valgo.Is(map[string]int{"a": 0}).Not().Empty()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -169,7 +169,7 @@ func TestNotEmptyMapValid(t *testing.T) {
 func TestNotEmptyMapInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
-	v := valgo.Is(map[string]int{}).NotEmpty()
+	v := valgo.Is(map[string]int{}).Not().Empty()
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)

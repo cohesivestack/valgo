@@ -119,7 +119,7 @@ func TestNotIdenticalToValid(t *testing.T) {
 		valueB := values[1]
 		msg := fmt.Sprintf("not assert with %s", description)
 
-		v := valgo.Is(valueA).NotIdenticalTo(valueB)
+		v := valgo.Is(valueA).Not().IdenticalTo(valueB)
 		assert.True(t, v.Valid(), msg)
 		assert.Empty(t, v.Errors(), msg)
 	}
@@ -148,7 +148,7 @@ func TestNotIdenticalToInvalid(t *testing.T) {
 	} {
 		valueA := values[0]
 		valueB := values[1]
-		v := valgo.Is(valueA).NotIdenticalTo(valueB)
+		v := valgo.Is(valueA).Not().IdenticalTo(valueB)
 		msg := fmt.Sprintf("not assert with %s", description)
 
 		assert.False(t, v.Valid(), msg)

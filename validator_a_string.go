@@ -13,9 +13,12 @@ func (value *Value) IsString() bool {
 }
 
 func (validator *Validator) AString(template ...string) *Validator {
-	if !validator.currentValue.IsString() {
+	if !validator.assert(validator.currentValue.IsString()) {
 		validator.invalidate("a_string",
 			map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
+
+	validator.resetNegative()
+
 	return validator
 }

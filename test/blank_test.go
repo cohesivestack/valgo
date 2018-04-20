@@ -33,7 +33,7 @@ func TestBlankInvalid(t *testing.T) {
 func TestNotBlankValid(t *testing.T) {
 	valgo.ResetMessages()
 
-	v := valgo.Is("Vitalik Buterin").NotBlank()
+	v := valgo.Is("Vitalik Buterin").Not().Blank()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -42,7 +42,7 @@ func TestNotBlankInvalid(t *testing.T) {
 	valgo.ResetMessages()
 
 	for _, value := range []string{" ", ""} {
-		v := valgo.Is(value).NotBlank()
+		v := valgo.Is(value).Not().Blank()
 
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {

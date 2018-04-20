@@ -28,9 +28,12 @@ func (value *Value) IsInteger() bool {
 }
 
 func (validator *Validator) AnInteger(template ...string) *Validator {
-	if !validator.currentValue.IsInteger() {
+	if !validator.assert(validator.currentValue.IsInteger()) {
 		validator.invalidate("an_integer",
 			map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
+
+	validator.resetNegative()
+
 	return validator
 }

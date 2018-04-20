@@ -26,19 +26,13 @@ func (value *Value) IsEmpty() bool {
 }
 
 func (validator *Validator) Empty(template ...string) *Validator {
-	if !validator.currentValue.IsEmpty() {
+	if !validator.assert(validator.currentValue.IsEmpty()) {
 		validator.invalidate(
 			"empty",
 			map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
-	return validator
-}
 
-func (validator *Validator) NotEmpty(template ...string) *Validator {
-	if validator.currentValue.IsEmpty() {
-		validator.invalidate(
-			"not_empty",
-			map[string]interface{}{"Title": validator.currentTitle}, template)
-	}
+	validator.resetNegative()
+
 	return validator
 }

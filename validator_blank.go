@@ -13,16 +13,11 @@ func (value *Value) IsBlank() bool {
 }
 
 func (validator *Validator) Blank(template ...string) *Validator {
-	if !validator.currentValue.IsBlank() {
+	if !validator.assert(validator.currentValue.IsBlank()) {
 		validator.invalidate("blank", map[string]interface{}{"Title": validator.currentTitle}, template)
 	}
-	return validator
-}
 
-func (validator *Validator) NotBlank(template ...string) *Validator {
-	if validator.currentValue.IsBlank() {
-		validator.invalidate("not_blank", map[string]interface{}{
-			"Title": validator.currentTitle}, template)
-	}
+	validator.resetNegative()
+
 	return validator
 }

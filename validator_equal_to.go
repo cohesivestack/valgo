@@ -25,21 +25,14 @@ func (valueA *Value) IsEqualTo(value interface{}) bool {
 }
 
 func (validator *Validator) EqualTo(value interface{}, template ...string) *Validator {
-	if !validator.currentValue.IsEqualTo(value) {
+	if !validator.assert(validator.currentValue.IsEqualTo(value)) {
 		validator.invalidate("equivalent_to",
 			map[string]interface{}{
 				"Title": validator.currentTitle,
 				"Value": convertToString(value)}, template)
 	}
-	return validator
-}
 
-func (validator *Validator) NotEqualTo(value interface{}, template ...string) *Validator {
-	if validator.currentValue.IsEqualTo(value) {
-		validator.invalidate("not_equivalent_to",
-			map[string]interface{}{
-				"Title": validator.currentTitle,
-				"Value": convertToString(value)}, template)
-	}
+	validator.resetNegative()
+
 	return validator
 }

@@ -15,7 +15,7 @@ type Validator struct {
 	currentIndex int
 	currentError *Error
 
-	_currentValueAsString *string
+	currentNegative bool
 
 	_locale locale
 	valid   bool
@@ -26,16 +26,21 @@ func (validator *Validator) Is(value interface{}) *Validator {
 
 	validator.currentIndex += 1
 	validator.currentValue = NewValue(value)
-	switch value.(type) {
-	case string:
-		valueAsString := value.(string)
-		validator._currentValueAsString = &valueAsString
-	}
 	validator.currentValid = true
 	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
 	validator.currentTitle = validator.currentName
 
 	return validator
+}
+
+func (validator *Validator) Not() *Validator {
+	validator.currentNegative = true
+
+	return validator
+}
+
+func (validator *Validator) resetNegative() {
+	validator.currentNegative = false
 }
 
 func (validator *Validator) Named(name string) *Validator {
@@ -66,6 +71,9 @@ func (validator *Validator) Passing(
 	} else {
 		function(&customValidator)
 	}
+
+	validator.resetNegative()
+
 	return validator
 }
 
@@ -73,8 +81,16 @@ func (validator *Validator) Errors() []*Error {
 	return validator.errors
 }
 
+func (validator *Validator) assert(value bool) bool {
+	return validator.currentNegative != value
+}
+
 func (validator *Validator) invalidate(
 	key string, values map[string]interface{}, templateString []string) {
+
+	if validator.currentNegative {
+		key = "not_" + key
+	}
 
 	validator.valid = false
 	var _templateString string
