@@ -17,7 +17,7 @@ func TestGreaterThanValid(t *testing.T) {
 	for description, values := range map[string][]interface{}{
 		"integers":                []interface{}{2, 1},
 		"strings-letters":         []interface{}{"b", "a"},
-		"strings-numbers":         []interface{}{"11", "2"},
+		"strings-numbers":         []interface{}{"2", "11"},
 		"string integer":          []interface{}{"1.1", 1},
 		"string float":            []interface{}{"1.1", 1.0},
 		"float integer":           []interface{}{1.1, 1},
@@ -48,7 +48,7 @@ func TestGreaterThanInvalid(t *testing.T) {
 		"integers-equal-to":                 []interface{}{1, 1},
 		"strings-letters-less-than":         []interface{}{"a", "b"},
 		"strings-letters-equal-to":          []interface{}{"a", "a"},
-		"strings-numbers-less-than":         []interface{}{"2", "11"},
+		"strings-numbers-less-than":         []interface{}{"11", "2"},
 		"strings-numbers-equal-to":          []interface{}{"2", "2"},
 		"string-less-than integer":          []interface{}{"1", 2},
 		"string-equal-to integer":           []interface{}{"1", 1},

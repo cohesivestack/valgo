@@ -7,7 +7,9 @@ func (valueA *Value) IsGreaterThan(value interface{}) bool {
 		return false
 	}
 
-	if valueA.IsNumber() && valueA.IsNumber() {
+	if (valueA.IsNumber() && valueB.IsNumberType()) ||
+		(valueB.IsNumber() && valueA.IsNumberType()) ||
+		(valueA.IsNumberType() && valueB.IsNumberType()) {
 		return valueA.AsFloat64() > valueB.AsFloat64()
 	}
 
