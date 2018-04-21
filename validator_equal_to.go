@@ -15,9 +15,7 @@ func (valueA *Value) IsEqualTo(value interface{}) bool {
 		return false
 	}
 
-	if (valueA.IsString() && valueB.IsNumberType()) ||
-		(valueB.IsString() && valueA.IsNumberType()) ||
-		(valueB.IsNumberType() && valueA.IsNumberType()) {
+	if valueA.IsNumber() && valueB.IsNumber() {
 		return valueA.AsFloat64() == valueB.AsFloat64()
 	}
 
