@@ -21,6 +21,8 @@ func setDefaultEnglishMessages() {
 			"not_greater_or_equal_to": "\"{{Title}}\" can't be greater or equal to \"{{Value}}\"",
 			"less_than":               "\"{{Title}}\" must be less than \"{{Value}}\"",
 			"not_less_than":           "\"{{Title}}\" can't be less than \"{{Value}}\"",
+			"less_or_equal_to":        "\"{{Title}}\" must be less or equal to \"{{Value}}\"",
+			"not_less_or_equal_to":    "\"{{Title}}\" can't be less or equal to \"{{Value}}\"",
 			"identical_to":            "\"{{Title}}\" must be equal to \"{{Value}}\"",
 			"not_identical_to":        "\"{{Title}}\" can't be equal to \"{{Value}}\"",
 			"matching_to":             "\"{{Title}}\" must match to \"{{Value}}\"",
