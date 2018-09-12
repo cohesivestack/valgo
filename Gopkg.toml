@@ -26,9 +26,5 @@
   version = "1.1.4"
 
 [[constraint]]
-  branch = "v2"
-  name = "gopkg.in/yaml.v2"
-
-[[constraint]]
   revision = "dcecefd839c4193db0d35b88ec65b4c12d360ab0"
   name = "github.com/valyala/fasttemplate"
