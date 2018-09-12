@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/carlosforero/valgo"
+	"git.cohesivestack.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -67,9 +67,9 @@ func TestLessThanInvalid(t *testing.T) {
 		"pointer-string-greater-than string":   []interface{}{&_string, "a"},
 		"pointer-string-equal-to string":       []interface{}{&_string, "b"},
 		// Different types than strings and number never should be true
-		"array":               []interface{}{[]int{2}, []int{1}},
-		"pointer-array":       []interface{}{&[]int{2}, &[]int{1}},
-		"pointer-array array": []interface{}{&[]int{2}, []int{1}},
+		"array":                 []interface{}{[]int{2}, []int{1}},
+		"pointer-array":         []interface{}{&[]int{2}, &[]int{1}},
+		"pointer-array array":   []interface{}{&[]int{2}, []int{1}},
 		"map":                   []interface{}{map[string]int{"a": 2}, map[string]int{"a": 1}},
 		"pointer-map":           []interface{}{&map[string]int{"a": 2}, &map[string]int{"a": 1}},
 		"pointer-map map":       []interface{}{&map[string]int{"a": 2}, map[string]int{"a": 1}},

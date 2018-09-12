@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/carlosforero/valgo"
+	"git.cohesivestack.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,12 +28,12 @@ func TestEqualToValid(t *testing.T) {
 		"array":                   []interface{}{[]int{10}, []int{10}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{10}},
 		"pointer-array array":     []interface{}{&[]int{10}, []int{10}},
-		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 10}},
-		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 10}},
-		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 10}},
-		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
-		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 10}},
-		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+		"map":                     []interface{}{map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"pointer-map":             []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 10}},
+		"pointer-map map":         []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"struct":                  []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+		"pointer-struct":          []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 10}},
+		"pointer-struct struct":   []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
 	} {
 		valueA := values[0]
 		valueB := values[1]
@@ -65,12 +65,12 @@ func TestEqualToInvalid(t *testing.T) {
 		"array":                   []interface{}{[]int{10}, []int{11}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{11}},
 		"pointer-array array":     []interface{}{&[]int{10}, []int{11}},
-		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 11}},
-		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 11}},
-		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 11}},
-		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
-		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 11}},
-		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+		"map":                     []interface{}{map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"pointer-map":             []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 11}},
+		"pointer-map map":         []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"struct":                  []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+		"pointer-struct":          []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 11}},
+		"pointer-struct struct":   []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
 	} {
 		valueA := values[0]
 		valueB := values[1]
@@ -106,12 +106,12 @@ func TestNotEqualToValid(t *testing.T) {
 		"array":                   []interface{}{[]int{10}, []int{11}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{11}},
 		"pointer-array array":     []interface{}{&[]int{10}, []int{11}},
-		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 11}},
-		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 11}},
-		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 11}},
-		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
-		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 11}},
-		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+		"map":                     []interface{}{map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"pointer-map":             []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 11}},
+		"pointer-map map":         []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 11}},
+		"struct":                  []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
+		"pointer-struct":          []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 11}},
+		"pointer-struct struct":   []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 11}},
 	} {
 		valueA := values[0]
 		valueB := values[1]
@@ -139,12 +139,12 @@ func TestNotEqualToInvalid(t *testing.T) {
 		"array":                   []interface{}{[]int{10}, []int{10}},
 		"pointer-array":           []interface{}{&[]int{10}, &[]int{10}},
 		"pointer-array array":     []interface{}{&[]int{10}, []int{10}},
-		"map":                   []interface{}{map[string]int{"a": 10}, map[string]int{"a": 10}},
-		"pointer-map":           []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 10}},
-		"pointer-map map":       []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 10}},
-		"struct":                []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
-		"pointer-struct":        []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 10}},
-		"pointer-struct struct": []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+		"map":                     []interface{}{map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"pointer-map":             []interface{}{&map[string]int{"a": 10}, &map[string]int{"a": 10}},
+		"pointer-map map":         []interface{}{&map[string]int{"a": 10}, map[string]int{"a": 10}},
+		"struct":                  []interface{}{MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
+		"pointer-struct":          []interface{}{&MyStruct{FieldInt: 10}, &MyStruct{FieldInt: 10}},
+		"pointer-struct struct":   []interface{}{&MyStruct{FieldInt: 10}, MyStruct{FieldInt: 10}},
 	} {
 		valueA := values[0]
 		valueB := values[1]

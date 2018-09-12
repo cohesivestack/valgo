@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/carlosforero/valgo"
+	"git.cohesivestack.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
