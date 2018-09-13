@@ -32,6 +32,8 @@ func setDefaultEnglishMessages() {
 			"an_integer":              "\"{{Title}}\" must be an integer number",
 			"an_integer_type":         "\"{{Title}}\" must be an integer type",
 			"a_string":                "\"{{Title}}\" must be a text",
+			"an_email":                "\"{{Title}}\" is not an email address",
+			"not_an_email":            "\"{{Title}}\" must not be an email address",
 		},
 	}
 }

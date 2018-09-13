@@ -24,6 +24,8 @@ func setDefaultSpanishMessages() {
 			"an_integer":        "\"{{Title}}\" debe ser un número entero",
 			"an_integer_type":   "\"{{Title}}\" debe ser un número tipo entero",
 			"a_string":          "\"{{Title}}\" debe ser un texto",
+			"an_email":          "\"{{Title}}\" no es una dirección de correo valida",
+			"not_an_email":      "\"{{Title}}\" debe ser una dirección de correo",
 		},
 	}
 }
