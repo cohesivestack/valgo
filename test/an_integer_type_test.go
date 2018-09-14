@@ -27,7 +27,7 @@ func TestAnIntegerTypeValid(t *testing.T) {
 		v := valgo.Is(value).AnIntegerType()
 
 		assert.True(t, v.Valid())
-		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
+		assert.Empty(t, v.ErrorItems(), fmt.Sprintf("not assert using %s", value))
 	}
 }
 
@@ -45,9 +45,9 @@ func TestAnIntegerTypeInvalid(t *testing.T) {
 		[]int{10}} {
 		v := valgo.Is(value).AnIntegerType()
 
-		if assert.NotEmpty(t, v.Errors()) {
-			assert.Len(t, v.Errors(), 1)
-			assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be an integer type")
+		if assert.NotEmpty(t, v.ErrorItems()) {
+			assert.Len(t, v.ErrorItems(), 1)
+			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be an integer type")
 		}
 	}
 }

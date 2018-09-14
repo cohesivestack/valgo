@@ -13,13 +13,13 @@ type Validator struct {
 	currentName  string
 	currentValid bool
 	currentIndex int
-	currentError *Error
+	currentError *ErrorItem
 
 	currentNegative bool
 
 	_locale locale
 	valid   bool
-	errors  []*Error
+	errors  []*ErrorItem
 }
 
 func (validator *Validator) Is(value interface{}) *Validator {
@@ -77,7 +77,7 @@ func (validator *Validator) Passing(
 	return validator
 }
 
-func (validator *Validator) Errors() []*Error {
+func (validator *Validator) ErrorItems() []*ErrorItem {
 	return validator.errors
 }
 
@@ -109,7 +109,7 @@ func (validator *Validator) invalidate(
 	message := template.ExecuteString(values)
 
 	if validator.currentError == nil {
-		validator.currentError = &Error{
+		validator.currentError = &ErrorItem{
 			Name:  validator.currentName,
 			Title: validator.currentTitle,
 			Value: validator.currentValue,
@@ -120,7 +120,7 @@ func (validator *Validator) invalidate(
 		validator.valid = false
 
 		if validator.errors == nil {
-			validator.errors = []*Error{validator.currentError}
+			validator.errors = []*ErrorItem{validator.currentError}
 		} else {
 			validator.errors = append(validator.errors, validator.currentError)
 		}

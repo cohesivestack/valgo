@@ -31,7 +31,7 @@ func TestAnEmailValid(t *testing.T) {
 		v := valgo.Is(value).AnEmail()
 
 		assert.True(t, v.Valid())
-		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
+		assert.Empty(t, v.ErrorItems(), fmt.Sprintf("not assert using %s", value))
 	}
 }
 
@@ -50,9 +50,9 @@ func TestAnEmailInvalid(t *testing.T) {
 		"email@example..com"} {
 		v := valgo.Is(value).AnEmail()
 
-		if assert.NotEmpty(t, v.Errors(), fmt.Sprintf("not assert using %s", value)) {
-			assert.Len(t, v.Errors(), 1)
-			assert.Contains(t, v.Errors()[0].Messages, "\"value0\" is not an email address")
+		if assert.NotEmpty(t, v.ErrorItems(), fmt.Sprintf("not assert using %s", value)) {
+			assert.Len(t, v.ErrorItems(), 1)
+			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" is not an email address")
 		}
 	}
 }

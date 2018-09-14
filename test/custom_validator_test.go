@@ -17,9 +17,9 @@ func TestCustomValidatorAsInvalid(t *testing.T) {
 	})
 
 	assert.False(t, v.Valid())
-	if assert.NotEmpty(t, v.Errors()) {
-		assert.Len(t, v.Errors(), 1)
-		assert.Contains(t, v.Errors()[0].Messages, "\"value0\" must be equal to \"BTC\"")
+	if assert.NotEmpty(t, v.ErrorItems()) {
+		assert.Len(t, v.ErrorItems(), 1)
+		assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be equal to \"BTC\"")
 	}
 }
 
@@ -33,5 +33,5 @@ func TestCustomValidatorAsValid(t *testing.T) {
 	})
 
 	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
+	assert.Empty(t, v.ErrorItems())
 }

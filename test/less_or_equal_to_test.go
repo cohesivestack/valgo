@@ -44,7 +44,7 @@ func TestLessOrEqualToValid(t *testing.T) {
 
 		v := valgo.Is(valueA).LessOrEqualTo(valueB)
 		assert.True(t, v.Valid(), msg)
-		assert.Empty(t, v.Errors(), msg)
+		assert.Empty(t, v.ErrorItems(), msg)
 	}
 }
 
@@ -83,9 +83,9 @@ func TestLessOrEqualToInvalid(t *testing.T) {
 		msg := fmt.Sprintf("not assert with %s", description)
 
 		assert.False(t, v.Valid(), msg)
-		if assert.NotEmpty(t, v.Errors(), msg) {
-			assert.Len(t, v.Errors(), 1, msg)
-			assert.Contains(t, v.Errors()[0].Messages,
+		if assert.NotEmpty(t, v.ErrorItems(), msg) {
+			assert.Len(t, v.ErrorItems(), 1, msg)
+			assert.Contains(t, v.ErrorItems()[0].Messages,
 				fmt.Sprintf("\"value0\" must be less or equal to \"%v\"", valueB), msg)
 		}
 	}

@@ -22,7 +22,7 @@ func TestMatchingToValid(t *testing.T) {
 
 		v := valgo.Is(value).MatchingTo(pattern)
 		assert.True(t, v.Valid(), msg)
-		assert.Empty(t, v.Errors(), msg)
+		assert.Empty(t, v.ErrorItems(), msg)
 	}
 }
 
@@ -43,9 +43,9 @@ func TestMatchingToInvalid(t *testing.T) {
 		msg := fmt.Sprintf("not assert with %s", description)
 
 		assert.False(t, v.Valid())
-		if assert.NotEmpty(t, v.Errors()) {
-			assert.Len(t, v.Errors(), 1, msg)
-			assert.Contains(t, v.Errors()[0].Messages,
+		if assert.NotEmpty(t, v.ErrorItems()) {
+			assert.Len(t, v.ErrorItems(), 1, msg)
+			assert.Contains(t, v.ErrorItems()[0].Messages,
 				fmt.Sprintf("\"value0\" must match to \"%v\"", pattern), msg)
 		}
 	}

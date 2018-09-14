@@ -1,6 +1,6 @@
 package valgo
 
-type Error struct {
+type ErrorItem struct {
 	Value    interface{}
 	Name     string
 	Title    string
