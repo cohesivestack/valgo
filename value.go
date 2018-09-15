@@ -37,86 +37,86 @@ func stringAsPointer(value string) *string {
 }
 
 func NewValue(value interface{}) *Value {
-	_value := &Value{
+	_val := &Value{
 		original: value,
 	}
 
 	rv := reflect.ValueOf(value)
 	if rv.Kind() == reflect.Ptr {
-		_value.absolute = reflect.Indirect(rv).Interface()
+		_val.absolute = reflect.Indirect(rv).Interface()
 	} else {
-		_value.absolute = value
+		_val.absolute = value
 	}
 
-	return _value
+	return _val
 }
 
 func isComparableType(value interface{}) bool {
-	_value := reflect.ValueOf(value)
-	switch _value.Kind() {
+	_val := reflect.ValueOf(value)
+	switch _val.Kind() {
 	case reflect.Slice, reflect.Array, reflect.Map:
 		return false
 	}
 	return true
 }
 
-func (value *Value) IsComparableType() bool {
-	if value.isComparableType == nil {
-		value.isComparableType = boolPointer(isComparableType(value.absolute))
+func (val *Value) IsComparableType() bool {
+	if val.isComparableType == nil {
+		val.isComparableType = boolPointer(isComparableType(val.absolute))
 	}
-	return *value.isComparableType
+	return *val.isComparableType
 }
 
-func (value *Value) AsFloat64() float64 {
-	if value.asFloat64 == nil {
-		_value := value.absolute
+func (val *Value) AsFloat64() float64 {
+	if val.asFloat64 == nil {
+		_val := val.absolute
 
-		switch _value.(type) {
+		switch _val.(type) {
 		case uint:
-			value.asFloat64 = float64Pointer(float64(_value.(uint)))
+			val.asFloat64 = float64Pointer(float64(_val.(uint)))
 		case uint8:
-			value.asFloat64 = float64Pointer(float64(_value.(uint8)))
+			val.asFloat64 = float64Pointer(float64(_val.(uint8)))
 		case uint16:
-			value.asFloat64 = float64Pointer(float64(_value.(uint16)))
+			val.asFloat64 = float64Pointer(float64(_val.(uint16)))
 		case uint32:
-			value.asFloat64 = float64Pointer(float64(_value.(uint32)))
+			val.asFloat64 = float64Pointer(float64(_val.(uint32)))
 		case uint64:
-			value.asFloat64 = float64Pointer(float64(_value.(uint64)))
+			val.asFloat64 = float64Pointer(float64(_val.(uint64)))
 		case int:
-			value.asFloat64 = float64Pointer(float64(_value.(int)))
+			val.asFloat64 = float64Pointer(float64(_val.(int)))
 		case int8:
-			value.asFloat64 = float64Pointer(float64(_value.(int8)))
+			val.asFloat64 = float64Pointer(float64(_val.(int8)))
 		case int16:
-			value.asFloat64 = float64Pointer(float64(_value.(int16)))
+			val.asFloat64 = float64Pointer(float64(_val.(int16)))
 		case int32:
-			value.asFloat64 = float64Pointer(float64(_value.(int32)))
+			val.asFloat64 = float64Pointer(float64(_val.(int32)))
 		case int64:
-			value.asFloat64 = float64Pointer(float64(_value.(int64)))
+			val.asFloat64 = float64Pointer(float64(_val.(int64)))
 		case float32:
-			value.asFloat64 = float64Pointer(float64(_value.(float32)))
+			val.asFloat64 = float64Pointer(float64(_val.(float32)))
 		case float64:
-			value.asFloat64 = float64Pointer(_value.(float64))
+			val.asFloat64 = float64Pointer(_val.(float64))
 		case string:
-			_value, err := strconv.ParseFloat(_value.(string), 64)
+			_val, err := strconv.ParseFloat(_val.(string), 64)
 			if err != nil {
-				_value = 0
+				_val = 0
 			}
-			value.asFloat64 = float64Pointer(_value)
+			val.asFloat64 = float64Pointer(_val)
 		default:
-			value.asFloat64 = float64Pointer(0)
+			val.asFloat64 = float64Pointer(0)
 		}
 	}
 
-	return *value.asFloat64
+	return *val.asFloat64
 }
 
 func convertToString(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
-func (value *Value) AsString() string {
-	if value.asString == nil {
-		value.asString = stringAsPointer(convertToString(value.absolute))
+func (val *Value) AsString() string {
+	if val.asString == nil {
+		val.asString = stringAsPointer(convertToString(val.absolute))
 	}
-	return *value.asString
+	return *val.asString
 }

@@ -4,7 +4,7 @@ type CustomValidator struct {
 	validator *Validator
 }
 
-func (customValidator *CustomValidator) Invalidate(
+func (cv *CustomValidator) Invalidate(
 	key string, templateString []string, variables map[string]interface{}) {
 
 	if variables == nil {
@@ -12,12 +12,12 @@ func (customValidator *CustomValidator) Invalidate(
 	}
 
 	if _, ok := variables["Title"]; !ok {
-		variables["Title"] = customValidator.validator.currentTitle
+		variables["Title"] = cv.validator.currentTitle
 	}
 
-	customValidator.validator.invalidate(key, variables, templateString)
+	cv.validator.invalidate(key, variables, templateString)
 }
 
-func (customValidator *CustomValidator) Value() *Value {
-	return customValidator.validator.currentValue
+func (cv *CustomValidator) Value() *Value {
+	return cv.validator.currentValue
 }

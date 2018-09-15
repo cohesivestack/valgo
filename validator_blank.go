@@ -4,20 +4,20 @@ import (
 	"strings"
 )
 
-func (value *Value) IsBlank() bool {
-	if value.isBlank == nil {
-		_value := strings.TrimSpace(value.AsString())
-		value.isBlank = boolPointer(len(_value) == 0)
+func (val *Value) IsBlank() bool {
+	if val.isBlank == nil {
+		_val := strings.TrimSpace(val.AsString())
+		val.isBlank = boolPointer(len(_val) == 0)
 	}
-	return *value.isBlank
+	return *val.isBlank
 }
 
-func (validator *Validator) Blank(template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsBlank()) {
-		validator.invalidate("blank", map[string]interface{}{"Title": validator.currentTitle}, template)
+func (v *Validator) Blank(template ...string) *Validator {
+	if !v.assert(v.currentValue.IsBlank()) {
+		v.invalidate("blank", map[string]interface{}{"Title": v.currentTitle}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

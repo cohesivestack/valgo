@@ -1,26 +1,26 @@
 package valgo
 
-func (valueA *Value) IsIdenticalTo(value interface{}) bool {
-	valueBOriginal := value
+func (valA *Value) IsIdenticalTo(value interface{}) bool {
+	valBOriginal := value
 
 	// Value.IsComparableType is not used since we need to check the original
 	// values
-	if !isComparableType(valueA.original) || !isComparableType(valueBOriginal) {
+	if !isComparableType(valA.original) || !isComparableType(valBOriginal) {
 		return false
 	}
 
-	return valueA.original == valueBOriginal
+	return valA.original == valBOriginal
 }
 
-func (validator *Validator) IdenticalTo(value interface{}, template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsIdenticalTo(value)) {
-		validator.invalidate("identical_to",
+func (v *Validator) IdenticalTo(value interface{}, template ...string) *Validator {
+	if !v.assert(v.currentValue.IsIdenticalTo(value)) {
+		v.invalidate("identical_to",
 			map[string]interface{}{
-				"Title": validator.currentTitle,
+				"Title": v.currentTitle,
 				"Value": convertToString(value)}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

@@ -1,24 +1,24 @@
 package valgo
 
-func (value *Value) IsString() bool {
-	if value.isString == nil {
-		value.isString = boolPointer(false)
-		switch value.absolute.(type) {
+func (val *Value) IsString() bool {
+	if val.isString == nil {
+		val.isString = boolPointer(false)
+		switch val.absolute.(type) {
 		case string:
-			value.isString = boolPointer(true)
+			val.isString = boolPointer(true)
 		}
 	}
 
-	return *value.isString
+	return *val.isString
 }
 
-func (validator *Validator) AString(template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsString()) {
-		validator.invalidate("a_string",
-			map[string]interface{}{"Title": validator.currentTitle}, template)
+func (v *Validator) AString(template ...string) *Validator {
+	if !v.assert(v.currentValue.IsString()) {
+		v.invalidate("a_string",
+			map[string]interface{}{"Title": v.currentTitle}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

@@ -4,33 +4,33 @@ import (
 	"reflect"
 )
 
-func (valueA *Value) IsEqualTo(value interface{}) bool {
-	valueB := NewValue(value)
-	if valueA.IsComparableType() && valueB.IsComparableType() && valueA.absolute == valueB.absolute {
+func (val *Value) IsEqualTo(value interface{}) bool {
+	valB := NewValue(value)
+	if val.IsComparableType() && valB.IsComparableType() && val.absolute == valB.absolute {
 		return true
 	}
 
 	// if previous test was not true and one value is nil then just return false
-	if valueA.absolute == nil || valueB.absolute == nil {
+	if val.absolute == nil || valB.absolute == nil {
 		return false
 	}
 
-	if valueA.IsNumber() && valueB.IsNumber() {
-		return valueA.AsFloat64() == valueB.AsFloat64()
+	if val.IsNumber() && valB.IsNumber() {
+		return val.AsFloat64() == valB.AsFloat64()
 	}
 
-	return reflect.DeepEqual(valueA.absolute, valueB.absolute)
+	return reflect.DeepEqual(val.absolute, valB.absolute)
 }
 
-func (validator *Validator) EqualTo(value interface{}, template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsEqualTo(value)) {
-		validator.invalidate("equivalent_to",
+func (v *Validator) EqualTo(value interface{}, template ...string) *Validator {
+	if !v.assert(v.currentValue.IsEqualTo(value)) {
+		v.invalidate("equivalent_to",
 			map[string]interface{}{
-				"Title": validator.currentTitle,
+				"Title": v.currentTitle,
 				"Value": convertToString(value)}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

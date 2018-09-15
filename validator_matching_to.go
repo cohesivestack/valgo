@@ -4,24 +4,24 @@ import (
 	"regexp"
 )
 
-func (value *Value) IsMatchingTo(pattern string) bool {
-	if !value.IsString() {
+func (val *Value) IsMatchingTo(pattern string) bool {
+	if !val.IsString() {
 		return false
 	}
 
 	var r = regexp.MustCompile(pattern)
-	return r.MatchString(value.AsString())
+	return r.MatchString(val.AsString())
 }
 
-func (validator *Validator) MatchingTo(pattern string, template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsMatchingTo(pattern)) {
-		validator.invalidate("matching_to",
+func (v *Validator) MatchingTo(pattern string, template ...string) *Validator {
+	if !v.assert(v.currentValue.IsMatchingTo(pattern)) {
+		v.invalidate("matching_to",
 			map[string]interface{}{
-				"Title": validator.currentTitle,
+				"Title": v.currentTitle,
 				"Value": pattern}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

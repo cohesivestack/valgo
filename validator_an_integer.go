@@ -4,10 +4,10 @@ import (
 	"strconv"
 )
 
-func (value *Value) IsInteger() bool {
-	if value.isInteger == nil {
-		value.isInteger = boolPointer(false)
-		switch value.absolute.(type) {
+func (val *Value) IsInteger() bool {
+	if val.isInteger == nil {
+		val.isInteger = boolPointer(false)
+		switch val.absolute.(type) {
 		case uint,
 			uint8,
 			uint16,
@@ -18,22 +18,22 @@ func (value *Value) IsInteger() bool {
 			int16,
 			int32,
 			int64:
-			value.isInteger = boolPointer(true)
+			val.isInteger = boolPointer(true)
 		case string:
-			_, err := strconv.ParseInt(value.absolute.(string), 10, 64)
-			value.isInteger = boolPointer(err == nil)
+			_, err := strconv.ParseInt(val.absolute.(string), 10, 64)
+			val.isInteger = boolPointer(err == nil)
 		}
 	}
-	return *value.isInteger
+	return *val.isInteger
 }
 
-func (validator *Validator) AnInteger(template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsInteger()) {
-		validator.invalidate("an_integer",
-			map[string]interface{}{"Title": validator.currentTitle}, template)
+func (v *Validator) AnInteger(template ...string) *Validator {
+	if !v.assert(v.currentValue.IsInteger()) {
+		v.invalidate("an_integer",
+			map[string]interface{}{"Title": v.currentTitle}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

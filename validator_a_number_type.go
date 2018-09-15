@@ -1,9 +1,9 @@
 package valgo
 
-func (value *Value) IsNumberType() bool {
-	if value.isNumberType == nil {
-		value.isNumberType = boolPointer(false)
-		switch value.absolute.(type) {
+func (val *Value) IsNumberType() bool {
+	if val.isNumberType == nil {
+		val.isNumberType = boolPointer(false)
+		switch val.absolute.(type) {
 		case uint,
 			uint8,
 			uint16,
@@ -16,20 +16,20 @@ func (value *Value) IsNumberType() bool {
 			int64,
 			float32,
 			float64:
-			value.isNumberType = boolPointer(true)
+			val.isNumberType = boolPointer(true)
 		}
 	}
 
-	return *value.isNumberType
+	return *val.isNumberType
 }
 
-func (validator *Validator) ANumberType(template ...string) *Validator {
-	if !validator.assert(validator.currentValue.IsNumberType()) {
-		validator.invalidate("a_number_type",
-			map[string]interface{}{"Title": validator.currentTitle}, template)
+func (v *Validator) ANumberType(template ...string) *Validator {
+	if !v.assert(v.currentValue.IsNumberType()) {
+		v.invalidate("a_number_type",
+			map[string]interface{}{"Title": v.currentTitle}, template)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }

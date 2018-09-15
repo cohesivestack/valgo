@@ -21,53 +21,53 @@ type Validator struct {
 	errorValidator *ErrorValidator
 }
 
-func (validator *Validator) Is(value interface{}) *Validator {
+func (v *Validator) Is(value interface{}) *Validator {
 
-	validator.closeCurrentError()
+	v.closeCurrentError()
 
-	validator.currentIndex += 1
-	validator.currentValue = NewValue(value)
-	validator.currentValid = true
-	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
-	validator.currentTitle = validator.currentName
+	v.currentIndex += 1
+	v.currentValue = NewValue(value)
+	v.currentValid = true
+	v.currentName = fmt.Sprintf("value%v", v.currentIndex)
+	v.currentTitle = v.currentName
 
-	return validator
+	return v
 }
 
-func (validator *Validator) Not() *Validator {
-	validator.currentNegative = true
+func (v *Validator) Not() *Validator {
+	v.currentNegative = true
 
-	return validator
+	return v
 }
 
-func (validator *Validator) resetNegative() {
-	validator.currentNegative = false
+func (v *Validator) resetNegative() {
+	v.currentNegative = false
 }
 
-func (validator *Validator) Named(name string) *Validator {
-	validator.currentName = name
-	if !validator.currentValid {
-		validator.errorValidator.currentError.Name = name
+func (v *Validator) Named(name string) *Validator {
+	v.currentName = name
+	if !v.currentValid {
+		v.errorValidator.currentError.Name = name
 	}
 
-	return validator
+	return v
 }
 
-func (validator *Validator) Titled(title string) *Validator {
-	validator.currentTitle = title
+func (v *Validator) Titled(title string) *Validator {
+	v.currentTitle = title
 
-	return validator
+	return v
 }
 
-func (validator *Validator) Valid() bool {
-	return validator.valid
+func (v *Validator) Valid() bool {
+	return v.valid
 }
 
-func (validator *Validator) Passing(
+func (v *Validator) Passing(
 	function func(cv *CustomValidator, t ...string), template ...string) *Validator {
 
 	customValidator := CustomValidator{
-		validator: validator,
+		validator: v,
 	}
 
 	if len(template) > 0 {
@@ -76,21 +76,21 @@ func (validator *Validator) Passing(
 		function(&customValidator)
 	}
 
-	validator.resetNegative()
+	v.resetNegative()
 
-	return validator
+	return v
 }
 
-func (validator *Validator) ErrorItems() []ErrorItem {
-	if validator.valid {
+func (v *Validator) ErrorItems() []ErrorItem {
+	if v.valid {
 		return []ErrorItem{}
 	}
 
-	return validator.errorValidator.Items()
+	return v.errorValidator.Items()
 }
 
-func (validator *Validator) Error() error {
-	return validator.errorValidator
+func (v *Validator) Error() error {
+	return v.errorValidator
 }
 
 func (v *Validator) AddErrorToNamed(name string, message string) *Validator {
@@ -105,22 +105,22 @@ func (v *Validator) WithError(messageTemplate string) *Validator {
 	return v
 }
 
-func (validator *Validator) assert(value bool) bool {
-	return validator.currentNegative != value
+func (v *Validator) assert(value bool) bool {
+	return v.currentNegative != value
 }
 
-func (validator *Validator) invalidate(
+func (v *Validator) invalidate(
 	key string, values map[string]interface{}, templateString []string) {
 
-	if validator.currentNegative {
+	if v.currentNegative {
 		key = "not_" + key
 	}
 
-	validator.valid = false
+	v.valid = false
 	var _templateString string
 	if len(templateString) > 0 {
 		_templateString = templateString[0]
-	} else if ts, ok := validator._locale.Messages[key]; ok {
+	} else if ts, ok := v._locale.Messages[key]; ok {
 		_templateString = ts
 	} else if len(strings.TrimSpace(key)) == 0 {
 		_templateString = "ERROR: MISSING MESSAGE KEY OR TEMPLATE STRING!"
@@ -132,24 +132,24 @@ func (validator *Validator) invalidate(
 	template := fasttemplate.New(_templateString, "{{", "}}")
 	message := template.ExecuteString(values)
 
-	if validator.errorValidator == nil {
-		validator.errorValidator = &ErrorValidator{
+	if v.errorValidator == nil {
+		v.errorValidator = &ErrorValidator{
 			items: []*ErrorItem{},
 		}
 	}
 
-	if validator.errorValidator.currentError == nil {
-		validator.errorValidator.currentError = &ErrorItem{
-			Name:     validator.currentName,
+	if v.errorValidator.currentError == nil {
+		v.errorValidator.currentError = &ErrorItem{
+			Name:     v.currentName,
 			Messages: []string{},
 		}
 	}
 
-	validator.errorValidator.currentError.Messages = append(
-		validator.errorValidator.currentError.Messages, message)
+	v.errorValidator.currentError.Messages = append(
+		v.errorValidator.currentError.Messages, message)
 
-	validator.currentValid = false
-	validator.valid = false
+	v.currentValid = false
+	v.valid = false
 }
 
 func (v *Validator) closeCurrentError() {
