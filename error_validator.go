@@ -36,9 +36,16 @@ func (e *ErrorValidator) Items() []ErrorItem {
 }
 
 func (e *ErrorValidator) MarshalJSON() ([]byte, error) {
+	items := map[string][]string{}
+	for _, item := range e.items {
+		items[item.Name] = item.Messages
+	}
+	if e.currentError != nil {
+		items[e.currentError.Name] = e.currentError.Messages
+	}
 	return json.Marshal(struct {
-		Items []ErrorItem `json:"items"`
+		Items map[string][]string `json:"errors"`
 	}{
-		Items: e.Items(),
+		Items: items,
 	})
 }
