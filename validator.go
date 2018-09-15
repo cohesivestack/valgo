@@ -13,16 +13,17 @@ type Validator struct {
 	currentName  string
 	currentValid bool
 	currentIndex int
-	currentError *ErrorItem
 
 	currentNegative bool
 
-	_locale locale
-	valid   bool
-	errors  []*ErrorItem
+	_locale        locale
+	valid          bool
+	errorValidator *ErrorValidator
 }
 
 func (validator *Validator) Is(value interface{}) *Validator {
+
+	validator.closeCurrentError()
 
 	validator.currentIndex += 1
 	validator.currentValue = NewValue(value)
@@ -45,6 +46,9 @@ func (validator *Validator) resetNegative() {
 
 func (validator *Validator) Named(name string) *Validator {
 	validator.currentName = name
+	if !validator.currentValid {
+		validator.errorValidator.currentError.Name = name
+	}
 
 	return validator
 }
@@ -77,8 +81,28 @@ func (validator *Validator) Passing(
 	return validator
 }
 
-func (validator *Validator) ErrorItems() []*ErrorItem {
-	return validator.errors
+func (validator *Validator) ErrorItems() []ErrorItem {
+	if validator.valid {
+		return []ErrorItem{}
+	}
+
+	return validator.errorValidator.Items()
+}
+
+func (validator *Validator) Error() error {
+	return validator.errorValidator
+}
+
+func (v *Validator) AddErrorToNamed(name string, message string) *Validator {
+	return v.Is(nil).Named(name).WithError(message)
+}
+
+func (v *Validator) WithError(messageTemplate string) *Validator {
+	v.invalidate("", map[string]interface{}{
+		"Title": v.currentTitle,
+		"Value": v.currentValue}, []string{messageTemplate})
+
+	return v
 }
 
 func (validator *Validator) assert(value bool) bool {
@@ -108,24 +132,40 @@ func (validator *Validator) invalidate(
 	template := fasttemplate.New(_templateString, "{{", "}}")
 	message := template.ExecuteString(values)
 
-	if validator.currentError == nil {
-		validator.currentError = &ErrorItem{
-			Name:  validator.currentName,
-			Title: validator.currentTitle,
-			Value: validator.currentValue,
+	if validator.errorValidator == nil {
+		validator.errorValidator = &ErrorValidator{
+			items: []*ErrorItem{},
+		}
+	}
+
+	if validator.errorValidator.currentError == nil {
+		validator.errorValidator.currentError = &ErrorItem{
+			Name:     validator.currentName,
+			Messages: []string{},
+		}
+	}
+
+	validator.errorValidator.currentError.Messages = append(
+		validator.errorValidator.currentError.Messages, message)
+
+	validator.currentValid = false
+	validator.valid = false
+}
+
+func (v *Validator) closeCurrentError() {
+	if !v.currentValid {
+		lastError := v.errorValidator.currentError
+		v.errorValidator.currentError = nil
+
+		// If already exist an ErrorItem with the name then reuse the error item
+		for _, item := range v.errorValidator.items {
+			if item.Name == lastError.Name {
+				item.Messages = append(item.Messages, lastError.Messages...)
+				return
+			}
 		}
 
-		validator.currentError.Messages = []string{message}
-		validator.currentValid = false
-		validator.valid = false
-
-		if validator.errors == nil {
-			validator.errors = []*ErrorItem{validator.currentError}
-		} else {
-			validator.errors = append(validator.errors, validator.currentError)
-		}
-	} else {
-		validator.currentError.Messages = append(
-			validator.currentError.Messages, message)
+		// Is was not found an ErrorItem with the same name then add it
+		v.errorValidator.items = append(v.errorValidator.items, lastError)
 	}
 }

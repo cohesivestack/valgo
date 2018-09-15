@@ -6,14 +6,13 @@ import (
 )
 
 type ErrorItem struct {
-	Value    interface{} `json:"value"`
-	Name     string      `json:"name"`
-	Title    string      `json:"title"`
-	Messages []string    `json:"messages"`
+	Name     string   `json:"name"`
+	Messages []string `json:"messages"`
 }
 
 type ErrorValidator struct {
-	items []*ErrorItem
+	items        []*ErrorItem
+	currentError *ErrorItem
 }
 
 func (e *ErrorValidator) Error() string {
@@ -29,6 +28,9 @@ func (e *ErrorValidator) Items() []ErrorItem {
 	items := []ErrorItem{}
 	for _, item := range e.items {
 		items = append(items, *item)
+	}
+	if e.currentError != nil {
+		items = append(items, *e.currentError)
 	}
 	return items
 }

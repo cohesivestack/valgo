@@ -86,3 +86,7 @@ func newValidator(_locale locale, value interface{}) *Validator {
 func Is(value interface{}) *Validator {
 	return newValidator(getLocales()[defaultLocaleCode], value)
 }
+
+func AddErrorToNamed(name string, message string) *Validator {
+	return Is(nil).Named(name).WithError(message)
+}
