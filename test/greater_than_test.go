@@ -86,7 +86,7 @@ func TestGreaterThanInvalid(t *testing.T) {
 		if assert.NotEmpty(t, v.ErrorItems(), msg) {
 			assert.Len(t, v.ErrorItems(), 1, msg)
 			assert.Contains(t, v.ErrorItems()[0].Messages,
-				fmt.Sprintf("\"value0\" must be greater than \"%v\"", valueB), msg)
+				fmt.Sprintf("Value 0 must be greater than \"%v\"", valueB), msg)
 		}
 	}
 }

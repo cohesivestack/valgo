@@ -47,7 +47,7 @@ func TestANumberInvalid(t *testing.T) {
 
 		if assert.NotEmpty(t, v.ErrorItems()) {
 			assert.Len(t, v.ErrorItems(), 1)
-			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be a number")
+			assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be a number")
 		}
 	}
 }

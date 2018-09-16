@@ -52,7 +52,7 @@ func TestAnEmailInvalid(t *testing.T) {
 
 		if assert.NotEmpty(t, v.ErrorItems(), fmt.Sprintf("not assert using %s", value)) {
 			assert.Len(t, v.ErrorItems(), 1)
-			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" is not an email address")
+			assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 is not an email address")
 		}
 	}
 }

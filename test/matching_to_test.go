@@ -46,7 +46,7 @@ func TestMatchingToInvalid(t *testing.T) {
 		if assert.NotEmpty(t, v.ErrorItems()) {
 			assert.Len(t, v.ErrorItems(), 1, msg)
 			assert.Contains(t, v.ErrorItems()[0].Messages,
-				fmt.Sprintf("\"value0\" must match to \"%v\"", pattern), msg)
+				fmt.Sprintf("Value 0 must match to \"%v\"", pattern), msg)
 		}
 	}
 }

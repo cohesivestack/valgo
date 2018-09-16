@@ -72,15 +72,12 @@ func Localized(code string) (*localized, error) {
 
 func newValidator(_locale locale, value interface{}) *Validator {
 	validator := &Validator{
-		currentIndex: 0,
-		currentValue: NewValue(value),
 		currentValid: true,
 		valid:        true,
 		_locale:      _locale,
 	}
-	validator.currentName = fmt.Sprintf("value%v", validator.currentIndex)
-	validator.currentTitle = validator.currentName
-	return validator
+
+	return validator.Is(value)
 }
 
 func Is(value interface{}) *Validator {

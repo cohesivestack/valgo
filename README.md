@@ -3,6 +3,12 @@
 
 
 ```go
+
+valgo.For(object).Is("field2").Blank().Valid()
+valgo.Is(value).Named().Blank().Valid()
+
+
+
 var email = "elonmusk@tesla.com"
 
 valid := valgo.Is(name).NotBlank().Email().Valid()

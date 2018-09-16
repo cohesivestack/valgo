@@ -11,28 +11,28 @@ func TestCustomMessageTemplate(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is(" ").Not().Blank("The field \"{{Title}}\" can't be blank. :-)").Empty()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "The field \"value0\" can't be blank. :-)")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "The field \"Value 0\" can't be blank. :-)")
 }
 
 func TestCustomMessageTemplateIsNotReplacingOtherValidations(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is(" ").Not().Blank("The field \"{{Title}}\" can't be blank. :-)").Empty()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "The field \"value0\" can't be blank. :-)")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "The field \"Value 0\" can't be blank. :-)")
 
 	// Should not replace the template for other validations
-	assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be empty")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be empty")
 }
 
 func TestCustomMessageTemplateIsNotReplacingDefaultValidation(t *testing.T) {
 	valgo.ResetMessages()
 
 	v := valgo.Is(" ").Not().Blank("The field \"{{Title}}\" can't be blank. :-)").Empty()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "The field \"value0\" can't be blank. :-)")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "The field \"Value 0\" can't be blank. :-)")
 
 	// Should not replace default blank message
 	v = valgo.Is(" ").Not().Blank()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" can't be blank")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 can't be blank")
 }
 
 func TestCustomMessagesAddingANewLocale(t *testing.T) {
@@ -47,8 +47,8 @@ func TestCustomMessagesAddingANewLocale(t *testing.T) {
 	assert.NoError(t, err)
 
 	v := localized.Is(" ").Not().Blank().Empty()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "Liberland say \"value0\" can't be blank")
-	assert.Contains(t, v.ErrorItems()[0].Messages, "Liberland say \"value0\" must be empty")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Liberland say \"Value 0\" can't be blank")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Liberland say \"Value 0\" must be empty")
 
 }
 
@@ -64,8 +64,8 @@ func TestCustomMessagesReplacingExistingLocale(t *testing.T) {
 	assert.NoError(t, err)
 
 	v := localized.Is(" ").Not().Blank().Empty()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "An improved english say \"value0\" can't be blank")
-	assert.Contains(t, v.ErrorItems()[0].Messages, "An improved english say \"value0\" must be empty")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "An improved english say \"Value 0\" can't be blank")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "An improved english say \"Value 0\" must be empty")
 
 }
 
@@ -84,7 +84,7 @@ func TestGetMessagesIsACopy(t *testing.T) {
 	messages["not_blank"] = "This message should not be assigned"
 
 	v := valgo.Is(" ").Not().Blank()
-	assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" can't be blank")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 can't be blank")
 	assert.NotContains(t, v.ErrorItems()[0].Messages, "This message should not be assigned")
 }
 
@@ -104,7 +104,7 @@ func TestACopyCanBeUsedToReplaceALocale(t *testing.T) {
 
 	v := valgo.Is(" ").Not().Blank().Empty()
 	assert.Contains(t, v.ErrorItems()[0].Messages, "This message is changed for test purposes")
-	assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be empty")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be empty")
 }
 
 func TestWrongMessageKey(t *testing.T) {

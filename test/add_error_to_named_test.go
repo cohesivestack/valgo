@@ -14,13 +14,13 @@ func TestAddErrorToNamedFromValidator(t *testing.T) {
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.ErrorItems(), 1)
-	assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be blank")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Name must be blank")
 
 	v.AddErrorToNamed("email", "Email is invalid")
 
 	assert.Len(t, v.ErrorItems(), 2)
 	assert.False(t, v.Valid())
-	assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be blank")
+	assert.Contains(t, v.ErrorItems()[0].Messages, "Name must be blank")
 	assert.Contains(t, v.ErrorItems()[1].Messages, "Email is invalid")
 }
 
@@ -38,5 +38,5 @@ func TestAddErrorToNamedFromValgo(t *testing.T) {
 	assert.Len(t, v.ErrorItems(), 2)
 	assert.False(t, v.Valid())
 	assert.Contains(t, v.ErrorItems()[0].Messages, "Email is invalid")
-	assert.Contains(t, v.ErrorItems()[1].Messages, "\"value1\" must be blank")
+	assert.Contains(t, v.ErrorItems()[1].Messages, "Name must be blank")
 }

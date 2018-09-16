@@ -25,7 +25,7 @@ func TestEmptyStringInvalid(t *testing.T) {
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.ErrorItems()) {
 			assert.Len(t, v.ErrorItems(), 1, fmt.Sprintf("not assert using %s", value))
-			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be empty", fmt.Sprintf("not assert using %s", value))
+			assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be empty", fmt.Sprintf("not assert using %s", value))
 		}
 	}
 }
@@ -48,7 +48,7 @@ func TestNotEmptyStringInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.ErrorItems()) {
 		assert.Len(t, v.ErrorItems(), 1)
-		assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" can't be empty")
+		assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 can't be empty")
 	}
 }
 
@@ -71,7 +71,7 @@ func TestEmptyNumberInvalid(t *testing.T) {
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.ErrorItems()) {
 			assert.Len(t, v.ErrorItems(), 1, fmt.Sprintf("not assert using %v", value))
-			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be empty", fmt.Sprintf("not assert using %v", value))
+			assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be empty", fmt.Sprintf("not assert using %v", value))
 		}
 	}
 }
@@ -96,7 +96,7 @@ func TestNotEmptyNumberInvalid(t *testing.T) {
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.ErrorItems()) {
 			assert.Len(t, v.ErrorItems(), 1, fmt.Sprintf("not assert using %v", value))
-			assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" can't be empty", fmt.Sprintf("not assert using %v", value))
+			assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 can't be empty", fmt.Sprintf("not assert using %v", value))
 		}
 	}
 }
@@ -116,7 +116,7 @@ func TestEmptySliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.ErrorItems()) {
 		assert.Len(t, v.ErrorItems(), 1)
-		assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be empty")
+		assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be empty")
 	}
 }
 
@@ -135,7 +135,7 @@ func TestNotEmptySliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.ErrorItems()) {
 		assert.Len(t, v.ErrorItems(), 1)
-		assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" can't be empty")
+		assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 can't be empty")
 	}
 }
 
@@ -154,7 +154,7 @@ func TestEmptyMapInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.ErrorItems()) {
 		assert.Len(t, v.ErrorItems(), 1)
-		assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" must be empty")
+		assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 must be empty")
 	}
 }
 
@@ -173,6 +173,6 @@ func TestNotEmptyMapInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.ErrorItems()) {
 		assert.Len(t, v.ErrorItems(), 1)
-		assert.Contains(t, v.ErrorItems()[0].Messages, "\"value0\" can't be empty")
+		assert.Contains(t, v.ErrorItems()[0].Messages, "Value 0 can't be empty")
 	}
 }

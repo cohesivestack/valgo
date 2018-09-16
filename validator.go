@@ -3,16 +3,18 @@ package valgo
 import (
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/valyala/fasttemplate"
 )
 
 type Validator struct {
-	currentValue *Value
-	currentTitle string
-	currentName  string
-	currentValid bool
-	currentIndex int
+	currentValue          *Value
+	currentTitle          string
+	currentTitleModififed bool
+	currentName           string
+	currentValid          bool
+	currentIndex          int
 
 	currentNegative bool
 
@@ -28,8 +30,8 @@ func (v *Validator) Is(value interface{}) *Validator {
 	v.currentIndex += 1
 	v.currentValue = NewValue(value)
 	v.currentValid = true
-	v.currentName = fmt.Sprintf("value%v", v.currentIndex)
-	v.currentTitle = v.currentName
+
+	v.Named(fmt.Sprintf("value%v", v.currentIndex-1))
 
 	return v
 }
@@ -49,13 +51,15 @@ func (v *Validator) Named(name string) *Validator {
 	if !v.currentValid {
 		v.errorValidator.currentError.Name = name
 	}
-
+	if !v.currentTitleModififed {
+		v.currentTitle = humanizeName(name)
+	}
 	return v
 }
 
 func (v *Validator) Titled(title string) *Validator {
+	v.currentTitleModififed = true
 	v.currentTitle = title
-
 	return v
 }
 
@@ -153,6 +157,8 @@ func (v *Validator) invalidate(
 }
 
 func (v *Validator) closeCurrentError() {
+	v.currentTitle = ""
+	v.currentName = ""
 	if !v.currentValid {
 		lastError := v.errorValidator.currentError
 		v.errorValidator.currentError = nil
@@ -165,7 +171,60 @@ func (v *Validator) closeCurrentError() {
 			}
 		}
 
-		// Is was not found an ErrorItem with the same name then add it
+		// If was not found an ErrorItem with the same name then add it
 		v.errorValidator.items = append(v.errorValidator.items, lastError)
 	}
+}
+
+func humanizeName(name string) string {
+	in := []rune(strings.TrimSpace(name))
+	space := []rune(" ")[0]
+	lastIndex := len(in) - 1
+	var out []rune
+
+	for i, c := range in {
+		if i == 0 {
+			if unicode.IsLower(c) {
+				out = append(out, unicode.ToUpper(c))
+			} else {
+				out = append(out, c)
+			}
+		} else {
+			cb := in[i-1]
+			if !unicode.IsLetter(c) && !unicode.IsNumber(c) {
+				if !unicode.IsLetter(cb) && !unicode.IsNumber(cb) {
+					continue
+				} else {
+					out = append(out, space)
+				}
+			} else if unicode.IsUpper(c) {
+				isLast := i == lastIndex
+				var cn rune
+				if !isLast {
+					cn = in[i+1]
+				}
+				if unicode.IsUpper(cb) && (isLast || (unicode.IsUpper(cn) || !unicode.IsLetter(cn))) {
+					out = append(out, c)
+				} else {
+					if unicode.IsLetter(cb) || unicode.IsNumber(cb) {
+						out = append(out, space)
+					}
+					if !unicode.IsUpper(cb) && (!isLast && unicode.IsUpper(cn)) {
+						out = append(out, c)
+					} else {
+						out = append(out, unicode.ToLower(c))
+					}
+				}
+			} else if unicode.IsNumber(c) {
+				if unicode.IsLetter(cb) {
+					out = append(out, space)
+				}
+				out = append(out, c)
+			} else {
+				out = append(out, unicode.ToLower(c))
+			}
+		}
+	}
+
+	return string(out)
 }
