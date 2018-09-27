@@ -13,8 +13,8 @@ func (v *Validator) MatchingTo(regex *regexp.Regexp, template ...string) *Valida
 		panic("Empty validator requires a string as value")
 	} else if !v.assert(IsMatchingTo(v.currentValue.(string), regex)) {
 		v.invalidate("matching_to", map[string]interface{}{
-			"Title": v.currentTitle,
-			"Value": regex.String()}, template...)
+			"title": v.currentTitle,
+			"value": regex.String()}, template...)
 	}
 
 	v.resetNegative()

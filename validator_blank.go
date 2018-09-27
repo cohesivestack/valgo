@@ -12,7 +12,7 @@ func (v *Validator) Blank(template ...string) *Validator {
 	if v.currentDataType != DataTypeString {
 		panic("Blank validator requires a string as value")
 	} else if !v.assert(IsBlank(v.currentValue.(string))) {
-		v.invalidate("blank", map[string]interface{}{"Title": v.currentTitle}, template...)
+		v.invalidate("blank", map[string]interface{}{"title": v.currentTitle}, template...)
 	}
 
 	v.resetNegative()
