@@ -6,7 +6,7 @@ import (
 )
 
 func IsString(value string, nameAndTitle ...string) *Validator {
-	return newValidator(getDefaultLocale()).IsString(value, nameAndTitle...)
+	return NewValidator().IsString(value, nameAndTitle...)
 }
 
 func ResetMessages() {
@@ -32,4 +32,8 @@ func newValidator(_locale *locale) *Validator {
 	}
 
 	return v
+}
+
+func NewValidator() *Validator {
+	return newValidator(getDefaultLocale())
 }

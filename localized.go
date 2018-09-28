@@ -5,5 +5,9 @@ type localized struct {
 }
 
 func (l *localized) IsString(value string, nameAndTitle ...string) *Validator {
-	return newValidator(l._locale).IsString(value, nameAndTitle...)
+	return l.NewValidator().IsString(value, nameAndTitle...)
+}
+
+func (l *localized) NewValidator() *Validator {
+	return newValidator(l._locale)
 }
