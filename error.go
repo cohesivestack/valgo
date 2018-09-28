@@ -1,6 +1,15 @@
 package valgo
 
-import "github.com/valyala/fasttemplate"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/valyala/fasttemplate"
+)
+
+type Error struct {
+	errors map[string]*valueError
+}
 
 type errorMessage struct {
 	key      string
@@ -62,4 +71,25 @@ func (ve *valueError) buildMessage(em *errorMessage) string {
 	t := fasttemplate.New(ts, "{{", "}}")
 
 	return t.ExecuteString(em.values)
+}
+
+func (e *Error) Error() string {
+	count := len(e.errors)
+	if count == 1 {
+		return fmt.Sprintf("There is 1 error")
+	} else {
+		return fmt.Sprintf("There are %v errors", count)
+	}
+}
+
+func (e *Error) Errors() map[string]*valueError {
+	return e.errors
+}
+
+func (e *Error) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Errors map[string]*valueError `json:"errors"`
+	}{
+		Errors: e.errors,
+	})
 }

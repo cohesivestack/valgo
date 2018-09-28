@@ -24,6 +24,8 @@ type Validator struct {
 	_locale *locale
 	valid   bool
 	errors  map[string]*valueError
+
+	_error error
 }
 
 func (v *Validator) IsString(value string, nameAndTitle ...string) *Validator {
@@ -48,6 +50,15 @@ func (v *Validator) Is(value interface{}, nameAndTitle ...string) *Validator {
 
 func (v *Validator) Valid() bool {
 	return v.valid
+}
+
+func (v *Validator) Error() error {
+	if !v.valid {
+		return &Error{
+			errors: v.errors,
+		}
+	}
+	return nil
 }
 
 func (v *Validator) Errors() map[string]*valueError {
