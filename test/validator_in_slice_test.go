@@ -27,7 +27,7 @@ func TestStringInSliceInvalid(t *testing.T) {
 		if assert.NotEmpty(t, v.Errors(), m) {
 			assert.Contains(t,
 				v.Errors()["value_0"].Messages(),
-				"golang is not a value valid for Value 0", m)
+				"\"golang\" is not a valid value for Value 0", m)
 		}
 	}
 }

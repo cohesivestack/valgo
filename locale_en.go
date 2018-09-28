@@ -3,6 +3,8 @@ package valgo
 func setDefaultEnglishMessages() {
 	getLocales()["en"] = &locale{
 		Messages: map[string]string{
+			"valid":                   "\"{{value}}\" is not a valid value for {{title}}",
+			"not_valid":               "\"{{value}}\" is not a valid value for {{title}}",
 			"blank":                   "{{title}} must be blank",
 			"not_blank":               "{{title}} can't be blank",
 			"empty":                   "{{title}} must be empty",
@@ -30,8 +32,8 @@ func setDefaultEnglishMessages() {
 			"a_string":                "{{title}} must be a text",
 			"an_email":                "{{title}} is not an email address",
 			"not_an_email":            "{{title}} must not be an email address",
-			"in_slice":                "{{value}} is not a value valid for {{title}}",
-			"not_in_slice":            "{{value}} is not a value valid for {{title}}",
+			"in_slice":                "\"{{value}}\" is not a valid value for {{title}}",
+			"not_in_slice":            "\"{{value}}\" is not a valid value for {{title}}",
 		},
 	}
 }

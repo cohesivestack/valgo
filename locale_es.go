@@ -3,6 +3,8 @@ package valgo
 func setDefaultSpanishMessages() {
 	getLocales()["es"] = &locale{
 		Messages: map[string]string{
+			"valid":             "\"{{value}}\" no es un valor válido para {{title}}",
+			"not_valid":         "\"{{value}}\" no es un valor válido para {{title}}",
 			"blank":             "{{title}} debe estar en blanco",
 			"not_blank":         "{{title}} no puede estar en blanco",
 			"empty":             "{{title}} debe estar vacío",
