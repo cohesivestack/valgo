@@ -30,6 +30,8 @@ func setDefaultEnglishMessages() {
 			"a_string":                "{{title}} must be a text",
 			"an_email":                "{{title}} is not an email address",
 			"not_an_email":            "{{title}} must not be an email address",
+			"in_slice":                "{{value}} is not a value valid for {{title}}",
+			"not_in_slice":            "{{value}} is not a value valid for {{title}}",
 		},
 	}
 }

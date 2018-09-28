@@ -22,6 +22,8 @@ func setDefaultSpanishMessages() {
 			"a_string":          "{{title}} debe ser un texto",
 			"an_email":          "{{title}} no es una dirección de correo valida",
 			"not_an_email":      "{{title}} debe ser una dirección de correo",
+			"in_slice":          "{{value}} no es un valor válido para {{title}}",
+			"not_in_slice":      "{{value}} no es un valor válido para {{title}}",
 		},
 	}
 }
