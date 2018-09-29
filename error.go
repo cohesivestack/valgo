@@ -11,20 +11,19 @@ type Error struct {
 	errors map[string]*valueError
 }
 
-type errorMessage struct {
+type errorTemplate struct {
 	key      string
 	template *string
-	message  string
 	values   map[string]interface{}
 }
 
 type valueError struct {
-	name          *string
-	title         *string
-	errorMessages map[string]*errorMessage
-	messages      []string
-	dirty         bool
-	validator     *Validator
+	name           *string
+	title          *string
+	errorTemplates map[string]*errorTemplate
+	messages       []string
+	dirty          bool
+	validator      *Validator
 }
 
 func (ve *valueError) Title() string {
@@ -38,8 +37,8 @@ func (ve *valueError) Name() string {
 func (ve *valueError) Messages() []string {
 	if ve.dirty {
 		ve.messages = []string{}
-		for _, em := range ve.errorMessages {
-			ve.messages = append(ve.messages, ve.buildMessage(em))
+		for _, et := range ve.errorTemplates {
+			ve.messages = append(ve.messages, ve.buildMessage(et))
 		}
 		ve.dirty = false
 	}
@@ -47,15 +46,15 @@ func (ve *valueError) Messages() []string {
 	return ve.messages
 }
 
-func (ve *valueError) buildMessage(em *errorMessage) string {
+func (ve *valueError) buildMessage(et *errorTemplate) string {
 
 	var ts string
-	if em.template != nil {
-		ts = *em.template
-	} else if _ts, ok := ve.validator._locale.Messages[em.key]; ok {
+	if et.template != nil {
+		ts = *et.template
+	} else if _ts, ok := ve.validator._locale.Messages[et.key]; ok {
 		ts = _ts
 	} else {
-		ts = concatString("ERROR: THERE IS NOT A MESSAGE WITH THE KEY: ", em.key)
+		ts = concatString("ERROR: THERE IS NOT A MESSAGE WITH THE KEY: ", et.key)
 	}
 
 	var title string
@@ -65,12 +64,12 @@ func (ve *valueError) buildMessage(em *errorMessage) string {
 		title = *ve.title
 	}
 
-	em.values["name"] = *ve.name
-	em.values["title"] = title
+	et.values["name"] = *ve.name
+	et.values["title"] = title
 
 	t := fasttemplate.New(ts, "{{", "}}")
 
-	return t.ExecuteString(em.values)
+	return t.ExecuteString(et.values)
 }
 
 func (e *Error) Error() string {

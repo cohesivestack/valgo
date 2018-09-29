@@ -96,9 +96,9 @@ func (v *Validator) invalidate(errorKey string, values map[string]interface{}, t
 
 	if _, ok := v.errors[name]; !ok {
 		v.errors[name] = &valueError{
-			name:          &name,
-			errorMessages: map[string]*errorMessage{},
-			validator:     v,
+			name:           &name,
+			errorTemplates: map[string]*errorTemplate{},
+			validator:      v,
 		}
 	}
 
@@ -109,15 +109,15 @@ func (v *Validator) invalidate(errorKey string, values map[string]interface{}, t
 		errorKey = concatString("not_", errorKey)
 	}
 
-	if _, ok := ev.errorMessages[errorKey]; !ok {
-		ev.errorMessages[errorKey] = &errorMessage{
+	if _, ok := ev.errorTemplates[errorKey]; !ok {
+		ev.errorTemplates[errorKey] = &errorTemplate{
 			key: errorKey,
 		}
 	}
 
-	em := ev.errorMessages[errorKey]
+	et := ev.errorTemplates[errorKey]
 	if len(template) > 0 {
-		em.template = &template[0]
+		et.template = &template[0]
 	}
-	em.values = values
+	et.values = values
 }
