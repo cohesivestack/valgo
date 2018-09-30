@@ -71,6 +71,20 @@ func (v *Validator) Not() *Validator {
 	return v
 }
 
+func (v *Validator) AddErrorMessage(name string, message string) *Validator {
+	if v.errors == nil {
+		v.errors = map[string]*valueError{}
+	}
+
+	v.currentValid = false
+	v.valid = false
+
+	ev := v.getOrCreateValueError(name)
+	ev.errorMessages = append(ev.errorMessages, message)
+
+	return v
+}
+
 func (v *Validator) assert(value bool) bool {
 	return v.currentNegative != value
 }
@@ -94,16 +108,7 @@ func (v *Validator) invalidate(errorKey string, values map[string]interface{}, t
 		name = *v.currentName
 	}
 
-	if _, ok := v.errors[name]; !ok {
-		v.errors[name] = &valueError{
-			name:           &name,
-			errorTemplates: map[string]*errorTemplate{},
-			validator:      v,
-		}
-	}
-
-	ev := v.errors[name]
-	ev.dirty = true
+	ev := v.getOrCreateValueError(name)
 
 	if v.currentNegative {
 		errorKey = concatString("not_", errorKey)
@@ -120,4 +125,20 @@ func (v *Validator) invalidate(errorKey string, values map[string]interface{}, t
 		et.template = &template[0]
 	}
 	et.values = values
+}
+
+func (v *Validator) getOrCreateValueError(name string) *valueError {
+	if _, ok := v.errors[name]; !ok {
+		v.errors[name] = &valueError{
+			name:           &name,
+			errorTemplates: map[string]*errorTemplate{},
+			errorMessages:  []string{},
+			validator:      v,
+		}
+	}
+
+	ev := v.errors[name]
+	ev.dirty = true
+
+	return ev
 }

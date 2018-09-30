@@ -21,6 +21,7 @@ type valueError struct {
 	name           *string
 	title          *string
 	errorTemplates map[string]*errorTemplate
+	errorMessages  []string
 	messages       []string
 	dirty          bool
 	validator      *Validator
@@ -38,7 +39,10 @@ func (ve *valueError) Messages() []string {
 	if ve.dirty {
 		ve.messages = []string{}
 		for _, et := range ve.errorTemplates {
-			ve.messages = append(ve.messages, ve.buildMessage(et))
+			ve.messages = append(ve.messages, ve.buildMessageFromTemplate(et))
+		}
+		for _, em := range ve.errorMessages {
+			ve.messages = append(ve.messages, em)
 		}
 		ve.dirty = false
 	}
@@ -46,7 +50,7 @@ func (ve *valueError) Messages() []string {
 	return ve.messages
 }
 
-func (ve *valueError) buildMessage(et *errorTemplate) string {
+func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 
 	var ts string
 	if et.template != nil {

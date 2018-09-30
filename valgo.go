@@ -37,3 +37,7 @@ func newValidator(_locale *locale) *Validator {
 func NewValidator() *Validator {
 	return newValidator(getDefaultLocale())
 }
+
+func AddErrorMessage(name string, message string) *Validator {
+	return NewValidator().AddErrorMessage(name, message)
+}
