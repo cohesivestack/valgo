@@ -97,9 +97,15 @@ func (e *Error) Errors() map[string]*valueError {
 }
 
 func (e *Error) MarshalJSON() ([]byte, error) {
+	errors := map[string][]string{}
+
+	for k, v := range e.errors {
+		errors[k] = v.Messages()
+	}
+
 	return json.Marshal(struct {
-		Errors map[string]*valueError `json:"errors"`
+		Errors map[string][]string `json:"errors"`
 	}{
-		Errors: e.errors,
+		Errors: errors,
 	})
 }
