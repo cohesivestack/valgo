@@ -9,6 +9,10 @@ func IsString(value string, nameAndTitle ...string) *Validator {
 	return NewValidator().IsString(value, nameAndTitle...)
 }
 
+func Is(value interface{}, nameAndTitle ...string) *Validator {
+	return NewValidator().Is(value, nameAndTitle...)
+}
+
 func ResetMessages() {
 	setDefaultEnglishMessages()
 	setDefaultSpanishMessages()
