@@ -73,6 +73,13 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 
 	t := fasttemplate.New(ts, "{{", "}}")
 
+	// Ensure interface{} values are string in order to be handle by fasttemplate
+	for k, v := range et.values {
+		if k != "name" && k != "title" {
+			et.values[k] = fmt.Sprintf("%v", v)
+		}
+	}
+
 	return t.ExecuteString(et.values)
 }
 
