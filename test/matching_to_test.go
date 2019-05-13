@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"testing"
 
-	"git.cohesivestack.com/cohesivestack/valgo"
+	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
