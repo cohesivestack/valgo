@@ -1,15 +1,14 @@
-package test
+package valgo
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStringInSlice(t *testing.T) {
-	v := valgo.IsString("golang").InSlice([]interface{}{"swift", "golang", "kotlin"})
+	v := IsString("golang").InSlice([]interface{}{"swift", "golang", "kotlin"})
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -20,7 +19,7 @@ func TestStringInSliceInvalid(t *testing.T) {
 		[]interface{}{},
 		[]interface{}{"perl"}} {
 
-		v := valgo.IsString("golang").InSlice(slice)
+		v := IsString("golang").InSlice(slice)
 		m := fmt.Sprintf("not assert using options '%v'", i)
 
 		assert.False(t, v.Valid(), m)

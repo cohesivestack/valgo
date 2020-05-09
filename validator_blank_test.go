@@ -1,23 +1,22 @@
-package test
+package valgo
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStringBlank(t *testing.T) {
 	for _, value := range []string{"", " "} {
-		v := valgo.IsString(value).Blank()
+		v := IsString(value).Blank()
 		assert.True(t, v.Valid())
 		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
 	}
 }
 
 func TestStringBlankInvalid(t *testing.T) {
-	v := valgo.IsString("Vitalik Buterin").Blank()
+	v := IsString("Vitalik Buterin").Blank()
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
@@ -28,14 +27,14 @@ func TestStringBlankInvalid(t *testing.T) {
 }
 
 func TestStringNotBlankValid(t *testing.T) {
-	v := valgo.IsString("Vitalik Buterin").Not().Blank()
+	v := IsString("Vitalik Buterin").Not().Blank()
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestStringNotBlankInvalid(t *testing.T) {
 	for _, value := range []string{" ", ""} {
-		v := valgo.IsString(value).Not().Blank()
+		v := IsString(value).Not().Blank()
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {
 			assert.Len(t, v.Errors(), 1, fmt.Sprintf("not assert using %s", value))
@@ -50,24 +49,24 @@ func TestStringNotBlankInvalid(t *testing.T) {
 // Benchmarks
 func BenchmarkStringBlank(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = valgo.IsString(" ").Blank()
+		_ = IsString(" ").Blank()
 	}
 }
 
 func BenchmarkStringBlankInvalid(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = valgo.IsString("Vitalik Buterin").Blank()
+		_ = IsString("Vitalik Buterin").Blank()
 	}
 }
 
 func BenchmarkNotBlank(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = valgo.IsString("Vitalik Buterin").Not().Blank()
+		_ = IsString("Vitalik Buterin").Not().Blank()
 	}
 }
 
 func BenchmarkNotBlankInvalid(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = valgo.IsString(" ").Not().Blank()
+		_ = IsString(" ").Not().Blank()
 	}
 }

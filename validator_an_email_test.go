@@ -1,10 +1,9 @@
-package test
+package valgo
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,7 +11,7 @@ import (
 // credit to @cjaoude: https://gist.github.com/cjaoude/fd9910626629b53c4d25
 
 func TestAnEmailValid(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
 	for _, value := range []string{
 		"email@example.com",
@@ -28,7 +27,7 @@ func TestAnEmailValid(t *testing.T) {
 		"email@example.co.jp",
 		"firstname-lastname@example.com",
 	} {
-		v := valgo.IsString(value).AnEmail()
+		v := IsString(value).AnEmail()
 
 		msg := fmt.Sprintf("not assert using %s", value)
 
@@ -38,7 +37,7 @@ func TestAnEmailValid(t *testing.T) {
 }
 
 func TestAnEmailInvalid(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
 	for _, value := range []string{
 		"plainaddress",
@@ -50,7 +49,7 @@ func TestAnEmailInvalid(t *testing.T) {
 		"email@example.com (Joe Smith)",
 		"email@-example.com",
 		"email@example..com"} {
-		v := valgo.IsString(value).AnEmail()
+		v := IsString(value).AnEmail()
 
 		msg := fmt.Sprintf("not assert using %s", value)
 

@@ -1,15 +1,14 @@
-package test
+package valgo
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestEqualToValid(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
 	_pointer := 10
 	for description, values := range map[string][]interface{}{
@@ -22,14 +21,14 @@ func TestEqualToValid(t *testing.T) {
 		valueB := values[1]
 		msg := fmt.Sprintf("not assert with %s", description)
 
-		v := valgo.Is(valueA).EqualTo(valueB)
+		v := Is(valueA).EqualTo(valueB)
 		assert.True(t, v.Valid(), msg)
 		assert.Empty(t, v.Errors(), msg)
 	}
 }
 
 func TestEqualToInvalid(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
 	// _pointerA := 10
 	// _pointerB := 10
@@ -43,7 +42,7 @@ func TestEqualToInvalid(t *testing.T) {
 	} {
 		valueA := values[0]
 		valueB := values[1]
-		v := valgo.Is(valueA).EqualTo(valueB)
+		v := Is(valueA).EqualTo(valueB)
 		msg := fmt.Sprintf("not assert with %s", description)
 
 		assert.False(t, v.Valid(), msg)

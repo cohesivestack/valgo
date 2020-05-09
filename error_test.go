@@ -1,30 +1,29 @@
-package test
+package valgo
 
 import (
 	"testing"
 
-	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNotError(t *testing.T) {
 	for _, value := range []string{"", " "} {
-		v := valgo.IsString(value).Blank()
+		v := IsString(value).Blank()
 		assert.True(t, v.Valid())
 		assert.NoError(t, v.Error())
 	}
 }
 
 func TestError(t *testing.T) {
-	v := valgo.IsString("Vitalik Buterin").Blank()
+	v := IsString("Vitalik Buterin").Blank()
 	assert.False(t, v.Valid())
 	assert.Error(t, v.Error())
 }
 
 func TestAddErrorMessageFromValidator(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
-	v := valgo.IsString("Vitalik Buterin", "name").Blank()
+	v := IsString("Vitalik Buterin", "name").Blank()
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)
@@ -39,9 +38,9 @@ func TestAddErrorMessageFromValidator(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValgo(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
-	v := valgo.AddErrorMessage("email", "Email is invalid")
+	v := AddErrorMessage("email", "Email is invalid")
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)

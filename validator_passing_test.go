@@ -1,16 +1,15 @@
-package test
+package valgo
 
 import (
 	"testing"
 
-	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCustomValidatorAsInvalid(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
-	v := valgo.IsString("USD").Passing(func(_v *valgo.CustomValidator, _t ...string) {
+	v := IsString("USD").Passing(func(_v *CustomValidator, _t ...string) {
 		if _v.Value().(string) != "BTC" {
 			_v.Invalidate("equal_to", map[string]interface{}{"value": "BTC"}, _t...)
 		}
@@ -24,9 +23,9 @@ func TestCustomValidatorAsInvalid(t *testing.T) {
 }
 
 func TestCustomValidatorAsValid(t *testing.T) {
-	valgo.ResetMessages()
+	ResetMessages()
 
-	v := valgo.IsString("BTC").Passing(func(_v *valgo.CustomValidator, _t ...string) {
+	v := IsString("BTC").Passing(func(_v *CustomValidator, _t ...string) {
 		if _v.Value().(string) != "BTC" {
 			_v.Invalidate("equal_to", nil, _t...)
 		}
