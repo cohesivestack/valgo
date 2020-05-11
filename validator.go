@@ -20,6 +20,7 @@ type Validator struct {
 	currentIndex    int
 	currentDataType DataType
 	currentNegative bool
+	shortCircuit    bool
 
 	_locale *locale
 	valid   bool
@@ -29,14 +30,31 @@ type Validator struct {
 }
 
 func (v *Validator) IsString(value string, nameAndTitle ...string) *Validator {
-	v.currentDataType = DataTypeString
-	return v.Is(value, nameAndTitle...)
+	return v.isString(true, value, nameAndTitle...)
+}
+
+func (v *Validator) CheckString(value string, nameAndTitle ...string) *Validator {
+	return v.isString(false, value, nameAndTitle...)
 }
 
 func (v *Validator) Is(value interface{}, nameAndTitle ...string) *Validator {
+	return v.is(true, value, nameAndTitle...)
+}
+
+func (v *Validator) Check(value interface{}, nameAndTitle ...string) *Validator {
+	return v.is(false, value, nameAndTitle...)
+}
+
+func (v *Validator) isString(shortCircuit bool, value string, nameAndTitle ...string) *Validator {
+	v.currentDataType = DataTypeString
+	return v.is(shortCircuit, value, nameAndTitle...)
+}
+
+func (v *Validator) is(shortCircuit bool, value interface{}, nameAndTitle ...string) *Validator {
 	v.currentValue = value
 	v.currentIndex += 1
 	v.currentValid = true
+	v.shortCircuit = shortCircuit
 
 	sizeNameAndTitle := len(nameAndTitle)
 	if sizeNameAndTitle > 0 {
@@ -46,6 +64,10 @@ func (v *Validator) Is(value interface{}, nameAndTitle ...string) *Validator {
 		}
 	}
 	return v
+}
+
+func (v *Validator) isShortCircuit() bool {
+	return !v.currentValid && v.shortCircuit
 }
 
 func (v *Validator) Valid() bool {

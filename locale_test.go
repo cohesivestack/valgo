@@ -27,7 +27,7 @@ func TestSeparatedLocalization(t *testing.T) {
 	localized, err := Localized("es")
 	assert.NoError(t, err)
 
-	v := localized.IsString(" ", "my_value").Not().Blank().Empty()
+	v := localized.CheckString(" ", "my_value").Not().Blank().Empty()
 	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value no puede estar en blanco")
 	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value debe estar vacío")
 

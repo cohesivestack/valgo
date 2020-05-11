@@ -15,7 +15,9 @@ func IsAnEmail(value string) bool {
 }
 
 func (v *Validator) AnEmail(template ...string) *Validator {
-	if v.currentDataType != DataTypeString {
+	if v.isShortCircuit() {
+		return v
+	} else if v.currentDataType != DataTypeString {
 		panic("Email validator requires a string as value")
 	} else if !v.assert(IsAnEmail(v.currentValue.(string))) {
 		v.invalidate("an_email", map[string]interface{}{"title": v.currentTitle}, template...)

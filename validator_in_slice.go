@@ -10,7 +10,9 @@ func IsInSlice(value interface{}, slice []interface{}) bool {
 }
 
 func (v *Validator) InSlice(slice []interface{}, template ...string) *Validator {
-	if !v.assert(IsInSlice(v.currentValue, slice)) {
+	if v.isShortCircuit() {
+		return v
+	} else if !v.assert(IsInSlice(v.currentValue, slice)) {
 		v.invalidate("in_slice", map[string]interface{}{
 			"title": v.currentTitle,
 			"value": v.currentValue}, template...)

@@ -5,7 +5,9 @@ func IsEmpty(value string) bool {
 }
 
 func (v *Validator) Empty(template ...string) *Validator {
-	if v.currentDataType != DataTypeString {
+	if v.isShortCircuit() {
+		return v
+	} else if v.currentDataType != DataTypeString {
 		panic("Empty validator requires a string as value")
 	} else if !v.assert(IsEmpty(v.currentValue.(string))) {
 		v.invalidate("empty", map[string]interface{}{"title": v.currentTitle}, template...)

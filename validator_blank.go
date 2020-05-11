@@ -9,7 +9,9 @@ func IsBlank(value string) bool {
 }
 
 func (v *Validator) Blank(template ...string) *Validator {
-	if v.currentDataType != DataTypeString {
+	if v.isShortCircuit() {
+		return v
+	} else if v.currentDataType != DataTypeString {
 		panic("Blank validator requires a string as value")
 	} else if !v.assert(IsBlank(v.currentValue.(string))) {
 		v.invalidate("blank", map[string]interface{}{"title": v.currentTitle}, template...)

@@ -5,7 +5,9 @@ func IsEqualTo(valueA interface{}, valueB interface{}) bool {
 }
 
 func (v *Validator) EqualTo(value interface{}, template ...string) *Validator {
-	if !v.assert(IsEqualTo(v.currentValue, value)) {
+	if v.isShortCircuit() {
+		return v
+	} else if !v.assert(IsEqualTo(v.currentValue, value)) {
 		v.invalidate("equal_to", map[string]interface{}{
 			"title": v.currentTitle,
 			"value": value}, template...)

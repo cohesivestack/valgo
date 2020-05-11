@@ -61,8 +61,17 @@ func TestAddErrorMessageFromValgo(t *testing.T) {
 	assert.Contains(t, v.Errors()["name"].Messages(), "Name must be blank")
 }
 
-func TestMultipleErrorsInOneField(t *testing.T) {
+func TestMultipleErrorsInOneFieldWithIs(t *testing.T) {
 	v := IsString("", "email").Not().Blank().AnEmail()
+
+	assert.Len(t, v.Errors(), 1)
+	assert.False(t, v.Valid())
+	assert.Len(t, v.Errors()["email"].Messages(), 1)
+	assert.Contains(t, v.Errors()["email"].Messages(), "Email can't be blank")
+}
+
+func TestMultipleErrorsInOneFieldWithCheck(t *testing.T) {
+	v := CheckString("", "email").Not().Blank().AnEmail()
 
 	assert.Len(t, v.Errors(), 1)
 	assert.False(t, v.Valid())
@@ -71,9 +80,25 @@ func TestMultipleErrorsInOneField(t *testing.T) {
 	assert.Contains(t, v.Errors()["email"].Messages(), "Email is not an email address")
 }
 
-func TestErrorMarshallJSON(t *testing.T) {
+func TestErrorMarshallJSONWithIs(t *testing.T) {
 	v := IsString("", "email").Not().Blank().AnEmail().
 		IsString("", "name").Not().Blank()
+
+	jsonByte, err := json.Marshal(v.Error())
+	assert.NoError(t, err)
+
+	jsonMap := map[string]interface{}{}
+	err = json.Unmarshal(jsonByte, &jsonMap)
+	assert.NoError(t, err)
+
+	assert.Equal(t, jsonMap["name"], "Name can't be blank")
+	assert.Equal(t, jsonMap["email"], "Email can't be blank")
+
+}
+
+func TestErrorMarshallJSONWithCheck(t *testing.T) {
+	v := CheckString("", "email").Not().Blank().AnEmail().
+		CheckString("", "name").Not().Blank()
 
 	jsonByte, err := json.Marshal(v.Error())
 	assert.NoError(t, err)
