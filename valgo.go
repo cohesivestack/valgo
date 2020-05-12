@@ -13,6 +13,14 @@ func CheckString(value string, nameAndTitle ...string) *StringValidator {
 	return NewValidator().CheckString(value, nameAndTitle...)
 }
 
+func IsInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return NewValidator().IsInt64(value, nameAndTitle...)
+}
+
+func CheckInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return NewValidator().CheckInt64(value, nameAndTitle...)
+}
+
 func Is(value interface{}, nameAndTitle ...string) *GenericValidator {
 	return NewValidator().Is(value, nameAndTitle...)
 }

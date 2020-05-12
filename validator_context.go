@@ -27,6 +27,14 @@ func (v *validatorContext) CheckString(value string, nameAndTitle ...string) *St
 	return v.isString(false, value, nameAndTitle...)
 }
 
+func (v *validatorContext) IsInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return v.isInt64(true, value, nameAndTitle...)
+}
+
+func (v *validatorContext) CheckInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return v.isInt64(true, value, nameAndTitle...)
+}
+
 func (v *validatorContext) Is(value interface{}, nameAndTitle ...string) *GenericValidator {
 	return v.is(true, value, nameAndTitle...)
 }
@@ -50,6 +58,23 @@ func (v *validatorContext) isString(shortCircuit bool, value string, nameAndTitl
 		}
 	}
 	return &StringValidator{v}
+}
+
+func (v *validatorContext) isInt64(shortCircuit bool, value int64, nameAndTitle ...string) *Int64Validator {
+	v.currentDataType = DataTypeInt64
+	v.currentValue = value
+	v.currentIndex += 1
+	v.currentValid = true
+	v.shortCircuit = shortCircuit
+
+	sizeNameAndTitle := len(nameAndTitle)
+	if sizeNameAndTitle > 0 {
+		v.currentName = &nameAndTitle[0]
+		if sizeNameAndTitle > 1 {
+			v.currentTitle = &nameAndTitle[1]
+		}
+	}
+	return &Int64Validator{v}
 }
 
 func (v *validatorContext) is(shortCircuit bool, value interface{}, nameAndTitle ...string) *GenericValidator {
