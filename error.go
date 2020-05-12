@@ -24,7 +24,7 @@ type valueError struct {
 	errorMessages  []string
 	messages       []string
 	dirty          bool
-	validator      *Validator
+	validator      *validatorContext
 }
 
 func (ve *valueError) Title() string {

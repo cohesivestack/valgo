@@ -5,19 +5,19 @@ import (
 	"fmt"
 )
 
-func IsString(value string, nameAndTitle ...string) *Validator {
+func IsString(value string, nameAndTitle ...string) *StringValidator {
 	return NewValidator().IsString(value, nameAndTitle...)
 }
 
-func CheckString(value string, nameAndTitle ...string) *Validator {
+func CheckString(value string, nameAndTitle ...string) *StringValidator {
 	return NewValidator().CheckString(value, nameAndTitle...)
 }
 
-func Is(value interface{}, nameAndTitle ...string) *Validator {
+func Is(value interface{}, nameAndTitle ...string) *GenericValidator {
 	return NewValidator().Is(value, nameAndTitle...)
 }
 
-func Check(value interface{}, nameAndTitle ...string) *Validator {
+func Check(value interface{}, nameAndTitle ...string) *GenericValidator {
 	return NewValidator().Check(value, nameAndTitle...)
 }
 
@@ -37,8 +37,8 @@ func Localized(code string) (*localized, error) {
 	}
 }
 
-func newValidator(_locale *locale) *Validator {
-	v := &Validator{
+func newValidator(_locale *locale) Validator {
+	v := &validatorContext{
 		valid:   true,
 		_locale: _locale,
 	}
@@ -46,10 +46,10 @@ func newValidator(_locale *locale) *Validator {
 	return v
 }
 
-func NewValidator() *Validator {
+func NewValidator() Validator {
 	return newValidator(getDefaultLocale())
 }
 
-func AddErrorMessage(name string, message string) *Validator {
+func AddErrorMessage(name string, message string) Validator {
 	return NewValidator().AddErrorMessage(name, message)
 }

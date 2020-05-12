@@ -1,7 +1,7 @@
 package valgo
 
 type CustomValidator struct {
-	validator *Validator
+	validator *validatorContext
 }
 
 func (cv *CustomValidator) Invalidate(

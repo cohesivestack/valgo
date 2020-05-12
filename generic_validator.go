@@ -1,10 +1,10 @@
 package valgo
 
-func IsEqualTo(valueA interface{}, valueB interface{}) bool {
-	return valueA == valueB
+type GenericValidator struct {
+	*validatorContext
 }
 
-func (v *Validator) EqualTo(value interface{}, template ...string) *Validator {
+func (v *GenericValidator) EqualTo(value interface{}, template ...string) *GenericValidator {
 	if v.isShortCircuit() {
 		return v
 	} else if !v.assert(IsEqualTo(v.currentValue, value)) {
