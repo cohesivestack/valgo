@@ -20,4 +20,5 @@ type Validator interface {
 	Error() error
 	Errors() map[string]*valueError
 	AddErrorMessage(name string, message string) Validator
+	IsValid(name string) bool
 }

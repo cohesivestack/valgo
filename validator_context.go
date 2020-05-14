@@ -40,6 +40,14 @@ func (v *validatorContext) Errors() map[string]*valueError {
 	return v.errors
 }
 
+func (v *validatorContext) IsValid(name string) bool {
+	if _, isNotValid := v.errors[name]; isNotValid {
+		return false
+	}
+
+	return true
+}
+
 func (v *validatorContext) AddErrorMessage(name string, message string) Validator {
 	if v.errors == nil {
 		v.errors = map[string]*valueError{}

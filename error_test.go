@@ -112,3 +112,11 @@ func TestErrorMarshallJSONWithCheck(t *testing.T) {
 	assert.Contains(t, emailErrors, "Email can't be blank")
 	assert.Contains(t, emailErrors, "Email is not an email address")
 }
+
+func TestIsValidByName(t *testing.T) {
+	v := IsString("Steve", "firstName").Not().Blank().
+		IsString("", "lastName").Not().Blank()
+
+	assert.True(t, v.IsValid("firstName"))
+	assert.False(t, v.IsValid("lastName"))
+}
