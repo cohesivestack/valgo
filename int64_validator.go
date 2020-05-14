@@ -4,6 +4,47 @@ type Int64Validator struct {
 	*validatorContext
 }
 
+func IsInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return NewValidator().IsInt64(value, nameAndTitle...)
+}
+
+func CheckInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return NewValidator().CheckInt64(value, nameAndTitle...)
+}
+
+func (v *validatorContext) IsInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return v.isInt64(true, value, nameAndTitle...)
+}
+
+func (v *validatorContext) CheckInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return v.isInt64(false, value, nameAndTitle...)
+}
+
+func (l *localized) IsInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return l.NewValidator().IsInt64(value, nameAndTitle...)
+}
+
+func (l *localized) CheckInt64(value int64, nameAndTitle ...string) *Int64Validator {
+	return l.NewValidator().CheckInt64(value, nameAndTitle...)
+}
+
+func (v *validatorContext) isInt64(shortCircuit bool, value int64, nameAndTitle ...string) *Int64Validator {
+	v.currentDataType = DataTypeInt64
+	v.currentValue = value
+	v.currentIndex += 1
+	v.currentValid = true
+	v.shortCircuit = shortCircuit
+
+	sizeNameAndTitle := len(nameAndTitle)
+	if sizeNameAndTitle > 0 {
+		v.currentName = &nameAndTitle[0]
+		if sizeNameAndTitle > 1 {
+			v.currentTitle = &nameAndTitle[1]
+		}
+	}
+	return &Int64Validator{v}
+}
+
 func (v *Int64Validator) EqualTo(value int64, template ...string) *Int64Validator {
 	if v.isShortCircuit() {
 		return v

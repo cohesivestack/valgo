@@ -9,6 +9,47 @@ type StringValidator struct {
 	*validatorContext
 }
 
+func IsString(value string, nameAndTitle ...string) *StringValidator {
+	return NewValidator().IsString(value, nameAndTitle...)
+}
+
+func CheckString(value string, nameAndTitle ...string) *StringValidator {
+	return NewValidator().CheckString(value, nameAndTitle...)
+}
+
+func (v *validatorContext) IsString(value string, nameAndTitle ...string) *StringValidator {
+	return v.isString(true, value, nameAndTitle...)
+}
+
+func (v *validatorContext) CheckString(value string, nameAndTitle ...string) *StringValidator {
+	return v.isString(false, value, nameAndTitle...)
+}
+
+func (l *localized) IsString(value string, nameAndTitle ...string) *StringValidator {
+	return l.NewValidator().IsString(value, nameAndTitle...)
+}
+
+func (l *localized) CheckString(value string, nameAndTitle ...string) *StringValidator {
+	return l.NewValidator().CheckString(value, nameAndTitle...)
+}
+
+func (v *validatorContext) isString(shortCircuit bool, value string, nameAndTitle ...string) *StringValidator {
+	v.currentDataType = DataTypeString
+	v.currentValue = value
+	v.currentIndex += 1
+	v.currentValid = true
+	v.shortCircuit = shortCircuit
+
+	sizeNameAndTitle := len(nameAndTitle)
+	if sizeNameAndTitle > 0 {
+		v.currentName = &nameAndTitle[0]
+		if sizeNameAndTitle > 1 {
+			v.currentTitle = &nameAndTitle[1]
+		}
+	}
+	return &StringValidator{v}
+}
+
 func IsBlank(value string) bool {
 	return len(strings.TrimSpace(value)) == 0
 }
