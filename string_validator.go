@@ -157,10 +157,19 @@ func IsInSlice(value interface{}, slice []interface{}) bool {
 	return false
 }
 
-func (v *StringValidator) InSlice(slice []interface{}, template ...string) *StringValidator {
+func IsStringInSlice(value string, slice []string) bool {
+	for _, v := range slice {
+		if value == v {
+			return true
+		}
+	}
+	return false
+}
+
+func (v *StringValidator) InSlice(slice []string, template ...string) *StringValidator {
 	if v.isShortCircuit() {
 		return v
-	} else if !v.assert(IsInSlice(v.currentValue, slice)) {
+	} else if !v.assert(IsStringInSlice(v.currentValue.(string), slice)) {
 		v.invalidate("in_slice", map[string]interface{}{
 			"title": v.currentTitle,
 			"value": v.currentValue}, template...)

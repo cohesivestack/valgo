@@ -139,10 +139,19 @@ func (v *Int64Validator) Passing(
 	return v
 }
 
-func (v *Int64Validator) InSlice(slice []interface{}, template ...string) *Int64Validator {
+func IsInt64InSlice(value int64, slice []int64) bool {
+	for _, v := range slice {
+		if value == v {
+			return true
+		}
+	}
+	return false
+}
+
+func (v *Int64Validator) InSlice(slice []int64, template ...string) *Int64Validator {
 	if v.isShortCircuit() {
 		return v
-	} else if !v.assert(IsInSlice(v.currentValue, slice)) {
+	} else if !v.assert(IsInt64InSlice(v.currentValue.(int64), slice)) {
 		v.invalidate("in_slice", map[string]interface{}{
 			"title": v.currentTitle,
 			"value": v.currentValue}, template...)
