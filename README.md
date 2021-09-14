@@ -10,12 +10,15 @@ Expressive validators for Go
 - [x] Empty
 - [x] Passing
 - [x] EqualTo
-- [ ] GreatherThan
-- [ ] GreatherOrEqualThan
+- [ ] GreaterThan
+- [ ] GreaterOrEqualThan
+- [ ] LongerThan
+- [ ] ShorterThan
+- [ ] LengthEqualTo
 - [ ] LessThan
 - [ ] LessOrEqualThan
 - [x] MatchingTo
-- [x] InSlice
+- [ ] InSlice
 - [ ] InMapValues
 - [ ] InMapKeys
 - [ ] True

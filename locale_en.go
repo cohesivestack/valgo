@@ -34,6 +34,12 @@ func setDefaultEnglishMessages() {
 			"not_an_email":            "{{title}} must not be an email address",
 			"in_slice":                "\"{{value}}\" is not a valid value for {{title}}",
 			"not_in_slice":            "\"{{value}}\" is not a valid value for {{title}}",
+			"max_length":              "{{title}} must not have a length longer than \"{{length}}\"",
+			"not_max_length":          "{{title}} must not have a length shorter than or equal to \"{{length}}\"",
+			"min_length":              "{{title}} must not have a length shorter than \"{{length}}\"",
+			"not_min_length":          "{{title}} must not have a length longer than or equal to \"{{length}}\"",
+			"length":                  "{{title}} must have a length equal to \"{{length}}\"",
+			"not_length":              "{{title}} must not have a length equal to \"{{length}}\"",
 		},
 	}
 }

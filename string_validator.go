@@ -124,6 +124,48 @@ func (v *StringValidator) MatchingTo(regex *regexp.Regexp, template ...string) *
 	return v
 }
 
+func (v *StringValidator) MaxLength(length int, template ...string) *StringValidator {
+	if v.isShortCircuit() {
+		return v
+	} else if v.currentDataType != DataTypeString {
+		panic("MaxLength validator requires a string as value")
+	} else if !v.assert(len(v.currentValue.(string)) <= length) {
+		v.invalidate("max_length", map[string]interface{}{"title": v.currentTitle, "length": length}, template...)
+	}
+
+	v.resetNegative()
+
+	return v
+}
+
+func (v *StringValidator) MinLength(length int, template ...string) *StringValidator {
+	if v.isShortCircuit() {
+		return v
+	} else if v.currentDataType != DataTypeString {
+		panic("MinLength validator requires a string as value")
+	} else if !v.assert(len(v.currentValue.(string)) >= length) {
+		v.invalidate("min_length", map[string]interface{}{"title": v.currentTitle, "length": length}, template...)
+	}
+
+	v.resetNegative()
+
+	return v
+}
+
+func (v *StringValidator) Length(length int, template ...string) *StringValidator {
+	if v.isShortCircuit() {
+		return v
+	} else if v.currentDataType != DataTypeString {
+		panic("Length validator requires a string as value")
+	} else if !v.assert(len(v.currentValue.(string)) == length) {
+		v.invalidate("length", map[string]interface{}{"title": v.currentTitle, "length": length}, template...)
+	}
+
+	v.resetNegative()
+
+	return v
+}
+
 func (v *StringValidator) Not() *StringValidator {
 	v.currentNegative = true
 
