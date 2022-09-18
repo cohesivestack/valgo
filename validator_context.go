@@ -1,121 +1,104 @@
 package valgo
 
-import "strconv"
-
-type validatorContext struct {
-	currentValue    interface{}
-	currentTitle    *string
-	currentName     *string
-	currentValid    bool
-	currentIndex    int
-	currentDataType DataType
-	currentNegative bool
-	shortCircuit    bool
-
-	_locale *locale
-	valid   bool
-	errors  map[string]*valueError
-
-	_error error
+type ValidatorFragment struct {
+	errorKey       string
+	template       []string
+	templateParams map[string]any
+	function       func() bool
+	boolOperation  bool
 }
 
-func (v *validatorContext) isShortCircuit() bool {
-	return !v.currentValid && v.shortCircuit
+type ValidatorContext struct {
+	fragments     []*ValidatorFragment
+	value         any
+	name          *string
+	title         *string
+	boolOperation bool
 }
 
-func (v *validatorContext) Valid() bool {
-	return v.valid
-}
+func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 
-func (v *validatorContext) Error() error {
-	if !v.valid {
-		return &Error{
-			errors: v.errors,
-		}
-	}
-	return nil
-}
-
-func (v *validatorContext) Errors() map[string]*valueError {
-	return v.errors
-}
-
-func (v *validatorContext) IsValid(name string) bool {
-	if _, isNotValid := v.errors[name]; isNotValid {
-		return false
+	context := &ValidatorContext{
+		value:         value,
+		fragments:     []*ValidatorFragment{},
+		boolOperation: true,
 	}
 
-	return true
-}
-
-func (v *validatorContext) AddErrorMessage(name string, message string) Validator {
-	if v.errors == nil {
-		v.errors = map[string]*valueError{}
-	}
-
-	v.currentValid = false
-	v.valid = false
-
-	ev := v.getOrCreateValueError(name)
-	ev.errorMessages = append(ev.errorMessages, message)
-
-	return v
-}
-
-func (v *validatorContext) assert(value bool) bool {
-	return v.currentNegative != value
-}
-
-func (v *validatorContext) resetNegative() {
-	v.currentNegative = false
-}
-
-func (v *validatorContext) invalidate(errorKey string, values map[string]interface{}, template ...string) {
-	if v.errors == nil {
-		v.errors = map[string]*valueError{}
-	}
-
-	v.currentValid = false
-	v.valid = false
-
-	var name string
-	if v.currentName == nil {
-		name = concatString("value_", strconv.Itoa(v.currentIndex-1))
-	} else {
-		name = *v.currentName
-	}
-
-	ev := v.getOrCreateValueError(name)
-
-	if v.currentNegative {
-		errorKey = concatString("not_", errorKey)
-	}
-
-	if _, ok := ev.errorTemplates[errorKey]; !ok {
-		ev.errorTemplates[errorKey] = &errorTemplate{
-			key: errorKey,
+	sizeNameAndTitle := len(nameAndTitle)
+	if sizeNameAndTitle > 0 {
+		name := nameAndTitle[0]
+		context.name = &name
+		if sizeNameAndTitle > 1 {
+			title := nameAndTitle[1]
+			context.title = &title
 		}
 	}
 
-	et := ev.errorTemplates[errorKey]
+	return context
+}
+
+func (ctx *ValidatorContext) Not() *ValidatorContext {
+	ctx.boolOperation = false
+	return ctx
+}
+
+func (ctx *ValidatorContext) AddWithValue(function func() bool, errorKey string, value any, template ...string) *ValidatorContext {
+	return ctx.AddWithParams(
+		function,
+		errorKey,
+		map[string]any{"title": ctx.title, "value": value}, template...)
+}
+
+func (ctx *ValidatorContext) Add(function func() bool, errorKey string, template ...string) *ValidatorContext {
+	return ctx.AddWithParams(
+		function,
+		errorKey,
+		map[string]any{"title": ctx.title}, template...)
+}
+
+func (ctx *ValidatorContext) AddWithParams(function func() bool, errorKey string, templateParams map[string]any, template ...string) *ValidatorContext {
+
+	fragment := &ValidatorFragment{
+		errorKey:       errorKey,
+		templateParams: templateParams,
+		function:       function,
+		boolOperation:  ctx.boolOperation,
+	}
 	if len(template) > 0 {
-		et.template = &template[0]
+		fragment.template = template
 	}
-	et.values = values
+	ctx.fragments = append(ctx.fragments, fragment)
+	ctx.boolOperation = true
+
+	return ctx
 }
 
-func (v *validatorContext) getOrCreateValueError(name string) *valueError {
-	if _, ok := v.errors[name]; !ok {
-		v.errors[name] = &valueError{
-			name:           &name,
-			errorTemplates: map[string]*errorTemplate{},
-			errorMessages:  []string{},
-			validator:      v,
+func (ctx *ValidatorContext) validateIs(group *ValidatorGroup) *ValidatorGroup {
+	return ctx.validate(group, true)
+}
+
+func (ctx *ValidatorContext) validateCheck(group *ValidatorGroup) *ValidatorGroup {
+	return ctx.validate(group, false)
+}
+
+func (ctx *ValidatorContext) validate(group *ValidatorGroup, shortCircuit bool) *ValidatorGroup {
+	group.valid = true
+	group.currentIndex++
+
+	for i, fragment := range ctx.fragments {
+		if i > 0 && !group.valid && shortCircuit {
+			return group
+		}
+
+		group.valid = fragment.function() == fragment.boolOperation && group.valid
+		if !group.valid {
+			group.invalidate(ctx.name, fragment)
 		}
 	}
 
-	ev := v.errors[name]
-	ev.dirty = true
+	return group
+}
 
-	return ev
+func (ctx *ValidatorContext) Value() any {
+	return ctx.value
 }

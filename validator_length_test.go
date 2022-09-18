@@ -8,14 +8,14 @@ import (
 )
 
 func TestStringLengthValid(t *testing.T) {
-	v := IsString("123").Length(3)
+	v := Is(String("123").Length(3))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestStringLengthInvalid(t *testing.T) {
 	for _, value := range []string{"12", "1234"} {
-		v := IsString(value).Length(3)
+		v := Is(String(value).Length(3))
 		m := fmt.Sprintf("not assert using '%s'", value)
 
 		assert.False(t, v.Valid(), m)
@@ -29,7 +29,7 @@ func TestStringLengthInvalid(t *testing.T) {
 
 func TestStringNotLengthValid(t *testing.T) {
 	for _, value := range []string{"12", "1234"} {
-		v := IsString(value).Not().Length(3)
+		v := Is(String(value).Not().Length(3))
 		m := fmt.Sprintf("not assert using '%s'", value)
 
 		assert.True(t, v.Valid(), m)
@@ -38,7 +38,7 @@ func TestStringNotLengthValid(t *testing.T) {
 }
 
 func TestStringNotLengthInvalid(t *testing.T) {
-	v := IsString("123").Not().Length(3)
+	v := Is(String("123").Not().Length(3))
 	assert.False(t, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 	assert.Contains(t,

@@ -1,7 +1,6 @@
 package valgo
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -17,23 +16,24 @@ func Localized(code string) (*localized, error) {
 			_locale: _locale,
 		}, nil
 	} else {
-		return nil, errors.New(fmt.Sprintf("Doesn't exist a registered locale with code '%s'", code))
+		return nil, fmt.Errorf("doesn't exist a registered locale with code '%s'", code)
 	}
 }
 
-func newValidator(_locale *locale) Validator {
-	v := &validatorContext{
-		valid:   true,
-		_locale: _locale,
-	}
-
-	return v
+func New() *ValidatorGroup {
+	return newValidatorGroup(getDefaultLocale())
 }
 
-func NewValidator() Validator {
-	return newValidator(getDefaultLocale())
+func Is(v Validator) *ValidatorGroup {
+	group := New()
+	return v.Context().validateIs(group)
 }
 
-func AddErrorMessage(name string, message string) Validator {
-	return NewValidator().AddErrorMessage(name, message)
+func Check(v Validator) *ValidatorGroup {
+	group := New()
+	return v.Context().validateCheck(group)
+}
+
+func AddErrorMessage(name string, message string) *ValidatorGroup {
+	return New().AddErrorMessage(name, message)
 }

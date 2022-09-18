@@ -10,11 +10,11 @@ func TestDefaultLocalization(t *testing.T) {
 	ResetMessages()
 
 	SetDefaultLocale("es")
-	v := IsString(" ").Not().Blank()
+	v := Is(String(" ").Not().Blank())
 	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 no puede estar en blanco")
 
 	// Default localization must be persistent
-	v = IsString(" ").Empty()
+	v = Is(String(" ").Empty())
 	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 debe estar vacío")
 }
 
@@ -27,11 +27,11 @@ func TestSeparatedLocalization(t *testing.T) {
 	localized, err := Localized("es")
 	assert.NoError(t, err)
 
-	v := localized.CheckString(" ", "my_value").Not().Blank().Empty()
+	v := localized.New().Check(String(" ", "my_value").Not().Blank().Empty())
 	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value no puede estar en blanco")
 	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value debe estar vacío")
 
 	// Default localization must not be changed
-	v = IsString(" ").Not().Blank()
+	v = Is(String(" ").Not().Blank())
 	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 can't be blank")
 }

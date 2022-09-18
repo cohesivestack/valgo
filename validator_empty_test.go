@@ -8,14 +8,14 @@ import (
 )
 
 func TestStringEmpty(t *testing.T) {
-	v := IsString("").Empty()
+	v := Is(String("").Empty())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestStringEmptyInvalid(t *testing.T) {
 	for _, value := range []string{" ", "Vitalik Buterin"} {
-		v := IsString(value).Empty()
+		v := Is(String(value).Empty())
 		m := fmt.Sprintf("not assert using '%s'", value)
 
 		assert.False(t, v.Valid(), m)
@@ -29,7 +29,7 @@ func TestStringEmptyInvalid(t *testing.T) {
 
 func TestStringNotEmptyValid(t *testing.T) {
 	for _, value := range []string{" ", "Vitalik Buterin"} {
-		v := IsString(value).Not().Empty()
+		v := Is(String(value).Not().Empty())
 		m := fmt.Sprintf("not assert using '%s'", value)
 
 		assert.True(t, v.Valid(), m)
@@ -38,7 +38,7 @@ func TestStringNotEmptyValid(t *testing.T) {
 }
 
 func TestStringNotEmptyInvalid(t *testing.T) {
-	v := IsString("").Not().Empty()
+	v := Is(String("").Not().Empty())
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)
 	assert.Contains(t,
@@ -50,24 +50,24 @@ func TestStringNotEmptyInvalid(t *testing.T) {
 
 func BenchmarkStringEmpty(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString("").Empty()
+		_ = Is(String("").Empty())
 	}
 }
 
 func BenchmarkStringEmptyInvalid(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString("Vitalik Buterin").Empty()
+		_ = Is(String("Vitalik Buterin").Empty())
 	}
 }
 
 func BenchmarkNotEmpty(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString("Vitalik Buterin").Not().Empty()
+		_ = Is(String("Vitalik Buterin").Not().Empty())
 	}
 }
 
 func BenchmarkNotEmptyInvalid(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString("").Not().Empty()
+		_ = Is(String("").Not().Empty())
 	}
 }

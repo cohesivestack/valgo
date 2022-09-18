@@ -23,8 +23,8 @@ func setDefaultEnglishMessages() {
 			"not_less_or_equal_to":    "{{title}} can't be less or equal to \"{{value}}\"",
 			"identical_to":            "{{title}} must be equal to \"{{value}}\"",
 			"not_identical_to":        "{{title}} can't be equal to \"{{value}}\"",
-			"matching_to":             "{{title}} must match to \"{{value}}\"",
-			"not_matching_to":         "{{title}} can't match to \"{{value}}\"",
+			"matching_to":             "{{title}} must match to \"{{regexp}}\"",
+			"not_matching_to":         "{{title}} can't match to \"{{regexp}}\"",
 			"a_number":                "{{title}} must be a number",
 			"a_number_type":           "{{title}} must be a number type",
 			"an_integer":              "{{title}} must be an integer number",
@@ -40,6 +40,8 @@ func setDefaultEnglishMessages() {
 			"not_min_length":          "{{title}} must not have a length longer than or equal to \"{{length}}\"",
 			"length":                  "{{title}} must have a length equal to \"{{length}}\"",
 			"not_length":              "{{title}} must not have a length equal to \"{{length}}\"",
+			"passing":                 "{{title}} is not valid",
+			"not_passing":             "{{title}} is not valid",
 		},
 	}
 }

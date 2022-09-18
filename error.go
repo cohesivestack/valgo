@@ -14,7 +14,7 @@ type Error struct {
 type errorTemplate struct {
 	key      string
 	template *string
-	values   map[string]interface{}
+	params   map[string]interface{}
 }
 
 type valueError struct {
@@ -24,7 +24,7 @@ type valueError struct {
 	errorMessages  []string
 	messages       []string
 	dirty          bool
-	validator      *validatorContext
+	validator      *ValidatorGroup
 }
 
 func (ve *valueError) Title() string {
@@ -41,9 +41,9 @@ func (ve *valueError) Messages() []string {
 		for _, et := range ve.errorTemplates {
 			ve.messages = append(ve.messages, ve.buildMessageFromTemplate(et))
 		}
-		for _, em := range ve.errorMessages {
-			ve.messages = append(ve.messages, em)
-		}
+
+		ve.messages = append(ve.messages, ve.errorMessages...)
+
 		ve.dirty = false
 	}
 
@@ -68,19 +68,19 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 		title = *ve.title
 	}
 
-	et.values["name"] = *ve.name
-	et.values["title"] = title
+	et.params["name"] = *ve.name
+	et.params["title"] = title
 
 	t := fasttemplate.New(ts, "{{", "}}")
 
 	// Ensure interface{} values are string in order to be handle by fasttemplate
-	for k, v := range et.values {
+	for k, v := range et.params {
 		if k != "name" && k != "title" {
-			et.values[k] = fmt.Sprintf("%v", v)
+			et.params[k] = fmt.Sprintf("%v", v)
 		}
 	}
 
-	return t.ExecuteString(et.values)
+	return t.ExecuteString(et.params)
 }
 
 func (e *Error) Error() string {

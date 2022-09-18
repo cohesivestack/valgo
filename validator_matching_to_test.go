@@ -14,7 +14,7 @@ func TestMatchingToValid(t *testing.T) {
 	pattern := regexp.MustCompile(`^[a-z]+\[[0-9]+\]$`)
 	value := "vitalik[10]"
 
-	v := IsString(value).MatchingTo(pattern)
+	v := Is(String(value).MatchingTo(pattern))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -25,7 +25,7 @@ func TestMatchingToInvalid(t *testing.T) {
 	pattern := regexp.MustCompile(`^[a-z]+\[[0-9]+\]$`)
 	value := "Vitalik[10]"
 
-	v := IsString(value).MatchingTo(pattern)
+	v := Is(String(value).MatchingTo(pattern))
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)

@@ -9,7 +9,7 @@ import (
 
 func TestStringMaxLengthValid(t *testing.T) {
 	for _, value := range []string{"123", "12"} {
-		v := IsString(value).MaxLength(3)
+		v := Is(String(value).MaxLength(3))
 		m := fmt.Sprintf("not assert using '%s'", value)
 
 		assert.True(t, v.Valid(), m)
@@ -18,7 +18,7 @@ func TestStringMaxLengthValid(t *testing.T) {
 }
 
 func TestStringMaxLengthInvalid(t *testing.T) {
-	v := IsString("1234").MaxLength(3)
+	v := Is(String("1234").MaxLength(3))
 
 	assert.False(t, v.Valid())
 	assert.NotEmpty(t, v.Errors())
@@ -28,7 +28,7 @@ func TestStringMaxLengthInvalid(t *testing.T) {
 }
 
 func TestStringNotMaxLengthValid(t *testing.T) {
-	v := IsString("1234").Not().MaxLength(3)
+	v := Is(String("1234").Not().MaxLength(3))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -36,7 +36,7 @@ func TestStringNotMaxLengthValid(t *testing.T) {
 
 func TestStringNotMaxLengthInvalid(t *testing.T) {
 	for _, value := range []string{"123", "12"} {
-		v := IsString(value).Not().MaxLength(3)
+		v := Is(String(value).Not().MaxLength(3))
 		m := fmt.Sprintf("not assert using '%s'", value)
 
 		assert.False(t, v.Valid(), m)

@@ -2,6 +2,7 @@ package valgo
 
 import (
 	"encoding/json"
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,14 +10,14 @@ import (
 
 func TestNotError(t *testing.T) {
 	for _, value := range []string{"", " "} {
-		v := IsString(value).Blank()
+		v := Is(String(value).Blank())
 		assert.True(t, v.Valid())
 		assert.NoError(t, v.Error())
 	}
 }
 
 func TestError(t *testing.T) {
-	v := IsString("Vitalik Buterin").Blank()
+	v := Is(String("Vitalik Buterin").Blank())
 	assert.False(t, v.Valid())
 	assert.Error(t, v.Error())
 }
@@ -24,7 +25,7 @@ func TestError(t *testing.T) {
 func TestAddErrorMessageFromValidator(t *testing.T) {
 	ResetMessages()
 
-	v := IsString("Vitalik Buterin", "name").Blank()
+	v := Is(String("Vitalik Buterin", "name").Blank())
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)
@@ -51,7 +52,7 @@ func TestAddErrorMessageFromValgo(t *testing.T) {
 	assert.Len(t, v.Errors()["email"].Messages(), 1)
 	assert.Contains(t, v.Errors()["email"].Messages(), "Email is invalid")
 
-	v.IsString("Vitalik Buterin", "name").Blank()
+	v.Is(String("Vitalik Buterin", "name").Blank())
 
 	assert.Len(t, v.Errors(), 2)
 	assert.False(t, v.Valid())
@@ -62,7 +63,8 @@ func TestAddErrorMessageFromValgo(t *testing.T) {
 }
 
 func TestMultipleErrorsInOneFieldWithIs(t *testing.T) {
-	v := IsString("", "email").Not().Blank().AnEmail()
+	r, _ := regexp.Compile("a")
+	v := Is(String("", "email").Not().Blank().MatchingTo(r))
 
 	assert.Len(t, v.Errors(), 1)
 	assert.False(t, v.Valid())
@@ -71,18 +73,20 @@ func TestMultipleErrorsInOneFieldWithIs(t *testing.T) {
 }
 
 func TestMultipleErrorsInOneFieldWithCheck(t *testing.T) {
-	v := CheckString("", "email").Not().Blank().AnEmail()
+	r, _ := regexp.Compile("a")
+	v := Check(String("", "email").Not().Blank().MatchingTo(r))
 
 	assert.Len(t, v.Errors(), 1)
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors()["email"].Messages(), 2)
 	assert.Contains(t, v.Errors()["email"].Messages(), "Email can't be blank")
-	assert.Contains(t, v.Errors()["email"].Messages(), "Email is not an email address")
+	assert.Contains(t, v.Errors()["email"].Messages(), "Email must match to \"a\"")
 }
 
 func TestErrorMarshallJSONWithIs(t *testing.T) {
-	v := IsString("", "email").Not().Blank().AnEmail().
-		IsString("", "name").Not().Blank()
+	r, _ := regexp.Compile("a")
+	v := Is(String("", "email").Not().Blank().MatchingTo(r)).
+		Is(String("", "name").Not().Blank())
 
 	jsonByte, err := json.Marshal(v.Error())
 	assert.NoError(t, err)
@@ -91,14 +95,15 @@ func TestErrorMarshallJSONWithIs(t *testing.T) {
 	err = json.Unmarshal(jsonByte, &jsonMap)
 	assert.NoError(t, err)
 
-	assert.Equal(t, jsonMap["name"], "Name can't be blank")
-	assert.Equal(t, jsonMap["email"], "Email can't be blank")
+	assert.Equal(t, "Name can't be blank", jsonMap["name"])
+	assert.Equal(t, "Email can't be blank", jsonMap["email"])
 
 }
 
 func TestErrorMarshallJSONWithCheck(t *testing.T) {
-	v := CheckString("", "email").Not().Blank().AnEmail().
-		CheckString("", "name").Not().Blank()
+	r, _ := regexp.Compile("a")
+	v := Check(String("", "email").Not().Blank().MatchingTo(r)).
+		Check(String("", "name").Not().Blank())
 
 	jsonByte, err := json.Marshal(v.Error())
 	assert.NoError(t, err)
@@ -107,15 +112,15 @@ func TestErrorMarshallJSONWithCheck(t *testing.T) {
 	err = json.Unmarshal(jsonByte, &jsonMap)
 	assert.NoError(t, err)
 
-	assert.Equal(t, jsonMap["name"], "Name can't be blank")
+	assert.Equal(t, "Name can't be blank", jsonMap["name"])
 	emailErrors := jsonMap["email"].([]interface{})
 	assert.Contains(t, emailErrors, "Email can't be blank")
-	assert.Contains(t, emailErrors, "Email is not an email address")
+	assert.Contains(t, emailErrors, "Email must match to \"a\"")
 }
 
 func TestIsValidByName(t *testing.T) {
-	v := IsString("Steve", "firstName").Not().Blank().
-		IsString("", "lastName").Not().Blank()
+	v := Is(String("Steve", "firstName").Not().Blank()).
+		Is(String("", "lastName").Not().Blank())
 
 	assert.True(t, v.IsValid("firstName"))
 	assert.False(t, v.IsValid("lastName"))

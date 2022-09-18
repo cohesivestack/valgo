@@ -1,0 +1,33 @@
+package valgo
+
+const (
+	ErrorKeyBlank            = "blank"
+	ErrorKeyEmpty            = "empty"
+	ErrorKeyEqualTo          = "equal_to"
+	ErrorKeyGreaterOrEqualTo = "greater_equal_to"
+	ErrorKeyGreaterThan      = "greater_than"
+	ErrorKeyInSlice          = "in_slice"
+	ErrorKeyLength           = "length"
+	ErrorKeyLessOrEqualThan  = "less_or_equal_than"
+	ErrorKeyLessThan         = "less_than"
+	ErrorKeyMatchingTo       = "matching_to"
+	ErrorKeyMaxLength        = "max_length"
+	ErrorKeyMinLength        = "min_length"
+	ErrorKeyPassing          = "passing"
+	ErrorKeyZero             = "zero"
+
+	ErrorKeyNotBlank            = "not_blank"
+	ErrorKeyNotEmpty            = "not_empty"
+	ErrorKeyNotEqualTo          = "not_equal_to"
+	ErrorKeyNotGreaterOrEqualTo = "not_greater_equal_to"
+	ErrorKeyNotGreaterThan      = "not_greater_than"
+	ErrorKeyNotInSlice          = "not_in_slice"
+	ErrorKeyNotLength           = "not_length"
+	ErrorKeyNotLessOrEqualThan  = "not_less_or_equal_than"
+	ErrorKeyNotLessThan         = "not_less_than"
+	ErrorKeyNotMatchingTo       = "not_matching_to"
+	ErrorKeyNotMaxLength        = "not_max_length"
+	ErrorKeyNotMinLength        = "not_min_length"
+	ErrorKeyNotPassing          = "not_passing"
+	ErrorKeyNotZero             = "not_zero"
+)

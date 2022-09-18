@@ -8,18 +8,18 @@ import (
 )
 
 func TestStringInSlice(t *testing.T) {
-	v := IsString("golang").InSlice([]interface{}{"swift", "golang", "kotlin"})
+	v := Is(String("golang").InSlice([]string{"swift", "golang", "kotlin"}))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestStringInSliceInvalid(t *testing.T) {
-	for i, slice := range [][]interface{}{
-		[]interface{}{"dart", "typescript"},
-		[]interface{}{},
-		[]interface{}{"perl"}} {
+	for i, slice := range [][]string{
+		{"dart", "typescript"},
+		{},
+		{"perl"}} {
 
-		v := IsString("golang").InSlice(slice)
+		v := Is(String("golang").InSlice(slice))
 		m := fmt.Sprintf("not assert using options '%v'", i)
 
 		assert.False(t, v.Valid(), m)

@@ -9,14 +9,14 @@ import (
 
 func TestStringBlank(t *testing.T) {
 	for _, value := range []string{"", " "} {
-		v := IsString(value).Blank()
+		v := Is(String(value).Blank())
 		assert.True(t, v.Valid())
 		assert.Empty(t, v.Errors(), fmt.Sprintf("not assert using %s", value))
 	}
 }
 
 func TestStringBlankInvalid(t *testing.T) {
-	v := IsString("Vitalik Buterin").Blank()
+	v := Is(String("Vitalik Buterin").Blank())
 	assert.False(t, v.Valid())
 	if assert.NotEmpty(t, v.Errors()) {
 		assert.Len(t, v.Errors(), 1)
@@ -27,14 +27,14 @@ func TestStringBlankInvalid(t *testing.T) {
 }
 
 func TestStringNotBlankValid(t *testing.T) {
-	v := IsString("Vitalik Buterin").Not().Blank()
+	v := Is(String("Vitalik Buterin").Not().Blank())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestStringNotBlankInvalid(t *testing.T) {
 	for _, value := range []string{" ", ""} {
-		v := IsString(value).Not().Blank()
+		v := Is(String(value).Not().Blank())
 		assert.False(t, v.Valid())
 		if assert.NotEmpty(t, v.Errors()) {
 			assert.Len(t, v.Errors(), 1, fmt.Sprintf("not assert using %s", value))
@@ -49,24 +49,24 @@ func TestStringNotBlankInvalid(t *testing.T) {
 // Benchmarks
 func BenchmarkStringBlank(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString(" ").Blank()
+		_ = Is(String(" ").Blank())
 	}
 }
 
 func BenchmarkStringBlankInvalid(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString("Vitalik Buterin").Blank()
+		_ = Is(String("Vitalik Buterin").Blank())
 	}
 }
 
 func BenchmarkNotBlank(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString("Vitalik Buterin").Not().Blank()
+		_ = Is(String("Vitalik Buterin").Not().Blank())
 	}
 }
 
 func BenchmarkNotBlankInvalid(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		_ = IsString(" ").Not().Blank()
+		_ = Is(String(" ").Not().Blank())
 	}
 }
