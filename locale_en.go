@@ -3,45 +3,56 @@ package valgo
 func setDefaultEnglishMessages() {
 	getLocales()["en"] = &locale{
 		Messages: map[string]string{
-			"valid":                   "\"{{value}}\" is not a valid value for {{title}}",
-			"not_valid":               "\"{{value}}\" is not a valid value for {{title}}",
-			"blank":                   "{{title}} must be blank",
-			"not_blank":               "{{title}} can't be blank",
-			"empty":                   "{{title}} must be empty",
-			"not_empty":               "{{title}} can't be empty",
-			"equivalent_to":           "{{title}} must be equal to \"{{value}}\"",
-			"not_equivalent_to":       "{{title}} can't be equal to \"{{value}}\"",
-			"equal_to":                "{{title}} must be equal to \"{{value}}\"",
-			"not_equal_to":            "{{title}} can't be equal to \"{{value}}\"",
-			"greater_than":            "{{title}} must be greater than \"{{value}}\"",
-			"not_greater_than":        "{{title}} can't be greater than \"{{value}}\"",
-			"greater_or_equal_to":     "{{title}} must be greater or equal to \"{{value}}\"",
-			"not_greater_or_equal_to": "{{title}} can't be greater or equal to \"{{value}}\"",
-			"less_than":               "{{title}} must be less than \"{{value}}\"",
-			"not_less_than":           "{{title}} can't be less than \"{{value}}\"",
-			"less_or_equal_to":        "{{title}} must be less or equal to \"{{value}}\"",
-			"not_less_or_equal_to":    "{{title}} can't be less or equal to \"{{value}}\"",
-			"identical_to":            "{{title}} must be equal to \"{{value}}\"",
-			"not_identical_to":        "{{title}} can't be equal to \"{{value}}\"",
-			"matching_to":             "{{title}} must match to \"{{regexp}}\"",
-			"not_matching_to":         "{{title}} can't match to \"{{regexp}}\"",
-			"a_number":                "{{title}} must be a number",
-			"a_number_type":           "{{title}} must be a number type",
-			"an_integer":              "{{title}} must be an integer number",
-			"an_integer_type":         "{{title}} must be an integer type",
-			"a_string":                "{{title}} must be a text",
-			"an_email":                "{{title}} is not an email address",
-			"not_an_email":            "{{title}} must not be an email address",
-			"in_slice":                "\"{{value}}\" is not a valid value for {{title}}",
-			"not_in_slice":            "\"{{value}}\" is not a valid value for {{title}}",
-			"max_length":              "{{title}} must not have a length longer than \"{{length}}\"",
-			"not_max_length":          "{{title}} must not have a length shorter than or equal to \"{{length}}\"",
-			"min_length":              "{{title}} must not have a length shorter than \"{{length}}\"",
-			"not_min_length":          "{{title}} must not have a length longer than or equal to \"{{length}}\"",
-			"length":                  "{{title}} must have a length equal to \"{{length}}\"",
-			"not_length":              "{{title}} must not have a length equal to \"{{length}}\"",
-			"passing":                 "{{title}} is not valid",
-			"not_passing":             "{{title}} is not valid",
+			ErrorKeyBlank:    "{{title}} must be blank",
+			ErrorKeyNotBlank: "{{title}} can't be blank",
+
+			ErrorKeyEmpty:    "{{title}} must be empty",
+			ErrorKeyNotEmpty: "{{title}} can't be empty",
+
+			ErrorKeyEqualTo:    "{{title}} must be equal to \"{{value}}\"",
+			ErrorKeyNotEqualTo: "{{title}} can't be equal to \"{{value}}\"",
+
+			ErrorKeyFalse:    "{{title}} must be false",
+			ErrorKeyNotFalse: "{{title}} must not be false",
+
+			ErrorKeyGreaterOrEqualTo:    "{{title}} must be greater than or equal to \"{{value}}\"",
+			ErrorKeyNotGreaterOrEqualTo: "{{title}} can't be greater than or equal to \"{{value}}\"",
+
+			ErrorKeyGreaterThan:    "{{title}} must be greater than \"{{value}}\"",
+			ErrorKeyNotGreaterThan: "{{title}} can't be greater than \"{{value}}\"",
+
+			ErrorKeyInSlice:    "\"{{value}}\" is not a valid value for {{title}}",
+			ErrorKeyNotInSlice: "\"{{value}}\" is not a valid value for {{title}}",
+
+			ErrorKeyLength:    "{{title}} must have a length equal to \"{{length}}\"",
+			ErrorKeyNotLength: "{{title}} must not have a length equal to \"{{length}}\"",
+
+			ErrorKeyLessOrEqualTo:    "{{title}} can't be less than or equal to \"{{value}}\"",
+			ErrorKeyNotLessOrEqualTo: "{{title}} can't be less than or equal to \"{{value}}\"",
+
+			ErrorKeyLessThan:    "{{title}} must be less than \"{{value}}\"",
+			ErrorKeyNotLessThan: "{{title}} can't be less than \"{{value}}\"",
+
+			ErrorKeyMatchingTo:    "{{title}} must match to \"{{regexp}}\"",
+			ErrorKeyNotMatchingTo: "{{title}} can't match to \"{{regexp}}\"",
+
+			ErrorKeyMaxLength:    "{{title}} must not have a length longer than \"{{length}}\"",
+			ErrorKeyNotMaxLength: "{{title}} must not have a length shorter than or equal to \"{{length}}\"",
+
+			ErrorKeyMinLength:    "{{title}} must not have a length shorter than \"{{length}}\"",
+			ErrorKeyNotMinLength: "{{title}} must not have a length longer than or equal to \"{{length}}\"",
+
+			ErrorKeyNil:    "{{title}} must be nil",
+			ErrorKeyNotNil: "{{title}} must not be nil",
+
+			ErrorKeyPassing:    "{{title}} is not valid",
+			ErrorKeyNotPassing: "{{title}} is not valid",
+
+			ErrorKeyTrue:    "{{title}} must be true",
+			ErrorKeyNotTrue: "{{title}} must not be true",
+
+			ErrorKeyZero:    "{{title}} must be zero",
+			ErrorKeyNotZero: "{{title}} must not be zero",
 		},
 	}
 }
