@@ -1,6 +1,9 @@
 package valgo
 
 const (
+	ErrorKeyBetween    = "between"
+	ErrorKeyNotBetween = "not_between"
+
 	ErrorKeyBlank    = "blank"
 	ErrorKeyNotBlank = "not_blank"
 
@@ -24,6 +27,9 @@ const (
 
 	ErrorKeyLength    = "length"
 	ErrorKeyNotLength = "not_length"
+
+	ErrorKeyLengthBetween    = "length_between"
+	ErrorKeyNotLengthBetween = "not_length_between"
 
 	ErrorKeyLessOrEqualTo    = "less_or_equal_to"
 	ErrorKeyNotLessOrEqualTo = "not_less_or_equal_to"

@@ -3,6 +3,9 @@ package valgo
 func setDefaultEnglishMessages() {
 	getLocales()["en"] = &locale{
 		Messages: map[string]string{
+			ErrorKeyBetween:    "{{title}} must be between \"{{min}}\" and \"{{max}}\"",
+			ErrorKeyNotBetween: "{{title}} can't be a value between \"{{min}}\" and \"{{max}}\"",
+
 			ErrorKeyBlank:    "{{title}} must be blank",
 			ErrorKeyNotBlank: "{{title}} can't be blank",
 
@@ -21,14 +24,17 @@ func setDefaultEnglishMessages() {
 			ErrorKeyGreaterThan:    "{{title}} must be greater than \"{{value}}\"",
 			ErrorKeyNotGreaterThan: "{{title}} can't be greater than \"{{value}}\"",
 
-			ErrorKeyInSlice:    "\"{{value}}\" is not a valid value for {{title}}",
-			ErrorKeyNotInSlice: "\"{{value}}\" is not a valid value for {{title}}",
+			ErrorKeyInSlice:    "{{title}} is not valid",
+			ErrorKeyNotInSlice: "{{title}} is not valid",
 
 			ErrorKeyLength:    "{{title}} must have a length equal to \"{{length}}\"",
 			ErrorKeyNotLength: "{{title}} must not have a length equal to \"{{length}}\"",
 
-			ErrorKeyLessOrEqualTo:    "{{title}} can't be less than or equal to \"{{value}}\"",
-			ErrorKeyNotLessOrEqualTo: "{{title}} can't be less than or equal to \"{{value}}\"",
+			ErrorKeyLengthBetween:    "{{title}} must have a length between \"{{min}}\" and \"{{max}}\"",
+			ErrorKeyNotLengthBetween: "{{title}} must not have a length between \"{{min}}\" and \"{{max}}\"",
+
+			ErrorKeyLessOrEqualTo:    "{{title}} must be less than or equal to \"{{value}}\"",
+			ErrorKeyNotLessOrEqualTo: "{{title}} must not be less than or equal to \"{{value}}\"",
 
 			ErrorKeyLessThan:    "{{title}} must be less than \"{{value}}\"",
 			ErrorKeyNotLessThan: "{{title}} can't be less than \"{{value}}\"",
