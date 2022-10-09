@@ -47,7 +47,11 @@ func main() {
 		panic(err)
 	}
 
-	for _, fileName := range []string{"validator_number.gen.go", "validator_number_test.gen.go"} {
+	for _, fileName := range []string{
+		"validator_number.gen.go",
+		"validator_number_test.gen.go",
+		"validator_number_p.gen.go",
+		"validator_number_p_test.gen.go"} {
 
 		templateName := fmt.Sprintf("%s.tpl", fileName)
 

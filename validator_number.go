@@ -52,14 +52,34 @@ type ValidatorNumber[T TypeNumber] struct {
 	context *ValidatorContext
 }
 
+// Receives a number value to validate.
+//
+// The value also can be any golang number type (int64, int32, float32, uint,
+// etc.) or a custom number type such as `type Level int32;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N`` pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+
 func Number[T TypeNumber](value T, nameAndTitle ...string) *ValidatorNumber[T] {
 	return &ValidatorNumber[T]{context: NewContext(value, nameAndTitle...)}
 }
 
+// This function returns the context for the Valgo Validator session's
+// validator. The function should not be called unless you are creating a custom
+// validator by extending this validator.
 func (validator *ValidatorNumber[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
+// Reverse the logical value associated to the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	Is(v.Number(0).Not().Zero()).Valid()
 func (validator *ValidatorNumber[T]) EqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
