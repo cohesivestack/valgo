@@ -16,6 +16,15 @@ func isBoolEqual[T ~bool](v0 T, v1 T) bool {
 	return v0 == v1
 }
 
+func isBoolInSlice[T ~bool](v T, slice []T) bool {
+	for _, _v := range slice {
+		if v == _v {
+			return true
+		}
+	}
+	return false
+}
+
 // Receives a boolean value to validate.
 //
 // The value also can be a custom boolean type such as `type Active bool;`
@@ -41,7 +50,7 @@ func (validator *ValidatorBool[T]) Context() *ValidatorContext {
 // Reverse the logical value associated to the next validation function.
 // For example:
 //
-//	// It will return false because Not() inverts to True ()
+//	// It will return false because Not() inverts to True()
 //	Is(v.Bool(true).Not().True()).Valid()
 func (validator *ValidatorBool[T]) Not() *ValidatorBool[T] {
 	validator.context.Not()
@@ -107,6 +116,22 @@ func (validator *ValidatorBool[T]) Passing(function func(v T) bool, template ...
 			return function(validator.context.Value().(T))
 		},
 		ErrorKeyPassing, template...)
+
+	return validator
+}
+
+// Validate if the value of a boolean pointer is present in a boolean slice.
+// For example:
+//
+//	activated := false
+//	elements := []bool{true, false, true}
+//	Is(v.Bool(activated).InSlice(elements))
+func (validator *ValidatorBool[T]) InSlice(slice []T, template ...string) *ValidatorBool[T] {
+	validator.context.AddWithValue(
+		func() bool {
+			return isBoolInSlice(validator.context.Value().(T), slice)
+		},
+		ErrorKeyInSlice, validator.context.Value(), template...)
 
 	return validator
 }

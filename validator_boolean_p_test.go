@@ -12,12 +12,11 @@ func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 	var v *ValidatorGroup
 
 	valTrue := true
-	valFalse := false
-
 	v = Is(BoolP(&valTrue).EqualTo(true))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
+	valFalse := false
 	v = Is(BoolP(&valFalse).EqualTo(false))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
@@ -38,15 +37,18 @@ func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
 	var v *ValidatorGroup
 
 	valTrue := true
+
+	v = Is(BoolP(&valTrue).EqualTo(false))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must be equal to \"false\"",
+		v.Errors()["value_0"].Messages()[0])
+
 	valFalse := false
-
-	v = Is(BoolP(&valTrue).EqualTo(true))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	v = Is(BoolP(&valFalse).EqualTo(false))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
+	v = Is(BoolP(&valFalse).EqualTo(true))
+	assert.Equal(t,
+		"Value 0 must be equal to \"true\"",
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyBool bool
@@ -87,9 +89,7 @@ func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
 
 	v = Is(BoolP(&valFalse).True())
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 must be true",
 		v.Errors()["value_0"].Messages()[0])
 
@@ -99,9 +99,7 @@ func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
 
 	v = Is(BoolP(&mybool1).True())
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 must be true",
 		v.Errors()["value_0"].Messages()[0])
 }
@@ -138,9 +136,7 @@ func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
 
 	v = Is(BoolP(valTrue).False())
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 must be false",
 		v.Errors()["value_0"].Messages()[0])
 
@@ -152,9 +148,7 @@ func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
 
 	v = Is(BoolP(mybool1).False())
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 must be false",
 		v.Errors()["value_0"].Messages()[0])
 }
@@ -189,9 +183,7 @@ func TestValidatorBoolNilIsInvalid(t *testing.T) {
 
 	v = Is(BoolP(&valTrue).Nil())
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 must be nil",
 		v.Errors()["value_0"].Messages()[0])
 
@@ -202,9 +194,7 @@ func TestValidatorBoolNilIsInvalid(t *testing.T) {
 
 	v = Is(BoolP(&mybool1).Nil())
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 must be nil",
 		v.Errors()["value_0"].Messages()[0])
 }
@@ -245,9 +235,7 @@ func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
 		return *val == true
 	}))
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 
@@ -259,9 +247,60 @@ func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
 		return *val == true
 	}))
 	assert.False(t, v.Valid())
-	assert.NotEmpty(t, v.Errors())
-	assert.Contains(t,
-		v.Errors()["value_0"].Messages(),
+	assert.Equal(t,
+		"Value 0 is not valid",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorBoolPInSliceValid(t *testing.T) {
+	ResetMessages()
+
+	var v *ValidatorGroup
+
+	boolValue := false
+
+	v = Is(BoolP(&boolValue).InSlice([]bool{true, false, true}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyBool bool
+	var myBool1 MyBool = false
+
+	v = Is(BoolP(&myBool1).InSlice([]MyBool{true, false, true}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorBoolPInSliceInvalid(t *testing.T) {
+	ResetMessages()
+
+	var v *ValidatorGroup
+
+	_boolValue := true
+	boolValue := &_boolValue
+
+	v = Is(BoolP(boolValue).InSlice([]bool{false, false, false}))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 is not valid",
+		v.Errors()["value_0"].Messages()[0])
+
+	boolValue = nil
+
+	v = Is(BoolP(boolValue).InSlice([]bool{false, false, false}))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 is not valid",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyBool bool
+	var myBool1 MyBool = true
+
+	v = Is(BoolP(&myBool1).InSlice([]MyBool{false, false, false}))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
