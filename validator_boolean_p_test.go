@@ -6,6 +6,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestValidatorBoolPNot(t *testing.T) {
+
+	bool1 := true
+
+	v := Is(BoolP(&bool1).Not().EqualTo(false))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 	ResetMessages()
 
