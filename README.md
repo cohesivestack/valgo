@@ -60,6 +60,10 @@ v.Is(String(" ").
 // Return true
 ```
 
+### `IsValid()` function
+
+TODO
+
 ### `In(...)` function
 
 TODO
@@ -140,18 +144,8 @@ TODO
 ### Any Validators
 
 - [x] `EqualTo`
-- [x] `InSlice`
-- [ ] `Passing`
-- [ ] `Nil`
-
-### Complex Validators
-
-- [x] `EqualTo`
-- [x] `InSlice`
 - [x] `Passing`
-- [x] `Zero`
-- [ ] `ZeroOrNil` (for pointer validator - `Complex64P` or `Complex128P`)
-- [ ] `Nil` (for pointer validator - `Complex64P` or `Complex128P`)
+- [x] `Nil`
 
 ## Custom Validators
 
