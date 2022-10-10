@@ -20,20 +20,20 @@ func Localized(code string) (*localized, error) {
 	}
 }
 
-func New() *ValidatorGroup {
-	return newValidatorGroup(getDefaultLocale())
+func New() *Validation {
+	return newValidation(getDefaultLocale())
 }
 
-func Is(v Validator) *ValidatorGroup {
-	group := New()
-	return v.Context().validateIs(group)
+func Is(v Validator) *Validation {
+	validation := New()
+	return v.Context().validateIs(validation)
 }
 
-func Check(v Validator) *ValidatorGroup {
-	group := New()
-	return v.Context().validateCheck(group)
+func Check(v Validator) *Validation {
+	validation := New()
+	return v.Context().validateCheck(validation)
 }
 
-func AddErrorMessage(name string, message string) *ValidatorGroup {
+func AddErrorMessage(name string, message string) *Validation {
 	return New().AddErrorMessage(name, message)
 }

@@ -22,7 +22,7 @@ func TestValidator{{ .Name }}PNot(t *testing.T) {
 
 func TestValidator{{ .Name }}PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -41,7 +41,7 @@ func TestValidator{{ .Name }}PEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(2)
 	number1 := &_number1
@@ -77,7 +77,7 @@ func TestValidator{{ .Name }}PEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(3)
 
@@ -97,7 +97,7 @@ func TestValidator{{ .Name }}PGreaterThanValid(t *testing.T) {
 
 func TestValidator{{ .Name }}PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(2)
 	number1 := &_number1
@@ -138,7 +138,7 @@ func TestValidator{{ .Name }}PGreaterThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -163,7 +163,7 @@ func TestValidator{{ .Name }}PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(2)
 	number1 := &_number1
@@ -196,7 +196,7 @@ func TestValidator{{ .Name }}PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -215,7 +215,7 @@ func TestValidator{{ .Name }}PLessThanValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(2)
 	number1 := &_number1
@@ -256,7 +256,7 @@ func TestValidator{{ .Name }}PLessThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -279,7 +279,7 @@ func TestValidator{{ .Name }}PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(3)
 	number1 := &_number1
@@ -311,7 +311,7 @@ func TestValidator{{ .Name }}PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -343,7 +343,7 @@ func TestValidator{{ .Name }}PBetweenValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(2)
 	number1 := &_number1
@@ -385,7 +385,7 @@ func TestValidator{{ .Name }}PBetweenInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(0)
 	number1 := &_number1
@@ -404,7 +404,7 @@ func TestValidator{{ .Name }}PZeroValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(1)
 	number1 := &_number1
@@ -436,7 +436,7 @@ func TestValidator{{ .Name }}PZeroInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(0)
 	number1 := &_number1
@@ -461,7 +461,7 @@ func TestValidator{{ .Name }}PZeroOrNilValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(1)
 
@@ -485,7 +485,7 @@ func TestValidator{{ .Name }}PZeroOrNilInvalid(t *testing.T) {
 func TestValidator{{ .Name }}PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -509,7 +509,7 @@ func TestValidator{{ .Name }}PPassingValid(t *testing.T) {
 func TestValidator{{ .Name }}PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(1)
 
@@ -537,7 +537,7 @@ func TestValidator{{ .Name }}PPassingInvalid(t *testing.T) {
 func TestValidator{{ .Name }}PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := {{ .Type }}(2)
 
@@ -556,7 +556,7 @@ func TestValidator{{ .Name }}PInSliceValid(t *testing.T) {
 func TestValidator{{ .Name }}PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := {{ .Type }}(1)
 	number1 := &_number1
@@ -589,7 +589,7 @@ func TestValidator{{ .Name }}PInSliceInvalid(t *testing.T) {
 func TestValidator{{ .Name }}PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *{{ .Type }}
 
@@ -609,7 +609,7 @@ func TestValidator{{ .Name }}PNilIsValid(t *testing.T) {
 func TestValidator{{ .Name }}PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := {{ .Type }}(1)
 

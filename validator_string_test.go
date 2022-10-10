@@ -17,7 +17,7 @@ func TestValidatorStringNot(t *testing.T) {
 
 func TestValidatorStringEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("text").EqualTo("text"))
 	assert.True(t, v.Valid())
@@ -34,7 +34,7 @@ func TestValidatorStringEqualToValid(t *testing.T) {
 }
 func TestValidatorStringEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("text1").EqualTo("text2"))
 	assert.False(t, v.Valid())
@@ -58,7 +58,7 @@ func TestValidatorStringEqualToInvalid(t *testing.T) {
 
 func TestValidatorStringGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("ab").GreaterThan("aa"))
 	assert.True(t, v.Valid())
@@ -76,7 +76,7 @@ func TestValidatorStringGreaterThanValid(t *testing.T) {
 
 func TestValidatorStringGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").GreaterThan("aa"))
 	assert.False(t, v.Valid())
@@ -104,7 +104,7 @@ func TestValidatorStringGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorStringGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").GreaterOrEqualTo("aa"))
 	assert.True(t, v.Valid())
@@ -125,7 +125,7 @@ func TestValidatorStringGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorStringGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").GreaterOrEqualTo("ab"))
 	assert.False(t, v.Valid())
@@ -147,7 +147,7 @@ func TestValidatorStringGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorStringLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").LessThan("ab"))
 	assert.True(t, v.Valid())
@@ -164,7 +164,7 @@ func TestValidatorStringLessThanValid(t *testing.T) {
 }
 func TestValidatorStringLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").LessThan("aa"))
 	assert.False(t, v.Valid())
@@ -192,7 +192,7 @@ func TestValidatorStringLessThanInvalid(t *testing.T) {
 
 func TestValidatorStringLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").LessOrEqualTo("aa"))
 	assert.True(t, v.Valid())
@@ -213,7 +213,7 @@ func TestValidatorStringLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorStringLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("ab").LessOrEqualTo("aa"))
 	assert.False(t, v.Valid())
@@ -235,7 +235,7 @@ func TestValidatorStringLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorStringBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").Between("aa", "ae"))
 	assert.True(t, v.Valid())
@@ -261,7 +261,7 @@ func TestValidatorStringBetweenValid(t *testing.T) {
 }
 func TestValidatorStringBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("aa").Between("ab", "ae"))
 	assert.False(t, v.Valid())
@@ -290,7 +290,7 @@ func TestValidatorStringBetweenInvalid(t *testing.T) {
 
 func TestValidatorStringEmptyValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("").Empty())
 	assert.True(t, v.Valid())
@@ -306,7 +306,7 @@ func TestValidatorStringEmptyValid(t *testing.T) {
 }
 func TestValidatorStringEmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("a").Empty())
 	assert.False(t, v.Valid())
@@ -333,7 +333,7 @@ func TestValidatorStringEmptyInvalid(t *testing.T) {
 
 func TestValidatorStringBlankValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("").Blank())
 	assert.True(t, v.Valid())
@@ -353,7 +353,7 @@ func TestValidatorStringBlankValid(t *testing.T) {
 }
 func TestValidatorStringBlankInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("a").Blank())
 	assert.False(t, v.Valid())
@@ -375,7 +375,7 @@ func TestValidatorStringBlankInvalid(t *testing.T) {
 func TestValidatorStringPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("text").Passing(func(val string) bool {
 		return val == "text"
@@ -397,7 +397,7 @@ func TestValidatorStringPassingValid(t *testing.T) {
 func TestValidatorStringPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("text1").Passing(func(val string) bool {
 		return val == "text2"
@@ -423,7 +423,7 @@ func TestValidatorStringPassingInvalid(t *testing.T) {
 func TestValidatorStringInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("up").InSlice([]string{"down", "up", "paused"}))
 	assert.True(t, v.Valid())
@@ -441,7 +441,7 @@ func TestValidatorStringInSliceValid(t *testing.T) {
 func TestValidatorStringInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("up").InSlice([]string{"down", "idle", "paused"}))
 	assert.False(t, v.Valid())
@@ -463,7 +463,7 @@ func TestValidatorStringInSliceInvalid(t *testing.T) {
 func TestValidatorStringMatchingToValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	regex, _ := regexp.Compile("pre-.+")
 
@@ -482,7 +482,7 @@ func TestValidatorStringMatchingToValid(t *testing.T) {
 func TestValidatorStringMatchingToInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	regex, _ := regexp.Compile("pre-.+")
 
@@ -506,7 +506,7 @@ func TestValidatorStringMatchingToInvalid(t *testing.T) {
 func TestValidatorStringMaxLengthValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("123456").MaxLength(6))
 	assert.True(t, v.Valid())
@@ -527,7 +527,7 @@ func TestValidatorStringMaxLengthValid(t *testing.T) {
 func TestValidatorStringMaxLengthInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("1234567").MaxLength(6))
 	assert.False(t, v.Valid())
@@ -549,7 +549,7 @@ func TestValidatorStringMaxLengthInvalid(t *testing.T) {
 func TestValidatorStringMinLengthValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("123456").MinLength(6))
 	assert.True(t, v.Valid())
@@ -570,7 +570,7 @@ func TestValidatorStringMinLengthValid(t *testing.T) {
 func TestValidatorStringMinLengthInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("12345").MinLength(6))
 	assert.False(t, v.Valid())
@@ -592,7 +592,7 @@ func TestValidatorStringMinLengthInvalid(t *testing.T) {
 func TestValidatorStringLengthValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("123456").Length(6))
 	assert.True(t, v.Valid())
@@ -609,7 +609,7 @@ func TestValidatorStringLengthValid(t *testing.T) {
 func TestValidatorStringLengthInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("12345").Length(6))
 	assert.False(t, v.Valid())
@@ -637,7 +637,7 @@ func TestValidatorStringLengthInvalid(t *testing.T) {
 func TestValidatorStringLengthBetweenValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("123456").LengthBetween(6, 10))
 	assert.True(t, v.Valid())
@@ -662,7 +662,7 @@ func TestValidatorStringLengthBetweenValid(t *testing.T) {
 func TestValidatorStringLengthBetweenInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(String("12345").LengthBetween(6, 10))
 	assert.False(t, v.Valid())

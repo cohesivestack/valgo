@@ -73,30 +73,30 @@ func (ctx *ValidatorContext) AddWithParams(function func() bool, errorKey string
 	return ctx
 }
 
-func (ctx *ValidatorContext) validateIs(group *ValidatorGroup) *ValidatorGroup {
-	return ctx.validate(group, true)
+func (ctx *ValidatorContext) validateIs(validation *Validation) *Validation {
+	return ctx.validate(validation, true)
 }
 
-func (ctx *ValidatorContext) validateCheck(group *ValidatorGroup) *ValidatorGroup {
-	return ctx.validate(group, false)
+func (ctx *ValidatorContext) validateCheck(validation *Validation) *Validation {
+	return ctx.validate(validation, false)
 }
 
-func (ctx *ValidatorContext) validate(group *ValidatorGroup, shortCircuit bool) *ValidatorGroup {
-	group.valid = true
-	group.currentIndex++
+func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool) *Validation {
+	validation.valid = true
+	validation.currentIndex++
 
 	for i, fragment := range ctx.fragments {
-		if i > 0 && !group.valid && shortCircuit {
-			return group
+		if i > 0 && !validation.valid && shortCircuit {
+			return validation
 		}
 
-		group.valid = fragment.function() == fragment.boolOperation && group.valid
-		if !group.valid {
-			group.invalidate(ctx.name, fragment)
+		validation.valid = fragment.function() == fragment.boolOperation && validation.valid
+		if !validation.valid {
+			validation.invalidate(ctx.name, fragment)
 		}
 	}
 
-	return group
+	return validation
 }
 
 func (ctx *ValidatorContext) Value() any {

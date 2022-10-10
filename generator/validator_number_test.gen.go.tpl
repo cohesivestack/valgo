@@ -20,7 +20,7 @@ func TestValidator{{ .Name }}Not(t *testing.T) {
 
 func TestValidator{{ .Name }}EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -37,7 +37,7 @@ func TestValidator{{ .Name }}EqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -61,7 +61,7 @@ func TestValidator{{ .Name }}EqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -79,7 +79,7 @@ func TestValidator{{ .Name }}GreaterThanValid(t *testing.T) {
 
 func TestValidator{{ .Name }}GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -107,7 +107,7 @@ func TestValidator{{ .Name }}GreaterThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -128,7 +128,7 @@ func TestValidator{{ .Name }}GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -150,7 +150,7 @@ func TestValidator{{ .Name }}GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -167,7 +167,7 @@ func TestValidator{{ .Name }}LessThanValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -195,7 +195,7 @@ func TestValidator{{ .Name }}LessThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -216,7 +216,7 @@ func TestValidator{{ .Name }}LessOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -238,7 +238,7 @@ func TestValidator{{ .Name }}LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -264,7 +264,7 @@ func TestValidator{{ .Name }}BetweenValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -293,7 +293,7 @@ func TestValidator{{ .Name }}BetweenInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(0)).Zero())
 	assert.True(t, v.Valid())
@@ -309,7 +309,7 @@ func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(1)).Zero())
 	assert.False(t, v.Valid())
@@ -331,7 +331,7 @@ func TestValidator{{ .Name }}EmptyInvalid(t *testing.T) {
 func TestValidator{{ .Name }}PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(1)).Passing(func(val {{ .Type }}) bool {
 		return val == 1
@@ -353,7 +353,7 @@ func TestValidator{{ .Name }}PassingValid(t *testing.T) {
 func TestValidator{{ .Name }}PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(1)).Passing(func(val {{ .Type }}) bool {
 		return val == 2
@@ -379,7 +379,7 @@ func TestValidator{{ .Name }}PassingInvalid(t *testing.T) {
 func TestValidator{{ .Name }}InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).InSlice([]{{ .Type }}{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -397,7 +397,7 @@ func TestValidator{{ .Name }}InSliceValid(t *testing.T) {
 func TestValidator{{ .Name }}InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(4)).InSlice([]{{ .Type }}{1, 2, 3}))
 	assert.False(t, v.Valid())

@@ -16,7 +16,7 @@ func TestValidatorNumberNot(t *testing.T) {
 
 func TestValidatorNumberEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -33,7 +33,7 @@ func TestValidatorNumberEqualToValid(t *testing.T) {
 }
 func TestValidatorNumberEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(1).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -57,7 +57,7 @@ func TestValidatorNumberEqualToInvalid(t *testing.T) {
 
 func TestValidatorNumberGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(3).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -75,7 +75,7 @@ func TestValidatorNumberGreaterThanValid(t *testing.T) {
 
 func TestValidatorNumberGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -103,7 +103,7 @@ func TestValidatorNumberGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorNumberGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -124,7 +124,7 @@ func TestValidatorNumberGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorNumberGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -146,7 +146,7 @@ func TestValidatorNumberGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorNumberLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).LessThan(3))
 	assert.True(t, v.Valid())
@@ -163,7 +163,7 @@ func TestValidatorNumberLessThanValid(t *testing.T) {
 }
 func TestValidatorNumberLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).LessThan(2))
 	assert.False(t, v.Valid())
@@ -191,7 +191,7 @@ func TestValidatorNumberLessThanInvalid(t *testing.T) {
 
 func TestValidatorNumberLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -212,7 +212,7 @@ func TestValidatorNumberLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorNumberLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(3).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -234,7 +234,7 @@ func TestValidatorNumberLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorNumberBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -260,7 +260,7 @@ func TestValidatorNumberBetweenValid(t *testing.T) {
 }
 func TestValidatorNumberBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -289,7 +289,7 @@ func TestValidatorNumberBetweenInvalid(t *testing.T) {
 
 func TestValidatorNumberZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(0).Zero())
 	assert.True(t, v.Valid())
@@ -305,7 +305,7 @@ func TestValidatorNumberZeroValid(t *testing.T) {
 }
 func TestValidatorNumberEmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(1).Zero())
 	assert.False(t, v.Valid())
@@ -333,7 +333,7 @@ func TestValidatorNumberEmptyInvalid(t *testing.T) {
 func TestValidatorNumberPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(1).Passing(func(val int) bool {
 		return val == 1
@@ -355,7 +355,7 @@ func TestValidatorNumberPassingValid(t *testing.T) {
 func TestValidatorNumberPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(1).Passing(func(val int) bool {
 		return val == 2
@@ -381,7 +381,7 @@ func TestValidatorNumberPassingInvalid(t *testing.T) {
 func TestValidatorNumberInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(2).InSlice([]int{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -399,7 +399,7 @@ func TestValidatorNumberInSliceValid(t *testing.T) {
 func TestValidatorNumberInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Number(4).InSlice([]int{1, 2, 3}))
 	assert.False(t, v.Valid())

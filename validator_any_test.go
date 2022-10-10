@@ -16,7 +16,7 @@ func TestValidatorAnyNot(t *testing.T) {
 func TestValidatorAnyEqualToValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Any(10).EqualTo(10))
 	assert.True(t, v.Valid())
@@ -40,7 +40,7 @@ func TestValidatorAnyEqualToValid(t *testing.T) {
 func TestValidatorAnyEqualToInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Any(11).EqualTo(10))
 	assert.False(t, v.Valid())
@@ -77,7 +77,7 @@ func TestValidatorAnyEqualToInvalid(t *testing.T) {
 func TestValidatorAnyNilValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var a *int
 	v = Is(Any(a).Nil())
@@ -94,7 +94,7 @@ func TestValidatorAnyNilValid(t *testing.T) {
 func TestValidatorAnyNilInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Any(0).Nil())
 	assert.False(t, v.Valid())
@@ -115,7 +115,7 @@ func TestValidatorAnyNilInvalid(t *testing.T) {
 func TestValidatorAnyPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTen := 10
 
@@ -129,7 +129,7 @@ func TestValidatorAnyPassingValid(t *testing.T) {
 func TestValidatorAnyPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTen := 10
 

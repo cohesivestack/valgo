@@ -4,6 +4,6 @@ type localized struct {
 	_locale *locale
 }
 
-func (l *localized) New() *ValidatorGroup {
-	return newValidatorGroup(l._locale)
+func (l *localized) New() *Validation {
+	return newValidation(l._locale)
 }

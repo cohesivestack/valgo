@@ -20,7 +20,7 @@ func TestValidatorUint8Not(t *testing.T) {
 
 func TestValidatorUint8EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -37,7 +37,7 @@ func TestValidatorUint8EqualToValid(t *testing.T) {
 }
 func TestValidatorUint8EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -61,7 +61,7 @@ func TestValidatorUint8EqualToInvalid(t *testing.T) {
 
 func TestValidatorUint8GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -79,7 +79,7 @@ func TestValidatorUint8GreaterThanValid(t *testing.T) {
 
 func TestValidatorUint8GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -107,7 +107,7 @@ func TestValidatorUint8GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint8GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -128,7 +128,7 @@ func TestValidatorUint8GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint8GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -150,7 +150,7 @@ func TestValidatorUint8GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint8LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -167,7 +167,7 @@ func TestValidatorUint8LessThanValid(t *testing.T) {
 }
 func TestValidatorUint8LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -195,7 +195,7 @@ func TestValidatorUint8LessThanInvalid(t *testing.T) {
 
 func TestValidatorUint8LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -216,7 +216,7 @@ func TestValidatorUint8LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint8LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -238,7 +238,7 @@ func TestValidatorUint8LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint8BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -264,7 +264,7 @@ func TestValidatorUint8BetweenValid(t *testing.T) {
 }
 func TestValidatorUint8BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -293,7 +293,7 @@ func TestValidatorUint8BetweenInvalid(t *testing.T) {
 
 func TestValidatorUint8ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(0)).Zero())
 	assert.True(t, v.Valid())
@@ -309,7 +309,7 @@ func TestValidatorUint8ZeroValid(t *testing.T) {
 }
 func TestValidatorUint8EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(1)).Zero())
 	assert.False(t, v.Valid())
@@ -331,7 +331,7 @@ func TestValidatorUint8EmptyInvalid(t *testing.T) {
 func TestValidatorUint8PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(1)).Passing(func(val uint8) bool {
 		return val == 1
@@ -353,7 +353,7 @@ func TestValidatorUint8PassingValid(t *testing.T) {
 func TestValidatorUint8PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(1)).Passing(func(val uint8) bool {
 		return val == 2
@@ -379,7 +379,7 @@ func TestValidatorUint8PassingInvalid(t *testing.T) {
 func TestValidatorUint8InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(2)).InSlice([]uint8{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -397,7 +397,7 @@ func TestValidatorUint8InSliceValid(t *testing.T) {
 func TestValidatorUint8InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint8(uint8(4)).InSlice([]uint8{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -428,7 +428,7 @@ func TestValidatorUint16Not(t *testing.T) {
 
 func TestValidatorUint16EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -445,7 +445,7 @@ func TestValidatorUint16EqualToValid(t *testing.T) {
 }
 func TestValidatorUint16EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -469,7 +469,7 @@ func TestValidatorUint16EqualToInvalid(t *testing.T) {
 
 func TestValidatorUint16GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -487,7 +487,7 @@ func TestValidatorUint16GreaterThanValid(t *testing.T) {
 
 func TestValidatorUint16GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -515,7 +515,7 @@ func TestValidatorUint16GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint16GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -536,7 +536,7 @@ func TestValidatorUint16GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint16GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -558,7 +558,7 @@ func TestValidatorUint16GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint16LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -575,7 +575,7 @@ func TestValidatorUint16LessThanValid(t *testing.T) {
 }
 func TestValidatorUint16LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -603,7 +603,7 @@ func TestValidatorUint16LessThanInvalid(t *testing.T) {
 
 func TestValidatorUint16LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -624,7 +624,7 @@ func TestValidatorUint16LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint16LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -646,7 +646,7 @@ func TestValidatorUint16LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint16BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -672,7 +672,7 @@ func TestValidatorUint16BetweenValid(t *testing.T) {
 }
 func TestValidatorUint16BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -701,7 +701,7 @@ func TestValidatorUint16BetweenInvalid(t *testing.T) {
 
 func TestValidatorUint16ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(0)).Zero())
 	assert.True(t, v.Valid())
@@ -717,7 +717,7 @@ func TestValidatorUint16ZeroValid(t *testing.T) {
 }
 func TestValidatorUint16EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(1)).Zero())
 	assert.False(t, v.Valid())
@@ -739,7 +739,7 @@ func TestValidatorUint16EmptyInvalid(t *testing.T) {
 func TestValidatorUint16PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(1)).Passing(func(val uint16) bool {
 		return val == 1
@@ -761,7 +761,7 @@ func TestValidatorUint16PassingValid(t *testing.T) {
 func TestValidatorUint16PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(1)).Passing(func(val uint16) bool {
 		return val == 2
@@ -787,7 +787,7 @@ func TestValidatorUint16PassingInvalid(t *testing.T) {
 func TestValidatorUint16InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(2)).InSlice([]uint16{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -805,7 +805,7 @@ func TestValidatorUint16InSliceValid(t *testing.T) {
 func TestValidatorUint16InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint16(uint16(4)).InSlice([]uint16{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -836,7 +836,7 @@ func TestValidatorUint32Not(t *testing.T) {
 
 func TestValidatorUint32EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -853,7 +853,7 @@ func TestValidatorUint32EqualToValid(t *testing.T) {
 }
 func TestValidatorUint32EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -877,7 +877,7 @@ func TestValidatorUint32EqualToInvalid(t *testing.T) {
 
 func TestValidatorUint32GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -895,7 +895,7 @@ func TestValidatorUint32GreaterThanValid(t *testing.T) {
 
 func TestValidatorUint32GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -923,7 +923,7 @@ func TestValidatorUint32GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint32GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -944,7 +944,7 @@ func TestValidatorUint32GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint32GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -966,7 +966,7 @@ func TestValidatorUint32GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint32LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -983,7 +983,7 @@ func TestValidatorUint32LessThanValid(t *testing.T) {
 }
 func TestValidatorUint32LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -1011,7 +1011,7 @@ func TestValidatorUint32LessThanInvalid(t *testing.T) {
 
 func TestValidatorUint32LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -1032,7 +1032,7 @@ func TestValidatorUint32LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint32LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -1054,7 +1054,7 @@ func TestValidatorUint32LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint32BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -1080,7 +1080,7 @@ func TestValidatorUint32BetweenValid(t *testing.T) {
 }
 func TestValidatorUint32BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -1109,7 +1109,7 @@ func TestValidatorUint32BetweenInvalid(t *testing.T) {
 
 func TestValidatorUint32ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(0)).Zero())
 	assert.True(t, v.Valid())
@@ -1125,7 +1125,7 @@ func TestValidatorUint32ZeroValid(t *testing.T) {
 }
 func TestValidatorUint32EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(1)).Zero())
 	assert.False(t, v.Valid())
@@ -1147,7 +1147,7 @@ func TestValidatorUint32EmptyInvalid(t *testing.T) {
 func TestValidatorUint32PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(1)).Passing(func(val uint32) bool {
 		return val == 1
@@ -1169,7 +1169,7 @@ func TestValidatorUint32PassingValid(t *testing.T) {
 func TestValidatorUint32PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(1)).Passing(func(val uint32) bool {
 		return val == 2
@@ -1195,7 +1195,7 @@ func TestValidatorUint32PassingInvalid(t *testing.T) {
 func TestValidatorUint32InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(2)).InSlice([]uint32{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -1213,7 +1213,7 @@ func TestValidatorUint32InSliceValid(t *testing.T) {
 func TestValidatorUint32InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint32(uint32(4)).InSlice([]uint32{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -1244,7 +1244,7 @@ func TestValidatorUint64Not(t *testing.T) {
 
 func TestValidatorUint64EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1261,7 +1261,7 @@ func TestValidatorUint64EqualToValid(t *testing.T) {
 }
 func TestValidatorUint64EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -1285,7 +1285,7 @@ func TestValidatorUint64EqualToInvalid(t *testing.T) {
 
 func TestValidatorUint64GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -1303,7 +1303,7 @@ func TestValidatorUint64GreaterThanValid(t *testing.T) {
 
 func TestValidatorUint64GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -1331,7 +1331,7 @@ func TestValidatorUint64GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint64GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -1352,7 +1352,7 @@ func TestValidatorUint64GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint64GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -1374,7 +1374,7 @@ func TestValidatorUint64GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint64LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -1391,7 +1391,7 @@ func TestValidatorUint64LessThanValid(t *testing.T) {
 }
 func TestValidatorUint64LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -1419,7 +1419,7 @@ func TestValidatorUint64LessThanInvalid(t *testing.T) {
 
 func TestValidatorUint64LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -1440,7 +1440,7 @@ func TestValidatorUint64LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint64LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -1462,7 +1462,7 @@ func TestValidatorUint64LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint64BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -1488,7 +1488,7 @@ func TestValidatorUint64BetweenValid(t *testing.T) {
 }
 func TestValidatorUint64BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -1517,7 +1517,7 @@ func TestValidatorUint64BetweenInvalid(t *testing.T) {
 
 func TestValidatorUint64ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(0)).Zero())
 	assert.True(t, v.Valid())
@@ -1533,7 +1533,7 @@ func TestValidatorUint64ZeroValid(t *testing.T) {
 }
 func TestValidatorUint64EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(1)).Zero())
 	assert.False(t, v.Valid())
@@ -1555,7 +1555,7 @@ func TestValidatorUint64EmptyInvalid(t *testing.T) {
 func TestValidatorUint64PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(1)).Passing(func(val uint64) bool {
 		return val == 1
@@ -1577,7 +1577,7 @@ func TestValidatorUint64PassingValid(t *testing.T) {
 func TestValidatorUint64PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(1)).Passing(func(val uint64) bool {
 		return val == 2
@@ -1603,7 +1603,7 @@ func TestValidatorUint64PassingInvalid(t *testing.T) {
 func TestValidatorUint64InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(2)).InSlice([]uint64{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -1621,7 +1621,7 @@ func TestValidatorUint64InSliceValid(t *testing.T) {
 func TestValidatorUint64InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Uint64(uint64(4)).InSlice([]uint64{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -1652,7 +1652,7 @@ func TestValidatorIntNot(t *testing.T) {
 
 func TestValidatorIntEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1669,7 +1669,7 @@ func TestValidatorIntEqualToValid(t *testing.T) {
 }
 func TestValidatorIntEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -1693,7 +1693,7 @@ func TestValidatorIntEqualToInvalid(t *testing.T) {
 
 func TestValidatorIntGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -1711,7 +1711,7 @@ func TestValidatorIntGreaterThanValid(t *testing.T) {
 
 func TestValidatorIntGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -1739,7 +1739,7 @@ func TestValidatorIntGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorIntGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -1760,7 +1760,7 @@ func TestValidatorIntGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorIntGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -1782,7 +1782,7 @@ func TestValidatorIntGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorIntLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -1799,7 +1799,7 @@ func TestValidatorIntLessThanValid(t *testing.T) {
 }
 func TestValidatorIntLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -1827,7 +1827,7 @@ func TestValidatorIntLessThanInvalid(t *testing.T) {
 
 func TestValidatorIntLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -1848,7 +1848,7 @@ func TestValidatorIntLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorIntLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -1870,7 +1870,7 @@ func TestValidatorIntLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorIntBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -1896,7 +1896,7 @@ func TestValidatorIntBetweenValid(t *testing.T) {
 }
 func TestValidatorIntBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -1925,7 +1925,7 @@ func TestValidatorIntBetweenInvalid(t *testing.T) {
 
 func TestValidatorIntZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(0)).Zero())
 	assert.True(t, v.Valid())
@@ -1941,7 +1941,7 @@ func TestValidatorIntZeroValid(t *testing.T) {
 }
 func TestValidatorIntEmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(1)).Zero())
 	assert.False(t, v.Valid())
@@ -1963,7 +1963,7 @@ func TestValidatorIntEmptyInvalid(t *testing.T) {
 func TestValidatorIntPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(1)).Passing(func(val int) bool {
 		return val == 1
@@ -1985,7 +1985,7 @@ func TestValidatorIntPassingValid(t *testing.T) {
 func TestValidatorIntPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(1)).Passing(func(val int) bool {
 		return val == 2
@@ -2011,7 +2011,7 @@ func TestValidatorIntPassingInvalid(t *testing.T) {
 func TestValidatorIntInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(2)).InSlice([]int{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -2029,7 +2029,7 @@ func TestValidatorIntInSliceValid(t *testing.T) {
 func TestValidatorIntInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int(int(4)).InSlice([]int{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -2060,7 +2060,7 @@ func TestValidatorInt8Not(t *testing.T) {
 
 func TestValidatorInt8EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2077,7 +2077,7 @@ func TestValidatorInt8EqualToValid(t *testing.T) {
 }
 func TestValidatorInt8EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -2101,7 +2101,7 @@ func TestValidatorInt8EqualToInvalid(t *testing.T) {
 
 func TestValidatorInt8GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -2119,7 +2119,7 @@ func TestValidatorInt8GreaterThanValid(t *testing.T) {
 
 func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -2147,7 +2147,7 @@ func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt8GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -2168,7 +2168,7 @@ func TestValidatorInt8GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt8GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -2190,7 +2190,7 @@ func TestValidatorInt8GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt8LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -2207,7 +2207,7 @@ func TestValidatorInt8LessThanValid(t *testing.T) {
 }
 func TestValidatorInt8LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -2235,7 +2235,7 @@ func TestValidatorInt8LessThanInvalid(t *testing.T) {
 
 func TestValidatorInt8LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -2256,7 +2256,7 @@ func TestValidatorInt8LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt8LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -2278,7 +2278,7 @@ func TestValidatorInt8LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt8BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -2304,7 +2304,7 @@ func TestValidatorInt8BetweenValid(t *testing.T) {
 }
 func TestValidatorInt8BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -2333,7 +2333,7 @@ func TestValidatorInt8BetweenInvalid(t *testing.T) {
 
 func TestValidatorInt8ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(0)).Zero())
 	assert.True(t, v.Valid())
@@ -2349,7 +2349,7 @@ func TestValidatorInt8ZeroValid(t *testing.T) {
 }
 func TestValidatorInt8EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(1)).Zero())
 	assert.False(t, v.Valid())
@@ -2371,7 +2371,7 @@ func TestValidatorInt8EmptyInvalid(t *testing.T) {
 func TestValidatorInt8PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(1)).Passing(func(val int8) bool {
 		return val == 1
@@ -2393,7 +2393,7 @@ func TestValidatorInt8PassingValid(t *testing.T) {
 func TestValidatorInt8PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(1)).Passing(func(val int8) bool {
 		return val == 2
@@ -2419,7 +2419,7 @@ func TestValidatorInt8PassingInvalid(t *testing.T) {
 func TestValidatorInt8InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(2)).InSlice([]int8{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -2437,7 +2437,7 @@ func TestValidatorInt8InSliceValid(t *testing.T) {
 func TestValidatorInt8InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int8(int8(4)).InSlice([]int8{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -2468,7 +2468,7 @@ func TestValidatorInt16Not(t *testing.T) {
 
 func TestValidatorInt16EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2485,7 +2485,7 @@ func TestValidatorInt16EqualToValid(t *testing.T) {
 }
 func TestValidatorInt16EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -2509,7 +2509,7 @@ func TestValidatorInt16EqualToInvalid(t *testing.T) {
 
 func TestValidatorInt16GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -2527,7 +2527,7 @@ func TestValidatorInt16GreaterThanValid(t *testing.T) {
 
 func TestValidatorInt16GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -2555,7 +2555,7 @@ func TestValidatorInt16GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt16GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -2576,7 +2576,7 @@ func TestValidatorInt16GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt16GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -2598,7 +2598,7 @@ func TestValidatorInt16GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt16LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -2615,7 +2615,7 @@ func TestValidatorInt16LessThanValid(t *testing.T) {
 }
 func TestValidatorInt16LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -2643,7 +2643,7 @@ func TestValidatorInt16LessThanInvalid(t *testing.T) {
 
 func TestValidatorInt16LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -2664,7 +2664,7 @@ func TestValidatorInt16LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt16LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -2686,7 +2686,7 @@ func TestValidatorInt16LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt16BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -2712,7 +2712,7 @@ func TestValidatorInt16BetweenValid(t *testing.T) {
 }
 func TestValidatorInt16BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -2741,7 +2741,7 @@ func TestValidatorInt16BetweenInvalid(t *testing.T) {
 
 func TestValidatorInt16ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(0)).Zero())
 	assert.True(t, v.Valid())
@@ -2757,7 +2757,7 @@ func TestValidatorInt16ZeroValid(t *testing.T) {
 }
 func TestValidatorInt16EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(1)).Zero())
 	assert.False(t, v.Valid())
@@ -2779,7 +2779,7 @@ func TestValidatorInt16EmptyInvalid(t *testing.T) {
 func TestValidatorInt16PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(1)).Passing(func(val int16) bool {
 		return val == 1
@@ -2801,7 +2801,7 @@ func TestValidatorInt16PassingValid(t *testing.T) {
 func TestValidatorInt16PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(1)).Passing(func(val int16) bool {
 		return val == 2
@@ -2827,7 +2827,7 @@ func TestValidatorInt16PassingInvalid(t *testing.T) {
 func TestValidatorInt16InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(2)).InSlice([]int16{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -2845,7 +2845,7 @@ func TestValidatorInt16InSliceValid(t *testing.T) {
 func TestValidatorInt16InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int16(int16(4)).InSlice([]int16{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -2876,7 +2876,7 @@ func TestValidatorInt32Not(t *testing.T) {
 
 func TestValidatorInt32EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2893,7 +2893,7 @@ func TestValidatorInt32EqualToValid(t *testing.T) {
 }
 func TestValidatorInt32EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -2917,7 +2917,7 @@ func TestValidatorInt32EqualToInvalid(t *testing.T) {
 
 func TestValidatorInt32GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -2935,7 +2935,7 @@ func TestValidatorInt32GreaterThanValid(t *testing.T) {
 
 func TestValidatorInt32GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -2963,7 +2963,7 @@ func TestValidatorInt32GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt32GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -2984,7 +2984,7 @@ func TestValidatorInt32GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt32GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -3006,7 +3006,7 @@ func TestValidatorInt32GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt32LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -3023,7 +3023,7 @@ func TestValidatorInt32LessThanValid(t *testing.T) {
 }
 func TestValidatorInt32LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -3051,7 +3051,7 @@ func TestValidatorInt32LessThanInvalid(t *testing.T) {
 
 func TestValidatorInt32LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -3072,7 +3072,7 @@ func TestValidatorInt32LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt32LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -3094,7 +3094,7 @@ func TestValidatorInt32LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt32BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -3120,7 +3120,7 @@ func TestValidatorInt32BetweenValid(t *testing.T) {
 }
 func TestValidatorInt32BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -3149,7 +3149,7 @@ func TestValidatorInt32BetweenInvalid(t *testing.T) {
 
 func TestValidatorInt32ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(0)).Zero())
 	assert.True(t, v.Valid())
@@ -3165,7 +3165,7 @@ func TestValidatorInt32ZeroValid(t *testing.T) {
 }
 func TestValidatorInt32EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(1)).Zero())
 	assert.False(t, v.Valid())
@@ -3187,7 +3187,7 @@ func TestValidatorInt32EmptyInvalid(t *testing.T) {
 func TestValidatorInt32PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(1)).Passing(func(val int32) bool {
 		return val == 1
@@ -3209,7 +3209,7 @@ func TestValidatorInt32PassingValid(t *testing.T) {
 func TestValidatorInt32PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(1)).Passing(func(val int32) bool {
 		return val == 2
@@ -3235,7 +3235,7 @@ func TestValidatorInt32PassingInvalid(t *testing.T) {
 func TestValidatorInt32InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(2)).InSlice([]int32{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -3253,7 +3253,7 @@ func TestValidatorInt32InSliceValid(t *testing.T) {
 func TestValidatorInt32InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int32(int32(4)).InSlice([]int32{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -3284,7 +3284,7 @@ func TestValidatorInt64Not(t *testing.T) {
 
 func TestValidatorInt64EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3301,7 +3301,7 @@ func TestValidatorInt64EqualToValid(t *testing.T) {
 }
 func TestValidatorInt64EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -3325,7 +3325,7 @@ func TestValidatorInt64EqualToInvalid(t *testing.T) {
 
 func TestValidatorInt64GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -3343,7 +3343,7 @@ func TestValidatorInt64GreaterThanValid(t *testing.T) {
 
 func TestValidatorInt64GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -3371,7 +3371,7 @@ func TestValidatorInt64GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt64GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -3392,7 +3392,7 @@ func TestValidatorInt64GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt64GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -3414,7 +3414,7 @@ func TestValidatorInt64GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt64LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -3431,7 +3431,7 @@ func TestValidatorInt64LessThanValid(t *testing.T) {
 }
 func TestValidatorInt64LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -3459,7 +3459,7 @@ func TestValidatorInt64LessThanInvalid(t *testing.T) {
 
 func TestValidatorInt64LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -3480,7 +3480,7 @@ func TestValidatorInt64LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt64LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -3502,7 +3502,7 @@ func TestValidatorInt64LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt64BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -3528,7 +3528,7 @@ func TestValidatorInt64BetweenValid(t *testing.T) {
 }
 func TestValidatorInt64BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -3557,7 +3557,7 @@ func TestValidatorInt64BetweenInvalid(t *testing.T) {
 
 func TestValidatorInt64ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(0)).Zero())
 	assert.True(t, v.Valid())
@@ -3573,7 +3573,7 @@ func TestValidatorInt64ZeroValid(t *testing.T) {
 }
 func TestValidatorInt64EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(1)).Zero())
 	assert.False(t, v.Valid())
@@ -3595,7 +3595,7 @@ func TestValidatorInt64EmptyInvalid(t *testing.T) {
 func TestValidatorInt64PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(1)).Passing(func(val int64) bool {
 		return val == 1
@@ -3617,7 +3617,7 @@ func TestValidatorInt64PassingValid(t *testing.T) {
 func TestValidatorInt64PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(1)).Passing(func(val int64) bool {
 		return val == 2
@@ -3643,7 +3643,7 @@ func TestValidatorInt64PassingInvalid(t *testing.T) {
 func TestValidatorInt64InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(2)).InSlice([]int64{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -3661,7 +3661,7 @@ func TestValidatorInt64InSliceValid(t *testing.T) {
 func TestValidatorInt64InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Int64(int64(4)).InSlice([]int64{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -3692,7 +3692,7 @@ func TestValidatorFloat32Not(t *testing.T) {
 
 func TestValidatorFloat32EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3709,7 +3709,7 @@ func TestValidatorFloat32EqualToValid(t *testing.T) {
 }
 func TestValidatorFloat32EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -3733,7 +3733,7 @@ func TestValidatorFloat32EqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat32GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -3751,7 +3751,7 @@ func TestValidatorFloat32GreaterThanValid(t *testing.T) {
 
 func TestValidatorFloat32GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -3779,7 +3779,7 @@ func TestValidatorFloat32GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorFloat32GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -3800,7 +3800,7 @@ func TestValidatorFloat32GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat32GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -3822,7 +3822,7 @@ func TestValidatorFloat32GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat32LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -3839,7 +3839,7 @@ func TestValidatorFloat32LessThanValid(t *testing.T) {
 }
 func TestValidatorFloat32LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -3867,7 +3867,7 @@ func TestValidatorFloat32LessThanInvalid(t *testing.T) {
 
 func TestValidatorFloat32LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -3888,7 +3888,7 @@ func TestValidatorFloat32LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat32LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -3910,7 +3910,7 @@ func TestValidatorFloat32LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat32BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -3936,7 +3936,7 @@ func TestValidatorFloat32BetweenValid(t *testing.T) {
 }
 func TestValidatorFloat32BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -3965,7 +3965,7 @@ func TestValidatorFloat32BetweenInvalid(t *testing.T) {
 
 func TestValidatorFloat32ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(0)).Zero())
 	assert.True(t, v.Valid())
@@ -3981,7 +3981,7 @@ func TestValidatorFloat32ZeroValid(t *testing.T) {
 }
 func TestValidatorFloat32EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(1)).Zero())
 	assert.False(t, v.Valid())
@@ -4003,7 +4003,7 @@ func TestValidatorFloat32EmptyInvalid(t *testing.T) {
 func TestValidatorFloat32PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(1)).Passing(func(val float32) bool {
 		return val == 1
@@ -4025,7 +4025,7 @@ func TestValidatorFloat32PassingValid(t *testing.T) {
 func TestValidatorFloat32PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(1)).Passing(func(val float32) bool {
 		return val == 2
@@ -4051,7 +4051,7 @@ func TestValidatorFloat32PassingInvalid(t *testing.T) {
 func TestValidatorFloat32InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(2)).InSlice([]float32{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -4069,7 +4069,7 @@ func TestValidatorFloat32InSliceValid(t *testing.T) {
 func TestValidatorFloat32InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float32(float32(4)).InSlice([]float32{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -4100,7 +4100,7 @@ func TestValidatorFloat64Not(t *testing.T) {
 
 func TestValidatorFloat64EqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4117,7 +4117,7 @@ func TestValidatorFloat64EqualToValid(t *testing.T) {
 }
 func TestValidatorFloat64EqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -4141,7 +4141,7 @@ func TestValidatorFloat64EqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat64GreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -4159,7 +4159,7 @@ func TestValidatorFloat64GreaterThanValid(t *testing.T) {
 
 func TestValidatorFloat64GreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -4187,7 +4187,7 @@ func TestValidatorFloat64GreaterThanInvalid(t *testing.T) {
 
 func TestValidatorFloat64GreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -4208,7 +4208,7 @@ func TestValidatorFloat64GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat64GreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -4230,7 +4230,7 @@ func TestValidatorFloat64GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat64LessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -4247,7 +4247,7 @@ func TestValidatorFloat64LessThanValid(t *testing.T) {
 }
 func TestValidatorFloat64LessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -4275,7 +4275,7 @@ func TestValidatorFloat64LessThanInvalid(t *testing.T) {
 
 func TestValidatorFloat64LessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -4296,7 +4296,7 @@ func TestValidatorFloat64LessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat64LessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -4318,7 +4318,7 @@ func TestValidatorFloat64LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat64BetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -4344,7 +4344,7 @@ func TestValidatorFloat64BetweenValid(t *testing.T) {
 }
 func TestValidatorFloat64BetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -4373,7 +4373,7 @@ func TestValidatorFloat64BetweenInvalid(t *testing.T) {
 
 func TestValidatorFloat64ZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(0)).Zero())
 	assert.True(t, v.Valid())
@@ -4389,7 +4389,7 @@ func TestValidatorFloat64ZeroValid(t *testing.T) {
 }
 func TestValidatorFloat64EmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(1)).Zero())
 	assert.False(t, v.Valid())
@@ -4411,7 +4411,7 @@ func TestValidatorFloat64EmptyInvalid(t *testing.T) {
 func TestValidatorFloat64PassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(1)).Passing(func(val float64) bool {
 		return val == 1
@@ -4433,7 +4433,7 @@ func TestValidatorFloat64PassingValid(t *testing.T) {
 func TestValidatorFloat64PassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(1)).Passing(func(val float64) bool {
 		return val == 2
@@ -4459,7 +4459,7 @@ func TestValidatorFloat64PassingInvalid(t *testing.T) {
 func TestValidatorFloat64InSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(2)).InSlice([]float64{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -4477,7 +4477,7 @@ func TestValidatorFloat64InSliceValid(t *testing.T) {
 func TestValidatorFloat64InSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Float64(float64(4)).InSlice([]float64{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -4508,7 +4508,7 @@ func TestValidatorByteNot(t *testing.T) {
 
 func TestValidatorByteEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4525,7 +4525,7 @@ func TestValidatorByteEqualToValid(t *testing.T) {
 }
 func TestValidatorByteEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -4549,7 +4549,7 @@ func TestValidatorByteEqualToInvalid(t *testing.T) {
 
 func TestValidatorByteGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -4567,7 +4567,7 @@ func TestValidatorByteGreaterThanValid(t *testing.T) {
 
 func TestValidatorByteGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -4595,7 +4595,7 @@ func TestValidatorByteGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorByteGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -4616,7 +4616,7 @@ func TestValidatorByteGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorByteGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -4638,7 +4638,7 @@ func TestValidatorByteGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorByteLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -4655,7 +4655,7 @@ func TestValidatorByteLessThanValid(t *testing.T) {
 }
 func TestValidatorByteLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -4683,7 +4683,7 @@ func TestValidatorByteLessThanInvalid(t *testing.T) {
 
 func TestValidatorByteLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -4704,7 +4704,7 @@ func TestValidatorByteLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorByteLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -4726,7 +4726,7 @@ func TestValidatorByteLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorByteBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -4752,7 +4752,7 @@ func TestValidatorByteBetweenValid(t *testing.T) {
 }
 func TestValidatorByteBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -4781,7 +4781,7 @@ func TestValidatorByteBetweenInvalid(t *testing.T) {
 
 func TestValidatorByteZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(0)).Zero())
 	assert.True(t, v.Valid())
@@ -4797,7 +4797,7 @@ func TestValidatorByteZeroValid(t *testing.T) {
 }
 func TestValidatorByteEmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(1)).Zero())
 	assert.False(t, v.Valid())
@@ -4819,7 +4819,7 @@ func TestValidatorByteEmptyInvalid(t *testing.T) {
 func TestValidatorBytePassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(1)).Passing(func(val byte) bool {
 		return val == 1
@@ -4841,7 +4841,7 @@ func TestValidatorBytePassingValid(t *testing.T) {
 func TestValidatorBytePassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(1)).Passing(func(val byte) bool {
 		return val == 2
@@ -4867,7 +4867,7 @@ func TestValidatorBytePassingInvalid(t *testing.T) {
 func TestValidatorByteInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(2)).InSlice([]byte{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -4885,7 +4885,7 @@ func TestValidatorByteInSliceValid(t *testing.T) {
 func TestValidatorByteInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Byte(byte(4)).InSlice([]byte{1, 2, 3}))
 	assert.False(t, v.Valid())
@@ -4916,7 +4916,7 @@ func TestValidatorRuneNot(t *testing.T) {
 
 func TestValidatorRuneEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4933,7 +4933,7 @@ func TestValidatorRuneEqualToValid(t *testing.T) {
 }
 func TestValidatorRuneEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(1)).EqualTo(2))
 	assert.False(t, v.Valid())
@@ -4957,7 +4957,7 @@ func TestValidatorRuneEqualToInvalid(t *testing.T) {
 
 func TestValidatorRuneGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(3)).GreaterThan(2))
 	assert.True(t, v.Valid())
@@ -4975,7 +4975,7 @@ func TestValidatorRuneGreaterThanValid(t *testing.T) {
 
 func TestValidatorRuneGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).GreaterThan(2))
 	assert.False(t, v.Valid())
@@ -5003,7 +5003,7 @@ func TestValidatorRuneGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorRuneGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).GreaterOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -5024,7 +5024,7 @@ func TestValidatorRuneGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorRuneGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).GreaterOrEqualTo(3))
 	assert.False(t, v.Valid())
@@ -5046,7 +5046,7 @@ func TestValidatorRuneGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorRuneLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).LessThan(3))
 	assert.True(t, v.Valid())
@@ -5063,7 +5063,7 @@ func TestValidatorRuneLessThanValid(t *testing.T) {
 }
 func TestValidatorRuneLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).LessThan(2))
 	assert.False(t, v.Valid())
@@ -5091,7 +5091,7 @@ func TestValidatorRuneLessThanInvalid(t *testing.T) {
 
 func TestValidatorRuneLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).LessOrEqualTo(2))
 	assert.True(t, v.Valid())
@@ -5112,7 +5112,7 @@ func TestValidatorRuneLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorRuneLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(3)).LessOrEqualTo(2))
 	assert.False(t, v.Valid())
@@ -5134,7 +5134,7 @@ func TestValidatorRuneLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorRuneBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).Between(2, 6))
 	assert.True(t, v.Valid())
@@ -5160,7 +5160,7 @@ func TestValidatorRuneBetweenValid(t *testing.T) {
 }
 func TestValidatorRuneBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).Between(3, 6))
 	assert.False(t, v.Valid())
@@ -5189,7 +5189,7 @@ func TestValidatorRuneBetweenInvalid(t *testing.T) {
 
 func TestValidatorRuneZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(0)).Zero())
 	assert.True(t, v.Valid())
@@ -5205,7 +5205,7 @@ func TestValidatorRuneZeroValid(t *testing.T) {
 }
 func TestValidatorRuneEmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(1)).Zero())
 	assert.False(t, v.Valid())
@@ -5227,7 +5227,7 @@ func TestValidatorRuneEmptyInvalid(t *testing.T) {
 func TestValidatorRunePassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(1)).Passing(func(val rune) bool {
 		return val == 1
@@ -5249,7 +5249,7 @@ func TestValidatorRunePassingValid(t *testing.T) {
 func TestValidatorRunePassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(1)).Passing(func(val rune) bool {
 		return val == 2
@@ -5275,7 +5275,7 @@ func TestValidatorRunePassingInvalid(t *testing.T) {
 func TestValidatorRuneInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(2)).InSlice([]rune{1, 2, 3}))
 	assert.True(t, v.Valid())
@@ -5293,7 +5293,7 @@ func TestValidatorRuneInSliceValid(t *testing.T) {
 func TestValidatorRuneInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Rune(rune(4)).InSlice([]rune{1, 2, 3}))
 	assert.False(t, v.Valid())

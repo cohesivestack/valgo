@@ -19,7 +19,7 @@ func TestValidatorStringPNot(t *testing.T) {
 
 func TestValidatorStringPEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "text"
 
@@ -38,7 +38,7 @@ func TestValidatorStringPEqualToValid(t *testing.T) {
 }
 func TestValidatorStringPEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "text1"
 	text1 := &_text1
@@ -74,7 +74,7 @@ func TestValidatorStringPEqualToInvalid(t *testing.T) {
 
 func TestValidatorStringPGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "ab"
 
@@ -94,7 +94,7 @@ func TestValidatorStringPGreaterThanValid(t *testing.T) {
 
 func TestValidatorStringPGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "aa"
 	text1 := &_text1
@@ -135,7 +135,7 @@ func TestValidatorStringPGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorStringPGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "aa"
 
@@ -160,7 +160,7 @@ func TestValidatorStringPGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorStringPGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "aa"
 	text1 := &_text1
@@ -193,7 +193,7 @@ func TestValidatorStringPGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorStringPLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "aa"
 
@@ -212,7 +212,7 @@ func TestValidatorStringPLessThanValid(t *testing.T) {
 }
 func TestValidatorStringPLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "aa"
 	text1 := &_text1
@@ -253,7 +253,7 @@ func TestValidatorStringPLessThanInvalid(t *testing.T) {
 
 func TestValidatorStringPLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "aa"
 
@@ -276,7 +276,7 @@ func TestValidatorStringPLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorStringPLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "ab"
 	text1 := &_text1
@@ -308,7 +308,7 @@ func TestValidatorStringPLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorStringPBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "aa"
 
@@ -340,7 +340,7 @@ func TestValidatorStringPBetweenValid(t *testing.T) {
 }
 func TestValidatorStringPBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "aa"
 	text1 := &_text1
@@ -382,7 +382,7 @@ func TestValidatorStringPBetweenInvalid(t *testing.T) {
 
 func TestValidatorStringPEmptyValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := ""
 	text1 := &_text1
@@ -401,7 +401,7 @@ func TestValidatorStringPEmptyValid(t *testing.T) {
 }
 func TestValidatorStringPEmptyInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "a"
 	text1 := &_text1
@@ -441,7 +441,7 @@ func TestValidatorStringPEmptyInvalid(t *testing.T) {
 
 func TestValidatorStringPEmptyOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := ""
 	text1 := &_text1
@@ -466,7 +466,7 @@ func TestValidatorStringPEmptyOrNilValid(t *testing.T) {
 }
 func TestValidatorStringPEmptyOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "a"
 
@@ -497,7 +497,7 @@ func TestValidatorStringPEmptyOrNilInvalid(t *testing.T) {
 
 func TestValidatorStringPBlankValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := ""
 	text1 := &_text1
@@ -522,7 +522,7 @@ func TestValidatorStringPBlankValid(t *testing.T) {
 }
 func TestValidatorStringPBlankInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "a"
 	text1 := &_text1
@@ -554,7 +554,7 @@ func TestValidatorStringPBlankInvalid(t *testing.T) {
 
 func TestValidatorStringPBlankOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := ""
 	text1 := &_text1
@@ -585,7 +585,7 @@ func TestValidatorStringPBlankOrNilValid(t *testing.T) {
 }
 func TestValidatorStringPBlankOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "a"
 
@@ -609,7 +609,7 @@ func TestValidatorStringPBlankOrNilInvalid(t *testing.T) {
 func TestValidatorStringPPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "text"
 
@@ -633,7 +633,7 @@ func TestValidatorStringPPassingValid(t *testing.T) {
 func TestValidatorStringPPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "text1"
 
@@ -661,7 +661,7 @@ func TestValidatorStringPPassingInvalid(t *testing.T) {
 func TestValidatorStringPInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "up"
 
@@ -680,7 +680,7 @@ func TestValidatorStringPInSliceValid(t *testing.T) {
 func TestValidatorStringPInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "up"
 	text1 := &_text1
@@ -713,7 +713,7 @@ func TestValidatorStringPInSliceInvalid(t *testing.T) {
 func TestValidatorStringPMatchingToValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	regex, _ := regexp.Compile("pre-.+")
 
@@ -734,7 +734,7 @@ func TestValidatorStringPMatchingToValid(t *testing.T) {
 func TestValidatorStringPMatchingToInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	regex, _ := regexp.Compile("pre-.+")
 
@@ -769,7 +769,7 @@ func TestValidatorStringPMatchingToInvalid(t *testing.T) {
 func TestValidatorStringPMaxLengthValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "123456"
 
@@ -794,7 +794,7 @@ func TestValidatorStringPMaxLengthValid(t *testing.T) {
 func TestValidatorStringPMaxLengthInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "1234567"
 	text1 := &_text1
@@ -827,7 +827,7 @@ func TestValidatorStringPMaxLengthInvalid(t *testing.T) {
 func TestValidatorStringPMinLengthValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "123456"
 
@@ -858,7 +858,7 @@ func TestValidatorStringPMinLengthValid(t *testing.T) {
 func TestValidatorStringPMinLengthInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "12345"
 	text1 := &_text1
@@ -891,7 +891,7 @@ func TestValidatorStringPMinLengthInvalid(t *testing.T) {
 func TestValidatorStringPLengthValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "123456"
 
@@ -910,7 +910,7 @@ func TestValidatorStringPLengthValid(t *testing.T) {
 func TestValidatorStringPLengthInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "12345"
 	text1 := &_text1
@@ -959,7 +959,7 @@ func TestValidatorStringPLengthInvalid(t *testing.T) {
 func TestValidatorStringPLengthBetweenValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	text1 := "123456"
 
@@ -1000,7 +1000,7 @@ func TestValidatorStringPLengthBetweenValid(t *testing.T) {
 func TestValidatorStringPLengthBetweenInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_text1 := "12345"
 	text1 := &_text1
@@ -1048,7 +1048,7 @@ func TestValidatorStringPLengthBetweenInvalid(t *testing.T) {
 func TestValidatorStringNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valString *string
 
@@ -1068,7 +1068,7 @@ func TestValidatorStringNilIsValid(t *testing.T) {
 func TestValidatorStringNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valString := "text"
 

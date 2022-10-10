@@ -18,7 +18,7 @@ func TestValidatorBoolPNot(t *testing.T) {
 func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTrue := true
 	v = Is(BoolP(&valTrue).EqualTo(true))
@@ -43,7 +43,7 @@ func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTrue := true
 
@@ -72,7 +72,7 @@ func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTrue := true
 
@@ -92,7 +92,7 @@ func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
 func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valFalse := false
 
@@ -116,7 +116,7 @@ func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_valFalse := false
 	valFalse := &_valFalse
@@ -138,7 +138,7 @@ func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
 func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_valTrue := true
 	valTrue := &_valTrue
@@ -165,7 +165,7 @@ func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valTrue *bool
 
@@ -186,7 +186,7 @@ func TestValidatorBoolNilIsValid(t *testing.T) {
 func TestValidatorBoolNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTrue := true
 
@@ -211,7 +211,7 @@ func TestValidatorBoolNilIsInvalid(t *testing.T) {
 func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valTrue := true
 
@@ -236,7 +236,7 @@ func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
 func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valFalse := false
 
@@ -264,7 +264,7 @@ func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolPInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	boolValue := false
 
@@ -284,7 +284,7 @@ func TestValidatorBoolPInSliceValid(t *testing.T) {
 func TestValidatorBoolPInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_boolValue := true
 	boolValue := &_boolValue

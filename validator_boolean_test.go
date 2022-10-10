@@ -16,7 +16,7 @@ func TestValidatorBoolNot(t *testing.T) {
 func TestValidatorBoolEqualToWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(true).EqualTo(true))
 	assert.True(t, v.Valid())
@@ -39,7 +39,7 @@ func TestValidatorBoolEqualToWhenIsValid(t *testing.T) {
 func TestValidatorBoolEqualToWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(true).EqualTo(false))
 	assert.False(t, v.Valid())
@@ -62,7 +62,7 @@ func TestValidatorBoolEqualToWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolTrueWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(true).True())
 	assert.True(t, v.Valid())
@@ -80,7 +80,7 @@ func TestValidatorBoolTrueWhenIsValid(t *testing.T) {
 func TestValidatorBoolTrueWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(false).True())
 	assert.False(t, v.Valid())
@@ -102,7 +102,7 @@ func TestValidatorBoolTrueWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolFalseWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(false).False())
 	assert.True(t, v.Valid())
@@ -120,7 +120,7 @@ func TestValidatorBoolFalseWhenIsValid(t *testing.T) {
 func TestValidatorBoolFalseWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(true).False())
 	assert.False(t, v.Valid())
@@ -142,7 +142,7 @@ func TestValidatorBoolFalseWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolPassingWhenIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(true).Passing(func(val bool) bool {
 		return val == true
@@ -165,7 +165,7 @@ func TestValidatorBoolPassingWhenIsValid(t *testing.T) {
 func TestValidatorBoolPassingWhenIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(false).Passing(func(val bool) bool {
 		return val == true
@@ -191,7 +191,7 @@ func TestValidatorBoolPassingWhenIsInvalid(t *testing.T) {
 func TestValidatorBoolInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(false).InSlice([]bool{true, false, true}))
 	assert.True(t, v.Valid())
@@ -209,7 +209,7 @@ func TestValidatorBoolInSliceValid(t *testing.T) {
 func TestValidatorBoolInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	v = Is(Bool(true).InSlice([]bool{false, false, false}))
 	assert.False(t, v.Valid())

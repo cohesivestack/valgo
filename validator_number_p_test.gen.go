@@ -22,7 +22,7 @@ func TestValidatorUint8PNot(t *testing.T) {
 
 func TestValidatorUint8PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -41,7 +41,7 @@ func TestValidatorUint8PEqualToValid(t *testing.T) {
 }
 func TestValidatorUint8PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(2)
 	number1 := &_number1
@@ -77,7 +77,7 @@ func TestValidatorUint8PEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint8PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(3)
 
@@ -97,7 +97,7 @@ func TestValidatorUint8PGreaterThanValid(t *testing.T) {
 
 func TestValidatorUint8PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(2)
 	number1 := &_number1
@@ -138,7 +138,7 @@ func TestValidatorUint8PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint8PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -163,7 +163,7 @@ func TestValidatorUint8PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint8PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(2)
 	number1 := &_number1
@@ -196,7 +196,7 @@ func TestValidatorUint8PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint8PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -215,7 +215,7 @@ func TestValidatorUint8PLessThanValid(t *testing.T) {
 }
 func TestValidatorUint8PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(2)
 	number1 := &_number1
@@ -256,7 +256,7 @@ func TestValidatorUint8PLessThanInvalid(t *testing.T) {
 
 func TestValidatorUint8PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -279,7 +279,7 @@ func TestValidatorUint8PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint8PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(3)
 	number1 := &_number1
@@ -311,7 +311,7 @@ func TestValidatorUint8PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint8PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -343,7 +343,7 @@ func TestValidatorUint8PBetweenValid(t *testing.T) {
 }
 func TestValidatorUint8PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(2)
 	number1 := &_number1
@@ -385,7 +385,7 @@ func TestValidatorUint8PBetweenInvalid(t *testing.T) {
 
 func TestValidatorUint8PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(0)
 	number1 := &_number1
@@ -404,7 +404,7 @@ func TestValidatorUint8PZeroValid(t *testing.T) {
 }
 func TestValidatorUint8PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(1)
 	number1 := &_number1
@@ -436,7 +436,7 @@ func TestValidatorUint8PZeroInvalid(t *testing.T) {
 
 func TestValidatorUint8PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(0)
 	number1 := &_number1
@@ -461,7 +461,7 @@ func TestValidatorUint8PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorUint8PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(1)
 
@@ -485,7 +485,7 @@ func TestValidatorUint8PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorUint8PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -509,7 +509,7 @@ func TestValidatorUint8PPassingValid(t *testing.T) {
 func TestValidatorUint8PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(1)
 
@@ -537,7 +537,7 @@ func TestValidatorUint8PPassingInvalid(t *testing.T) {
 func TestValidatorUint8PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint8(2)
 
@@ -556,7 +556,7 @@ func TestValidatorUint8PInSliceValid(t *testing.T) {
 func TestValidatorUint8PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint8(1)
 	number1 := &_number1
@@ -589,7 +589,7 @@ func TestValidatorUint8PInSliceInvalid(t *testing.T) {
 func TestValidatorUint8PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *uint8
 
@@ -609,7 +609,7 @@ func TestValidatorUint8PNilIsValid(t *testing.T) {
 func TestValidatorUint8PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := uint8(1)
 
@@ -644,7 +644,7 @@ func TestValidatorUint16PNot(t *testing.T) {
 
 func TestValidatorUint16PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -663,7 +663,7 @@ func TestValidatorUint16PEqualToValid(t *testing.T) {
 }
 func TestValidatorUint16PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(2)
 	number1 := &_number1
@@ -699,7 +699,7 @@ func TestValidatorUint16PEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint16PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(3)
 
@@ -719,7 +719,7 @@ func TestValidatorUint16PGreaterThanValid(t *testing.T) {
 
 func TestValidatorUint16PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(2)
 	number1 := &_number1
@@ -760,7 +760,7 @@ func TestValidatorUint16PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint16PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -785,7 +785,7 @@ func TestValidatorUint16PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint16PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(2)
 	number1 := &_number1
@@ -818,7 +818,7 @@ func TestValidatorUint16PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint16PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -837,7 +837,7 @@ func TestValidatorUint16PLessThanValid(t *testing.T) {
 }
 func TestValidatorUint16PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(2)
 	number1 := &_number1
@@ -878,7 +878,7 @@ func TestValidatorUint16PLessThanInvalid(t *testing.T) {
 
 func TestValidatorUint16PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -901,7 +901,7 @@ func TestValidatorUint16PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint16PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(3)
 	number1 := &_number1
@@ -933,7 +933,7 @@ func TestValidatorUint16PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint16PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -965,7 +965,7 @@ func TestValidatorUint16PBetweenValid(t *testing.T) {
 }
 func TestValidatorUint16PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(2)
 	number1 := &_number1
@@ -1007,7 +1007,7 @@ func TestValidatorUint16PBetweenInvalid(t *testing.T) {
 
 func TestValidatorUint16PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(0)
 	number1 := &_number1
@@ -1026,7 +1026,7 @@ func TestValidatorUint16PZeroValid(t *testing.T) {
 }
 func TestValidatorUint16PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(1)
 	number1 := &_number1
@@ -1058,7 +1058,7 @@ func TestValidatorUint16PZeroInvalid(t *testing.T) {
 
 func TestValidatorUint16PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(0)
 	number1 := &_number1
@@ -1083,7 +1083,7 @@ func TestValidatorUint16PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorUint16PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(1)
 
@@ -1107,7 +1107,7 @@ func TestValidatorUint16PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorUint16PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -1131,7 +1131,7 @@ func TestValidatorUint16PPassingValid(t *testing.T) {
 func TestValidatorUint16PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(1)
 
@@ -1159,7 +1159,7 @@ func TestValidatorUint16PPassingInvalid(t *testing.T) {
 func TestValidatorUint16PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint16(2)
 
@@ -1178,7 +1178,7 @@ func TestValidatorUint16PInSliceValid(t *testing.T) {
 func TestValidatorUint16PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint16(1)
 	number1 := &_number1
@@ -1211,7 +1211,7 @@ func TestValidatorUint16PInSliceInvalid(t *testing.T) {
 func TestValidatorUint16PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *uint16
 
@@ -1231,7 +1231,7 @@ func TestValidatorUint16PNilIsValid(t *testing.T) {
 func TestValidatorUint16PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := uint16(1)
 
@@ -1266,7 +1266,7 @@ func TestValidatorUint32PNot(t *testing.T) {
 
 func TestValidatorUint32PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1285,7 +1285,7 @@ func TestValidatorUint32PEqualToValid(t *testing.T) {
 }
 func TestValidatorUint32PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(2)
 	number1 := &_number1
@@ -1321,7 +1321,7 @@ func TestValidatorUint32PEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint32PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(3)
 
@@ -1341,7 +1341,7 @@ func TestValidatorUint32PGreaterThanValid(t *testing.T) {
 
 func TestValidatorUint32PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(2)
 	number1 := &_number1
@@ -1382,7 +1382,7 @@ func TestValidatorUint32PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint32PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1407,7 +1407,7 @@ func TestValidatorUint32PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint32PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(2)
 	number1 := &_number1
@@ -1440,7 +1440,7 @@ func TestValidatorUint32PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint32PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1459,7 +1459,7 @@ func TestValidatorUint32PLessThanValid(t *testing.T) {
 }
 func TestValidatorUint32PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(2)
 	number1 := &_number1
@@ -1500,7 +1500,7 @@ func TestValidatorUint32PLessThanInvalid(t *testing.T) {
 
 func TestValidatorUint32PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1523,7 +1523,7 @@ func TestValidatorUint32PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint32PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(3)
 	number1 := &_number1
@@ -1555,7 +1555,7 @@ func TestValidatorUint32PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint32PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1587,7 +1587,7 @@ func TestValidatorUint32PBetweenValid(t *testing.T) {
 }
 func TestValidatorUint32PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(2)
 	number1 := &_number1
@@ -1629,7 +1629,7 @@ func TestValidatorUint32PBetweenInvalid(t *testing.T) {
 
 func TestValidatorUint32PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(0)
 	number1 := &_number1
@@ -1648,7 +1648,7 @@ func TestValidatorUint32PZeroValid(t *testing.T) {
 }
 func TestValidatorUint32PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(1)
 	number1 := &_number1
@@ -1680,7 +1680,7 @@ func TestValidatorUint32PZeroInvalid(t *testing.T) {
 
 func TestValidatorUint32PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(0)
 	number1 := &_number1
@@ -1705,7 +1705,7 @@ func TestValidatorUint32PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorUint32PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(1)
 
@@ -1729,7 +1729,7 @@ func TestValidatorUint32PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorUint32PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1753,7 +1753,7 @@ func TestValidatorUint32PPassingValid(t *testing.T) {
 func TestValidatorUint32PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(1)
 
@@ -1781,7 +1781,7 @@ func TestValidatorUint32PPassingInvalid(t *testing.T) {
 func TestValidatorUint32PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint32(2)
 
@@ -1800,7 +1800,7 @@ func TestValidatorUint32PInSliceValid(t *testing.T) {
 func TestValidatorUint32PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint32(1)
 	number1 := &_number1
@@ -1833,7 +1833,7 @@ func TestValidatorUint32PInSliceInvalid(t *testing.T) {
 func TestValidatorUint32PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *uint32
 
@@ -1853,7 +1853,7 @@ func TestValidatorUint32PNilIsValid(t *testing.T) {
 func TestValidatorUint32PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := uint32(1)
 
@@ -1888,7 +1888,7 @@ func TestValidatorUint64PNot(t *testing.T) {
 
 func TestValidatorUint64PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -1907,7 +1907,7 @@ func TestValidatorUint64PEqualToValid(t *testing.T) {
 }
 func TestValidatorUint64PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(2)
 	number1 := &_number1
@@ -1943,7 +1943,7 @@ func TestValidatorUint64PEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint64PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(3)
 
@@ -1963,7 +1963,7 @@ func TestValidatorUint64PGreaterThanValid(t *testing.T) {
 
 func TestValidatorUint64PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(2)
 	number1 := &_number1
@@ -2004,7 +2004,7 @@ func TestValidatorUint64PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorUint64PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -2029,7 +2029,7 @@ func TestValidatorUint64PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint64PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(2)
 	number1 := &_number1
@@ -2062,7 +2062,7 @@ func TestValidatorUint64PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint64PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -2081,7 +2081,7 @@ func TestValidatorUint64PLessThanValid(t *testing.T) {
 }
 func TestValidatorUint64PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(2)
 	number1 := &_number1
@@ -2122,7 +2122,7 @@ func TestValidatorUint64PLessThanInvalid(t *testing.T) {
 
 func TestValidatorUint64PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -2145,7 +2145,7 @@ func TestValidatorUint64PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorUint64PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(3)
 	number1 := &_number1
@@ -2177,7 +2177,7 @@ func TestValidatorUint64PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorUint64PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -2209,7 +2209,7 @@ func TestValidatorUint64PBetweenValid(t *testing.T) {
 }
 func TestValidatorUint64PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(2)
 	number1 := &_number1
@@ -2251,7 +2251,7 @@ func TestValidatorUint64PBetweenInvalid(t *testing.T) {
 
 func TestValidatorUint64PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(0)
 	number1 := &_number1
@@ -2270,7 +2270,7 @@ func TestValidatorUint64PZeroValid(t *testing.T) {
 }
 func TestValidatorUint64PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(1)
 	number1 := &_number1
@@ -2302,7 +2302,7 @@ func TestValidatorUint64PZeroInvalid(t *testing.T) {
 
 func TestValidatorUint64PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(0)
 	number1 := &_number1
@@ -2327,7 +2327,7 @@ func TestValidatorUint64PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorUint64PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(1)
 
@@ -2351,7 +2351,7 @@ func TestValidatorUint64PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorUint64PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -2375,7 +2375,7 @@ func TestValidatorUint64PPassingValid(t *testing.T) {
 func TestValidatorUint64PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(1)
 
@@ -2403,7 +2403,7 @@ func TestValidatorUint64PPassingInvalid(t *testing.T) {
 func TestValidatorUint64PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := uint64(2)
 
@@ -2422,7 +2422,7 @@ func TestValidatorUint64PInSliceValid(t *testing.T) {
 func TestValidatorUint64PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := uint64(1)
 	number1 := &_number1
@@ -2455,7 +2455,7 @@ func TestValidatorUint64PInSliceInvalid(t *testing.T) {
 func TestValidatorUint64PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *uint64
 
@@ -2475,7 +2475,7 @@ func TestValidatorUint64PNilIsValid(t *testing.T) {
 func TestValidatorUint64PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := uint64(1)
 
@@ -2510,7 +2510,7 @@ func TestValidatorIntPNot(t *testing.T) {
 
 func TestValidatorIntPEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -2529,7 +2529,7 @@ func TestValidatorIntPEqualToValid(t *testing.T) {
 }
 func TestValidatorIntPEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(2)
 	number1 := &_number1
@@ -2565,7 +2565,7 @@ func TestValidatorIntPEqualToInvalid(t *testing.T) {
 
 func TestValidatorIntPGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(3)
 
@@ -2585,7 +2585,7 @@ func TestValidatorIntPGreaterThanValid(t *testing.T) {
 
 func TestValidatorIntPGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(2)
 	number1 := &_number1
@@ -2626,7 +2626,7 @@ func TestValidatorIntPGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorIntPGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -2651,7 +2651,7 @@ func TestValidatorIntPGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorIntPGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(2)
 	number1 := &_number1
@@ -2684,7 +2684,7 @@ func TestValidatorIntPGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorIntPLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -2703,7 +2703,7 @@ func TestValidatorIntPLessThanValid(t *testing.T) {
 }
 func TestValidatorIntPLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(2)
 	number1 := &_number1
@@ -2744,7 +2744,7 @@ func TestValidatorIntPLessThanInvalid(t *testing.T) {
 
 func TestValidatorIntPLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -2767,7 +2767,7 @@ func TestValidatorIntPLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorIntPLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(3)
 	number1 := &_number1
@@ -2799,7 +2799,7 @@ func TestValidatorIntPLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorIntPBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -2831,7 +2831,7 @@ func TestValidatorIntPBetweenValid(t *testing.T) {
 }
 func TestValidatorIntPBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(2)
 	number1 := &_number1
@@ -2873,7 +2873,7 @@ func TestValidatorIntPBetweenInvalid(t *testing.T) {
 
 func TestValidatorIntPZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(0)
 	number1 := &_number1
@@ -2892,7 +2892,7 @@ func TestValidatorIntPZeroValid(t *testing.T) {
 }
 func TestValidatorIntPZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(1)
 	number1 := &_number1
@@ -2924,7 +2924,7 @@ func TestValidatorIntPZeroInvalid(t *testing.T) {
 
 func TestValidatorIntPZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(0)
 	number1 := &_number1
@@ -2949,7 +2949,7 @@ func TestValidatorIntPZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorIntPZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(1)
 
@@ -2973,7 +2973,7 @@ func TestValidatorIntPZeroOrNilInvalid(t *testing.T) {
 func TestValidatorIntPPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -2997,7 +2997,7 @@ func TestValidatorIntPPassingValid(t *testing.T) {
 func TestValidatorIntPPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(1)
 
@@ -3025,7 +3025,7 @@ func TestValidatorIntPPassingInvalid(t *testing.T) {
 func TestValidatorIntPInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int(2)
 
@@ -3044,7 +3044,7 @@ func TestValidatorIntPInSliceValid(t *testing.T) {
 func TestValidatorIntPInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int(1)
 	number1 := &_number1
@@ -3077,7 +3077,7 @@ func TestValidatorIntPInSliceInvalid(t *testing.T) {
 func TestValidatorIntPNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *int
 
@@ -3097,7 +3097,7 @@ func TestValidatorIntPNilIsValid(t *testing.T) {
 func TestValidatorIntPNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := int(1)
 
@@ -3132,7 +3132,7 @@ func TestValidatorInt8PNot(t *testing.T) {
 
 func TestValidatorInt8PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3151,7 +3151,7 @@ func TestValidatorInt8PEqualToValid(t *testing.T) {
 }
 func TestValidatorInt8PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(2)
 	number1 := &_number1
@@ -3187,7 +3187,7 @@ func TestValidatorInt8PEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt8PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(3)
 
@@ -3207,7 +3207,7 @@ func TestValidatorInt8PGreaterThanValid(t *testing.T) {
 
 func TestValidatorInt8PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(2)
 	number1 := &_number1
@@ -3248,7 +3248,7 @@ func TestValidatorInt8PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt8PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3273,7 +3273,7 @@ func TestValidatorInt8PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt8PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(2)
 	number1 := &_number1
@@ -3306,7 +3306,7 @@ func TestValidatorInt8PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt8PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3325,7 +3325,7 @@ func TestValidatorInt8PLessThanValid(t *testing.T) {
 }
 func TestValidatorInt8PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(2)
 	number1 := &_number1
@@ -3366,7 +3366,7 @@ func TestValidatorInt8PLessThanInvalid(t *testing.T) {
 
 func TestValidatorInt8PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3389,7 +3389,7 @@ func TestValidatorInt8PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt8PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(3)
 	number1 := &_number1
@@ -3421,7 +3421,7 @@ func TestValidatorInt8PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt8PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3453,7 +3453,7 @@ func TestValidatorInt8PBetweenValid(t *testing.T) {
 }
 func TestValidatorInt8PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(2)
 	number1 := &_number1
@@ -3495,7 +3495,7 @@ func TestValidatorInt8PBetweenInvalid(t *testing.T) {
 
 func TestValidatorInt8PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(0)
 	number1 := &_number1
@@ -3514,7 +3514,7 @@ func TestValidatorInt8PZeroValid(t *testing.T) {
 }
 func TestValidatorInt8PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(1)
 	number1 := &_number1
@@ -3546,7 +3546,7 @@ func TestValidatorInt8PZeroInvalid(t *testing.T) {
 
 func TestValidatorInt8PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(0)
 	number1 := &_number1
@@ -3571,7 +3571,7 @@ func TestValidatorInt8PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorInt8PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(1)
 
@@ -3595,7 +3595,7 @@ func TestValidatorInt8PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorInt8PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3619,7 +3619,7 @@ func TestValidatorInt8PPassingValid(t *testing.T) {
 func TestValidatorInt8PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(1)
 
@@ -3647,7 +3647,7 @@ func TestValidatorInt8PPassingInvalid(t *testing.T) {
 func TestValidatorInt8PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int8(2)
 
@@ -3666,7 +3666,7 @@ func TestValidatorInt8PInSliceValid(t *testing.T) {
 func TestValidatorInt8PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int8(1)
 	number1 := &_number1
@@ -3699,7 +3699,7 @@ func TestValidatorInt8PInSliceInvalid(t *testing.T) {
 func TestValidatorInt8PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *int8
 
@@ -3719,7 +3719,7 @@ func TestValidatorInt8PNilIsValid(t *testing.T) {
 func TestValidatorInt8PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := int8(1)
 
@@ -3754,7 +3754,7 @@ func TestValidatorInt16PNot(t *testing.T) {
 
 func TestValidatorInt16PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -3773,7 +3773,7 @@ func TestValidatorInt16PEqualToValid(t *testing.T) {
 }
 func TestValidatorInt16PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(2)
 	number1 := &_number1
@@ -3809,7 +3809,7 @@ func TestValidatorInt16PEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt16PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(3)
 
@@ -3829,7 +3829,7 @@ func TestValidatorInt16PGreaterThanValid(t *testing.T) {
 
 func TestValidatorInt16PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(2)
 	number1 := &_number1
@@ -3870,7 +3870,7 @@ func TestValidatorInt16PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt16PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -3895,7 +3895,7 @@ func TestValidatorInt16PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt16PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(2)
 	number1 := &_number1
@@ -3928,7 +3928,7 @@ func TestValidatorInt16PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt16PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -3947,7 +3947,7 @@ func TestValidatorInt16PLessThanValid(t *testing.T) {
 }
 func TestValidatorInt16PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(2)
 	number1 := &_number1
@@ -3988,7 +3988,7 @@ func TestValidatorInt16PLessThanInvalid(t *testing.T) {
 
 func TestValidatorInt16PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -4011,7 +4011,7 @@ func TestValidatorInt16PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt16PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(3)
 	number1 := &_number1
@@ -4043,7 +4043,7 @@ func TestValidatorInt16PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt16PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -4075,7 +4075,7 @@ func TestValidatorInt16PBetweenValid(t *testing.T) {
 }
 func TestValidatorInt16PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(2)
 	number1 := &_number1
@@ -4117,7 +4117,7 @@ func TestValidatorInt16PBetweenInvalid(t *testing.T) {
 
 func TestValidatorInt16PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(0)
 	number1 := &_number1
@@ -4136,7 +4136,7 @@ func TestValidatorInt16PZeroValid(t *testing.T) {
 }
 func TestValidatorInt16PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(1)
 	number1 := &_number1
@@ -4168,7 +4168,7 @@ func TestValidatorInt16PZeroInvalid(t *testing.T) {
 
 func TestValidatorInt16PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(0)
 	number1 := &_number1
@@ -4193,7 +4193,7 @@ func TestValidatorInt16PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorInt16PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(1)
 
@@ -4217,7 +4217,7 @@ func TestValidatorInt16PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorInt16PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -4241,7 +4241,7 @@ func TestValidatorInt16PPassingValid(t *testing.T) {
 func TestValidatorInt16PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(1)
 
@@ -4269,7 +4269,7 @@ func TestValidatorInt16PPassingInvalid(t *testing.T) {
 func TestValidatorInt16PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int16(2)
 
@@ -4288,7 +4288,7 @@ func TestValidatorInt16PInSliceValid(t *testing.T) {
 func TestValidatorInt16PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int16(1)
 	number1 := &_number1
@@ -4321,7 +4321,7 @@ func TestValidatorInt16PInSliceInvalid(t *testing.T) {
 func TestValidatorInt16PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *int16
 
@@ -4341,7 +4341,7 @@ func TestValidatorInt16PNilIsValid(t *testing.T) {
 func TestValidatorInt16PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := int16(1)
 
@@ -4376,7 +4376,7 @@ func TestValidatorInt32PNot(t *testing.T) {
 
 func TestValidatorInt32PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4395,7 +4395,7 @@ func TestValidatorInt32PEqualToValid(t *testing.T) {
 }
 func TestValidatorInt32PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(2)
 	number1 := &_number1
@@ -4431,7 +4431,7 @@ func TestValidatorInt32PEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt32PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(3)
 
@@ -4451,7 +4451,7 @@ func TestValidatorInt32PGreaterThanValid(t *testing.T) {
 
 func TestValidatorInt32PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(2)
 	number1 := &_number1
@@ -4492,7 +4492,7 @@ func TestValidatorInt32PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt32PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4517,7 +4517,7 @@ func TestValidatorInt32PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt32PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(2)
 	number1 := &_number1
@@ -4550,7 +4550,7 @@ func TestValidatorInt32PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt32PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4569,7 +4569,7 @@ func TestValidatorInt32PLessThanValid(t *testing.T) {
 }
 func TestValidatorInt32PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(2)
 	number1 := &_number1
@@ -4610,7 +4610,7 @@ func TestValidatorInt32PLessThanInvalid(t *testing.T) {
 
 func TestValidatorInt32PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4633,7 +4633,7 @@ func TestValidatorInt32PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt32PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(3)
 	number1 := &_number1
@@ -4665,7 +4665,7 @@ func TestValidatorInt32PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt32PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4697,7 +4697,7 @@ func TestValidatorInt32PBetweenValid(t *testing.T) {
 }
 func TestValidatorInt32PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(2)
 	number1 := &_number1
@@ -4739,7 +4739,7 @@ func TestValidatorInt32PBetweenInvalid(t *testing.T) {
 
 func TestValidatorInt32PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(0)
 	number1 := &_number1
@@ -4758,7 +4758,7 @@ func TestValidatorInt32PZeroValid(t *testing.T) {
 }
 func TestValidatorInt32PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(1)
 	number1 := &_number1
@@ -4790,7 +4790,7 @@ func TestValidatorInt32PZeroInvalid(t *testing.T) {
 
 func TestValidatorInt32PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(0)
 	number1 := &_number1
@@ -4815,7 +4815,7 @@ func TestValidatorInt32PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorInt32PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(1)
 
@@ -4839,7 +4839,7 @@ func TestValidatorInt32PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorInt32PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4863,7 +4863,7 @@ func TestValidatorInt32PPassingValid(t *testing.T) {
 func TestValidatorInt32PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(1)
 
@@ -4891,7 +4891,7 @@ func TestValidatorInt32PPassingInvalid(t *testing.T) {
 func TestValidatorInt32PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int32(2)
 
@@ -4910,7 +4910,7 @@ func TestValidatorInt32PInSliceValid(t *testing.T) {
 func TestValidatorInt32PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int32(1)
 	number1 := &_number1
@@ -4943,7 +4943,7 @@ func TestValidatorInt32PInSliceInvalid(t *testing.T) {
 func TestValidatorInt32PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *int32
 
@@ -4963,7 +4963,7 @@ func TestValidatorInt32PNilIsValid(t *testing.T) {
 func TestValidatorInt32PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := int32(1)
 
@@ -4998,7 +4998,7 @@ func TestValidatorInt64PNot(t *testing.T) {
 
 func TestValidatorInt64PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5017,7 +5017,7 @@ func TestValidatorInt64PEqualToValid(t *testing.T) {
 }
 func TestValidatorInt64PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(2)
 	number1 := &_number1
@@ -5053,7 +5053,7 @@ func TestValidatorInt64PEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt64PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(3)
 
@@ -5073,7 +5073,7 @@ func TestValidatorInt64PGreaterThanValid(t *testing.T) {
 
 func TestValidatorInt64PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(2)
 	number1 := &_number1
@@ -5114,7 +5114,7 @@ func TestValidatorInt64PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorInt64PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5139,7 +5139,7 @@ func TestValidatorInt64PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt64PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(2)
 	number1 := &_number1
@@ -5172,7 +5172,7 @@ func TestValidatorInt64PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt64PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5191,7 +5191,7 @@ func TestValidatorInt64PLessThanValid(t *testing.T) {
 }
 func TestValidatorInt64PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(2)
 	number1 := &_number1
@@ -5232,7 +5232,7 @@ func TestValidatorInt64PLessThanInvalid(t *testing.T) {
 
 func TestValidatorInt64PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5255,7 +5255,7 @@ func TestValidatorInt64PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorInt64PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(3)
 	number1 := &_number1
@@ -5287,7 +5287,7 @@ func TestValidatorInt64PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorInt64PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5319,7 +5319,7 @@ func TestValidatorInt64PBetweenValid(t *testing.T) {
 }
 func TestValidatorInt64PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(2)
 	number1 := &_number1
@@ -5361,7 +5361,7 @@ func TestValidatorInt64PBetweenInvalid(t *testing.T) {
 
 func TestValidatorInt64PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(0)
 	number1 := &_number1
@@ -5380,7 +5380,7 @@ func TestValidatorInt64PZeroValid(t *testing.T) {
 }
 func TestValidatorInt64PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(1)
 	number1 := &_number1
@@ -5412,7 +5412,7 @@ func TestValidatorInt64PZeroInvalid(t *testing.T) {
 
 func TestValidatorInt64PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(0)
 	number1 := &_number1
@@ -5437,7 +5437,7 @@ func TestValidatorInt64PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorInt64PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(1)
 
@@ -5461,7 +5461,7 @@ func TestValidatorInt64PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorInt64PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5485,7 +5485,7 @@ func TestValidatorInt64PPassingValid(t *testing.T) {
 func TestValidatorInt64PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(1)
 
@@ -5513,7 +5513,7 @@ func TestValidatorInt64PPassingInvalid(t *testing.T) {
 func TestValidatorInt64PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := int64(2)
 
@@ -5532,7 +5532,7 @@ func TestValidatorInt64PInSliceValid(t *testing.T) {
 func TestValidatorInt64PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := int64(1)
 	number1 := &_number1
@@ -5565,7 +5565,7 @@ func TestValidatorInt64PInSliceInvalid(t *testing.T) {
 func TestValidatorInt64PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *int64
 
@@ -5585,7 +5585,7 @@ func TestValidatorInt64PNilIsValid(t *testing.T) {
 func TestValidatorInt64PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := int64(1)
 
@@ -5620,7 +5620,7 @@ func TestValidatorFloat32PNot(t *testing.T) {
 
 func TestValidatorFloat32PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -5639,7 +5639,7 @@ func TestValidatorFloat32PEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat32PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(2)
 	number1 := &_number1
@@ -5675,7 +5675,7 @@ func TestValidatorFloat32PEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat32PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(3)
 
@@ -5695,7 +5695,7 @@ func TestValidatorFloat32PGreaterThanValid(t *testing.T) {
 
 func TestValidatorFloat32PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(2)
 	number1 := &_number1
@@ -5736,7 +5736,7 @@ func TestValidatorFloat32PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorFloat32PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -5761,7 +5761,7 @@ func TestValidatorFloat32PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat32PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(2)
 	number1 := &_number1
@@ -5794,7 +5794,7 @@ func TestValidatorFloat32PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat32PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -5813,7 +5813,7 @@ func TestValidatorFloat32PLessThanValid(t *testing.T) {
 }
 func TestValidatorFloat32PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(2)
 	number1 := &_number1
@@ -5854,7 +5854,7 @@ func TestValidatorFloat32PLessThanInvalid(t *testing.T) {
 
 func TestValidatorFloat32PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -5877,7 +5877,7 @@ func TestValidatorFloat32PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat32PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(3)
 	number1 := &_number1
@@ -5909,7 +5909,7 @@ func TestValidatorFloat32PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat32PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -5941,7 +5941,7 @@ func TestValidatorFloat32PBetweenValid(t *testing.T) {
 }
 func TestValidatorFloat32PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(2)
 	number1 := &_number1
@@ -5983,7 +5983,7 @@ func TestValidatorFloat32PBetweenInvalid(t *testing.T) {
 
 func TestValidatorFloat32PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(0)
 	number1 := &_number1
@@ -6002,7 +6002,7 @@ func TestValidatorFloat32PZeroValid(t *testing.T) {
 }
 func TestValidatorFloat32PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(1)
 	number1 := &_number1
@@ -6034,7 +6034,7 @@ func TestValidatorFloat32PZeroInvalid(t *testing.T) {
 
 func TestValidatorFloat32PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(0)
 	number1 := &_number1
@@ -6059,7 +6059,7 @@ func TestValidatorFloat32PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorFloat32PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(1)
 
@@ -6083,7 +6083,7 @@ func TestValidatorFloat32PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorFloat32PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -6107,7 +6107,7 @@ func TestValidatorFloat32PPassingValid(t *testing.T) {
 func TestValidatorFloat32PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(1)
 
@@ -6135,7 +6135,7 @@ func TestValidatorFloat32PPassingInvalid(t *testing.T) {
 func TestValidatorFloat32PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float32(2)
 
@@ -6154,7 +6154,7 @@ func TestValidatorFloat32PInSliceValid(t *testing.T) {
 func TestValidatorFloat32PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float32(1)
 	number1 := &_number1
@@ -6187,7 +6187,7 @@ func TestValidatorFloat32PInSliceInvalid(t *testing.T) {
 func TestValidatorFloat32PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *float32
 
@@ -6207,7 +6207,7 @@ func TestValidatorFloat32PNilIsValid(t *testing.T) {
 func TestValidatorFloat32PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := float32(1)
 
@@ -6242,7 +6242,7 @@ func TestValidatorFloat64PNot(t *testing.T) {
 
 func TestValidatorFloat64PEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6261,7 +6261,7 @@ func TestValidatorFloat64PEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat64PEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(2)
 	number1 := &_number1
@@ -6297,7 +6297,7 @@ func TestValidatorFloat64PEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat64PGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(3)
 
@@ -6317,7 +6317,7 @@ func TestValidatorFloat64PGreaterThanValid(t *testing.T) {
 
 func TestValidatorFloat64PGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(2)
 	number1 := &_number1
@@ -6358,7 +6358,7 @@ func TestValidatorFloat64PGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorFloat64PGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6383,7 +6383,7 @@ func TestValidatorFloat64PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat64PGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(2)
 	number1 := &_number1
@@ -6416,7 +6416,7 @@ func TestValidatorFloat64PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat64PLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6435,7 +6435,7 @@ func TestValidatorFloat64PLessThanValid(t *testing.T) {
 }
 func TestValidatorFloat64PLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(2)
 	number1 := &_number1
@@ -6476,7 +6476,7 @@ func TestValidatorFloat64PLessThanInvalid(t *testing.T) {
 
 func TestValidatorFloat64PLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6499,7 +6499,7 @@ func TestValidatorFloat64PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorFloat64PLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(3)
 	number1 := &_number1
@@ -6531,7 +6531,7 @@ func TestValidatorFloat64PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorFloat64PBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6563,7 +6563,7 @@ func TestValidatorFloat64PBetweenValid(t *testing.T) {
 }
 func TestValidatorFloat64PBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(2)
 	number1 := &_number1
@@ -6605,7 +6605,7 @@ func TestValidatorFloat64PBetweenInvalid(t *testing.T) {
 
 func TestValidatorFloat64PZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(0)
 	number1 := &_number1
@@ -6624,7 +6624,7 @@ func TestValidatorFloat64PZeroValid(t *testing.T) {
 }
 func TestValidatorFloat64PZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(1)
 	number1 := &_number1
@@ -6656,7 +6656,7 @@ func TestValidatorFloat64PZeroInvalid(t *testing.T) {
 
 func TestValidatorFloat64PZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(0)
 	number1 := &_number1
@@ -6681,7 +6681,7 @@ func TestValidatorFloat64PZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorFloat64PZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(1)
 
@@ -6705,7 +6705,7 @@ func TestValidatorFloat64PZeroOrNilInvalid(t *testing.T) {
 func TestValidatorFloat64PPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6729,7 +6729,7 @@ func TestValidatorFloat64PPassingValid(t *testing.T) {
 func TestValidatorFloat64PPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(1)
 
@@ -6757,7 +6757,7 @@ func TestValidatorFloat64PPassingInvalid(t *testing.T) {
 func TestValidatorFloat64PInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := float64(2)
 
@@ -6776,7 +6776,7 @@ func TestValidatorFloat64PInSliceValid(t *testing.T) {
 func TestValidatorFloat64PInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := float64(1)
 	number1 := &_number1
@@ -6809,7 +6809,7 @@ func TestValidatorFloat64PInSliceInvalid(t *testing.T) {
 func TestValidatorFloat64PNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *float64
 
@@ -6829,7 +6829,7 @@ func TestValidatorFloat64PNilIsValid(t *testing.T) {
 func TestValidatorFloat64PNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := float64(1)
 
@@ -6864,7 +6864,7 @@ func TestValidatorBytePNot(t *testing.T) {
 
 func TestValidatorBytePEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -6883,7 +6883,7 @@ func TestValidatorBytePEqualToValid(t *testing.T) {
 }
 func TestValidatorBytePEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(2)
 	number1 := &_number1
@@ -6919,7 +6919,7 @@ func TestValidatorBytePEqualToInvalid(t *testing.T) {
 
 func TestValidatorBytePGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(3)
 
@@ -6939,7 +6939,7 @@ func TestValidatorBytePGreaterThanValid(t *testing.T) {
 
 func TestValidatorBytePGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(2)
 	number1 := &_number1
@@ -6980,7 +6980,7 @@ func TestValidatorBytePGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorBytePGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -7005,7 +7005,7 @@ func TestValidatorBytePGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorBytePGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(2)
 	number1 := &_number1
@@ -7038,7 +7038,7 @@ func TestValidatorBytePGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorBytePLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -7057,7 +7057,7 @@ func TestValidatorBytePLessThanValid(t *testing.T) {
 }
 func TestValidatorBytePLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(2)
 	number1 := &_number1
@@ -7098,7 +7098,7 @@ func TestValidatorBytePLessThanInvalid(t *testing.T) {
 
 func TestValidatorBytePLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -7121,7 +7121,7 @@ func TestValidatorBytePLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorBytePLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(3)
 	number1 := &_number1
@@ -7153,7 +7153,7 @@ func TestValidatorBytePLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorBytePBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -7185,7 +7185,7 @@ func TestValidatorBytePBetweenValid(t *testing.T) {
 }
 func TestValidatorBytePBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(2)
 	number1 := &_number1
@@ -7227,7 +7227,7 @@ func TestValidatorBytePBetweenInvalid(t *testing.T) {
 
 func TestValidatorBytePZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(0)
 	number1 := &_number1
@@ -7246,7 +7246,7 @@ func TestValidatorBytePZeroValid(t *testing.T) {
 }
 func TestValidatorBytePZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(1)
 	number1 := &_number1
@@ -7278,7 +7278,7 @@ func TestValidatorBytePZeroInvalid(t *testing.T) {
 
 func TestValidatorBytePZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(0)
 	number1 := &_number1
@@ -7303,7 +7303,7 @@ func TestValidatorBytePZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorBytePZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(1)
 
@@ -7327,7 +7327,7 @@ func TestValidatorBytePZeroOrNilInvalid(t *testing.T) {
 func TestValidatorBytePPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -7351,7 +7351,7 @@ func TestValidatorBytePPassingValid(t *testing.T) {
 func TestValidatorBytePPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(1)
 
@@ -7379,7 +7379,7 @@ func TestValidatorBytePPassingInvalid(t *testing.T) {
 func TestValidatorBytePInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := byte(2)
 
@@ -7398,7 +7398,7 @@ func TestValidatorBytePInSliceValid(t *testing.T) {
 func TestValidatorBytePInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := byte(1)
 	number1 := &_number1
@@ -7431,7 +7431,7 @@ func TestValidatorBytePInSliceInvalid(t *testing.T) {
 func TestValidatorBytePNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *byte
 
@@ -7451,7 +7451,7 @@ func TestValidatorBytePNilIsValid(t *testing.T) {
 func TestValidatorBytePNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := byte(1)
 
@@ -7486,7 +7486,7 @@ func TestValidatorRunePNot(t *testing.T) {
 
 func TestValidatorRunePEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -7505,7 +7505,7 @@ func TestValidatorRunePEqualToValid(t *testing.T) {
 }
 func TestValidatorRunePEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(2)
 	number1 := &_number1
@@ -7541,7 +7541,7 @@ func TestValidatorRunePEqualToInvalid(t *testing.T) {
 
 func TestValidatorRunePGreaterThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(3)
 
@@ -7561,7 +7561,7 @@ func TestValidatorRunePGreaterThanValid(t *testing.T) {
 
 func TestValidatorRunePGreaterThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(2)
 	number1 := &_number1
@@ -7602,7 +7602,7 @@ func TestValidatorRunePGreaterThanInvalid(t *testing.T) {
 
 func TestValidatorRunePGreaterOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -7627,7 +7627,7 @@ func TestValidatorRunePGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidatorRunePGreaterOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(2)
 	number1 := &_number1
@@ -7660,7 +7660,7 @@ func TestValidatorRunePGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorRunePLessThanValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -7679,7 +7679,7 @@ func TestValidatorRunePLessThanValid(t *testing.T) {
 }
 func TestValidatorRunePLessThanInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(2)
 	number1 := &_number1
@@ -7720,7 +7720,7 @@ func TestValidatorRunePLessThanInvalid(t *testing.T) {
 
 func TestValidatorRunePLessOrEqualToValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -7743,7 +7743,7 @@ func TestValidatorRunePLessOrEqualToValid(t *testing.T) {
 }
 func TestValidatorRunePLessOrEqualToInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(3)
 	number1 := &_number1
@@ -7775,7 +7775,7 @@ func TestValidatorRunePLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidatorRunePBetweenValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -7807,7 +7807,7 @@ func TestValidatorRunePBetweenValid(t *testing.T) {
 }
 func TestValidatorRunePBetweenInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(2)
 	number1 := &_number1
@@ -7849,7 +7849,7 @@ func TestValidatorRunePBetweenInvalid(t *testing.T) {
 
 func TestValidatorRunePZeroValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(0)
 	number1 := &_number1
@@ -7868,7 +7868,7 @@ func TestValidatorRunePZeroValid(t *testing.T) {
 }
 func TestValidatorRunePZeroInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(1)
 	number1 := &_number1
@@ -7900,7 +7900,7 @@ func TestValidatorRunePZeroInvalid(t *testing.T) {
 
 func TestValidatorRunePZeroOrNilValid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(0)
 	number1 := &_number1
@@ -7925,7 +7925,7 @@ func TestValidatorRunePZeroOrNilValid(t *testing.T) {
 }
 func TestValidatorRunePZeroOrNilInvalid(t *testing.T) {
 	ResetMessages()
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(1)
 
@@ -7949,7 +7949,7 @@ func TestValidatorRunePZeroOrNilInvalid(t *testing.T) {
 func TestValidatorRunePPassingValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -7973,7 +7973,7 @@ func TestValidatorRunePPassingValid(t *testing.T) {
 func TestValidatorRunePPassingInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(1)
 
@@ -8001,7 +8001,7 @@ func TestValidatorRunePPassingInvalid(t *testing.T) {
 func TestValidatorRunePInSliceValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	number1 := rune(2)
 
@@ -8020,7 +8020,7 @@ func TestValidatorRunePInSliceValid(t *testing.T) {
 func TestValidatorRunePInSliceInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	_number1 := rune(1)
 	number1 := &_number1
@@ -8053,7 +8053,7 @@ func TestValidatorRunePInSliceInvalid(t *testing.T) {
 func TestValidatorRunePNilIsValid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	var valNumber *rune
 
@@ -8073,7 +8073,7 @@ func TestValidatorRunePNilIsValid(t *testing.T) {
 func TestValidatorRunePNilIsInvalid(t *testing.T) {
 	ResetMessages()
 
-	var v *ValidatorGroup
+	var v *Validation
 
 	valNumber := rune(1)
 
