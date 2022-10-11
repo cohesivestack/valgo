@@ -1,7 +1,9 @@
 package valgo
 
 import (
+	"fmt"
 	"strconv"
+	"strings"
 )
 
 type Validation struct {
@@ -24,25 +26,42 @@ func (validation *Validation) Valid() bool {
 	return validation.valid
 }
 
+func (validation *Validation) In(name string, _validation *Validation) *Validation {
+	return validation.merge(name, _validation)
+}
+
+func (validation *Validation) InRow(name string, index int, _validation *Validation) *Validation {
+	return validation.merge(fmt.Sprintf("%s[%v]", name, index), _validation)
+}
+
 func (validation *Validation) Merge(_validation *Validation) *Validation {
+	return validation.merge("", _validation)
+}
+
+func (validation *Validation) merge(prefix string, _validation *Validation) *Validation {
+
+	var _prefix string
+	if len(strings.TrimSpace(prefix)) > 0 {
+		_prefix = prefix + "."
+	}
 
 LOOP1:
 	for _field, _err := range _validation.Errors() {
 		for field, err := range validation.Errors() {
-			if _field == field {
-				for _, _errMsg := range _err.messages {
-					for _, errMsg := range err.messages {
+			if _prefix+_field == field {
+				for _, _errMsg := range _err.Messages() {
+					for _, errMsg := range err.Messages() {
 						if _errMsg == errMsg {
 							continue LOOP1
 						}
 					}
-					validation.AddErrorMessage(_field, _errMsg)
+					validation.AddErrorMessage(_prefix+_field, _errMsg)
 				}
 				continue LOOP1
 			}
 		}
-		for _, _errMsg := range _err.messages {
-			validation.AddErrorMessage(_field, _errMsg)
+		for _, _errMsg := range _err.Messages() {
+			validation.AddErrorMessage(_prefix+_field, _errMsg)
 		}
 	}
 	return validation

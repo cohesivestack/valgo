@@ -87,3 +87,156 @@ func TestValidationMergeInvalidate(t *testing.T) {
 		"Name can't be blank",
 		v0.Errors()["name"].Messages()[0])
 }
+
+func TestValidationIn(t *testing.T) {
+	v := In("address",
+		Is(String("", "line1").Not().Blank()).
+			Is(String("", "line2").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["address.line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["address.line2"].Messages()[0])
+
+	v.Is(String("", "line1").Not().Blank())
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["address.line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["address.line2"].Messages()[0])
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["line1"].Messages()[0])
+}
+
+func TestValidationInDeeply(t *testing.T) {
+	v := In("address",
+		Is(String("", "line1").Not().Blank()).
+			Is(String("", "line2").Not().Blank()).
+			In("phone",
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())),
+	)
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["address.line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["address.line2"].Messages()[0])
+	assert.Equal(t,
+		"Code can't be empty",
+		v.Errors()["address.phone.code"].Messages()[0])
+	assert.Equal(t,
+		"Number can't be empty",
+		v.Errors()["address.phone.number"].Messages()[0])
+}
+
+func TestValidationInRow(t *testing.T) {
+	v := InRow("addresses", 0,
+		Is(String("", "line1").Not().Blank()).
+			Is(String("", "line2").Not().Blank()),
+	).InRow("addresses", 1,
+		Is(String("", "line1").Not().Blank()).
+			Is(String("", "line2").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["addresses[0].line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["addresses[0].line2"].Messages()[0])
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["addresses[1].line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["addresses[1].line2"].Messages()[0])
+
+	v.Is(String("", "addresses").Not().Blank())
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["addresses[0].line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["addresses[0].line2"].Messages()[0])
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["addresses[1].line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["addresses[1].line2"].Messages()[0])
+	assert.Equal(t,
+		"Addresses can't be blank",
+		v.Errors()["addresses"].Messages()[0])
+}
+
+func TestValidationInRowDeeply(t *testing.T) {
+	v := InRow("addresses", 0,
+		Is(String("", "line1").Not().Blank()).
+			Is(String("", "line2").Not().Blank()).
+			InRow("phones", 0,
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())).
+			InRow("phones", 1,
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())),
+	).InRow("addresses", 1,
+		Is(String("", "line1").Not().Blank()).
+			Is(String("", "line2").Not().Blank()).
+			InRow("phones", 0,
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())).
+			InRow("phones", 1,
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())),
+	)
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["addresses[0].line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["addresses[0].line2"].Messages()[0])
+	assert.Equal(t,
+		"Code can't be empty",
+		v.Errors()["addresses[0].phones[0].code"].Messages()[0])
+	assert.Equal(t,
+		"Number can't be empty",
+		v.Errors()["addresses[0].phones[0].number"].Messages()[0])
+	assert.Equal(t,
+		"Code can't be empty",
+		v.Errors()["addresses[0].phones[1].code"].Messages()[0])
+	assert.Equal(t,
+		"Number can't be empty",
+		v.Errors()["addresses[0].phones[1].number"].Messages()[0])
+	assert.Equal(t,
+		"Line 1 can't be blank",
+		v.Errors()["addresses[1].line1"].Messages()[0])
+	assert.Equal(t,
+		"Line 2 can't be blank",
+		v.Errors()["addresses[1].line2"].Messages()[0])
+	assert.Equal(t,
+		"Code can't be empty",
+		v.Errors()["addresses[1].phones[0].code"].Messages()[0])
+	assert.Equal(t,
+		"Number can't be empty",
+		v.Errors()["addresses[1].phones[0].number"].Messages()[0])
+	assert.Equal(t,
+		"Code can't be empty",
+		v.Errors()["addresses[1].phones[1].code"].Messages()[0])
+	assert.Equal(t,
+		"Number can't be empty",
+		v.Errors()["addresses[1].phones[1].number"].Messages()[0])
+}

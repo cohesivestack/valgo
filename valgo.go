@@ -28,6 +28,14 @@ func Is(v Validator) *Validation {
 	return New().Is(v)
 }
 
+func In(name string, v *Validation) *Validation {
+	return New().In(name, v)
+}
+
+func InRow(name string, index int, v *Validation) *Validation {
+	return New().InRow(name, index, v)
+}
+
 func Check(v Validator) *Validation {
 	return New().Check(v)
 }
