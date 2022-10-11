@@ -25,13 +25,11 @@ func New() *Validation {
 }
 
 func Is(v Validator) *Validation {
-	validation := New()
-	return v.Context().validateIs(validation)
+	return New().Is(v)
 }
 
 func Check(v Validator) *Validation {
-	validation := New()
-	return v.Context().validateCheck(validation)
+	return New().Check(v)
 }
 
 func AddErrorMessage(name string, message string) *Validation {
