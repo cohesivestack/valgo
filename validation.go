@@ -24,6 +24,30 @@ func (validation *Validation) Valid() bool {
 	return validation.valid
 }
 
+func (validation *Validation) Merge(_validation *Validation) *Validation {
+
+LOOP1:
+	for _field, _err := range _validation.Errors() {
+		for field, err := range validation.Errors() {
+			if _field == field {
+				for _, _errMsg := range _err.messages {
+					for _, errMsg := range err.messages {
+						if _errMsg == errMsg {
+							continue LOOP1
+						}
+					}
+					validation.AddErrorMessage(_field, _errMsg)
+				}
+				continue LOOP1
+			}
+		}
+		for _, _errMsg := range _err.messages {
+			validation.AddErrorMessage(_field, _errMsg)
+		}
+	}
+	return validation
+}
+
 func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 	if v.errors == nil {
 		v.errors = map[string]*valueError{}

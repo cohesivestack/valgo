@@ -68,9 +68,9 @@ TODO
 
 TODO
 
-### Concat a validator `Concat( ... )`
+### Concat a validator `Merge( ... )`
 
-The `Concat( ... )` allows to join two different validation sessions.
+The `Merge( ... )` allows to merge two different validation sessions.
 
 ### Name and title of the value
 
