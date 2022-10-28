@@ -4,7 +4,10 @@ import (
 	"fmt"
 )
 
-func ResetMessages() {
+var customMarshalJson func(e *Error) ([]byte, error)
+
+func Teardown() {
+	SetMarshalJSON(nil)
 	setDefaultEnglishMessages()
 	setDefaultSpanishMessages()
 	SetDefaultLocale("en")
@@ -42,4 +45,8 @@ func Check(v Validator) *Validation {
 
 func AddErrorMessage(name string, message string) *Validation {
 	return New().AddErrorMessage(name, message)
+}
+
+func SetMarshalJSON(customFunc func(e *Error) ([]byte, error)) {
+	customMarshalJson = customFunc
 }

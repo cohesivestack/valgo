@@ -2,6 +2,7 @@ package valgo
 
 import (
 	"encoding/json"
+	"fmt"
 	"regexp"
 	"testing"
 
@@ -23,7 +24,7 @@ func TestError(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValidator(t *testing.T) {
-	ResetMessages()
+	Teardown()
 
 	v := Is(String("Vitalik Buterin", "name").Blank())
 
@@ -43,7 +44,7 @@ func TestAddErrorMessageFromValidator(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValgo(t *testing.T) {
-	ResetMessages()
+	Teardown()
 
 	v := AddErrorMessage("email", "Email is invalid")
 
@@ -124,4 +125,44 @@ func TestIsValidByName(t *testing.T) {
 
 	assert.True(t, v.IsValid("firstName"))
 	assert.False(t, v.IsValid("lastName"))
+}
+
+func TestCustomErrorMarshallJSON(t *testing.T) {
+	Teardown()
+
+	customFunc := func(e *Error) ([]byte, error) {
+
+		errors := map[string]interface{}{}
+
+		for k, v := range e.errors {
+			if len(v.Messages()) == 1 {
+				errors[k] = v.Messages()[0]
+			} else {
+				errors[k] = v.Messages()
+			}
+		}
+
+		// Add root level errors to customize errors interface
+		return json.Marshal(map[string]map[string]interface{}{"errors": errors})
+	}
+
+	SetMarshalJSON(customFunc)
+
+	r, _ := regexp.Compile("a")
+	v := Check(String("", "email").Not().Blank().MatchingTo(r)).
+		Check(String("", "name").Not().Blank())
+
+	jsonByte, err := json.Marshal(v.Error())
+	assert.NoError(t, err)
+
+	fmt.Println(string(jsonByte))
+
+	jsonMap := map[string]map[string]interface{}{}
+	err = json.Unmarshal(jsonByte, &jsonMap)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "Name can't be blank", jsonMap["errors"]["name"])
+	emailErrors := jsonMap["errors"]["email"].([]interface{})
+	assert.Contains(t, emailErrors, "Email can't be blank")
+	assert.Contains(t, emailErrors, "Email must match to \"a\"")
 }
