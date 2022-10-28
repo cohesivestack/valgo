@@ -16,7 +16,7 @@ func TestValidatorBoolPNot(t *testing.T) {
 }
 
 func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -41,7 +41,7 @@ func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -70,7 +70,7 @@ func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -90,7 +90,7 @@ func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -114,7 +114,7 @@ func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -136,7 +136,7 @@ func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -163,7 +163,7 @@ func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolNilIsValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -184,7 +184,7 @@ func TestValidatorBoolNilIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolNilIsInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -209,7 +209,7 @@ func TestValidatorBoolNilIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -234,7 +234,7 @@ func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -262,7 +262,7 @@ func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPInSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -282,7 +282,7 @@ func TestValidatorBoolPInSliceValid(t *testing.T) {
 }
 
 func TestValidatorBoolPInSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 

@@ -11,7 +11,7 @@ import (
 
 
 func TestValidatorUint8Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Uint8(uint8(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -19,7 +19,7 @@ func TestValidatorUint8Not(t *testing.T) {
 }
 
 func TestValidatorUint8EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).EqualTo(2))
@@ -36,7 +36,7 @@ func TestValidatorUint8EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint8EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(1)).EqualTo(2))
@@ -60,7 +60,7 @@ func TestValidatorUint8EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(3)).GreaterThan(2))
@@ -78,7 +78,7 @@ func TestValidatorUint8GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorUint8GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).GreaterThan(2))
@@ -106,7 +106,7 @@ func TestValidatorUint8GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).GreaterOrEqualTo(2))
@@ -127,7 +127,7 @@ func TestValidatorUint8GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint8GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).GreaterOrEqualTo(3))
@@ -149,7 +149,7 @@ func TestValidatorUint8GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).LessThan(3))
@@ -166,7 +166,7 @@ func TestValidatorUint8LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint8LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).LessThan(2))
@@ -194,7 +194,7 @@ func TestValidatorUint8LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).LessOrEqualTo(2))
@@ -215,7 +215,7 @@ func TestValidatorUint8LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint8LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(3)).LessOrEqualTo(2))
@@ -237,7 +237,7 @@ func TestValidatorUint8LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).Between(2, 6))
@@ -263,7 +263,7 @@ func TestValidatorUint8BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint8BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(2)).Between(3, 6))
@@ -292,7 +292,7 @@ func TestValidatorUint8BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(0)).Zero())
@@ -308,7 +308,7 @@ func TestValidatorUint8ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint8EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint8(uint8(1)).Zero())
@@ -329,7 +329,7 @@ func TestValidatorUint8EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -351,7 +351,7 @@ func TestValidatorUint8PassingValid(t *testing.T) {
 }
 
 func TestValidatorUint8PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -377,7 +377,7 @@ func TestValidatorUint8PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorUint8InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -395,7 +395,7 @@ func TestValidatorUint8InSliceValid(t *testing.T) {
 }
 
 func TestValidatorUint8InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -419,7 +419,7 @@ func TestValidatorUint8InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorUint16Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Uint16(uint16(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -427,7 +427,7 @@ func TestValidatorUint16Not(t *testing.T) {
 }
 
 func TestValidatorUint16EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).EqualTo(2))
@@ -444,7 +444,7 @@ func TestValidatorUint16EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint16EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(1)).EqualTo(2))
@@ -468,7 +468,7 @@ func TestValidatorUint16EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(3)).GreaterThan(2))
@@ -486,7 +486,7 @@ func TestValidatorUint16GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorUint16GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).GreaterThan(2))
@@ -514,7 +514,7 @@ func TestValidatorUint16GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).GreaterOrEqualTo(2))
@@ -535,7 +535,7 @@ func TestValidatorUint16GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint16GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).GreaterOrEqualTo(3))
@@ -557,7 +557,7 @@ func TestValidatorUint16GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).LessThan(3))
@@ -574,7 +574,7 @@ func TestValidatorUint16LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint16LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).LessThan(2))
@@ -602,7 +602,7 @@ func TestValidatorUint16LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).LessOrEqualTo(2))
@@ -623,7 +623,7 @@ func TestValidatorUint16LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint16LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(3)).LessOrEqualTo(2))
@@ -645,7 +645,7 @@ func TestValidatorUint16LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).Between(2, 6))
@@ -671,7 +671,7 @@ func TestValidatorUint16BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint16BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(2)).Between(3, 6))
@@ -700,7 +700,7 @@ func TestValidatorUint16BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(0)).Zero())
@@ -716,7 +716,7 @@ func TestValidatorUint16ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint16EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint16(uint16(1)).Zero())
@@ -737,7 +737,7 @@ func TestValidatorUint16EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -759,7 +759,7 @@ func TestValidatorUint16PassingValid(t *testing.T) {
 }
 
 func TestValidatorUint16PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -785,7 +785,7 @@ func TestValidatorUint16PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorUint16InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -803,7 +803,7 @@ func TestValidatorUint16InSliceValid(t *testing.T) {
 }
 
 func TestValidatorUint16InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -827,7 +827,7 @@ func TestValidatorUint16InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorUint32Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Uint32(uint32(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -835,7 +835,7 @@ func TestValidatorUint32Not(t *testing.T) {
 }
 
 func TestValidatorUint32EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).EqualTo(2))
@@ -852,7 +852,7 @@ func TestValidatorUint32EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint32EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(1)).EqualTo(2))
@@ -876,7 +876,7 @@ func TestValidatorUint32EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(3)).GreaterThan(2))
@@ -894,7 +894,7 @@ func TestValidatorUint32GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorUint32GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).GreaterThan(2))
@@ -922,7 +922,7 @@ func TestValidatorUint32GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).GreaterOrEqualTo(2))
@@ -943,7 +943,7 @@ func TestValidatorUint32GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint32GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).GreaterOrEqualTo(3))
@@ -965,7 +965,7 @@ func TestValidatorUint32GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).LessThan(3))
@@ -982,7 +982,7 @@ func TestValidatorUint32LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint32LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).LessThan(2))
@@ -1010,7 +1010,7 @@ func TestValidatorUint32LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).LessOrEqualTo(2))
@@ -1031,7 +1031,7 @@ func TestValidatorUint32LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint32LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(3)).LessOrEqualTo(2))
@@ -1053,7 +1053,7 @@ func TestValidatorUint32LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).Between(2, 6))
@@ -1079,7 +1079,7 @@ func TestValidatorUint32BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint32BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(2)).Between(3, 6))
@@ -1108,7 +1108,7 @@ func TestValidatorUint32BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(0)).Zero())
@@ -1124,7 +1124,7 @@ func TestValidatorUint32ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint32EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint32(uint32(1)).Zero())
@@ -1145,7 +1145,7 @@ func TestValidatorUint32EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1167,7 +1167,7 @@ func TestValidatorUint32PassingValid(t *testing.T) {
 }
 
 func TestValidatorUint32PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1193,7 +1193,7 @@ func TestValidatorUint32PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorUint32InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1211,7 +1211,7 @@ func TestValidatorUint32InSliceValid(t *testing.T) {
 }
 
 func TestValidatorUint32InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1235,7 +1235,7 @@ func TestValidatorUint32InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorUint64Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Uint64(uint64(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1243,7 +1243,7 @@ func TestValidatorUint64Not(t *testing.T) {
 }
 
 func TestValidatorUint64EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).EqualTo(2))
@@ -1260,7 +1260,7 @@ func TestValidatorUint64EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint64EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(1)).EqualTo(2))
@@ -1284,7 +1284,7 @@ func TestValidatorUint64EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(3)).GreaterThan(2))
@@ -1302,7 +1302,7 @@ func TestValidatorUint64GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorUint64GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).GreaterThan(2))
@@ -1330,7 +1330,7 @@ func TestValidatorUint64GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).GreaterOrEqualTo(2))
@@ -1351,7 +1351,7 @@ func TestValidatorUint64GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint64GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).GreaterOrEqualTo(3))
@@ -1373,7 +1373,7 @@ func TestValidatorUint64GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).LessThan(3))
@@ -1390,7 +1390,7 @@ func TestValidatorUint64LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint64LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).LessThan(2))
@@ -1418,7 +1418,7 @@ func TestValidatorUint64LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).LessOrEqualTo(2))
@@ -1439,7 +1439,7 @@ func TestValidatorUint64LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint64LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(3)).LessOrEqualTo(2))
@@ -1461,7 +1461,7 @@ func TestValidatorUint64LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).Between(2, 6))
@@ -1487,7 +1487,7 @@ func TestValidatorUint64BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint64BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(2)).Between(3, 6))
@@ -1516,7 +1516,7 @@ func TestValidatorUint64BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(0)).Zero())
@@ -1532,7 +1532,7 @@ func TestValidatorUint64ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorUint64EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Uint64(uint64(1)).Zero())
@@ -1553,7 +1553,7 @@ func TestValidatorUint64EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1575,7 +1575,7 @@ func TestValidatorUint64PassingValid(t *testing.T) {
 }
 
 func TestValidatorUint64PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1601,7 +1601,7 @@ func TestValidatorUint64PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorUint64InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1619,7 +1619,7 @@ func TestValidatorUint64InSliceValid(t *testing.T) {
 }
 
 func TestValidatorUint64InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1643,7 +1643,7 @@ func TestValidatorUint64InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorIntNot(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Int(int(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1651,7 +1651,7 @@ func TestValidatorIntNot(t *testing.T) {
 }
 
 func TestValidatorIntEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).EqualTo(2))
@@ -1668,7 +1668,7 @@ func TestValidatorIntEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorIntEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(1)).EqualTo(2))
@@ -1692,7 +1692,7 @@ func TestValidatorIntEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorIntGreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(3)).GreaterThan(2))
@@ -1710,7 +1710,7 @@ func TestValidatorIntGreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorIntGreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).GreaterThan(2))
@@ -1738,7 +1738,7 @@ func TestValidatorIntGreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorIntGreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).GreaterOrEqualTo(2))
@@ -1759,7 +1759,7 @@ func TestValidatorIntGreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorIntGreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).GreaterOrEqualTo(3))
@@ -1781,7 +1781,7 @@ func TestValidatorIntGreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorIntLessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).LessThan(3))
@@ -1798,7 +1798,7 @@ func TestValidatorIntLessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorIntLessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).LessThan(2))
@@ -1826,7 +1826,7 @@ func TestValidatorIntLessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorIntLessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).LessOrEqualTo(2))
@@ -1847,7 +1847,7 @@ func TestValidatorIntLessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorIntLessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(3)).LessOrEqualTo(2))
@@ -1869,7 +1869,7 @@ func TestValidatorIntLessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorIntBetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).Between(2, 6))
@@ -1895,7 +1895,7 @@ func TestValidatorIntBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorIntBetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(2)).Between(3, 6))
@@ -1924,7 +1924,7 @@ func TestValidatorIntBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorIntZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(0)).Zero())
@@ -1940,7 +1940,7 @@ func TestValidatorIntZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorIntEmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int(int(1)).Zero())
@@ -1961,7 +1961,7 @@ func TestValidatorIntEmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorIntPassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -1983,7 +1983,7 @@ func TestValidatorIntPassingValid(t *testing.T) {
 }
 
 func TestValidatorIntPassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2009,7 +2009,7 @@ func TestValidatorIntPassingInvalid(t *testing.T) {
 }
 
 func TestValidatorIntInSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2027,7 +2027,7 @@ func TestValidatorIntInSliceValid(t *testing.T) {
 }
 
 func TestValidatorIntInSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2051,7 +2051,7 @@ func TestValidatorIntInSliceInvalid(t *testing.T) {
 
 
 func TestValidatorInt8Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Int8(int8(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2059,7 +2059,7 @@ func TestValidatorInt8Not(t *testing.T) {
 }
 
 func TestValidatorInt8EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).EqualTo(2))
@@ -2076,7 +2076,7 @@ func TestValidatorInt8EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt8EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(1)).EqualTo(2))
@@ -2100,7 +2100,7 @@ func TestValidatorInt8EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(3)).GreaterThan(2))
@@ -2118,7 +2118,7 @@ func TestValidatorInt8GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).GreaterThan(2))
@@ -2146,7 +2146,7 @@ func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).GreaterOrEqualTo(2))
@@ -2167,7 +2167,7 @@ func TestValidatorInt8GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt8GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).GreaterOrEqualTo(3))
@@ -2189,7 +2189,7 @@ func TestValidatorInt8GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).LessThan(3))
@@ -2206,7 +2206,7 @@ func TestValidatorInt8LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt8LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).LessThan(2))
@@ -2234,7 +2234,7 @@ func TestValidatorInt8LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).LessOrEqualTo(2))
@@ -2255,7 +2255,7 @@ func TestValidatorInt8LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt8LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(3)).LessOrEqualTo(2))
@@ -2277,7 +2277,7 @@ func TestValidatorInt8LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).Between(2, 6))
@@ -2303,7 +2303,7 @@ func TestValidatorInt8BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt8BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(2)).Between(3, 6))
@@ -2332,7 +2332,7 @@ func TestValidatorInt8BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(0)).Zero())
@@ -2348,7 +2348,7 @@ func TestValidatorInt8ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt8EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int8(int8(1)).Zero())
@@ -2369,7 +2369,7 @@ func TestValidatorInt8EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2391,7 +2391,7 @@ func TestValidatorInt8PassingValid(t *testing.T) {
 }
 
 func TestValidatorInt8PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2417,7 +2417,7 @@ func TestValidatorInt8PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorInt8InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2435,7 +2435,7 @@ func TestValidatorInt8InSliceValid(t *testing.T) {
 }
 
 func TestValidatorInt8InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2459,7 +2459,7 @@ func TestValidatorInt8InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorInt16Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Int16(int16(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2467,7 +2467,7 @@ func TestValidatorInt16Not(t *testing.T) {
 }
 
 func TestValidatorInt16EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).EqualTo(2))
@@ -2484,7 +2484,7 @@ func TestValidatorInt16EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt16EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(1)).EqualTo(2))
@@ -2508,7 +2508,7 @@ func TestValidatorInt16EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(3)).GreaterThan(2))
@@ -2526,7 +2526,7 @@ func TestValidatorInt16GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorInt16GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).GreaterThan(2))
@@ -2554,7 +2554,7 @@ func TestValidatorInt16GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).GreaterOrEqualTo(2))
@@ -2575,7 +2575,7 @@ func TestValidatorInt16GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt16GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).GreaterOrEqualTo(3))
@@ -2597,7 +2597,7 @@ func TestValidatorInt16GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).LessThan(3))
@@ -2614,7 +2614,7 @@ func TestValidatorInt16LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt16LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).LessThan(2))
@@ -2642,7 +2642,7 @@ func TestValidatorInt16LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).LessOrEqualTo(2))
@@ -2663,7 +2663,7 @@ func TestValidatorInt16LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt16LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(3)).LessOrEqualTo(2))
@@ -2685,7 +2685,7 @@ func TestValidatorInt16LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).Between(2, 6))
@@ -2711,7 +2711,7 @@ func TestValidatorInt16BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt16BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(2)).Between(3, 6))
@@ -2740,7 +2740,7 @@ func TestValidatorInt16BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(0)).Zero())
@@ -2756,7 +2756,7 @@ func TestValidatorInt16ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt16EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int16(int16(1)).Zero())
@@ -2777,7 +2777,7 @@ func TestValidatorInt16EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2799,7 +2799,7 @@ func TestValidatorInt16PassingValid(t *testing.T) {
 }
 
 func TestValidatorInt16PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2825,7 +2825,7 @@ func TestValidatorInt16PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorInt16InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2843,7 +2843,7 @@ func TestValidatorInt16InSliceValid(t *testing.T) {
 }
 
 func TestValidatorInt16InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -2867,7 +2867,7 @@ func TestValidatorInt16InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorInt32Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Int32(int32(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2875,7 +2875,7 @@ func TestValidatorInt32Not(t *testing.T) {
 }
 
 func TestValidatorInt32EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).EqualTo(2))
@@ -2892,7 +2892,7 @@ func TestValidatorInt32EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(1)).EqualTo(2))
@@ -2916,7 +2916,7 @@ func TestValidatorInt32EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(3)).GreaterThan(2))
@@ -2934,7 +2934,7 @@ func TestValidatorInt32GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorInt32GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).GreaterThan(2))
@@ -2962,7 +2962,7 @@ func TestValidatorInt32GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).GreaterOrEqualTo(2))
@@ -2983,7 +2983,7 @@ func TestValidatorInt32GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).GreaterOrEqualTo(3))
@@ -3005,7 +3005,7 @@ func TestValidatorInt32GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).LessThan(3))
@@ -3022,7 +3022,7 @@ func TestValidatorInt32LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).LessThan(2))
@@ -3050,7 +3050,7 @@ func TestValidatorInt32LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).LessOrEqualTo(2))
@@ -3071,7 +3071,7 @@ func TestValidatorInt32LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(3)).LessOrEqualTo(2))
@@ -3093,7 +3093,7 @@ func TestValidatorInt32LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).Between(2, 6))
@@ -3119,7 +3119,7 @@ func TestValidatorInt32BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(2)).Between(3, 6))
@@ -3148,7 +3148,7 @@ func TestValidatorInt32BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(0)).Zero())
@@ -3164,7 +3164,7 @@ func TestValidatorInt32ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int32(int32(1)).Zero())
@@ -3185,7 +3185,7 @@ func TestValidatorInt32EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3207,7 +3207,7 @@ func TestValidatorInt32PassingValid(t *testing.T) {
 }
 
 func TestValidatorInt32PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3233,7 +3233,7 @@ func TestValidatorInt32PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorInt32InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3251,7 +3251,7 @@ func TestValidatorInt32InSliceValid(t *testing.T) {
 }
 
 func TestValidatorInt32InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3275,7 +3275,7 @@ func TestValidatorInt32InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorInt64Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Int64(int64(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3283,7 +3283,7 @@ func TestValidatorInt64Not(t *testing.T) {
 }
 
 func TestValidatorInt64EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).EqualTo(2))
@@ -3300,7 +3300,7 @@ func TestValidatorInt64EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt64EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(1)).EqualTo(2))
@@ -3324,7 +3324,7 @@ func TestValidatorInt64EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(3)).GreaterThan(2))
@@ -3342,7 +3342,7 @@ func TestValidatorInt64GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorInt64GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).GreaterThan(2))
@@ -3370,7 +3370,7 @@ func TestValidatorInt64GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).GreaterOrEqualTo(2))
@@ -3391,7 +3391,7 @@ func TestValidatorInt64GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt64GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).GreaterOrEqualTo(3))
@@ -3413,7 +3413,7 @@ func TestValidatorInt64GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).LessThan(3))
@@ -3430,7 +3430,7 @@ func TestValidatorInt64LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt64LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).LessThan(2))
@@ -3458,7 +3458,7 @@ func TestValidatorInt64LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).LessOrEqualTo(2))
@@ -3479,7 +3479,7 @@ func TestValidatorInt64LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt64LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(3)).LessOrEqualTo(2))
@@ -3501,7 +3501,7 @@ func TestValidatorInt64LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).Between(2, 6))
@@ -3527,7 +3527,7 @@ func TestValidatorInt64BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt64BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(2)).Between(3, 6))
@@ -3556,7 +3556,7 @@ func TestValidatorInt64BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(0)).Zero())
@@ -3572,7 +3572,7 @@ func TestValidatorInt64ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt64EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Int64(int64(1)).Zero())
@@ -3593,7 +3593,7 @@ func TestValidatorInt64EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3615,7 +3615,7 @@ func TestValidatorInt64PassingValid(t *testing.T) {
 }
 
 func TestValidatorInt64PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3641,7 +3641,7 @@ func TestValidatorInt64PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorInt64InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3659,7 +3659,7 @@ func TestValidatorInt64InSliceValid(t *testing.T) {
 }
 
 func TestValidatorInt64InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -3683,7 +3683,7 @@ func TestValidatorInt64InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorFloat32Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Float32(float32(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3691,7 +3691,7 @@ func TestValidatorFloat32Not(t *testing.T) {
 }
 
 func TestValidatorFloat32EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).EqualTo(2))
@@ -3708,7 +3708,7 @@ func TestValidatorFloat32EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat32EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(1)).EqualTo(2))
@@ -3732,7 +3732,7 @@ func TestValidatorFloat32EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(3)).GreaterThan(2))
@@ -3750,7 +3750,7 @@ func TestValidatorFloat32GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorFloat32GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).GreaterThan(2))
@@ -3778,7 +3778,7 @@ func TestValidatorFloat32GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).GreaterOrEqualTo(2))
@@ -3799,7 +3799,7 @@ func TestValidatorFloat32GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat32GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).GreaterOrEqualTo(3))
@@ -3821,7 +3821,7 @@ func TestValidatorFloat32GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).LessThan(3))
@@ -3838,7 +3838,7 @@ func TestValidatorFloat32LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat32LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).LessThan(2))
@@ -3866,7 +3866,7 @@ func TestValidatorFloat32LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).LessOrEqualTo(2))
@@ -3887,7 +3887,7 @@ func TestValidatorFloat32LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat32LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(3)).LessOrEqualTo(2))
@@ -3909,7 +3909,7 @@ func TestValidatorFloat32LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).Between(2, 6))
@@ -3935,7 +3935,7 @@ func TestValidatorFloat32BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat32BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(2)).Between(3, 6))
@@ -3964,7 +3964,7 @@ func TestValidatorFloat32BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(0)).Zero())
@@ -3980,7 +3980,7 @@ func TestValidatorFloat32ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat32EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float32(float32(1)).Zero())
@@ -4001,7 +4001,7 @@ func TestValidatorFloat32EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4023,7 +4023,7 @@ func TestValidatorFloat32PassingValid(t *testing.T) {
 }
 
 func TestValidatorFloat32PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4049,7 +4049,7 @@ func TestValidatorFloat32PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat32InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4067,7 +4067,7 @@ func TestValidatorFloat32InSliceValid(t *testing.T) {
 }
 
 func TestValidatorFloat32InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4091,7 +4091,7 @@ func TestValidatorFloat32InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorFloat64Not(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Float64(float64(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4099,7 +4099,7 @@ func TestValidatorFloat64Not(t *testing.T) {
 }
 
 func TestValidatorFloat64EqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).EqualTo(2))
@@ -4116,7 +4116,7 @@ func TestValidatorFloat64EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat64EqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(1)).EqualTo(2))
@@ -4140,7 +4140,7 @@ func TestValidatorFloat64EqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64GreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(3)).GreaterThan(2))
@@ -4158,7 +4158,7 @@ func TestValidatorFloat64GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorFloat64GreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).GreaterThan(2))
@@ -4186,7 +4186,7 @@ func TestValidatorFloat64GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64GreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).GreaterOrEqualTo(2))
@@ -4207,7 +4207,7 @@ func TestValidatorFloat64GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat64GreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).GreaterOrEqualTo(3))
@@ -4229,7 +4229,7 @@ func TestValidatorFloat64GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64LessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).LessThan(3))
@@ -4246,7 +4246,7 @@ func TestValidatorFloat64LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat64LessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).LessThan(2))
@@ -4274,7 +4274,7 @@ func TestValidatorFloat64LessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64LessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).LessOrEqualTo(2))
@@ -4295,7 +4295,7 @@ func TestValidatorFloat64LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat64LessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(3)).LessOrEqualTo(2))
@@ -4317,7 +4317,7 @@ func TestValidatorFloat64LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64BetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).Between(2, 6))
@@ -4343,7 +4343,7 @@ func TestValidatorFloat64BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat64BetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(2)).Between(3, 6))
@@ -4372,7 +4372,7 @@ func TestValidatorFloat64BetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64ZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(0)).Zero())
@@ -4388,7 +4388,7 @@ func TestValidatorFloat64ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorFloat64EmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Float64(float64(1)).Zero())
@@ -4409,7 +4409,7 @@ func TestValidatorFloat64EmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64PassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4431,7 +4431,7 @@ func TestValidatorFloat64PassingValid(t *testing.T) {
 }
 
 func TestValidatorFloat64PassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4457,7 +4457,7 @@ func TestValidatorFloat64PassingInvalid(t *testing.T) {
 }
 
 func TestValidatorFloat64InSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4475,7 +4475,7 @@ func TestValidatorFloat64InSliceValid(t *testing.T) {
 }
 
 func TestValidatorFloat64InSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4499,7 +4499,7 @@ func TestValidatorFloat64InSliceInvalid(t *testing.T) {
 
 
 func TestValidatorByteNot(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Byte(byte(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4507,7 +4507,7 @@ func TestValidatorByteNot(t *testing.T) {
 }
 
 func TestValidatorByteEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).EqualTo(2))
@@ -4524,7 +4524,7 @@ func TestValidatorByteEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorByteEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(1)).EqualTo(2))
@@ -4548,7 +4548,7 @@ func TestValidatorByteEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorByteGreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(3)).GreaterThan(2))
@@ -4566,7 +4566,7 @@ func TestValidatorByteGreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorByteGreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).GreaterThan(2))
@@ -4594,7 +4594,7 @@ func TestValidatorByteGreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorByteGreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).GreaterOrEqualTo(2))
@@ -4615,7 +4615,7 @@ func TestValidatorByteGreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorByteGreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).GreaterOrEqualTo(3))
@@ -4637,7 +4637,7 @@ func TestValidatorByteGreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorByteLessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).LessThan(3))
@@ -4654,7 +4654,7 @@ func TestValidatorByteLessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorByteLessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).LessThan(2))
@@ -4682,7 +4682,7 @@ func TestValidatorByteLessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorByteLessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).LessOrEqualTo(2))
@@ -4703,7 +4703,7 @@ func TestValidatorByteLessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorByteLessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(3)).LessOrEqualTo(2))
@@ -4725,7 +4725,7 @@ func TestValidatorByteLessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorByteBetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).Between(2, 6))
@@ -4751,7 +4751,7 @@ func TestValidatorByteBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorByteBetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(2)).Between(3, 6))
@@ -4780,7 +4780,7 @@ func TestValidatorByteBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorByteZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(0)).Zero())
@@ -4796,7 +4796,7 @@ func TestValidatorByteZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorByteEmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Byte(byte(1)).Zero())
@@ -4817,7 +4817,7 @@ func TestValidatorByteEmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorBytePassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4839,7 +4839,7 @@ func TestValidatorBytePassingValid(t *testing.T) {
 }
 
 func TestValidatorBytePassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4865,7 +4865,7 @@ func TestValidatorBytePassingInvalid(t *testing.T) {
 }
 
 func TestValidatorByteInSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4883,7 +4883,7 @@ func TestValidatorByteInSliceValid(t *testing.T) {
 }
 
 func TestValidatorByteInSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -4907,7 +4907,7 @@ func TestValidatorByteInSliceInvalid(t *testing.T) {
 
 
 func TestValidatorRuneNot(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(Rune(rune(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4915,7 +4915,7 @@ func TestValidatorRuneNot(t *testing.T) {
 }
 
 func TestValidatorRuneEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).EqualTo(2))
@@ -4932,7 +4932,7 @@ func TestValidatorRuneEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorRuneEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(1)).EqualTo(2))
@@ -4956,7 +4956,7 @@ func TestValidatorRuneEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneGreaterThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(3)).GreaterThan(2))
@@ -4974,7 +4974,7 @@ func TestValidatorRuneGreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorRuneGreaterThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).GreaterThan(2))
@@ -5002,7 +5002,7 @@ func TestValidatorRuneGreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneGreaterOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).GreaterOrEqualTo(2))
@@ -5023,7 +5023,7 @@ func TestValidatorRuneGreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorRuneGreaterOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).GreaterOrEqualTo(3))
@@ -5045,7 +5045,7 @@ func TestValidatorRuneGreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneLessThanValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).LessThan(3))
@@ -5062,7 +5062,7 @@ func TestValidatorRuneLessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorRuneLessThanInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).LessThan(2))
@@ -5090,7 +5090,7 @@ func TestValidatorRuneLessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneLessOrEqualToValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).LessOrEqualTo(2))
@@ -5111,7 +5111,7 @@ func TestValidatorRuneLessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorRuneLessOrEqualToInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(3)).LessOrEqualTo(2))
@@ -5133,7 +5133,7 @@ func TestValidatorRuneLessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneBetweenValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).Between(2, 6))
@@ -5159,7 +5159,7 @@ func TestValidatorRuneBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorRuneBetweenInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(2)).Between(3, 6))
@@ -5188,7 +5188,7 @@ func TestValidatorRuneBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneZeroValid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(0)).Zero())
@@ -5204,7 +5204,7 @@ func TestValidatorRuneZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorRuneEmptyInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 	var v *Validation
 
 	v = Is(Rune(rune(1)).Zero())
@@ -5225,7 +5225,7 @@ func TestValidatorRuneEmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorRunePassingValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -5247,7 +5247,7 @@ func TestValidatorRunePassingValid(t *testing.T) {
 }
 
 func TestValidatorRunePassingInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -5273,7 +5273,7 @@ func TestValidatorRunePassingInvalid(t *testing.T) {
 }
 
 func TestValidatorRuneInSliceValid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 
@@ -5291,7 +5291,7 @@ func TestValidatorRuneInSliceValid(t *testing.T) {
 }
 
 func TestValidatorRuneInSliceInvalid(t *testing.T) {
-	Teardown()
+	teardown()
 
 	var v *Validation
 

@@ -24,7 +24,7 @@ func TestError(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValidator(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := Is(String("Vitalik Buterin", "name").Blank())
 
@@ -44,7 +44,7 @@ func TestAddErrorMessageFromValidator(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValgo(t *testing.T) {
-	Teardown()
+	teardown()
 
 	v := AddErrorMessage("email", "Email is invalid")
 
@@ -128,7 +128,7 @@ func TestIsValidByName(t *testing.T) {
 }
 
 func TestCustomErrorMarshallJSON(t *testing.T) {
-	Teardown()
+	teardown()
 
 	customFunc := func(e *Error) ([]byte, error) {
 
