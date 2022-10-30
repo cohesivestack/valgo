@@ -1,9 +1,5 @@
 package valgo
 
-type ValidatorBool[T ~bool] struct {
-	context *ValidatorContext
-}
-
 func isBoolTrue[T ~bool](v T) bool {
 	return bool(v)
 }
@@ -25,12 +21,17 @@ func isBoolInSlice[T ~bool](v T, slice []T) bool {
 	return false
 }
 
+// The Boolean validator's type that keeps its validator context.
+type ValidatorBool[T ~bool] struct {
+	context *ValidatorContext
+}
+
 // Receives a boolean value to validate.
 //
 // The value also can be a custom boolean type such as `type Active bool;`
 //
 // Optionally, the function can receive a name and title, in that order,
-// to be used in the error messages. A `value_%N`` pattern is used as a name in
+// to be displayed in the error messages. A `value_%N`` pattern is used as a name in
 // error messages if a name and title are not supplied; for example: value_0. When the name is
 // provided but not the title, then the name is humanized to be used as the
 // title as well; for example the name `phone_number` will be humanized as
@@ -40,14 +41,13 @@ func Bool[T ~bool](value T, nameAndTitle ...string) *ValidatorBool[T] {
 	return &ValidatorBool[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// This function returns the context for the Valgo Validator session's
-// validator. The function should not be called unless you are creating a custom
+// Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorBool[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated to the next validation function.
+// Reverse the logical value associated with the next validation function.
 // For example:
 //
 //	// It will return false because Not() inverts to True()

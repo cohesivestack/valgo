@@ -1,5 +1,6 @@
 package valgo
 
+// The Boolean pointer validator's type that keeps its validator context.
 type ValidatorBoolP[T ~bool] struct {
 	context *ValidatorContext
 }
@@ -9,7 +10,7 @@ type ValidatorBoolP[T ~bool] struct {
 // The value also can be a custom boolean type such as `type Active bool;`
 //
 // Optionally, the function can receive a name and title, in that order,
-// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// to be displayed in the error messages. A `value_%N“ pattern is used as a name in
 // error messages if a name and title are not supplied; for example: value_0. When the name is
 // provided but not the title, then the name is humanized to be used as the
 // title as well; for example the name `phone_number` will be humanized as
@@ -18,14 +19,13 @@ func BoolP[T ~bool](value *T, nameAndTitle ...string) *ValidatorBoolP[T] {
 	return &ValidatorBoolP[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// This function returns the context for the Valgo Validator session's
-// validator. The function should not be called unless you are creating a custom
+// Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorBoolP[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated to the next validation function.
+// Reverse the logical value associated with the next validation function.
 // For example:
 //
 //	// It will return false because Not() inverts to True()

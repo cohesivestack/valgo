@@ -34,6 +34,7 @@ func getDefaultLocale() *locale {
 	return getLocales()[defaultLocaleCode]
 }
 
+// Set the default locale.
 func SetDefaultLocale(code string) error {
 	if _, exist := getLocales()[code]; exist {
 		defaultLocaleCode = code
@@ -44,10 +45,12 @@ func SetDefaultLocale(code string) error {
 
 }
 
+// Add or change the messages of a specific locale.
 func SetLocaleMessages(code string, messages map[string]string) {
 	getLocales()[code] = &locale{Messages: messages}
 }
 
+// Get the messages of a specific locale.
 func GetLocaleMessages(code string) (messages map[string]string, err error) {
 	if _, exist := getLocales()[code]; exist {
 		messages = map[string]string{}

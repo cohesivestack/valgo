@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+// Type of validation session. One or more field validators must be added to a
+// Validation session using the functions [Is()] or [Check()].
 type Validation struct {
 	valid bool
 
@@ -14,26 +16,33 @@ type Validation struct {
 	currentIndex int
 }
 
+// Add a field validator to a [Validation] session.
 func (validation *Validation) Is(v Validator) *Validation {
 	return v.Context().validateIs(validation)
 }
 
+// Add a field validator to a [Validation] session. But unlike [Is()] the
+// field validator is not short-circuited.
 func (validation *Validation) Check(v Validator) *Validation {
 	return v.Context().validateCheck(validation)
 }
 
+// Return `true` is all field validators in the [Validation] session are valid.
 func (validation *Validation) Valid() bool {
 	return validation.valid
 }
 
+// Add a map namespace to a [Validation] session.
 func (validation *Validation) In(name string, _validation *Validation) *Validation {
 	return validation.merge(name, _validation)
 }
 
+// Add an indexed namespace to a [Validation] session.
 func (validation *Validation) InRow(name string, index int, _validation *Validation) *Validation {
 	return validation.merge(fmt.Sprintf("%s[%v]", name, index), _validation)
 }
 
+// Merge two [Validation] sessions.
 func (validation *Validation) Merge(_validation *Validation) *Validation {
 	return validation.merge("", _validation)
 }
@@ -67,6 +76,9 @@ LOOP1:
 	return validation
 }
 
+// Add an error message to the [Validation] session without executing a field
+// validator. By adding this error message, the [Validation] session will be
+// marked as invalid.
 func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 	if v.errors == nil {
 		v.errors = map[string]*valueError{}
@@ -116,10 +128,14 @@ func (validation *Validation) invalidate(name *string, fragment *ValidatorFragme
 	et.params = fragment.templateParams
 }
 
+// Return a map with the information for each invalid field validator in the
+// [Validation] session.
 func (session *Validation) Errors() map[string]*valueError {
 	return session.errors
 }
 
+// Return a map with the information for each invalid field validator in the
+// [Validation] session.
 func (validation *Validation) Error() error {
 	if !validation.valid {
 		return &Error{
@@ -129,6 +145,7 @@ func (validation *Validation) Error() error {
 	return nil
 }
 
+// Return true if a specific field validator is valid.
 func (validation *Validation) IsValid(name string) bool {
 	if _, isNotValid := validation.errors[name]; isNotValid {
 		return false

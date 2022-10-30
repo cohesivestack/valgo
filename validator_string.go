@@ -53,36 +53,36 @@ func isStringLengthBetween[T ~string](v T, min int, max int) bool {
 	return len(v) >= min && len(v) <= max
 }
 
+// The String validator's type that keeps its validator context.
 type ValidatorString[T ~string] struct {
 	context *ValidatorContext
 }
 
-// Receives a string value to validate.
+// Receive a string value to validate.
 //
-// The value also can be a custom boolean type such as `type Status string;`
+// The value can also be a custom string type such as type Status string;.
 //
-// Optionally, the function can receive a name and title, in that order,
-// to be used in the error messages. A `value_%N`` pattern is used as a name in
-// error messages if a name and title are not supplied; for example: value_0. When the name is
-// provided but not the title, then the name is humanized to be used as the
-// title as well; for example the name `phone_number` will be humanized as
-// `Phone Number`
+// Optionally, the function can receive a name and title, in that order, to be
+// displayed in the error messages. A value_%N` pattern is used as a name in the
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name phone_number will be
+// humanized as Phone Number.
 
 func String[T ~string](value T, nameAndTitle ...string) *ValidatorString[T] {
 	return &ValidatorString[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// This function returns the context for the Valgo Validator session's
-// validator. The function should not be called unless you are creating a custom
+// Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorString[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated to the next validation function.
+// Reverse the logical value associated with the next validation function.
 // For example:
 //
-//	// It will return false because Not() inverts to Blank()
+//	// It will return false because `Not()` inverts to `Blank()`
 //	Is(v.String("").Not().Blank()).Valid()
 func (validator *ValidatorString[T]) Not() *ValidatorString[T] {
 	validator.context.Not()
@@ -90,7 +90,8 @@ func (validator *ValidatorString[T]) Not() *ValidatorString[T] {
 	return validator
 }
 
-// Validate if a string value is equal to another.
+// Validate if a string value is equal to another. This function internally uses
+// the golang `==` operator.
 // For example:
 //
 //	status := "running"
@@ -105,8 +106,8 @@ func (validator *ValidatorString[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
-// Validate if a string value is greater than to another. This function
-// internally uses the golang `>` operator.
+// Validate if a string value is greater than another. This function internally
+// uses the golang `>` operator.
 // For example:
 //
 //	section := "bb"
@@ -154,7 +155,7 @@ func (validator *ValidatorString[T]) LessThan(value T, template ...string) *Vali
 	return validator
 }
 
-// Validate if a string value is less or equal to another. This function
+// Validate if a string value is less than or equal to another. This function
 // internally uses the golang `<=` operator to compare two strings.
 // For example:
 //
@@ -170,9 +171,10 @@ func (validator *ValidatorString[T]) LessOrEqualTo(value T, template ...string) 
 	return validator
 }
 
-// Validate if a string value is empty. Empty will be false if the length
-// of the string is greater than zero, even if the string has only spaces.
-// For checking if the string has only spaces, uses the function `Blank()`
+// Validate if a string value is empty. Return false if the length of the string
+// is greater than zero, even if the string has only spaces.
+//
+// For checking if the string has only spaces, use the function `Blank()`
 // instead.
 // For example:
 //
@@ -190,7 +192,6 @@ func (validator *ValidatorString[T]) Empty(template ...string) *ValidatorString[
 
 // Validate if a string value is blank. Blank will be true if the length
 // of the string is zero or if the string only has spaces.
-// instead.
 // For example:
 //
 //	Is(v.String("").Empty()) // Will be true
@@ -205,7 +206,7 @@ func (validator *ValidatorString[T]) Blank(template ...string) *ValidatorString[
 	return validator
 }
 
-// Validate if a string value pass a custom function.
+// Validate if a string value passes a custom function.
 // For example:
 //
 //	status := ""
@@ -222,7 +223,7 @@ func (validator *ValidatorString[T]) Passing(function func(v0 T) bool, template 
 	return validator
 }
 
-// Validate if a string is present in an string slice.
+// Validate if a string is present in a string slice.
 // For example:
 //
 //	status := "idle"
@@ -238,7 +239,7 @@ func (validator *ValidatorString[T]) InSlice(slice []T, template ...string) *Val
 	return validator
 }
 
-// Validate if a string match a regular expression.
+// Validate if a string matches a regular expression.
 // For example:
 //
 //	status := "pre-approved"
@@ -307,7 +308,7 @@ func (validator *ValidatorString[T]) Length(length int, template ...string) *Val
 	return validator
 }
 
-// Validate if the length a string is in a range (inclusive).
+// Validate if the length of a string is within a range (inclusive).
 // For example:
 //
 //	slug := "myname"
@@ -324,11 +325,11 @@ func (validator *ValidatorString[T]) LengthBetween(min int, max int, template ..
 	return validator
 }
 
-// Validate if the value of a string is in a range (inclusive).
+// Validate if the value of a string is within a range (inclusive).
 // For example:
 //
-//	slug := "myname"
-//	Is(v.String(slug).Between(2,6))
+//	slug := "ab"
+//	Is(v.String(slug).Between("ab","ac"))
 func (validator *ValidatorString[T]) Between(min T, max T, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
