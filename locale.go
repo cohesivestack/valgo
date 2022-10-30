@@ -44,3 +44,19 @@ func SetDefaultLocale(code string) error {
 	}
 
 }
+
+func SetLocaleMessages(code string, messages map[string]string) {
+	getLocales()[code] = &locale{Messages: messages}
+}
+
+func GetLocaleMessages(code string) (messages map[string]string, err error) {
+	if _, exist := getLocales()[code]; exist {
+		messages = map[string]string{}
+		for k, v := range getLocales()[code].Messages {
+			messages[k] = v
+		}
+	} else {
+		err = errors.New(fmt.Sprintf("There is not a locale registered with code %s", code))
+	}
+	return
+}
