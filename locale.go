@@ -1,7 +1,6 @@
 package valgo
 
 import (
-	"errors"
 	"fmt"
 	"log"
 )
@@ -40,7 +39,7 @@ func SetDefaultLocale(code string) error {
 		defaultLocaleCode = code
 		return nil
 	} else {
-		return errors.New(fmt.Sprintf("There is not a locale registered with code %s", code))
+		return fmt.Errorf("there is not a locale registered with code %s", code)
 	}
 
 }
@@ -56,7 +55,7 @@ func GetLocaleMessages(code string) (messages map[string]string, err error) {
 			messages[k] = v
 		}
 	} else {
-		err = errors.New(fmt.Sprintf("There is not a locale registered with code %s", code))
+		err = fmt.Errorf("there is not a locale registered with code %s", code)
 	}
 	return
 }
