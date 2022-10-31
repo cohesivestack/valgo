@@ -93,7 +93,7 @@ func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 	return v
 }
 
-func (validation *Validation) invalidate(name *string, fragment *ValidatorFragment) {
+func (validation *Validation) invalidate(name *string, fragment *validatorFragment) {
 	if validation.errors == nil {
 		validation.errors = map[string]*valueError{}
 	}

@@ -1,6 +1,6 @@
 package valgo
 
-type ValidatorFragment struct {
+type validatorFragment struct {
 	errorKey       string
 	template       []string
 	templateParams map[string]any
@@ -9,7 +9,7 @@ type ValidatorFragment struct {
 }
 
 type ValidatorContext struct {
-	fragments     []*ValidatorFragment
+	fragments     []*validatorFragment
 	value         any
 	name          *string
 	title         *string
@@ -20,7 +20,7 @@ func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 
 	context := &ValidatorContext{
 		value:         value,
-		fragments:     []*ValidatorFragment{},
+		fragments:     []*validatorFragment{},
 		boolOperation: true,
 	}
 
@@ -58,7 +58,7 @@ func (ctx *ValidatorContext) Add(function func() bool, errorKey string, template
 
 func (ctx *ValidatorContext) AddWithParams(function func() bool, errorKey string, templateParams map[string]any, template ...string) *ValidatorContext {
 
-	fragment := &ValidatorFragment{
+	fragment := &validatorFragment{
 		errorKey:       errorKey,
 		templateParams: templateParams,
 		function:       function,
