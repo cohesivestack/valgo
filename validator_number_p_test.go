@@ -7,7 +7,7 @@ import (
 )
 
 func TestValidatorNumberPNot(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	number1 := 2
 
@@ -17,7 +17,7 @@ func TestValidatorNumberPNot(t *testing.T) {
 }
 
 func TestValidatorNumberPEqualToValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 2
@@ -36,7 +36,7 @@ func TestValidatorNumberPEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPEqualToInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 2
@@ -72,7 +72,7 @@ func TestValidatorNumberPEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPGreaterThanValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 3
@@ -92,7 +92,7 @@ func TestValidatorNumberPGreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorNumberPGreaterThanInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 2
@@ -133,7 +133,7 @@ func TestValidatorNumberPGreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPGreaterOrEqualToValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 2
@@ -158,7 +158,7 @@ func TestValidatorNumberPGreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPGreaterOrEqualToInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 2
@@ -191,7 +191,7 @@ func TestValidatorNumberPGreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPLessThanValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 2
@@ -210,7 +210,7 @@ func TestValidatorNumberPLessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPLessThanInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 2
@@ -251,7 +251,7 @@ func TestValidatorNumberPLessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPLessOrEqualToValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 2
@@ -274,7 +274,7 @@ func TestValidatorNumberPLessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPLessOrEqualToInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 3
@@ -306,7 +306,7 @@ func TestValidatorNumberPLessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPBetweenValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 2
@@ -338,7 +338,7 @@ func TestValidatorNumberPBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPBetweenInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 2
@@ -380,7 +380,7 @@ func TestValidatorNumberPBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPZeroValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 0
@@ -406,7 +406,7 @@ func TestValidatorNumberPZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPZeroInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 1
@@ -438,7 +438,7 @@ func TestValidatorNumberPZeroInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPZeroOrNilValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	_number1 := 0
@@ -463,7 +463,7 @@ func TestValidatorNumberPZeroOrNilValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPZeroOrNilInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 	var v *Validation
 
 	number1 := 1
@@ -486,7 +486,7 @@ func TestValidatorNumberPZeroOrNilInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPPassingValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -510,7 +510,7 @@ func TestValidatorNumberPPassingValid(t *testing.T) {
 }
 
 func TestValidatorNumberPPassingInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -538,7 +538,7 @@ func TestValidatorNumberPPassingInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPInSliceValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -557,7 +557,7 @@ func TestValidatorNumberPInSliceValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberPInSliceInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -590,7 +590,7 @@ func TestValidatorNumberPInSliceInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberNilIsValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -610,7 +610,7 @@ func TestValidatorNumberNilIsValid(t *testing.T) {
 }
 
 func TestValidatorNumberNilIsInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 

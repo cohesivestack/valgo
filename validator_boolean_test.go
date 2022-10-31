@@ -14,7 +14,7 @@ func TestValidatorBoolNot(t *testing.T) {
 }
 
 func TestValidatorBoolEqualToWhenIsValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -37,7 +37,7 @@ func TestValidatorBoolEqualToWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolEqualToWhenIsInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -60,7 +60,7 @@ func TestValidatorBoolEqualToWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolTrueWhenIsValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -78,7 +78,7 @@ func TestValidatorBoolTrueWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolTrueWhenIsInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -100,7 +100,7 @@ func TestValidatorBoolTrueWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolFalseWhenIsValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -118,7 +118,7 @@ func TestValidatorBoolFalseWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolFalseWhenIsInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -140,7 +140,7 @@ func TestValidatorBoolFalseWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPassingWhenIsValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -163,7 +163,7 @@ func TestValidatorBoolPassingWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPassingWhenIsInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -189,7 +189,7 @@ func TestValidatorBoolPassingWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolInSliceValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -207,7 +207,7 @@ func TestValidatorBoolInSliceValid(t *testing.T) {
 }
 
 func TestValidatorBoolInSliceInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 

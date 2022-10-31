@@ -34,6 +34,11 @@ func getDefaultLocale() *locale {
 	return getLocales()[defaultLocaleCode]
 }
 
+// Get the default locale code.
+func GetDefaultLocaleCode() string {
+	return defaultLocaleCode
+}
+
 // Set the default locale.
 func SetDefaultLocale(code string) error {
 	if _, exist := getLocales()[code]; exist {

@@ -8,6 +8,8 @@ type validatorFragment struct {
 	boolOperation  bool
 }
 
+// The context keeps the state and provides the functions to control a
+// validator.
 type ValidatorContext struct {
 	fragments     []*validatorFragment
 	value         any

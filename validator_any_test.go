@@ -14,7 +14,7 @@ func TestValidatorAnyNot(t *testing.T) {
 }
 
 func TestValidatorAnyEqualToValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -38,7 +38,7 @@ func TestValidatorAnyEqualToValid(t *testing.T) {
 }
 
 func TestValidatorAnyEqualToInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -75,7 +75,7 @@ func TestValidatorAnyEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorAnyNilValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -92,7 +92,7 @@ func TestValidatorAnyNilValid(t *testing.T) {
 }
 
 func TestValidatorAnyNilInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -113,7 +113,7 @@ func TestValidatorAnyNilInvalid(t *testing.T) {
 }
 
 func TestValidatorAnyPassingValid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 
@@ -127,7 +127,7 @@ func TestValidatorAnyPassingValid(t *testing.T) {
 }
 
 func TestValidatorAnyPassingInvalid(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	var v *Validation
 

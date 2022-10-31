@@ -7,7 +7,7 @@ import (
 )
 
 func TestDefaultLocalization(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	SetDefaultLocale("es")
 	v := Is(String(" ").Not().Blank())
@@ -19,7 +19,7 @@ func TestDefaultLocalization(t *testing.T) {
 }
 
 func TestSeparatedLocalization(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	err := SetDefaultLocale("en")
 	assert.NoError(t, err)
@@ -37,7 +37,7 @@ func TestSeparatedLocalization(t *testing.T) {
 }
 
 func TestAddLocalization(t *testing.T) {
-	teardown()
+	TeardownTest()
 
 	err := SetDefaultLocale("en")
 	assert.NoError(t, err)

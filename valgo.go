@@ -6,7 +6,7 @@ import (
 
 var customMarshalJson func(e *Error) ([]byte, error)
 
-func teardown() {
+func TeardownTest() {
 	SetMarshalJSON(nil)
 	setDefaultEnglishMessages()
 	setDefaultSpanishMessages()
