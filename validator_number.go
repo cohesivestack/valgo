@@ -2,6 +2,8 @@ package valgo
 
 //go:generate go run generator/main.go
 
+// Custom generic type covering all numeric types. This type is used as the
+// value type in ValidatorNumber and ValidatorNumberP.
 type TypeNumber interface {
 	~int |
 		~int8 |
@@ -48,17 +50,18 @@ func isNumberInSlice[T TypeNumber](v T, slice []T) bool {
 	return false
 }
 
+// The numeric validator type that keeps its validator context.
 type ValidatorNumber[T TypeNumber] struct {
 	context *ValidatorContext
 }
 
-// Receives a number value to validate.
+// Receives a numeric value to validate.
 //
-// The value also can be any golang number type (int64, int32, float32, uint,
-// etc.) or a custom number type such as `type Level int32;`
+// The value can be any golang numeric type (int64, int32, float32, uint,
+// etc.) or a custom numeric type such as `type Level int32;`
 //
 // Optionally, the function can receive a name and title, in that order,
-// to be used in the error messages. A `value_%N`` pattern is used as a name in
+// to be displayed in the error messages. A `value_%N`` pattern is used as a name in
 // error messages if a name and title are not supplied; for example: value_0.
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
@@ -68,18 +71,29 @@ func Number[T TypeNumber](value T, nameAndTitle ...string) *ValidatorNumber[T] {
 	return &ValidatorNumber[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// This function returns the context for the Valgo Validator session's
-// validator. The function should not be called unless you are creating a custom
+// Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorNumber[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated to the next validation function.
+// Reverse the logical value associated with the next validation function.
 // For example:
 //
 //	// It will return false because Not() inverts to Zero()
 //	Is(v.Number(0).Not().Zero()).Valid()
+func (validator *ValidatorNumber[T]) Not() *ValidatorNumber[T] {
+	validator.context.Not()
+
+	return validator
+}
+
+// Validate if a numeric value is equal to another. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := 2
+//	Is(v.Number(quantity).Equal(2))
 func (validator *ValidatorNumber[T]) EqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -90,6 +104,12 @@ func (validator *ValidatorNumber[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if a numeric value is greater than another. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := 3
+//	Is(v.Number(quantity).GreaterThan(2))
 func (validator *ValidatorNumber[T]) GreaterThan(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -100,6 +120,12 @@ func (validator *ValidatorNumber[T]) GreaterThan(value T, template ...string) *V
 	return validator
 }
 
+// Validate if a numeric value is greater than or equal to another. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := 3
+//	Is(v.Number(quantity).GreaterOrEqualTo(3))
 func (validator *ValidatorNumber[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -110,6 +136,12 @@ func (validator *ValidatorNumber[T]) GreaterOrEqualTo(value T, template ...strin
 	return validator
 }
 
+// Validate if a numeric value is less than another. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := 2
+//	Is(v.Number(quantity).LessThan(3))
 func (validator *ValidatorNumber[T]) LessThan(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -120,6 +152,12 @@ func (validator *ValidatorNumber[T]) LessThan(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if a numeric value is less than or equal to another. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := 2
+//	Is(v.Number(quantity).LessOrEqualTo(2))
 func (validator *ValidatorNumber[T]) LessOrEqualTo(value T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -130,7 +168,7 @@ func (validator *ValidatorNumber[T]) LessOrEqualTo(value T, template ...string) 
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if a number is within a range (inclusive).
 // For example:
 //
 //	Is(v.Number(3).Between(2,6))
@@ -146,6 +184,11 @@ func (validator *ValidatorNumber[T]) Between(min T, max T, template ...string) *
 	return validator
 }
 
+// Validate if a numeric value is zero.
+//
+// For example:
+//
+//	Is(v.Number(0).Zero())
 func (validator *ValidatorNumber[T]) Zero(template ...string) *ValidatorNumber[T] {
 	validator.context.Add(
 		func() bool {
@@ -156,6 +199,13 @@ func (validator *ValidatorNumber[T]) Zero(template ...string) *ValidatorNumber[T
 	return validator
 }
 
+// Validate if a numeric value passes a custom function.
+// For example:
+//
+//	quantity := 2
+//	Is(v.Number(quantity).Passing((v int) bool {
+//		return v == getAllowedQuantity()
+//	})
 func (validator *ValidatorNumber[T]) Passing(function func(v T) bool, template ...string) *ValidatorNumber[T] {
 	validator.context.Add(
 		func() bool {
@@ -166,18 +216,18 @@ func (validator *ValidatorNumber[T]) Passing(function func(v T) bool, template .
 	return validator
 }
 
+// Validate if a number is present in a numeric slice.
+// For example:
+//
+//	quantity := 3
+//	validQuantities := []int{1,3,5}
+//	Is(v.Number(quantity).InSlice(validQuantities))
 func (validator *ValidatorNumber[T]) InSlice(slice []T, template ...string) *ValidatorNumber[T] {
 	validator.context.AddWithValue(
 		func() bool {
 			return isNumberInSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
-
-	return validator
-}
-
-func (validator *ValidatorNumber[T]) Not() *ValidatorNumber[T] {
-	validator.context.Not()
 
 	return validator
 }

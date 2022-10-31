@@ -4,13 +4,14 @@ import (
 	"regexp"
 )
 
+// The String pointer validator type that keeps its validator context.
 type ValidatorStringP[T ~string] struct {
 	context *ValidatorContext
 }
 
 // Receives a string pointer to validate.
 //
-// The value also can be a custom boolean type such as `type Status string;`
+// The value also can be a custom boolean type such as `type Status *string;`
 //
 // Optionally, the function can receive a name and title, in that order,
 // to be used in the error messages. A `value_%N`` pattern is used as a name in
@@ -23,8 +24,7 @@ func StringP[T ~string](value *T, nameAndTitle ...string) *ValidatorStringP[T] {
 	return &ValidatorStringP[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// This function returns the context for the Valgo Validator session's
-// validator. The function should not be called unless you are creating a custom
+// Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorStringP[T]) Context() *ValidatorContext {
 	return validator.context
@@ -46,7 +46,7 @@ func (validator *ValidatorStringP[T]) Not() *ValidatorStringP[T] {
 // For example:
 //
 //	status := "running"
-//	Is(v.StringP(status).Equal("running"))
+//	Is(v.StringP(&status).Equal("running"))
 func (validator *ValidatorStringP[T]) EqualTo(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -62,7 +62,7 @@ func (validator *ValidatorStringP[T]) EqualTo(value T, template ...string) *Vali
 // For example:
 //
 //	section := "bb"
-//	Is(v.String(section).GreaterThan("ba"))
+//	Is(v.StringP(&section).GreaterThan("ba"))
 func (validator *ValidatorStringP[T]) GreaterThan(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -78,7 +78,7 @@ func (validator *ValidatorStringP[T]) GreaterThan(value T, template ...string) *
 // For example:
 //
 //	section := "bc"
-//	Is(v.String(section).GreaterOrEqualTo("bc"))
+//	Is(v.StringP(&section).GreaterOrEqualTo("bc"))
 
 func (validator *ValidatorStringP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
@@ -95,7 +95,7 @@ func (validator *ValidatorStringP[T]) GreaterOrEqualTo(value T, template ...stri
 // For example:
 //
 //	section := "bb"
-//	Is(v.String(section).LessThan("bc"))
+//	Is(v.StringP(&section).LessThan("bc"))
 func (validator *ValidatorStringP[T]) LessThan(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -111,7 +111,7 @@ func (validator *ValidatorStringP[T]) LessThan(value T, template ...string) *Val
 // For example:
 //
 //	section := "bc"
-//	Is(v.String(section).LessOrEqualTo("bc"))
+//	Is(v.StringP(&section).LessOrEqualTo("bc"))
 func (validator *ValidatorStringP[T]) LessOrEqualTo(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -206,7 +206,7 @@ func (validator *ValidatorStringP[T]) BlankOrNil(template ...string) *ValidatorS
 // For example:
 //
 //	status := ""
-//	Is(v.String(status).Passing((v string) bool {
+//	Is(v.StringP(&status).Passing((v string) bool {
 //		return v == getNewStatus()
 //	})
 func (validator *ValidatorStringP[T]) Passing(function func(v0 *T) bool, template ...string) *ValidatorStringP[T] {
@@ -224,7 +224,7 @@ func (validator *ValidatorStringP[T]) Passing(function func(v0 *T) bool, templat
 //
 //	status := "idle"
 //	validStatus := []string{"idle", "paused", "stopped"}
-//	Is(v.String(status).InSlice(validStatus))
+//	Is(v.StringP(&status).InSlice(validStatus))
 func (validator *ValidatorStringP[T]) InSlice(slice []T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -240,7 +240,7 @@ func (validator *ValidatorStringP[T]) InSlice(slice []T, template ...string) *Va
 //
 //	status := "pre-approved"
 //	regex, _ := regexp.Compile("pre-.+")
-//	Is(v.String(&status).MatchingTo(regex))
+//	Is(v.StringP(&status).MatchingTo(regex))
 func (validator *ValidatorStringP[T]) MatchingTo(regex *regexp.Regexp, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -257,7 +257,7 @@ func (validator *ValidatorStringP[T]) MatchingTo(regex *regexp.Regexp, template 
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(&slug).MaxLength(6))
+//	Is(v.StringP(&slug).MaxLength(6))
 func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -274,7 +274,7 @@ func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) 
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(&slug).MinLength(6))
+//	Is(v.StringP(&slug).MinLength(6))
 func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -291,7 +291,7 @@ func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) 
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(&slug).Length(6))
+//	Is(v.StringP(&slug).Length(6))
 func (validator *ValidatorStringP[T]) Length(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -308,7 +308,7 @@ func (validator *ValidatorStringP[T]) Length(length int, template ...string) *Va
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(&slug).LengthBetween(2,6))
+//	Is(v.StringP(&slug).LengthBetween(2,6))
 func (validator *ValidatorStringP[T]) LengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -325,7 +325,7 @@ func (validator *ValidatorStringP[T]) LengthBetween(min int, max int, template .
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(&slug).Between(2,6))
+//	Is(v.StringP(&slug).Between(2,6))
 func (validator *ValidatorStringP[T]) Between(min T, max T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -342,7 +342,7 @@ func (validator *ValidatorStringP[T]) Between(min T, max T, template ...string) 
 // For example:
 //
 //	var status *string
-//	Is(v.BoolP(status).Nil())
+//	Is(v.StringP(status).Nil())
 func (validator *ValidatorStringP[T]) Nil(template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {

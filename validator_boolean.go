@@ -21,7 +21,7 @@ func isBoolInSlice[T ~bool](v T, slice []T) bool {
 	return false
 }
 
-// The Boolean validator's type that keeps its validator context.
+// The Boolean validator type that keeps its validator context.
 type ValidatorBool[T ~bool] struct {
 	context *ValidatorContext
 }

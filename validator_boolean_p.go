@@ -1,6 +1,6 @@
 package valgo
 
-// The Boolean pointer validator's type that keeps its validator context.
+// The Boolean pointer validator type that keeps its validator context.
 type ValidatorBoolP[T ~bool] struct {
 	context *ValidatorContext
 }
@@ -118,7 +118,7 @@ func (validator *ValidatorBoolP[T]) Nil(template ...string) *ValidatorBoolP[T] {
 // For example:
 //
 //	activated := false
-//	Is(v.Bool(&activated).Passing((v *bool) bool {
+//	Is(v.BoolP(&activated).Passing((v *bool) bool {
 //		return *v == someBoolFunction()
 //	})
 func (validator *ValidatorBoolP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorBoolP[T] {
@@ -136,7 +136,7 @@ func (validator *ValidatorBoolP[T]) Passing(function func(v *T) bool, template .
 //
 //	activated := false
 //	elements := []bool{true, false, true}
-//	Is(v.Bool(&activated).InSlice(elements))
+//	Is(v.BoolP(&activated).InSlice(elements))
 func (validator *ValidatorBoolP[T]) InSlice(slice []T, template ...string) *ValidatorBoolP[T] {
 	validator.context.AddWithValue(
 		func() bool {

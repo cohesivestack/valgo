@@ -4,18 +4,49 @@ package valgo
 
 
 
+// The uint8 pointer validator type that keeps its validator context.
 type ValidatorUint8P[T ~uint8] struct {
 	context *ValidatorContext
 }
 
+// Receives the uint8 pointer to validate.
+//
+// The value also can be a custom uint8 type such as `type Level *uint8;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
 func Uint8P[T ~uint8](value *T, nameAndTitle ...string) *ValidatorUint8P[T] {
 	return &ValidatorUint8P[T]{context: NewContext(value, nameAndTitle...)}
 }
 
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
 func (validator *ValidatorUint8P[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := uint8(0)
+//	Is(v.Uint8P(&n).Not().Zero()).Valid()
+func (validator *ValidatorUint8P[T]) Not() *ValidatorUint8P[T] {
+	validator.context.Not()
+
+	return validator
+}
+
+// Validate if the uint8 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := uint8(2)
+//	Is(v.Uint8P(quantity).Equal(uint8(2)))
 func (validator *ValidatorUint8P[T]) EqualTo(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -26,6 +57,12 @@ func (validator *ValidatorUint8P[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the uint8 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := uint8(3)
+//	Is(v.Uint8P(&quantity).GreaterThan(uint8(2)))
 func (validator *ValidatorUint8P[T]) GreaterThan(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -36,6 +73,12 @@ func (validator *ValidatorUint8P[T]) GreaterThan(value T, template ...string) *V
 	return validator
 }
 
+// Validate if the uint8 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := uint8(3)
+//	Is(v.Uint8P(&quantity).GreaterOrEqualTo(uint8(3)))
 func (validator *ValidatorUint8P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -46,6 +89,12 @@ func (validator *ValidatorUint8P[T]) GreaterOrEqualTo(value T, template ...strin
 	return validator
 }
 
+// Validate if the uint8 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := uint8(2)
+//	Is(v.Uint8P(&quantity).LessThan(uint8(3)))
 func (validator *ValidatorUint8P[T]) LessThan(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -56,6 +105,12 @@ func (validator *ValidatorUint8P[T]) LessThan(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the uint8 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := uint8(2)
+//	Is(v.Uint8P(&quantity).LessOrEqualTo(uint8(2)))
 func (validator *ValidatorUint8P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -66,10 +121,11 @@ func (validator *ValidatorUint8P[T]) LessOrEqualTo(value T, template ...string) 
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the uint8 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Uint8(3).Between(2,6))
+//	n := uint8(3)
+//	Is(v.Uint8P(&n).Between(uint8(2),uint8(6)))
 func (validator *ValidatorUint8P[T]) Between(min T, max T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -82,6 +138,12 @@ func (validator *ValidatorUint8P[T]) Between(min T, max T, template ...string) *
 	return validator
 }
 
+// Validate if the uint8 pointer value is zero.
+//
+// For example:
+//
+//	n := uint8(0)
+//	Is(v.Uint8P(&n).Zero())
 func (validator *ValidatorUint8P[T]) Zero(template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -92,6 +154,12 @@ func (validator *ValidatorUint8P[T]) Zero(template ...string) *ValidatorUint8P[T
 	return validator
 }
 
+// Validate if the uint8 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *uint8
+//	Is(v.Uint8P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorUint8P[T]) ZeroOrNil(template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -102,6 +170,12 @@ func (validator *ValidatorUint8P[T]) ZeroOrNil(template ...string) *ValidatorUin
 	return validator
 }
 
+// Validate if the uint8 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *uint8
+//	Is(v.Uint8P(quantity).Nil()) // Will be true
 func (validator *ValidatorUint8P[T]) Nil(template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -112,6 +186,13 @@ func (validator *ValidatorUint8P[T]) Nil(template ...string) *ValidatorUint8P[T]
 	return validator
 }
 
+// Validate if the uint8 pointer value passes a custom function.
+// For example:
+//
+//	quantity := uint8(2)
+//	Is(v.Uint8P(&quantity).Passing((v *uint8) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorUint8P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -122,6 +203,12 @@ func (validator *ValidatorUint8P[T]) Passing(function func(v *T) bool, template 
 	return validator
 }
 
+// Validate if the uint8 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := uint8(3)
+//	validQuantities := []uint8{1,3,5}
+//	Is(v.Uint8P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorUint8P[T]) InSlice(slice []T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -132,26 +219,51 @@ func (validator *ValidatorUint8P[T]) InSlice(slice []T, template ...string) *Val
 	return validator
 }
 
-func (validator *ValidatorUint8P[T]) Not() *ValidatorUint8P[T] {
+
+
+// The uint16 pointer validator type that keeps its validator context.
+type ValidatorUint16P[T ~uint16] struct {
+	context *ValidatorContext
+}
+
+// Receives the uint16 pointer to validate.
+//
+// The value also can be a custom uint16 type such as `type Level *uint16;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Uint16P[T ~uint16](value *T, nameAndTitle ...string) *ValidatorUint16P[T] {
+	return &ValidatorUint16P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorUint16P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := uint16(0)
+//	Is(v.Uint16P(&n).Not().Zero()).Valid()
+func (validator *ValidatorUint16P[T]) Not() *ValidatorUint16P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorUint16P[T ~uint16] struct {
-	context *ValidatorContext
-}
-
-func Uint16P[T ~uint16](value *T, nameAndTitle ...string) *ValidatorUint16P[T] {
-	return &ValidatorUint16P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorUint16P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the uint16 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := uint16(2)
+//	Is(v.Uint16P(quantity).Equal(uint16(2)))
 func (validator *ValidatorUint16P[T]) EqualTo(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -162,6 +274,12 @@ func (validator *ValidatorUint16P[T]) EqualTo(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the uint16 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := uint16(3)
+//	Is(v.Uint16P(&quantity).GreaterThan(uint16(2)))
 func (validator *ValidatorUint16P[T]) GreaterThan(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -172,6 +290,12 @@ func (validator *ValidatorUint16P[T]) GreaterThan(value T, template ...string) *
 	return validator
 }
 
+// Validate if the uint16 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := uint16(3)
+//	Is(v.Uint16P(&quantity).GreaterOrEqualTo(uint16(3)))
 func (validator *ValidatorUint16P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -182,6 +306,12 @@ func (validator *ValidatorUint16P[T]) GreaterOrEqualTo(value T, template ...stri
 	return validator
 }
 
+// Validate if the uint16 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := uint16(2)
+//	Is(v.Uint16P(&quantity).LessThan(uint16(3)))
 func (validator *ValidatorUint16P[T]) LessThan(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -192,6 +322,12 @@ func (validator *ValidatorUint16P[T]) LessThan(value T, template ...string) *Val
 	return validator
 }
 
+// Validate if the uint16 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := uint16(2)
+//	Is(v.Uint16P(&quantity).LessOrEqualTo(uint16(2)))
 func (validator *ValidatorUint16P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -202,10 +338,11 @@ func (validator *ValidatorUint16P[T]) LessOrEqualTo(value T, template ...string)
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the uint16 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Uint16(3).Between(2,6))
+//	n := uint16(3)
+//	Is(v.Uint16P(&n).Between(uint16(2),uint16(6)))
 func (validator *ValidatorUint16P[T]) Between(min T, max T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -218,6 +355,12 @@ func (validator *ValidatorUint16P[T]) Between(min T, max T, template ...string) 
 	return validator
 }
 
+// Validate if the uint16 pointer value is zero.
+//
+// For example:
+//
+//	n := uint16(0)
+//	Is(v.Uint16P(&n).Zero())
 func (validator *ValidatorUint16P[T]) Zero(template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -228,6 +371,12 @@ func (validator *ValidatorUint16P[T]) Zero(template ...string) *ValidatorUint16P
 	return validator
 }
 
+// Validate if the uint16 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *uint16
+//	Is(v.Uint16P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorUint16P[T]) ZeroOrNil(template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -238,6 +387,12 @@ func (validator *ValidatorUint16P[T]) ZeroOrNil(template ...string) *ValidatorUi
 	return validator
 }
 
+// Validate if the uint16 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *uint16
+//	Is(v.Uint16P(quantity).Nil()) // Will be true
 func (validator *ValidatorUint16P[T]) Nil(template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -248,6 +403,13 @@ func (validator *ValidatorUint16P[T]) Nil(template ...string) *ValidatorUint16P[
 	return validator
 }
 
+// Validate if the uint16 pointer value passes a custom function.
+// For example:
+//
+//	quantity := uint16(2)
+//	Is(v.Uint16P(&quantity).Passing((v *uint16) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorUint16P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -258,6 +420,12 @@ func (validator *ValidatorUint16P[T]) Passing(function func(v *T) bool, template
 	return validator
 }
 
+// Validate if the uint16 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := uint16(3)
+//	validQuantities := []uint16{1,3,5}
+//	Is(v.Uint16P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorUint16P[T]) InSlice(slice []T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -268,26 +436,51 @@ func (validator *ValidatorUint16P[T]) InSlice(slice []T, template ...string) *Va
 	return validator
 }
 
-func (validator *ValidatorUint16P[T]) Not() *ValidatorUint16P[T] {
+
+
+// The uint32 pointer validator type that keeps its validator context.
+type ValidatorUint32P[T ~uint32] struct {
+	context *ValidatorContext
+}
+
+// Receives the uint32 pointer to validate.
+//
+// The value also can be a custom uint32 type such as `type Level *uint32;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Uint32P[T ~uint32](value *T, nameAndTitle ...string) *ValidatorUint32P[T] {
+	return &ValidatorUint32P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorUint32P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := uint32(0)
+//	Is(v.Uint32P(&n).Not().Zero()).Valid()
+func (validator *ValidatorUint32P[T]) Not() *ValidatorUint32P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorUint32P[T ~uint32] struct {
-	context *ValidatorContext
-}
-
-func Uint32P[T ~uint32](value *T, nameAndTitle ...string) *ValidatorUint32P[T] {
-	return &ValidatorUint32P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorUint32P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the uint32 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := uint32(2)
+//	Is(v.Uint32P(quantity).Equal(uint32(2)))
 func (validator *ValidatorUint32P[T]) EqualTo(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -298,6 +491,12 @@ func (validator *ValidatorUint32P[T]) EqualTo(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the uint32 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := uint32(3)
+//	Is(v.Uint32P(&quantity).GreaterThan(uint32(2)))
 func (validator *ValidatorUint32P[T]) GreaterThan(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -308,6 +507,12 @@ func (validator *ValidatorUint32P[T]) GreaterThan(value T, template ...string) *
 	return validator
 }
 
+// Validate if the uint32 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := uint32(3)
+//	Is(v.Uint32P(&quantity).GreaterOrEqualTo(uint32(3)))
 func (validator *ValidatorUint32P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -318,6 +523,12 @@ func (validator *ValidatorUint32P[T]) GreaterOrEqualTo(value T, template ...stri
 	return validator
 }
 
+// Validate if the uint32 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := uint32(2)
+//	Is(v.Uint32P(&quantity).LessThan(uint32(3)))
 func (validator *ValidatorUint32P[T]) LessThan(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -328,6 +539,12 @@ func (validator *ValidatorUint32P[T]) LessThan(value T, template ...string) *Val
 	return validator
 }
 
+// Validate if the uint32 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := uint32(2)
+//	Is(v.Uint32P(&quantity).LessOrEqualTo(uint32(2)))
 func (validator *ValidatorUint32P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -338,10 +555,11 @@ func (validator *ValidatorUint32P[T]) LessOrEqualTo(value T, template ...string)
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the uint32 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Uint32(3).Between(2,6))
+//	n := uint32(3)
+//	Is(v.Uint32P(&n).Between(uint32(2),uint32(6)))
 func (validator *ValidatorUint32P[T]) Between(min T, max T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -354,6 +572,12 @@ func (validator *ValidatorUint32P[T]) Between(min T, max T, template ...string) 
 	return validator
 }
 
+// Validate if the uint32 pointer value is zero.
+//
+// For example:
+//
+//	n := uint32(0)
+//	Is(v.Uint32P(&n).Zero())
 func (validator *ValidatorUint32P[T]) Zero(template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -364,6 +588,12 @@ func (validator *ValidatorUint32P[T]) Zero(template ...string) *ValidatorUint32P
 	return validator
 }
 
+// Validate if the uint32 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *uint32
+//	Is(v.Uint32P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorUint32P[T]) ZeroOrNil(template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -374,6 +604,12 @@ func (validator *ValidatorUint32P[T]) ZeroOrNil(template ...string) *ValidatorUi
 	return validator
 }
 
+// Validate if the uint32 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *uint32
+//	Is(v.Uint32P(quantity).Nil()) // Will be true
 func (validator *ValidatorUint32P[T]) Nil(template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -384,6 +620,13 @@ func (validator *ValidatorUint32P[T]) Nil(template ...string) *ValidatorUint32P[
 	return validator
 }
 
+// Validate if the uint32 pointer value passes a custom function.
+// For example:
+//
+//	quantity := uint32(2)
+//	Is(v.Uint32P(&quantity).Passing((v *uint32) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorUint32P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -394,6 +637,12 @@ func (validator *ValidatorUint32P[T]) Passing(function func(v *T) bool, template
 	return validator
 }
 
+// Validate if the uint32 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := uint32(3)
+//	validQuantities := []uint32{1,3,5}
+//	Is(v.Uint32P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorUint32P[T]) InSlice(slice []T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -404,26 +653,51 @@ func (validator *ValidatorUint32P[T]) InSlice(slice []T, template ...string) *Va
 	return validator
 }
 
-func (validator *ValidatorUint32P[T]) Not() *ValidatorUint32P[T] {
+
+
+// The uint64 pointer validator type that keeps its validator context.
+type ValidatorUint64P[T ~uint64] struct {
+	context *ValidatorContext
+}
+
+// Receives the uint64 pointer to validate.
+//
+// The value also can be a custom uint64 type such as `type Level *uint64;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Uint64P[T ~uint64](value *T, nameAndTitle ...string) *ValidatorUint64P[T] {
+	return &ValidatorUint64P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorUint64P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := uint64(0)
+//	Is(v.Uint64P(&n).Not().Zero()).Valid()
+func (validator *ValidatorUint64P[T]) Not() *ValidatorUint64P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorUint64P[T ~uint64] struct {
-	context *ValidatorContext
-}
-
-func Uint64P[T ~uint64](value *T, nameAndTitle ...string) *ValidatorUint64P[T] {
-	return &ValidatorUint64P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorUint64P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the uint64 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := uint64(2)
+//	Is(v.Uint64P(quantity).Equal(uint64(2)))
 func (validator *ValidatorUint64P[T]) EqualTo(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -434,6 +708,12 @@ func (validator *ValidatorUint64P[T]) EqualTo(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the uint64 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := uint64(3)
+//	Is(v.Uint64P(&quantity).GreaterThan(uint64(2)))
 func (validator *ValidatorUint64P[T]) GreaterThan(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -444,6 +724,12 @@ func (validator *ValidatorUint64P[T]) GreaterThan(value T, template ...string) *
 	return validator
 }
 
+// Validate if the uint64 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := uint64(3)
+//	Is(v.Uint64P(&quantity).GreaterOrEqualTo(uint64(3)))
 func (validator *ValidatorUint64P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -454,6 +740,12 @@ func (validator *ValidatorUint64P[T]) GreaterOrEqualTo(value T, template ...stri
 	return validator
 }
 
+// Validate if the uint64 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := uint64(2)
+//	Is(v.Uint64P(&quantity).LessThan(uint64(3)))
 func (validator *ValidatorUint64P[T]) LessThan(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -464,6 +756,12 @@ func (validator *ValidatorUint64P[T]) LessThan(value T, template ...string) *Val
 	return validator
 }
 
+// Validate if the uint64 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := uint64(2)
+//	Is(v.Uint64P(&quantity).LessOrEqualTo(uint64(2)))
 func (validator *ValidatorUint64P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -474,10 +772,11 @@ func (validator *ValidatorUint64P[T]) LessOrEqualTo(value T, template ...string)
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the uint64 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Uint64(3).Between(2,6))
+//	n := uint64(3)
+//	Is(v.Uint64P(&n).Between(uint64(2),uint64(6)))
 func (validator *ValidatorUint64P[T]) Between(min T, max T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -490,6 +789,12 @@ func (validator *ValidatorUint64P[T]) Between(min T, max T, template ...string) 
 	return validator
 }
 
+// Validate if the uint64 pointer value is zero.
+//
+// For example:
+//
+//	n := uint64(0)
+//	Is(v.Uint64P(&n).Zero())
 func (validator *ValidatorUint64P[T]) Zero(template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -500,6 +805,12 @@ func (validator *ValidatorUint64P[T]) Zero(template ...string) *ValidatorUint64P
 	return validator
 }
 
+// Validate if the uint64 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *uint64
+//	Is(v.Uint64P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorUint64P[T]) ZeroOrNil(template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -510,6 +821,12 @@ func (validator *ValidatorUint64P[T]) ZeroOrNil(template ...string) *ValidatorUi
 	return validator
 }
 
+// Validate if the uint64 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *uint64
+//	Is(v.Uint64P(quantity).Nil()) // Will be true
 func (validator *ValidatorUint64P[T]) Nil(template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -520,6 +837,13 @@ func (validator *ValidatorUint64P[T]) Nil(template ...string) *ValidatorUint64P[
 	return validator
 }
 
+// Validate if the uint64 pointer value passes a custom function.
+// For example:
+//
+//	quantity := uint64(2)
+//	Is(v.Uint64P(&quantity).Passing((v *uint64) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorUint64P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -530,6 +854,12 @@ func (validator *ValidatorUint64P[T]) Passing(function func(v *T) bool, template
 	return validator
 }
 
+// Validate if the uint64 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := uint64(3)
+//	validQuantities := []uint64{1,3,5}
+//	Is(v.Uint64P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorUint64P[T]) InSlice(slice []T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -540,26 +870,51 @@ func (validator *ValidatorUint64P[T]) InSlice(slice []T, template ...string) *Va
 	return validator
 }
 
-func (validator *ValidatorUint64P[T]) Not() *ValidatorUint64P[T] {
+
+
+// The int pointer validator type that keeps its validator context.
+type ValidatorIntP[T ~int] struct {
+	context *ValidatorContext
+}
+
+// Receives the int pointer to validate.
+//
+// The value also can be a custom int type such as `type Level *int;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func IntP[T ~int](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
+	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorIntP[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := int(0)
+//	Is(v.IntP(&n).Not().Zero()).Valid()
+func (validator *ValidatorIntP[T]) Not() *ValidatorIntP[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorIntP[T ~int] struct {
-	context *ValidatorContext
-}
-
-func IntP[T ~int](value *T, nameAndTitle ...string) *ValidatorIntP[T] {
-	return &ValidatorIntP[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorIntP[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the int pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := int(2)
+//	Is(v.IntP(quantity).Equal(int(2)))
 func (validator *ValidatorIntP[T]) EqualTo(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -570,6 +925,12 @@ func (validator *ValidatorIntP[T]) EqualTo(value T, template ...string) *Validat
 	return validator
 }
 
+// Validate if the int pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := int(3)
+//	Is(v.IntP(&quantity).GreaterThan(int(2)))
 func (validator *ValidatorIntP[T]) GreaterThan(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -580,6 +941,12 @@ func (validator *ValidatorIntP[T]) GreaterThan(value T, template ...string) *Val
 	return validator
 }
 
+// Validate if the int pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := int(3)
+//	Is(v.IntP(&quantity).GreaterOrEqualTo(int(3)))
 func (validator *ValidatorIntP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -590,6 +957,12 @@ func (validator *ValidatorIntP[T]) GreaterOrEqualTo(value T, template ...string)
 	return validator
 }
 
+// Validate if the int pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := int(2)
+//	Is(v.IntP(&quantity).LessThan(int(3)))
 func (validator *ValidatorIntP[T]) LessThan(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -600,6 +973,12 @@ func (validator *ValidatorIntP[T]) LessThan(value T, template ...string) *Valida
 	return validator
 }
 
+// Validate if the int pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := int(2)
+//	Is(v.IntP(&quantity).LessOrEqualTo(int(2)))
 func (validator *ValidatorIntP[T]) LessOrEqualTo(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -610,10 +989,11 @@ func (validator *ValidatorIntP[T]) LessOrEqualTo(value T, template ...string) *V
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the int pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Int(3).Between(2,6))
+//	n := int(3)
+//	Is(v.IntP(&n).Between(int(2),int(6)))
 func (validator *ValidatorIntP[T]) Between(min T, max T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -626,6 +1006,12 @@ func (validator *ValidatorIntP[T]) Between(min T, max T, template ...string) *Va
 	return validator
 }
 
+// Validate if the int pointer value is zero.
+//
+// For example:
+//
+//	n := int(0)
+//	Is(v.IntP(&n).Zero())
 func (validator *ValidatorIntP[T]) Zero(template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
@@ -636,6 +1022,12 @@ func (validator *ValidatorIntP[T]) Zero(template ...string) *ValidatorIntP[T] {
 	return validator
 }
 
+// Validate if the int pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *int
+//	Is(v.IntP(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorIntP[T]) ZeroOrNil(template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
@@ -646,6 +1038,12 @@ func (validator *ValidatorIntP[T]) ZeroOrNil(template ...string) *ValidatorIntP[
 	return validator
 }
 
+// Validate if the int pointer value is nil.
+//
+// For example:
+//
+//	var quantity *int
+//	Is(v.IntP(quantity).Nil()) // Will be true
 func (validator *ValidatorIntP[T]) Nil(template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
@@ -656,6 +1054,13 @@ func (validator *ValidatorIntP[T]) Nil(template ...string) *ValidatorIntP[T] {
 	return validator
 }
 
+// Validate if the int pointer value passes a custom function.
+// For example:
+//
+//	quantity := int(2)
+//	Is(v.IntP(&quantity).Passing((v *int) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorIntP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
@@ -666,6 +1071,12 @@ func (validator *ValidatorIntP[T]) Passing(function func(v *T) bool, template ..
 	return validator
 }
 
+// Validate if the int pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := int(3)
+//	validQuantities := []int{1,3,5}
+//	Is(v.IntP(&quantity).InSlice(validQuantities))
 func (validator *ValidatorIntP[T]) InSlice(slice []T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -676,26 +1087,51 @@ func (validator *ValidatorIntP[T]) InSlice(slice []T, template ...string) *Valid
 	return validator
 }
 
-func (validator *ValidatorIntP[T]) Not() *ValidatorIntP[T] {
+
+
+// The int8 pointer validator type that keeps its validator context.
+type ValidatorInt8P[T ~int8] struct {
+	context *ValidatorContext
+}
+
+// Receives the int8 pointer to validate.
+//
+// The value also can be a custom int8 type such as `type Level *int8;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Int8P[T ~int8](value *T, nameAndTitle ...string) *ValidatorInt8P[T] {
+	return &ValidatorInt8P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorInt8P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := int8(0)
+//	Is(v.Int8P(&n).Not().Zero()).Valid()
+func (validator *ValidatorInt8P[T]) Not() *ValidatorInt8P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorInt8P[T ~int8] struct {
-	context *ValidatorContext
-}
-
-func Int8P[T ~int8](value *T, nameAndTitle ...string) *ValidatorInt8P[T] {
-	return &ValidatorInt8P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorInt8P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the int8 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := int8(2)
+//	Is(v.Int8P(quantity).Equal(int8(2)))
 func (validator *ValidatorInt8P[T]) EqualTo(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -706,6 +1142,12 @@ func (validator *ValidatorInt8P[T]) EqualTo(value T, template ...string) *Valida
 	return validator
 }
 
+// Validate if the int8 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := int8(3)
+//	Is(v.Int8P(&quantity).GreaterThan(int8(2)))
 func (validator *ValidatorInt8P[T]) GreaterThan(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -716,6 +1158,12 @@ func (validator *ValidatorInt8P[T]) GreaterThan(value T, template ...string) *Va
 	return validator
 }
 
+// Validate if the int8 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := int8(3)
+//	Is(v.Int8P(&quantity).GreaterOrEqualTo(int8(3)))
 func (validator *ValidatorInt8P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -726,6 +1174,12 @@ func (validator *ValidatorInt8P[T]) GreaterOrEqualTo(value T, template ...string
 	return validator
 }
 
+// Validate if the int8 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := int8(2)
+//	Is(v.Int8P(&quantity).LessThan(int8(3)))
 func (validator *ValidatorInt8P[T]) LessThan(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -736,6 +1190,12 @@ func (validator *ValidatorInt8P[T]) LessThan(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the int8 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := int8(2)
+//	Is(v.Int8P(&quantity).LessOrEqualTo(int8(2)))
 func (validator *ValidatorInt8P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -746,10 +1206,11 @@ func (validator *ValidatorInt8P[T]) LessOrEqualTo(value T, template ...string) *
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the int8 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Int8(3).Between(2,6))
+//	n := int8(3)
+//	Is(v.Int8P(&n).Between(int8(2),int8(6)))
 func (validator *ValidatorInt8P[T]) Between(min T, max T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -762,6 +1223,12 @@ func (validator *ValidatorInt8P[T]) Between(min T, max T, template ...string) *V
 	return validator
 }
 
+// Validate if the int8 pointer value is zero.
+//
+// For example:
+//
+//	n := int8(0)
+//	Is(v.Int8P(&n).Zero())
 func (validator *ValidatorInt8P[T]) Zero(template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -772,6 +1239,12 @@ func (validator *ValidatorInt8P[T]) Zero(template ...string) *ValidatorInt8P[T] 
 	return validator
 }
 
+// Validate if the int8 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *int8
+//	Is(v.Int8P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorInt8P[T]) ZeroOrNil(template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -782,6 +1255,12 @@ func (validator *ValidatorInt8P[T]) ZeroOrNil(template ...string) *ValidatorInt8
 	return validator
 }
 
+// Validate if the int8 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *int8
+//	Is(v.Int8P(quantity).Nil()) // Will be true
 func (validator *ValidatorInt8P[T]) Nil(template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -792,6 +1271,13 @@ func (validator *ValidatorInt8P[T]) Nil(template ...string) *ValidatorInt8P[T] {
 	return validator
 }
 
+// Validate if the int8 pointer value passes a custom function.
+// For example:
+//
+//	quantity := int8(2)
+//	Is(v.Int8P(&quantity).Passing((v *int8) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorInt8P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
@@ -802,6 +1288,12 @@ func (validator *ValidatorInt8P[T]) Passing(function func(v *T) bool, template .
 	return validator
 }
 
+// Validate if the int8 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := int8(3)
+//	validQuantities := []int8{1,3,5}
+//	Is(v.Int8P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorInt8P[T]) InSlice(slice []T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -812,26 +1304,51 @@ func (validator *ValidatorInt8P[T]) InSlice(slice []T, template ...string) *Vali
 	return validator
 }
 
-func (validator *ValidatorInt8P[T]) Not() *ValidatorInt8P[T] {
+
+
+// The int16 pointer validator type that keeps its validator context.
+type ValidatorInt16P[T ~int16] struct {
+	context *ValidatorContext
+}
+
+// Receives the int16 pointer to validate.
+//
+// The value also can be a custom int16 type such as `type Level *int16;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Int16P[T ~int16](value *T, nameAndTitle ...string) *ValidatorInt16P[T] {
+	return &ValidatorInt16P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorInt16P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := int16(0)
+//	Is(v.Int16P(&n).Not().Zero()).Valid()
+func (validator *ValidatorInt16P[T]) Not() *ValidatorInt16P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorInt16P[T ~int16] struct {
-	context *ValidatorContext
-}
-
-func Int16P[T ~int16](value *T, nameAndTitle ...string) *ValidatorInt16P[T] {
-	return &ValidatorInt16P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorInt16P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the int16 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := int16(2)
+//	Is(v.Int16P(quantity).Equal(int16(2)))
 func (validator *ValidatorInt16P[T]) EqualTo(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -842,6 +1359,12 @@ func (validator *ValidatorInt16P[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the int16 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := int16(3)
+//	Is(v.Int16P(&quantity).GreaterThan(int16(2)))
 func (validator *ValidatorInt16P[T]) GreaterThan(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -852,6 +1375,12 @@ func (validator *ValidatorInt16P[T]) GreaterThan(value T, template ...string) *V
 	return validator
 }
 
+// Validate if the int16 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := int16(3)
+//	Is(v.Int16P(&quantity).GreaterOrEqualTo(int16(3)))
 func (validator *ValidatorInt16P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -862,6 +1391,12 @@ func (validator *ValidatorInt16P[T]) GreaterOrEqualTo(value T, template ...strin
 	return validator
 }
 
+// Validate if the int16 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := int16(2)
+//	Is(v.Int16P(&quantity).LessThan(int16(3)))
 func (validator *ValidatorInt16P[T]) LessThan(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -872,6 +1407,12 @@ func (validator *ValidatorInt16P[T]) LessThan(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the int16 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := int16(2)
+//	Is(v.Int16P(&quantity).LessOrEqualTo(int16(2)))
 func (validator *ValidatorInt16P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -882,10 +1423,11 @@ func (validator *ValidatorInt16P[T]) LessOrEqualTo(value T, template ...string) 
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the int16 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Int16(3).Between(2,6))
+//	n := int16(3)
+//	Is(v.Int16P(&n).Between(int16(2),int16(6)))
 func (validator *ValidatorInt16P[T]) Between(min T, max T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -898,6 +1440,12 @@ func (validator *ValidatorInt16P[T]) Between(min T, max T, template ...string) *
 	return validator
 }
 
+// Validate if the int16 pointer value is zero.
+//
+// For example:
+//
+//	n := int16(0)
+//	Is(v.Int16P(&n).Zero())
 func (validator *ValidatorInt16P[T]) Zero(template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -908,6 +1456,12 @@ func (validator *ValidatorInt16P[T]) Zero(template ...string) *ValidatorInt16P[T
 	return validator
 }
 
+// Validate if the int16 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *int16
+//	Is(v.Int16P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorInt16P[T]) ZeroOrNil(template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -918,6 +1472,12 @@ func (validator *ValidatorInt16P[T]) ZeroOrNil(template ...string) *ValidatorInt
 	return validator
 }
 
+// Validate if the int16 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *int16
+//	Is(v.Int16P(quantity).Nil()) // Will be true
 func (validator *ValidatorInt16P[T]) Nil(template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -928,6 +1488,13 @@ func (validator *ValidatorInt16P[T]) Nil(template ...string) *ValidatorInt16P[T]
 	return validator
 }
 
+// Validate if the int16 pointer value passes a custom function.
+// For example:
+//
+//	quantity := int16(2)
+//	Is(v.Int16P(&quantity).Passing((v *int16) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorInt16P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
@@ -938,6 +1505,12 @@ func (validator *ValidatorInt16P[T]) Passing(function func(v *T) bool, template 
 	return validator
 }
 
+// Validate if the int16 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := int16(3)
+//	validQuantities := []int16{1,3,5}
+//	Is(v.Int16P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorInt16P[T]) InSlice(slice []T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -948,26 +1521,51 @@ func (validator *ValidatorInt16P[T]) InSlice(slice []T, template ...string) *Val
 	return validator
 }
 
-func (validator *ValidatorInt16P[T]) Not() *ValidatorInt16P[T] {
+
+
+// The int32 pointer validator type that keeps its validator context.
+type ValidatorInt32P[T ~int32] struct {
+	context *ValidatorContext
+}
+
+// Receives the int32 pointer to validate.
+//
+// The value also can be a custom int32 type such as `type Level *int32;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Int32P[T ~int32](value *T, nameAndTitle ...string) *ValidatorInt32P[T] {
+	return &ValidatorInt32P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorInt32P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := int32(0)
+//	Is(v.Int32P(&n).Not().Zero()).Valid()
+func (validator *ValidatorInt32P[T]) Not() *ValidatorInt32P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorInt32P[T ~int32] struct {
-	context *ValidatorContext
-}
-
-func Int32P[T ~int32](value *T, nameAndTitle ...string) *ValidatorInt32P[T] {
-	return &ValidatorInt32P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorInt32P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the int32 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := int32(2)
+//	Is(v.Int32P(quantity).Equal(int32(2)))
 func (validator *ValidatorInt32P[T]) EqualTo(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -978,6 +1576,12 @@ func (validator *ValidatorInt32P[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the int32 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := int32(3)
+//	Is(v.Int32P(&quantity).GreaterThan(int32(2)))
 func (validator *ValidatorInt32P[T]) GreaterThan(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -988,6 +1592,12 @@ func (validator *ValidatorInt32P[T]) GreaterThan(value T, template ...string) *V
 	return validator
 }
 
+// Validate if the int32 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := int32(3)
+//	Is(v.Int32P(&quantity).GreaterOrEqualTo(int32(3)))
 func (validator *ValidatorInt32P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -998,6 +1608,12 @@ func (validator *ValidatorInt32P[T]) GreaterOrEqualTo(value T, template ...strin
 	return validator
 }
 
+// Validate if the int32 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := int32(2)
+//	Is(v.Int32P(&quantity).LessThan(int32(3)))
 func (validator *ValidatorInt32P[T]) LessThan(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1008,6 +1624,12 @@ func (validator *ValidatorInt32P[T]) LessThan(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the int32 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := int32(2)
+//	Is(v.Int32P(&quantity).LessOrEqualTo(int32(2)))
 func (validator *ValidatorInt32P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1018,10 +1640,11 @@ func (validator *ValidatorInt32P[T]) LessOrEqualTo(value T, template ...string) 
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the int32 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Int32(3).Between(2,6))
+//	n := int32(3)
+//	Is(v.Int32P(&n).Between(int32(2),int32(6)))
 func (validator *ValidatorInt32P[T]) Between(min T, max T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -1034,6 +1657,12 @@ func (validator *ValidatorInt32P[T]) Between(min T, max T, template ...string) *
 	return validator
 }
 
+// Validate if the int32 pointer value is zero.
+//
+// For example:
+//
+//	n := int32(0)
+//	Is(v.Int32P(&n).Zero())
 func (validator *ValidatorInt32P[T]) Zero(template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1044,6 +1673,12 @@ func (validator *ValidatorInt32P[T]) Zero(template ...string) *ValidatorInt32P[T
 	return validator
 }
 
+// Validate if the int32 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *int32
+//	Is(v.Int32P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorInt32P[T]) ZeroOrNil(template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1054,6 +1689,12 @@ func (validator *ValidatorInt32P[T]) ZeroOrNil(template ...string) *ValidatorInt
 	return validator
 }
 
+// Validate if the int32 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *int32
+//	Is(v.Int32P(quantity).Nil()) // Will be true
 func (validator *ValidatorInt32P[T]) Nil(template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1064,6 +1705,13 @@ func (validator *ValidatorInt32P[T]) Nil(template ...string) *ValidatorInt32P[T]
 	return validator
 }
 
+// Validate if the int32 pointer value passes a custom function.
+// For example:
+//
+//	quantity := int32(2)
+//	Is(v.Int32P(&quantity).Passing((v *int32) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorInt32P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1074,6 +1722,12 @@ func (validator *ValidatorInt32P[T]) Passing(function func(v *T) bool, template 
 	return validator
 }
 
+// Validate if the int32 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := int32(3)
+//	validQuantities := []int32{1,3,5}
+//	Is(v.Int32P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorInt32P[T]) InSlice(slice []T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1084,26 +1738,51 @@ func (validator *ValidatorInt32P[T]) InSlice(slice []T, template ...string) *Val
 	return validator
 }
 
-func (validator *ValidatorInt32P[T]) Not() *ValidatorInt32P[T] {
+
+
+// The int64 pointer validator type that keeps its validator context.
+type ValidatorInt64P[T ~int64] struct {
+	context *ValidatorContext
+}
+
+// Receives the int64 pointer to validate.
+//
+// The value also can be a custom int64 type such as `type Level *int64;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Int64P[T ~int64](value *T, nameAndTitle ...string) *ValidatorInt64P[T] {
+	return &ValidatorInt64P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorInt64P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := int64(0)
+//	Is(v.Int64P(&n).Not().Zero()).Valid()
+func (validator *ValidatorInt64P[T]) Not() *ValidatorInt64P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorInt64P[T ~int64] struct {
-	context *ValidatorContext
-}
-
-func Int64P[T ~int64](value *T, nameAndTitle ...string) *ValidatorInt64P[T] {
-	return &ValidatorInt64P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorInt64P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the int64 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := int64(2)
+//	Is(v.Int64P(quantity).Equal(int64(2)))
 func (validator *ValidatorInt64P[T]) EqualTo(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1114,6 +1793,12 @@ func (validator *ValidatorInt64P[T]) EqualTo(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the int64 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := int64(3)
+//	Is(v.Int64P(&quantity).GreaterThan(int64(2)))
 func (validator *ValidatorInt64P[T]) GreaterThan(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1124,6 +1809,12 @@ func (validator *ValidatorInt64P[T]) GreaterThan(value T, template ...string) *V
 	return validator
 }
 
+// Validate if the int64 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := int64(3)
+//	Is(v.Int64P(&quantity).GreaterOrEqualTo(int64(3)))
 func (validator *ValidatorInt64P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1134,6 +1825,12 @@ func (validator *ValidatorInt64P[T]) GreaterOrEqualTo(value T, template ...strin
 	return validator
 }
 
+// Validate if the int64 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := int64(2)
+//	Is(v.Int64P(&quantity).LessThan(int64(3)))
 func (validator *ValidatorInt64P[T]) LessThan(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1144,6 +1841,12 @@ func (validator *ValidatorInt64P[T]) LessThan(value T, template ...string) *Vali
 	return validator
 }
 
+// Validate if the int64 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := int64(2)
+//	Is(v.Int64P(&quantity).LessOrEqualTo(int64(2)))
 func (validator *ValidatorInt64P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1154,10 +1857,11 @@ func (validator *ValidatorInt64P[T]) LessOrEqualTo(value T, template ...string) 
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the int64 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Int64(3).Between(2,6))
+//	n := int64(3)
+//	Is(v.Int64P(&n).Between(int64(2),int64(6)))
 func (validator *ValidatorInt64P[T]) Between(min T, max T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -1170,6 +1874,12 @@ func (validator *ValidatorInt64P[T]) Between(min T, max T, template ...string) *
 	return validator
 }
 
+// Validate if the int64 pointer value is zero.
+//
+// For example:
+//
+//	n := int64(0)
+//	Is(v.Int64P(&n).Zero())
 func (validator *ValidatorInt64P[T]) Zero(template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1180,6 +1890,12 @@ func (validator *ValidatorInt64P[T]) Zero(template ...string) *ValidatorInt64P[T
 	return validator
 }
 
+// Validate if the int64 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *int64
+//	Is(v.Int64P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorInt64P[T]) ZeroOrNil(template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1190,6 +1906,12 @@ func (validator *ValidatorInt64P[T]) ZeroOrNil(template ...string) *ValidatorInt
 	return validator
 }
 
+// Validate if the int64 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *int64
+//	Is(v.Int64P(quantity).Nil()) // Will be true
 func (validator *ValidatorInt64P[T]) Nil(template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1200,6 +1922,13 @@ func (validator *ValidatorInt64P[T]) Nil(template ...string) *ValidatorInt64P[T]
 	return validator
 }
 
+// Validate if the int64 pointer value passes a custom function.
+// For example:
+//
+//	quantity := int64(2)
+//	Is(v.Int64P(&quantity).Passing((v *int64) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorInt64P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1210,6 +1939,12 @@ func (validator *ValidatorInt64P[T]) Passing(function func(v *T) bool, template 
 	return validator
 }
 
+// Validate if the int64 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := int64(3)
+//	validQuantities := []int64{1,3,5}
+//	Is(v.Int64P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorInt64P[T]) InSlice(slice []T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1220,26 +1955,51 @@ func (validator *ValidatorInt64P[T]) InSlice(slice []T, template ...string) *Val
 	return validator
 }
 
-func (validator *ValidatorInt64P[T]) Not() *ValidatorInt64P[T] {
+
+
+// The float32 pointer validator type that keeps its validator context.
+type ValidatorFloat32P[T ~float32] struct {
+	context *ValidatorContext
+}
+
+// Receives the float32 pointer to validate.
+//
+// The value also can be a custom float32 type such as `type Level *float32;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Float32P[T ~float32](value *T, nameAndTitle ...string) *ValidatorFloat32P[T] {
+	return &ValidatorFloat32P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorFloat32P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := float32(0)
+//	Is(v.Float32P(&n).Not().Zero()).Valid()
+func (validator *ValidatorFloat32P[T]) Not() *ValidatorFloat32P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorFloat32P[T ~float32] struct {
-	context *ValidatorContext
-}
-
-func Float32P[T ~float32](value *T, nameAndTitle ...string) *ValidatorFloat32P[T] {
-	return &ValidatorFloat32P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorFloat32P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the float32 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := float32(2)
+//	Is(v.Float32P(quantity).Equal(float32(2)))
 func (validator *ValidatorFloat32P[T]) EqualTo(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1250,6 +2010,12 @@ func (validator *ValidatorFloat32P[T]) EqualTo(value T, template ...string) *Val
 	return validator
 }
 
+// Validate if the float32 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := float32(3)
+//	Is(v.Float32P(&quantity).GreaterThan(float32(2)))
 func (validator *ValidatorFloat32P[T]) GreaterThan(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1260,6 +2026,12 @@ func (validator *ValidatorFloat32P[T]) GreaterThan(value T, template ...string) 
 	return validator
 }
 
+// Validate if the float32 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := float32(3)
+//	Is(v.Float32P(&quantity).GreaterOrEqualTo(float32(3)))
 func (validator *ValidatorFloat32P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1270,6 +2042,12 @@ func (validator *ValidatorFloat32P[T]) GreaterOrEqualTo(value T, template ...str
 	return validator
 }
 
+// Validate if the float32 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := float32(2)
+//	Is(v.Float32P(&quantity).LessThan(float32(3)))
 func (validator *ValidatorFloat32P[T]) LessThan(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1280,6 +2058,12 @@ func (validator *ValidatorFloat32P[T]) LessThan(value T, template ...string) *Va
 	return validator
 }
 
+// Validate if the float32 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := float32(2)
+//	Is(v.Float32P(&quantity).LessOrEqualTo(float32(2)))
 func (validator *ValidatorFloat32P[T]) LessOrEqualTo(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1290,10 +2074,11 @@ func (validator *ValidatorFloat32P[T]) LessOrEqualTo(value T, template ...string
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the float32 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Float32(3).Between(2,6))
+//	n := float32(3)
+//	Is(v.Float32P(&n).Between(float32(2),float32(6)))
 func (validator *ValidatorFloat32P[T]) Between(min T, max T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -1306,6 +2091,12 @@ func (validator *ValidatorFloat32P[T]) Between(min T, max T, template ...string)
 	return validator
 }
 
+// Validate if the float32 pointer value is zero.
+//
+// For example:
+//
+//	n := float32(0)
+//	Is(v.Float32P(&n).Zero())
 func (validator *ValidatorFloat32P[T]) Zero(template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1316,6 +2107,12 @@ func (validator *ValidatorFloat32P[T]) Zero(template ...string) *ValidatorFloat3
 	return validator
 }
 
+// Validate if the float32 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *float32
+//	Is(v.Float32P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorFloat32P[T]) ZeroOrNil(template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1326,6 +2123,12 @@ func (validator *ValidatorFloat32P[T]) ZeroOrNil(template ...string) *ValidatorF
 	return validator
 }
 
+// Validate if the float32 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *float32
+//	Is(v.Float32P(quantity).Nil()) // Will be true
 func (validator *ValidatorFloat32P[T]) Nil(template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1336,6 +2139,13 @@ func (validator *ValidatorFloat32P[T]) Nil(template ...string) *ValidatorFloat32
 	return validator
 }
 
+// Validate if the float32 pointer value passes a custom function.
+// For example:
+//
+//	quantity := float32(2)
+//	Is(v.Float32P(&quantity).Passing((v *float32) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorFloat32P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1346,6 +2156,12 @@ func (validator *ValidatorFloat32P[T]) Passing(function func(v *T) bool, templat
 	return validator
 }
 
+// Validate if the float32 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := float32(3)
+//	validQuantities := []float32{1,3,5}
+//	Is(v.Float32P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorFloat32P[T]) InSlice(slice []T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1356,26 +2172,51 @@ func (validator *ValidatorFloat32P[T]) InSlice(slice []T, template ...string) *V
 	return validator
 }
 
-func (validator *ValidatorFloat32P[T]) Not() *ValidatorFloat32P[T] {
+
+
+// The float64 pointer validator type that keeps its validator context.
+type ValidatorFloat64P[T ~float64] struct {
+	context *ValidatorContext
+}
+
+// Receives the float64 pointer to validate.
+//
+// The value also can be a custom float64 type such as `type Level *float64;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func Float64P[T ~float64](value *T, nameAndTitle ...string) *ValidatorFloat64P[T] {
+	return &ValidatorFloat64P[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorFloat64P[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := float64(0)
+//	Is(v.Float64P(&n).Not().Zero()).Valid()
+func (validator *ValidatorFloat64P[T]) Not() *ValidatorFloat64P[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorFloat64P[T ~float64] struct {
-	context *ValidatorContext
-}
-
-func Float64P[T ~float64](value *T, nameAndTitle ...string) *ValidatorFloat64P[T] {
-	return &ValidatorFloat64P[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorFloat64P[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the float64 pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := float64(2)
+//	Is(v.Float64P(quantity).Equal(float64(2)))
 func (validator *ValidatorFloat64P[T]) EqualTo(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1386,6 +2227,12 @@ func (validator *ValidatorFloat64P[T]) EqualTo(value T, template ...string) *Val
 	return validator
 }
 
+// Validate if the float64 pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := float64(3)
+//	Is(v.Float64P(&quantity).GreaterThan(float64(2)))
 func (validator *ValidatorFloat64P[T]) GreaterThan(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1396,6 +2243,12 @@ func (validator *ValidatorFloat64P[T]) GreaterThan(value T, template ...string) 
 	return validator
 }
 
+// Validate if the float64 pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := float64(3)
+//	Is(v.Float64P(&quantity).GreaterOrEqualTo(float64(3)))
 func (validator *ValidatorFloat64P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1406,6 +2259,12 @@ func (validator *ValidatorFloat64P[T]) GreaterOrEqualTo(value T, template ...str
 	return validator
 }
 
+// Validate if the float64 pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := float64(2)
+//	Is(v.Float64P(&quantity).LessThan(float64(3)))
 func (validator *ValidatorFloat64P[T]) LessThan(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1416,6 +2275,12 @@ func (validator *ValidatorFloat64P[T]) LessThan(value T, template ...string) *Va
 	return validator
 }
 
+// Validate if the float64 pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := float64(2)
+//	Is(v.Float64P(&quantity).LessOrEqualTo(float64(2)))
 func (validator *ValidatorFloat64P[T]) LessOrEqualTo(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1426,10 +2291,11 @@ func (validator *ValidatorFloat64P[T]) LessOrEqualTo(value T, template ...string
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the float64 pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Float64(3).Between(2,6))
+//	n := float64(3)
+//	Is(v.Float64P(&n).Between(float64(2),float64(6)))
 func (validator *ValidatorFloat64P[T]) Between(min T, max T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -1442,6 +2308,12 @@ func (validator *ValidatorFloat64P[T]) Between(min T, max T, template ...string)
 	return validator
 }
 
+// Validate if the float64 pointer value is zero.
+//
+// For example:
+//
+//	n := float64(0)
+//	Is(v.Float64P(&n).Zero())
 func (validator *ValidatorFloat64P[T]) Zero(template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1452,6 +2324,12 @@ func (validator *ValidatorFloat64P[T]) Zero(template ...string) *ValidatorFloat6
 	return validator
 }
 
+// Validate if the float64 pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *float64
+//	Is(v.Float64P(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorFloat64P[T]) ZeroOrNil(template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1462,6 +2340,12 @@ func (validator *ValidatorFloat64P[T]) ZeroOrNil(template ...string) *ValidatorF
 	return validator
 }
 
+// Validate if the float64 pointer value is nil.
+//
+// For example:
+//
+//	var quantity *float64
+//	Is(v.Float64P(quantity).Nil()) // Will be true
 func (validator *ValidatorFloat64P[T]) Nil(template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1472,6 +2356,13 @@ func (validator *ValidatorFloat64P[T]) Nil(template ...string) *ValidatorFloat64
 	return validator
 }
 
+// Validate if the float64 pointer value passes a custom function.
+// For example:
+//
+//	quantity := float64(2)
+//	Is(v.Float64P(&quantity).Passing((v *float64) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorFloat64P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
@@ -1482,6 +2373,12 @@ func (validator *ValidatorFloat64P[T]) Passing(function func(v *T) bool, templat
 	return validator
 }
 
+// Validate if the float64 pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := float64(3)
+//	validQuantities := []float64{1,3,5}
+//	Is(v.Float64P(&quantity).InSlice(validQuantities))
 func (validator *ValidatorFloat64P[T]) InSlice(slice []T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1492,26 +2389,51 @@ func (validator *ValidatorFloat64P[T]) InSlice(slice []T, template ...string) *V
 	return validator
 }
 
-func (validator *ValidatorFloat64P[T]) Not() *ValidatorFloat64P[T] {
+
+
+// The byte pointer validator type that keeps its validator context.
+type ValidatorByteP[T ~byte] struct {
+	context *ValidatorContext
+}
+
+// Receives the byte pointer to validate.
+//
+// The value also can be a custom byte type such as `type Level *byte;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func ByteP[T ~byte](value *T, nameAndTitle ...string) *ValidatorByteP[T] {
+	return &ValidatorByteP[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorByteP[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := byte(0)
+//	Is(v.ByteP(&n).Not().Zero()).Valid()
+func (validator *ValidatorByteP[T]) Not() *ValidatorByteP[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorByteP[T ~byte] struct {
-	context *ValidatorContext
-}
-
-func ByteP[T ~byte](value *T, nameAndTitle ...string) *ValidatorByteP[T] {
-	return &ValidatorByteP[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorByteP[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the byte pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := byte(2)
+//	Is(v.ByteP(quantity).Equal(byte(2)))
 func (validator *ValidatorByteP[T]) EqualTo(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1522,6 +2444,12 @@ func (validator *ValidatorByteP[T]) EqualTo(value T, template ...string) *Valida
 	return validator
 }
 
+// Validate if the byte pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := byte(3)
+//	Is(v.ByteP(&quantity).GreaterThan(byte(2)))
 func (validator *ValidatorByteP[T]) GreaterThan(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1532,6 +2460,12 @@ func (validator *ValidatorByteP[T]) GreaterThan(value T, template ...string) *Va
 	return validator
 }
 
+// Validate if the byte pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := byte(3)
+//	Is(v.ByteP(&quantity).GreaterOrEqualTo(byte(3)))
 func (validator *ValidatorByteP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1542,6 +2476,12 @@ func (validator *ValidatorByteP[T]) GreaterOrEqualTo(value T, template ...string
 	return validator
 }
 
+// Validate if the byte pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := byte(2)
+//	Is(v.ByteP(&quantity).LessThan(byte(3)))
 func (validator *ValidatorByteP[T]) LessThan(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1552,6 +2492,12 @@ func (validator *ValidatorByteP[T]) LessThan(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the byte pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := byte(2)
+//	Is(v.ByteP(&quantity).LessOrEqualTo(byte(2)))
 func (validator *ValidatorByteP[T]) LessOrEqualTo(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1562,10 +2508,11 @@ func (validator *ValidatorByteP[T]) LessOrEqualTo(value T, template ...string) *
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the byte pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Byte(3).Between(2,6))
+//	n := byte(3)
+//	Is(v.ByteP(&n).Between(byte(2),byte(6)))
 func (validator *ValidatorByteP[T]) Between(min T, max T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -1578,6 +2525,12 @@ func (validator *ValidatorByteP[T]) Between(min T, max T, template ...string) *V
 	return validator
 }
 
+// Validate if the byte pointer value is zero.
+//
+// For example:
+//
+//	n := byte(0)
+//	Is(v.ByteP(&n).Zero())
 func (validator *ValidatorByteP[T]) Zero(template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1588,6 +2541,12 @@ func (validator *ValidatorByteP[T]) Zero(template ...string) *ValidatorByteP[T] 
 	return validator
 }
 
+// Validate if the byte pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *byte
+//	Is(v.ByteP(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorByteP[T]) ZeroOrNil(template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1598,6 +2557,12 @@ func (validator *ValidatorByteP[T]) ZeroOrNil(template ...string) *ValidatorByte
 	return validator
 }
 
+// Validate if the byte pointer value is nil.
+//
+// For example:
+//
+//	var quantity *byte
+//	Is(v.ByteP(quantity).Nil()) // Will be true
 func (validator *ValidatorByteP[T]) Nil(template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1608,6 +2573,13 @@ func (validator *ValidatorByteP[T]) Nil(template ...string) *ValidatorByteP[T] {
 	return validator
 }
 
+// Validate if the byte pointer value passes a custom function.
+// For example:
+//
+//	quantity := byte(2)
+//	Is(v.ByteP(&quantity).Passing((v *byte) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorByteP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1618,6 +2590,12 @@ func (validator *ValidatorByteP[T]) Passing(function func(v *T) bool, template .
 	return validator
 }
 
+// Validate if the byte pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := byte(3)
+//	validQuantities := []byte{1,3,5}
+//	Is(v.ByteP(&quantity).InSlice(validQuantities))
 func (validator *ValidatorByteP[T]) InSlice(slice []T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1628,26 +2606,51 @@ func (validator *ValidatorByteP[T]) InSlice(slice []T, template ...string) *Vali
 	return validator
 }
 
-func (validator *ValidatorByteP[T]) Not() *ValidatorByteP[T] {
+
+
+// The rune pointer validator type that keeps its validator context.
+type ValidatorRuneP[T ~rune] struct {
+	context *ValidatorContext
+}
+
+// Receives the rune pointer to validate.
+//
+// The value also can be a custom rune type such as `type Level *rune;`
+//
+// Optionally, the function can receive a name and title, in that order,
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
+// error messages if a name and title are not supplied; for example: value_0.
+// When the name is provided but not the title, then the name is humanized to be
+// used as the title as well; for example the name `phone_number` will be
+// humanized as `Phone Number`
+func RuneP[T ~rune](value *T, nameAndTitle ...string) *ValidatorRuneP[T] {
+	return &ValidatorRuneP[T]{context: NewContext(value, nameAndTitle...)}
+}
+
+// Return the context of the validator. The context is useful to create a custom
+// validator by extending this validator.
+func (validator *ValidatorRuneP[T]) Context() *ValidatorContext {
+	return validator.context
+}
+
+// Reverse the logical value associated with the next validation function.
+// For example:
+//
+//	// It will return false because Not() inverts to Zero()
+//	n := rune(0)
+//	Is(v.RuneP(&n).Not().Zero()).Valid()
+func (validator *ValidatorRuneP[T]) Not() *ValidatorRuneP[T] {
 	validator.context.Not()
 
 	return validator
 }
 
-
-
-type ValidatorRuneP[T ~rune] struct {
-	context *ValidatorContext
-}
-
-func RuneP[T ~rune](value *T, nameAndTitle ...string) *ValidatorRuneP[T] {
-	return &ValidatorRuneP[T]{context: NewContext(value, nameAndTitle...)}
-}
-
-func (validator *ValidatorRuneP[T]) Context() *ValidatorContext {
-	return validator.context
-}
-
+// Validate if the rune pointer value is equal to another value. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := rune(2)
+//	Is(v.RuneP(quantity).Equal(rune(2)))
 func (validator *ValidatorRuneP[T]) EqualTo(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1658,6 +2661,12 @@ func (validator *ValidatorRuneP[T]) EqualTo(value T, template ...string) *Valida
 	return validator
 }
 
+// Validate if the rune pointer value is greater than another value. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := rune(3)
+//	Is(v.RuneP(&quantity).GreaterThan(rune(2)))
 func (validator *ValidatorRuneP[T]) GreaterThan(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1668,6 +2677,12 @@ func (validator *ValidatorRuneP[T]) GreaterThan(value T, template ...string) *Va
 	return validator
 }
 
+// Validate if the rune pointer value is greater than or equal to another value. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := rune(3)
+//	Is(v.RuneP(&quantity).GreaterOrEqualTo(rune(3)))
 func (validator *ValidatorRuneP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1678,6 +2693,12 @@ func (validator *ValidatorRuneP[T]) GreaterOrEqualTo(value T, template ...string
 	return validator
 }
 
+// Validate if the rune pointer value is less than another value. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := rune(2)
+//	Is(v.RuneP(&quantity).LessThan(rune(3)))
 func (validator *ValidatorRuneP[T]) LessThan(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1688,6 +2709,12 @@ func (validator *ValidatorRuneP[T]) LessThan(value T, template ...string) *Valid
 	return validator
 }
 
+// Validate if the rune pointer value is less than or equal to another value. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := rune(2)
+//	Is(v.RuneP(&quantity).LessOrEqualTo(rune(2)))
 func (validator *ValidatorRuneP[T]) LessOrEqualTo(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -1698,10 +2725,11 @@ func (validator *ValidatorRuneP[T]) LessOrEqualTo(value T, template ...string) *
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the value of the rune pointer is within a range (inclusive).
 // For example:
 //
-//	Is(v.Rune(3).Between(2,6))
+//	n := rune(3)
+//	Is(v.RuneP(&n).Between(rune(2),rune(6)))
 func (validator *ValidatorRuneP[T]) Between(min T, max T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -1714,6 +2742,12 @@ func (validator *ValidatorRuneP[T]) Between(min T, max T, template ...string) *V
 	return validator
 }
 
+// Validate if the rune pointer value is zero.
+//
+// For example:
+//
+//	n := rune(0)
+//	Is(v.RuneP(&n).Zero())
 func (validator *ValidatorRuneP[T]) Zero(template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1724,6 +2758,12 @@ func (validator *ValidatorRuneP[T]) Zero(template ...string) *ValidatorRuneP[T] 
 	return validator
 }
 
+// Validate if the rune pointer value is zero or nil.
+//
+// For example:
+//
+//	var _quantity *rune
+//	Is(v.RuneP(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorRuneP[T]) ZeroOrNil(template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1734,6 +2774,12 @@ func (validator *ValidatorRuneP[T]) ZeroOrNil(template ...string) *ValidatorRune
 	return validator
 }
 
+// Validate if the rune pointer value is nil.
+//
+// For example:
+//
+//	var quantity *rune
+//	Is(v.RuneP(quantity).Nil()) // Will be true
 func (validator *ValidatorRuneP[T]) Nil(template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1744,6 +2790,13 @@ func (validator *ValidatorRuneP[T]) Nil(template ...string) *ValidatorRuneP[T] {
 	return validator
 }
 
+// Validate if the rune pointer value passes a custom function.
+// For example:
+//
+//	quantity := rune(2)
+//	Is(v.RuneP(&quantity).Passing((v *rune) bool {
+//		return *v == getAllowedQuantity()
+//	})
 func (validator *ValidatorRuneP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
@@ -1754,18 +2807,18 @@ func (validator *ValidatorRuneP[T]) Passing(function func(v *T) bool, template .
 	return validator
 }
 
+// Validate if the rune pointer value is present in a numeric slice.
+// For example:
+//
+//	quantity := rune(3)
+//	validQuantities := []rune{1,3,5}
+//	Is(v.RuneP(&quantity).InSlice(validQuantities))
 func (validator *ValidatorRuneP[T]) InSlice(slice []T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isRuneInSlice(*(validator.context.Value().(*T)), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
-
-	return validator
-}
-
-func (validator *ValidatorRuneP[T]) Not() *ValidatorRuneP[T] {
-	validator.context.Not()
 
 	return validator
 }

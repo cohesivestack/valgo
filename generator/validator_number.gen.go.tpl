@@ -35,17 +35,17 @@ func is{{ .Name }}InSlice[T ~{{ .Type }}](v T, slice []T) bool {
 	return false
 }
 
+// The {{ .Type }} validator type that keeps its validator context.
 type Validator{{ .Name }}[T ~{{ .Type }}] struct {
 	context *ValidatorContext
 }
 
-// Receives a number value to validate.
+// Receives the {{ .Type }} value to validate.
 //
-// The value also can be any golang number type (int64, int32, float32, uint,
-// etc.) or a custom number type such as `type Level int32;`
+// The value also can be a custom {{ .Type }} type such as `type Level {{ .Type }};`
 //
 // Optionally, the function can receive a name and title, in that order,
-// to be used in the error messages. A `value_%N`` pattern is used as a name in
+// to be displayed in the error messages. A `value_%N`` pattern is used as a name in
 // error messages if a name and title are not supplied; for example: value_0.
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
@@ -55,18 +55,29 @@ func {{ .Name }}[T ~{{ .Type }}](value T, nameAndTitle ...string) *Validator{{ .
 	return &Validator{{ .Name }}[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// This function returns the context for the Valgo Validator session's
-// validator. The function should not be called unless you are creating a custom
+// Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *Validator{{ .Name }}[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated to the next validation function.
+// Reverse the logical value associated with the next validation function.
 // For example:
 //
 //	// It will return false because Not() inverts to Zero()
-//	Is(v.{{ .Name }}(0).Not().Zero()).Valid()
+//	Is(v.{{ .Name }}({{ .Type }}(0)).Not().Zero()).Valid()
+func (validator *Validator{{ .Name }}[T]) Not() *Validator{{ .Name }}[T] {
+	validator.context.Not()
+
+	return validator
+}
+
+// Validate if the {{ .Type }} value is equal to another. This function internally uses
+// the golang `==` operator.
+// For example:
+//
+//	quantity := {{ .Type }}(2)
+//	Is(v.{{ .Name }}(quantity).Equal({{ .Type }}(2)))
 func (validator *Validator{{ .Name }}[T]) EqualTo(value T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -77,6 +88,12 @@ func (validator *Validator{{ .Name }}[T]) EqualTo(value T, template ...string) *
 	return validator
 }
 
+// Validate if the {{ .Type }} value is greater than another. This function internally
+// uses the golang `>` operator.
+// For example:
+//
+//	quantity := {{ .Type }}(3)
+//	Is(v.{{ .Name }}(quantity).GreaterThan({{ .Type }}(2)))
 func (validator *Validator{{ .Name }}[T]) GreaterThan(value T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -87,6 +104,12 @@ func (validator *Validator{{ .Name }}[T]) GreaterThan(value T, template ...strin
 	return validator
 }
 
+// Validate if the {{ .Type }} value is greater than or equal to another. This function
+// internally uses the golang `>=` operator.
+// For example:
+//
+//	quantity := {{ .Type }}(3)
+//	Is(v.{{ .Name }}(quantity).GreaterOrEqualTo({{ .Type }}(3)))
 func (validator *Validator{{ .Name }}[T]) GreaterOrEqualTo(value T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -97,6 +120,12 @@ func (validator *Validator{{ .Name }}[T]) GreaterOrEqualTo(value T, template ...
 	return validator
 }
 
+// Validate if the {{ .Type }} value is less than another. This function internally
+// uses the golang `<` operator.
+// For example:
+//
+//	quantity := {{ .Type }}(2)
+//	Is(v.{{ .Name }}(quantity).LessThan({{ .Type }}(3)))
 func (validator *Validator{{ .Name }}[T]) LessThan(value T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -107,6 +136,12 @@ func (validator *Validator{{ .Name }}[T]) LessThan(value T, template ...string) 
 	return validator
 }
 
+// Validate if the {{ .Type }} value is less than or equal to another. This function
+// internally uses the golang `<=` operator.
+// For example:
+//
+//	quantity := {{ .Type }}(2)
+//	Is(v.{{ .Name }}(quantity).LessOrEqualTo({{ .Type }}(2)))
 func (validator *Validator{{ .Name }}[T]) LessOrEqualTo(value T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithValue(
 		func() bool {
@@ -117,10 +152,10 @@ func (validator *Validator{{ .Name }}[T]) LessOrEqualTo(value T, template ...str
 	return validator
 }
 
-// Validate if the value of a number is in a range (inclusive).
+// Validate if the {{ .Type }} is within a range (inclusive).
 // For example:
 //
-//	Is(v.{{ .Name }}(3).Between(2,6))
+//	Is(v.{{ .Name }}({{ .Type }}(3)).Between({{ .Type }}(2),{{ .Type }}(6)))
 func (validator *Validator{{ .Name }}[T]) Between(min T, max T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithParams(
 		func() bool {
@@ -133,6 +168,11 @@ func (validator *Validator{{ .Name }}[T]) Between(min T, max T, template ...stri
 	return validator
 }
 
+// Validate if the {{ .Type }} value is zero.
+//
+// For example:
+//
+//	Is(v.{{ .Name }}({{ .Type }}(0)).Zero())
 func (validator *Validator{{ .Name }}[T]) Zero(template ...string) *Validator{{ .Name }}[T] {
 	validator.context.Add(
 		func() bool {
@@ -143,6 +183,13 @@ func (validator *Validator{{ .Name }}[T]) Zero(template ...string) *Validator{{ 
 	return validator
 }
 
+// Validate if the {{ .Type }} value passes a custom function.
+// For example:
+//
+//	quantity := {{ .Type }}(2)
+//	Is(v.{{ .Name }}(quantity).Passing((v {{ .Type }}) bool {
+//		return v == getAllowedQuantity()
+//	})
 func (validator *Validator{{ .Name }}[T]) Passing(function func(v T) bool, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.Add(
 		func() bool {
@@ -153,18 +200,18 @@ func (validator *Validator{{ .Name }}[T]) Passing(function func(v T) bool, templ
 	return validator
 }
 
+// Validate if the {{ .Type }} value is present in the {{ .Type }} slice.
+// For example:
+//
+//	quantity := {{ .Type }}(3)
+//	validQuantities := []{{ .Type }}{1,3,5}
+//	Is(v.{{ .Name }}(quantity).InSlice(validQuantities))
 func (validator *Validator{{ .Name }}[T]) InSlice(slice []T, template ...string) *Validator{{ .Name }}[T] {
 	validator.context.AddWithValue(
 		func() bool {
 			return is{{ .Name }}InSlice(validator.context.Value().(T), slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
-
-	return validator
-}
-
-func (validator *Validator{{ .Name }}[T]) Not() *Validator{{ .Name }}[T] {
-	validator.context.Not()
 
 	return validator
 }

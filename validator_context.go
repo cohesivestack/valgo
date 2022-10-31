@@ -9,7 +9,7 @@ type validatorFragment struct {
 }
 
 // The context keeps the state and provides the functions to control a
-// validator.
+// custom validator.
 type ValidatorContext struct {
 	fragments     []*validatorFragment
 	value         any
@@ -18,6 +18,7 @@ type ValidatorContext struct {
 	boolOperation bool
 }
 
+// Create a new [ValidatorContext] to be used by a custom validator.
 func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 
 	context := &ValidatorContext{
@@ -39,11 +40,17 @@ func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 	return context
 }
 
+// Reverse the logical value associated with the next validator function in
+// a custom validator.
 func (ctx *ValidatorContext) Not() *ValidatorContext {
 	ctx.boolOperation = false
 	return ctx
 }
 
+// Add a function to a custom validator and pass a value used for the
+// validator function to be displayed in the error message.
+//
+// Use [AddWithParams()] if the error message requires more input values.
 func (ctx *ValidatorContext) AddWithValue(function func() bool, errorKey string, value any, template ...string) *ValidatorContext {
 	return ctx.AddWithParams(
 		function,
@@ -51,6 +58,7 @@ func (ctx *ValidatorContext) AddWithValue(function func() bool, errorKey string,
 		map[string]any{"title": ctx.title, "value": value}, template...)
 }
 
+// Add a function to a custom validator.
 func (ctx *ValidatorContext) Add(function func() bool, errorKey string, template ...string) *ValidatorContext {
 	return ctx.AddWithParams(
 		function,
@@ -58,6 +66,8 @@ func (ctx *ValidatorContext) Add(function func() bool, errorKey string, template
 		map[string]any{"title": ctx.title}, template...)
 }
 
+// Add a function to a custom validator and pass a map with values used for the
+// validator function to be displayed in the error message.
 func (ctx *ValidatorContext) AddWithParams(function func() bool, errorKey string, templateParams map[string]any, template ...string) *ValidatorContext {
 
 	fragment := &validatorFragment{
@@ -101,6 +111,7 @@ func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool)
 	return validation
 }
 
+// Return the value being validated in a custom validator.
 func (ctx *ValidatorContext) Value() any {
 	return ctx.value
 }

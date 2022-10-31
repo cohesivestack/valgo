@@ -11,7 +11,7 @@ import (
 {{ range . }}
 
 func TestValidator{{ .Name }}Not(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 
 	v := Is({{ .Name }}({{ .Type }}(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -19,7 +19,7 @@ func TestValidator{{ .Name }}Not(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}EqualToValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).EqualTo(2))
@@ -36,7 +36,7 @@ func TestValidator{{ .Name }}EqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidator{{ .Name }}EqualToInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(1)).EqualTo(2))
@@ -60,7 +60,7 @@ func TestValidator{{ .Name }}EqualToInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}GreaterThanValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(3)).GreaterThan(2))
@@ -78,7 +78,7 @@ func TestValidator{{ .Name }}GreaterThanValid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}GreaterThanInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).GreaterThan(2))
@@ -106,7 +106,7 @@ func TestValidator{{ .Name }}GreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}GreaterOrEqualToValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).GreaterOrEqualTo(2))
@@ -127,7 +127,7 @@ func TestValidator{{ .Name }}GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidator{{ .Name }}GreaterOrEqualToInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).GreaterOrEqualTo(3))
@@ -149,7 +149,7 @@ func TestValidator{{ .Name }}GreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}LessThanValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).LessThan(3))
@@ -166,7 +166,7 @@ func TestValidator{{ .Name }}LessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidator{{ .Name }}LessThanInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).LessThan(2))
@@ -194,7 +194,7 @@ func TestValidator{{ .Name }}LessThanInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}LessOrEqualToValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).LessOrEqualTo(2))
@@ -215,7 +215,7 @@ func TestValidator{{ .Name }}LessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidator{{ .Name }}LessOrEqualToInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(3)).LessOrEqualTo(2))
@@ -237,7 +237,7 @@ func TestValidator{{ .Name }}LessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}BetweenValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).Between(2, 6))
@@ -263,7 +263,7 @@ func TestValidator{{ .Name }}BetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidator{{ .Name }}BetweenInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(2)).Between(3, 6))
@@ -292,7 +292,7 @@ func TestValidator{{ .Name }}BetweenInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(0)).Zero())
@@ -308,7 +308,7 @@ func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidator{{ .Name }}EmptyInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 	var v *Validation
 
 	v = Is({{ .Name }}({{ .Type }}(1)).Zero())
@@ -329,7 +329,7 @@ func TestValidator{{ .Name }}EmptyInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}PassingValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 
 	var v *Validation
 
@@ -351,7 +351,7 @@ func TestValidator{{ .Name }}PassingValid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}PassingInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 
 	var v *Validation
 
@@ -377,7 +377,7 @@ func TestValidator{{ .Name }}PassingInvalid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}InSliceValid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 
 	var v *Validation
 
@@ -395,7 +395,7 @@ func TestValidator{{ .Name }}InSliceValid(t *testing.T) {
 }
 
 func TestValidator{{ .Name }}InSliceInvalid(t *testing.T) {
-	ResetMessages()
+	TeardownTest()
 
 	var v *Validation
 
