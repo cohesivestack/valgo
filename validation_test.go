@@ -249,3 +249,37 @@ func TestValidationInRowDeeply(t *testing.T) {
 		"Number can't be empty",
 		v.Errors()["addresses[1].phones[1].number"].Messages()[0])
 }
+
+func TestLastValidationIsNotAlteringPreviousOne(t *testing.T) {
+	TeardownTest()
+
+	// With validation
+	v := Is(String("up", "status").EqualTo("down")).
+		Is(String("Elon Musk", "name").Not().Blank())
+
+	assert.False(t, v.Valid())
+
+	assert.False(t, v.IsValid("status"))
+	assert.Equal(t,
+		"Status must be equal to \"down\"",
+		v.Errors()["status"].Messages()[0])
+
+	assert.True(t, v.IsValid("name"))
+	_, ok := v.Errors()["name"]
+	assert.False(t, ok)
+
+	// Adding error message
+	v = AddErrorMessage("status", "Something is wrong").
+		Is(String("Elon Musk", "name").Not().Blank())
+
+	assert.False(t, v.Valid())
+
+	assert.False(t, v.IsValid("status"))
+	assert.Equal(t,
+		"Something is wrong",
+		v.Errors()["status"].Messages()[0])
+
+	assert.True(t, v.IsValid("name"))
+	_, ok = v.Errors()["name"]
+	assert.False(t, ok)
+}

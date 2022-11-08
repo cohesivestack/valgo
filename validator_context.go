@@ -94,16 +94,16 @@ func (ctx *ValidatorContext) validateCheck(validation *Validation) *Validation {
 }
 
 func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool) *Validation {
-	validation.valid = true
+	valid := true
 	validation.currentIndex++
 
 	for i, fragment := range ctx.fragments {
-		if i > 0 && !validation.valid && shortCircuit {
+		if i > 0 && !valid && shortCircuit {
 			return validation
 		}
 
-		validation.valid = fragment.function() == fragment.boolOperation && validation.valid
-		if !validation.valid {
+		valid = fragment.function() == fragment.boolOperation && valid
+		if !valid {
 			validation.invalidate(ctx.name, fragment)
 		}
 	}
