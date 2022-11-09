@@ -594,7 +594,7 @@ func TestValidatorStringLengthValid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(String("123456").Length(6))
+	v = Is(String("123456").OfLength(6))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -602,7 +602,7 @@ func TestValidatorStringLengthValid(t *testing.T) {
 	type MyString string
 	var myString1 MyString = "123456"
 
-	v = Is(String(myString1).Length(6))
+	v = Is(String(myString1).OfLength(6))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -611,13 +611,13 @@ func TestValidatorStringLengthInvalid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(String("12345").Length(6))
+	v = Is(String("12345").OfLength(6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length equal to \"6\"",
 		v.Errors()["value_0"].Messages()[0])
 
-	v = Is(String("1234567").Length(6))
+	v = Is(String("1234567").OfLength(6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length equal to \"6\"",
@@ -627,7 +627,7 @@ func TestValidatorStringLengthInvalid(t *testing.T) {
 	type MyString string
 	var myString1 MyString = "12345"
 
-	v = Is(String(myString1).Length(6))
+	v = Is(String(myString1).OfLength(6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length equal to \"6\"",
@@ -639,15 +639,15 @@ func TestValidatorStringLengthBetweenValid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(String("123456").LengthBetween(6, 10))
+	v = Is(String("123456").OfLengthBetween(6, 10))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	v = Is(String("12345678").LengthBetween(6, 10))
+	v = Is(String("12345678").OfLengthBetween(6, 10))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	v = Is(String("1234567890").LengthBetween(6, 10))
+	v = Is(String("1234567890").OfLengthBetween(6, 10))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -655,7 +655,7 @@ func TestValidatorStringLengthBetweenValid(t *testing.T) {
 	type MyString string
 	var myString1 MyString = "123456"
 
-	v = Is(String(myString1).LengthBetween(6, 10))
+	v = Is(String(myString1).OfLengthBetween(6, 10))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -664,13 +664,13 @@ func TestValidatorStringLengthBetweenInvalid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(String("12345").LengthBetween(6, 10))
+	v = Is(String("12345").OfLengthBetween(6, 10))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length between \"6\" and \"10\"",
 		v.Errors()["value_0"].Messages()[0])
 
-	v = Is(String("12345678901").LengthBetween(6, 10))
+	v = Is(String("12345678901").OfLengthBetween(6, 10))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length between \"6\" and \"10\"",
@@ -680,7 +680,7 @@ func TestValidatorStringLengthBetweenInvalid(t *testing.T) {
 	type MyString string
 	var myString1 MyString = "12345"
 
-	v = Is(String(myString1).LengthBetween(6, 10))
+	v = Is(String(myString1).OfLengthBetween(6, 10))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length between \"6\" and \"10\"",

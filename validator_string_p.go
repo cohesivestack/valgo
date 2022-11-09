@@ -291,8 +291,8 @@ func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) 
 // For example:
 //
 //	slug := "myname"
-//	Is(v.StringP(&slug).Length(6))
-func (validator *ValidatorStringP[T]) Length(length int, template ...string) *ValidatorStringP[T] {
+//	Is(v.StringP(&slug).OfLength(6))
+func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isStringLength(*(validator.context.Value().(*T)), length)
@@ -308,8 +308,8 @@ func (validator *ValidatorStringP[T]) Length(length int, template ...string) *Va
 // For example:
 //
 //	slug := "myname"
-//	Is(v.StringP(&slug).LengthBetween(2,6))
-func (validator *ValidatorStringP[T]) LengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
+//	Is(v.StringP(&slug).OfLengthBetween(2,6))
+func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isStringLengthBetween(*(validator.context.Value().(*T)), min, max)
