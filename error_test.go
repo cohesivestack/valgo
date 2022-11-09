@@ -92,12 +92,12 @@ func TestErrorMarshallJSONWithIs(t *testing.T) {
 	jsonByte, err := json.Marshal(v.Error())
 	assert.NoError(t, err)
 
-	jsonMap := map[string]interface{}{}
+	jsonMap := map[string][]interface{}{}
 	err = json.Unmarshal(jsonByte, &jsonMap)
 	assert.NoError(t, err)
 
-	assert.Equal(t, "Name can't be blank", jsonMap["name"])
-	assert.Equal(t, "Email can't be blank", jsonMap["email"])
+	assert.Equal(t, "Name can't be blank", jsonMap["name"][0])
+	assert.Equal(t, "Email can't be blank", jsonMap["email"][0])
 
 }
 
@@ -109,14 +109,13 @@ func TestErrorMarshallJSONWithCheck(t *testing.T) {
 	jsonByte, err := json.Marshal(v.Error())
 	assert.NoError(t, err)
 
-	jsonMap := map[string]interface{}{}
+	jsonMap := map[string][]interface{}{}
 	err = json.Unmarshal(jsonByte, &jsonMap)
 	assert.NoError(t, err)
 
-	assert.Equal(t, "Name can't be blank", jsonMap["name"])
-	emailErrors := jsonMap["email"].([]interface{})
-	assert.Contains(t, emailErrors, "Email can't be blank")
-	assert.Contains(t, emailErrors, "Email must match to \"a\"")
+	assert.Equal(t, "Name can't be blank", jsonMap["name"][0])
+	assert.Contains(t, jsonMap["email"], "Email can't be blank")
+	assert.Contains(t, jsonMap["email"], "Email must match to \"a\"")
 }
 
 func TestIsValidByName(t *testing.T) {

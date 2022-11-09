@@ -118,11 +118,7 @@ func (e *Error) MarshalJSON() ([]byte, error) {
 		errors := map[string]interface{}{}
 
 		for k, v := range e.errors {
-			if len(v.Messages()) == 1 {
-				errors[k] = v.Messages()[0]
-			} else {
-				errors[k] = v.Messages()
-			}
+			errors[k] = v.Messages()
 		}
 
 		return json.Marshal(errors)
