@@ -6,8 +6,25 @@ import (
 	"strings"
 )
 
-// Type of validation session. One or more field validators must be added to a
-// Validation session using the functions [Is()] or [Check()].
+// The [Validation] session in Valgo is the main structure for validating one or
+// more values. It is called Validation in code.
+//
+// A [Validation] session will contain one or more Validators, where each [Validator]
+// will have the responsibility to validate a value with one or more rules.
+//
+// There are multiple functions to create a [Validation] session, depending on the
+// requirements:
+//
+//   - [New]()
+//   - [Is](...)
+//   - [In](...)
+//   - [InRow](...)
+//   - [Check](...)
+//   - [AddErrorMessage](...)
+//
+// the function [Is](...) is likely to be the most frequently used function in your
+// validations. When [Is](...) is called, the function creates a validation and
+// receives a validator at the same time.
 type Validation struct {
 	valid bool
 
@@ -27,7 +44,12 @@ func (validation *Validation) Check(v Validator) *Validation {
 	return v.Context().validateCheck(validation)
 }
 
-// Return `true` is all field validators in the [Validation] session are valid.
+// A [Validation] session provides this function which returns either true if
+// all their validators are valid or false if any one of them is invalid.
+//
+// In the following example, even though the [Validator] for age is valid, the
+// [Validator] for status is invalid, making the entire Validator session
+// invalid.
 func (validation *Validation) Valid() bool {
 	return validation.valid
 }
@@ -58,10 +80,11 @@ LOOP1:
 	for _field, _err := range _validation.Errors() {
 		for field, err := range validation.Errors() {
 			if _prefix+_field == field {
+			LOOP2:
 				for _, _errMsg := range _err.Messages() {
 					for _, errMsg := range err.Messages() {
 						if _errMsg == errMsg {
-							continue LOOP1
+							continue LOOP2
 						}
 					}
 					validation.AddErrorMessage(_prefix+_field, _errMsg)
