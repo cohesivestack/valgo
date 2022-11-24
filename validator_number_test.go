@@ -303,7 +303,7 @@ func TestValidatorNumberZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorNumberEmptyInvalid(t *testing.T) {
+func TestValidatorNumberZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 

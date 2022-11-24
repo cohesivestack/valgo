@@ -307,7 +307,7 @@ func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidator{{ .Name }}EmptyInvalid(t *testing.T) {
+func TestValidator{{ .Name }}ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 

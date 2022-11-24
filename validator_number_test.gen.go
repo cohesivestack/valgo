@@ -307,7 +307,7 @@ func TestValidatorUint8ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorUint8EmptyInvalid(t *testing.T) {
+func TestValidatorUint8ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -715,7 +715,7 @@ func TestValidatorUint16ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorUint16EmptyInvalid(t *testing.T) {
+func TestValidatorUint16ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -1123,7 +1123,7 @@ func TestValidatorUint32ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorUint32EmptyInvalid(t *testing.T) {
+func TestValidatorUint32ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -1531,7 +1531,7 @@ func TestValidatorUint64ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorUint64EmptyInvalid(t *testing.T) {
+func TestValidatorUint64ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -1939,7 +1939,7 @@ func TestValidatorIntZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorIntEmptyInvalid(t *testing.T) {
+func TestValidatorIntZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -2347,7 +2347,7 @@ func TestValidatorInt8ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorInt8EmptyInvalid(t *testing.T) {
+func TestValidatorInt8ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -2755,7 +2755,7 @@ func TestValidatorInt16ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorInt16EmptyInvalid(t *testing.T) {
+func TestValidatorInt16ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -3163,7 +3163,7 @@ func TestValidatorInt32ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorInt32EmptyInvalid(t *testing.T) {
+func TestValidatorInt32ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -3571,7 +3571,7 @@ func TestValidatorInt64ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorInt64EmptyInvalid(t *testing.T) {
+func TestValidatorInt64ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -3979,7 +3979,7 @@ func TestValidatorFloat32ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorFloat32EmptyInvalid(t *testing.T) {
+func TestValidatorFloat32ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -4387,7 +4387,7 @@ func TestValidatorFloat64ZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorFloat64EmptyInvalid(t *testing.T) {
+func TestValidatorFloat64ZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -4795,7 +4795,7 @@ func TestValidatorByteZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorByteEmptyInvalid(t *testing.T) {
+func TestValidatorByteZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 
@@ -5203,7 +5203,7 @@ func TestValidatorRuneZeroValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorRuneEmptyInvalid(t *testing.T) {
+func TestValidatorRuneZeroInvalid(t *testing.T) {
 	TeardownTest()
 	var v *Validation
 

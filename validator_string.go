@@ -53,7 +53,8 @@ func isStringLengthBetween[T ~string](v T, min int, max int) bool {
 	return len(v) >= min && len(v) <= max
 }
 
-// The String validator's type that keeps its validator context.
+// The `ValidatorString` provides functions for setting validation rules for
+// a string value type, or a custom type based on a string.
 type ValidatorString[T ~string] struct {
 	context *ValidatorContext
 }
