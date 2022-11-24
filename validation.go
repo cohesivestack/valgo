@@ -64,7 +64,14 @@ func (validation *Validation) InRow(name string, index int, _validation *Validat
 	return validation.merge(fmt.Sprintf("%s[%v]", name, index), _validation)
 }
 
-// Merge two [Validation] sessions.
+// Using [Merge](...) you can merge two [Validation] sessions. When two
+// validations are merged, errors with the same value name will be merged. It is
+// useful for reusing validation logic.
+//
+// The following example merges the [Validation] session returned by the
+// validatePreStatus function. Since both [Validation] sessions validate a value
+// with the name status, the error returned will return two error messages, and
+// without duplicate the Not().Blank() error message rule.
 func (validation *Validation) Merge(_validation *Validation) *Validation {
 	return validation.merge("", _validation)
 }

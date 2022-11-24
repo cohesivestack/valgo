@@ -40,7 +40,7 @@ func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 	return context
 }
 
-// Reverse the logical value associated with the next validator function in
+// Invert the boolean value associated with the next validator function in
 // a custom validator.
 func (ctx *ValidatorContext) Not() *ValidatorContext {
 	ctx.boolOperation = false

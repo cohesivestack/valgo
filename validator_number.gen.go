@@ -61,10 +61,10 @@ func (validator *ValidatorUint8[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Uint8(uint8(0)).Not().Zero()).Valid()
 func (validator *ValidatorUint8[T]) Not() *ValidatorUint8[T] {
 	validator.context.Not()
@@ -275,10 +275,10 @@ func (validator *ValidatorUint16[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Uint16(uint16(0)).Not().Zero()).Valid()
 func (validator *ValidatorUint16[T]) Not() *ValidatorUint16[T] {
 	validator.context.Not()
@@ -489,10 +489,10 @@ func (validator *ValidatorUint32[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Uint32(uint32(0)).Not().Zero()).Valid()
 func (validator *ValidatorUint32[T]) Not() *ValidatorUint32[T] {
 	validator.context.Not()
@@ -703,10 +703,10 @@ func (validator *ValidatorUint64[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Uint64(uint64(0)).Not().Zero()).Valid()
 func (validator *ValidatorUint64[T]) Not() *ValidatorUint64[T] {
 	validator.context.Not()
@@ -917,10 +917,10 @@ func (validator *ValidatorInt[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Int(int(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt[T]) Not() *ValidatorInt[T] {
 	validator.context.Not()
@@ -1131,10 +1131,10 @@ func (validator *ValidatorInt8[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Int8(int8(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt8[T]) Not() *ValidatorInt8[T] {
 	validator.context.Not()
@@ -1345,10 +1345,10 @@ func (validator *ValidatorInt16[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Int16(int16(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt16[T]) Not() *ValidatorInt16[T] {
 	validator.context.Not()
@@ -1559,10 +1559,10 @@ func (validator *ValidatorInt32[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Int32(int32(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt32[T]) Not() *ValidatorInt32[T] {
 	validator.context.Not()
@@ -1773,10 +1773,10 @@ func (validator *ValidatorInt64[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Int64(int64(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt64[T]) Not() *ValidatorInt64[T] {
 	validator.context.Not()
@@ -1987,10 +1987,10 @@ func (validator *ValidatorFloat32[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Float32(float32(0)).Not().Zero()).Valid()
 func (validator *ValidatorFloat32[T]) Not() *ValidatorFloat32[T] {
 	validator.context.Not()
@@ -2201,10 +2201,10 @@ func (validator *ValidatorFloat64[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Float64(float64(0)).Not().Zero()).Valid()
 func (validator *ValidatorFloat64[T]) Not() *ValidatorFloat64[T] {
 	validator.context.Not()
@@ -2415,10 +2415,10 @@ func (validator *ValidatorByte[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Byte(byte(0)).Not().Zero()).Valid()
 func (validator *ValidatorByte[T]) Not() *ValidatorByte[T] {
 	validator.context.Not()
@@ -2629,10 +2629,10 @@ func (validator *ValidatorRune[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.Rune(rune(0)).Not().Zero()).Valid()
 func (validator *ValidatorRune[T]) Not() *ValidatorRune[T] {
 	validator.context.Not()

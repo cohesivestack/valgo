@@ -30,10 +30,10 @@ func (validator *ValidatorStringP[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated to the next validation function.
+// Invert the logical value associated to the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Blank()
+//	// It will return false because Not() inverts the boolean value associated with the Blank() function
 //	status := ""
 //	Is(v.StringP(&status).Not().Blank()).Valid()
 func (validator *ValidatorStringP[T]) Not() *ValidatorStringP[T] {

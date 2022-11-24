@@ -61,10 +61,10 @@ func (validator *Validator{{ .Name }}[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	Is(v.{{ .Name }}({{ .Type }}(0)).Not().Zero()).Valid()
 func (validator *Validator{{ .Name }}[T]) Not() *Validator{{ .Name }}[T] {
 	validator.context.Not()

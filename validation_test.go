@@ -1,6 +1,9 @@
 package valgo
 
 import (
+	"encoding/json"
+	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -25,6 +28,8 @@ func TestValidationMergeMessages(t *testing.T) {
 	v1 := Is(String("up", "status").Not().EqualTo("up")).
 		Is(String("", "name").Not().Blank()).
 		Is(Number(0, "position").Not().Zero()).
+		// Same error message as in v0 should not be added twice
+		AddErrorMessage("status", "The status is not valid").
 		AddErrorMessage("status", "The status is incorrect")
 
 	assert.False(t, v1.Valid())
@@ -32,8 +37,11 @@ func TestValidationMergeMessages(t *testing.T) {
 		"Status can't be equal to \"up\"",
 		v1.Errors()["status"].Messages()[0])
 	assert.Equal(t,
-		"The status is incorrect",
+		"The status is not valid",
 		v1.Errors()["status"].Messages()[1])
+	assert.Equal(t,
+		"The status is incorrect",
+		v1.Errors()["status"].Messages()[2])
 	assert.Equal(t,
 		"Name can't be blank",
 		v1.Errors()["name"].Messages()[0])
@@ -282,4 +290,64 @@ func TestLastValidationIsNotAlteringPreviousOne(t *testing.T) {
 	assert.True(t, v.IsValid("name"))
 	_, ok = v.Errors()["name"]
 	assert.False(t, ok)
+}
+
+func ExampleValidation_Valid() {
+	val := Is(Number(21, "age").GreaterThan(18)).
+		Is(String("singl", "status").InSlice([]string{"married", "single"}))
+
+	if !val.Valid() {
+		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		fmt.Println(string(out))
+	}
+
+	// output: {
+	//   "status": [
+	//     "Status is not valid"
+	//   ]
+	// }
+}
+
+func ExampleValidation_IsValid() {
+	val := Is(Number(16, "age").GreaterThan(18)).
+		Is(String("single", "status").InSlice([]string{"married", "single"}))
+
+	if !val.IsValid("age") {
+		fmt.Println("Warning: someone underage is trying to sign up")
+	}
+
+	// output: Warning: someone underage is trying to sign up
+}
+
+func ExampleValidation_Merge() {
+	type Record struct {
+		Name   string
+		Status string
+	}
+
+	validatePreStatus := func(status string) *Validation {
+		regex, _ := regexp.Compile("pre-.+")
+
+		return Check(String(status, "status").Not().Blank().MatchingTo(regex))
+	}
+
+	r := Record{"Classified", ""}
+
+	val := Is(
+		String(r.Name, "name").Not().Blank()).Is(
+		String(r.Status, "status").Not().Blank())
+
+	val.Merge(validatePreStatus(r.Status))
+
+	if !val.Valid() {
+		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		fmt.Println(string(out))
+	}
+
+	// output: {
+	//   "status": [
+	//     "Status can't be blank",
+	//     "Status must match to \"pre-.+\""
+	//   ]
+	// }
 }

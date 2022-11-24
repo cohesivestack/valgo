@@ -28,10 +28,10 @@ func (validator *ValidatorNumberP[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the boolean value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to Zero()
+//	// It will return false because Not() inverts the boolean value associated with the Zero() function
 //	n := 0
 //	Is(v.NumberP(&n).Not().Zero()).Valid()
 func (validator *ValidatorNumberP[T]) Not() *ValidatorNumberP[T] {

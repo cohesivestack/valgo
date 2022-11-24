@@ -47,10 +47,10 @@ func (validator *ValidatorBool[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the boolean value associated with the next validator function.
 // For example:
 //
-//	// It will return false because Not() inverts to True()
+//	// It will return false because `Not()` inverts the boolean value associated with the True() function
 //	Is(v.Bool(true).Not().True()).Valid()
 func (validator *ValidatorBool[T]) Not() *ValidatorBool[T] {
 	validator.context.Not()

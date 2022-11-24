@@ -29,10 +29,10 @@ func (validator *ValidatorAny) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Reverse the logical value associated with the next validation function.
+// Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because `Not()` inverts to `Equal()`
+//	// It will return false because `Not()` inverts the boolean value associated with the `Equal()` function
 //	Is(v.Any("a").Not().Equal("a")).Valid()
 func (validator *ValidatorAny) Not() *ValidatorAny {
 	validator.context.Not()
