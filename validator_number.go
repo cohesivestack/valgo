@@ -50,7 +50,11 @@ func isNumberInSlice[T TypeNumber](v T, slice []T) bool {
 	return false
 }
 
-// The numeric validator type that keeps its validator context.
+// The [ValidatorNumber] provides functions for setting validation rules for a
+// [TypeNumber] value type, or a custom type based on a [TypeNumber].
+//
+// [TypeNumber] is a generic interface defined by Valgo that generalizes any
+// standard Golang type.
 type ValidatorNumber[T TypeNumber] struct {
 	context *ValidatorContext
 }
