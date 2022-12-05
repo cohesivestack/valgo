@@ -41,7 +41,7 @@ output:
 
 Valgo is in its early stages, so backward compatibility won't be guaranteed until v1.
 
-Valgo is used in production by [Statsignal](https://statsignal.dev), but we want community feedback before setting up version 1.
+Valgo is used in production by [Statsignal](https://statsignal.dev), but we want community feedback before releasing version 1.
 
 # Table of content
 
