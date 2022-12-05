@@ -29,10 +29,10 @@ output:
 ```json
 {
   "age": [
-    "Age must be greater than \"12\""
+    "Age must be greater than \"18\""
   ],
-  "name": [
-    "Name must have a length between \"1\" and \"2\""
+  "full_name": [
+    "Full name must have a length between \"4\" and \"20\""
   ]
 }
 ```
