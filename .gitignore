@@ -6,8 +6,7 @@
 # Folders
 _obj
 _test
-
-vendor
+.idea
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -28,5 +27,15 @@ _testmain.go
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# linter config
+.golangci*.yml
+
+# Included make files
+linter.mk
+tests.mk
+
 # external packages folder
 vendor/
+
+# binaries folder
+bin/

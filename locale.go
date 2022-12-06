@@ -1,69 +1,91 @@
 package valgo
 
 import (
-	"fmt"
 	"log"
+	"sync"
 )
 
 type locale struct {
 	Messages map[string]string
 }
 
-var locales map[string]*locale
+type existingLocales struct {
+	sync.RWMutex
+	locales map[string]*locale
+}
+
+var locales existingLocales
 
 var defaultLocaleCode string
 
+//nolint:gochecknoinits // by design. must be refactored
 func init() {
-	setDefaultEnglishMessages()
-	setDefaultSpanishMessages()
+	locales = existingLocales{locales: make(map[string]*locale)}
 
-	err := SetDefaultLocale("en")
-	if err != nil {
+	SetDefaultEnglishMessages()
+	SetDefaultSpanishMessages()
+
+	if err := SetDefaultLocale("en"); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func getLocales() map[string]*locale {
-	if locales == nil {
-		locales = map[string]*locale{}
+func getLocale(code string) *locale {
+	if len(locales.locales) == 0 {
+		return nil
 	}
-	return locales
+
+	locales.RLock()
+
+	l, ok := locales.locales[code]
+	if !ok {
+		return nil
+	}
+
+	locales.RUnlock()
+
+	return l
 }
 
 func getDefaultLocale() *locale {
-	return getLocales()[defaultLocaleCode]
+	return getLocale(defaultLocaleCode)
 }
 
-// Get the default locale code.
+// GetDefaultLocaleCode Get the default locale code.
 func GetDefaultLocaleCode() string {
 	return defaultLocaleCode
 }
 
-// Set the default locale.
+// SetDefaultLocale Set the default locale.
 func SetDefaultLocale(code string) error {
-	if _, exist := getLocales()[code]; exist {
-		defaultLocaleCode = code
-		return nil
-	} else {
-		return fmt.Errorf("there is not a locale registered with code %s", code)
+	if l := getLocale(code); l == nil {
+		return localeDoesNotExist(code)
 	}
 
+	defaultLocaleCode = code
+
+	return nil
 }
 
-// Add or change the messages of a specific locale.
+// SetLocaleMessages Add or change the messages of a specific locale.
 func SetLocaleMessages(code string, messages map[string]string) {
-	getLocales()[code] = &locale{Messages: messages}
+	locales.Lock()
+	locales.locales[code] = &locale{Messages: messages}
+	locales.Unlock()
 }
 
-// Get the messages of a specific locale.
-func GetLocaleMessages(code string) (messages map[string]string, err error) {
-	if _, exist := getLocales()[code]; exist {
-		messages = map[string]string{}
-		for k, v := range getLocales()[code].Messages {
-			messages[k] = v
-		}
-	} else {
-		err = fmt.Errorf("there is not a locale registered with code %s", code)
+// GetLocaleMessages Get the messages of a specific locale.
+func GetLocaleMessages(code string) (map[string]string, error) {
+	l := getLocale(code)
+	if l == nil {
+		return nil, localeDoesNotExist(code)
 	}
-	return
+
+	messages := make(map[string]string)
+
+	for k, v := range l.Messages {
+		messages[k] = v
+	}
+
+	return messages, nil
 }

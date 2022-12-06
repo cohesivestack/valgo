@@ -8,7 +8,7 @@ type validatorFragment struct {
 	boolOperation  bool
 }
 
-// The context keeps the state and provides the functions to control a
+// ValidatorContext The context keeps the state and provides the functions to control a
 // custom validator.
 type ValidatorContext struct {
 	fragments     []*validatorFragment
@@ -18,9 +18,8 @@ type ValidatorContext struct {
 	boolOperation bool
 }
 
-// Create a new [ValidatorContext] to be used by a custom validator.
-func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
-
+// NewContext Create a new [ValidatorContext] to be used by a custom validator.
+func NewContext[T any](value T, nameAndTitle ...string) *ValidatorContext {
 	context := &ValidatorContext{
 		value:         value,
 		fragments:     []*validatorFragment{},
@@ -31,6 +30,7 @@ func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 	if sizeNameAndTitle > 0 {
 		name := nameAndTitle[0]
 		context.name = &name
+
 		if sizeNameAndTitle > 1 {
 			title := nameAndTitle[1]
 			context.title = &title
@@ -40,14 +40,15 @@ func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 	return context
 }
 
-// Invert the boolean value associated with the next validator function in
+// Not Invert the boolean value associated with the next validator function in
 // a custom validator.
 func (ctx *ValidatorContext) Not() *ValidatorContext {
 	ctx.boolOperation = false
+
 	return ctx
 }
 
-// Add a function to a custom validator and pass a value used for the
+// AddWithValue Adds a function to a custom validator and pass a value used for the
 // validator function to be displayed in the error message.
 //
 // Use [AddWithParams()] if the error message requires more input values.
@@ -66,19 +67,25 @@ func (ctx *ValidatorContext) Add(function func() bool, errorKey string, template
 		map[string]any{"title": ctx.title}, template...)
 }
 
-// Add a function to a custom validator and pass a map with values used for the
+// AddWithParams Adds a function to a custom validator and pass a map with values used for the
 // validator function to be displayed in the error message.
-func (ctx *ValidatorContext) AddWithParams(function func() bool, errorKey string, templateParams map[string]any, template ...string) *ValidatorContext {
-
+func (ctx *ValidatorContext) AddWithParams(
+	function func() bool,
+	errorKey string,
+	templateParams map[string]any,
+	template ...string,
+) *ValidatorContext {
 	fragment := &validatorFragment{
 		errorKey:       errorKey,
 		templateParams: templateParams,
 		function:       function,
 		boolOperation:  ctx.boolOperation,
 	}
+
 	if len(template) > 0 {
 		fragment.template = template
 	}
+
 	ctx.fragments = append(ctx.fragments, fragment)
 	ctx.boolOperation = true
 
@@ -111,7 +118,7 @@ func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool)
 	return validation
 }
 
-// Return the value being validated in a custom validator.
+// Value Return the value being validated in a custom validator.
 func (ctx *ValidatorContext) Value() any {
 	return ctx.value
 }

@@ -78,6 +78,7 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [Extending Valgo with custom validators](#extending-valgo-with-custom-validators)
 - [Localizing validator messages](#localizing-validator-messages)
 - [List of rules by validator type](#list-of-rules-by-validator-type)
+- [Contributing](#Contributing)
 - [License](#license)
 
 # Getting started
@@ -674,7 +675,7 @@ val := v.Is(v.NumberP(&stage).GreaterThan(Stage(1)))
 It is possible to customize the JSON output for errors using the function `SetMarshalJSON(err Error)`. The parameter in this function receives a `valgo.Error` structure, which provides all information regarding output validation errors. Below is an example of a customized function.
 
 ```go
-customMarshalJson := func(e *Error) ([]byte, error) {
+customMarshalJSON := func(e *Error) ([]byte, error) {
 
   errors := map[string]interface{}{}
 
@@ -687,7 +688,7 @@ customMarshalJson := func(e *Error) ([]byte, error) {
 }
 
 // Set the custom Marshal JSON function
-v.SetMarshalJSON(customMarshalJson)
+v.SetMarshalJSON(customMarshalJSON)
 
 // Now validate something to check if the output JSON contains the errors root key
 
@@ -917,6 +918,13 @@ PRs are welcome if you want to add locale messages for your language, but please
   - `EqualTo`
   - `Passing`
   - `Nil`
+
+# Contributing
+
+Before push check your changes by running `make lint` command and do your best 
+to satisfy linter.
+
+To test package code run `make tests`.
 
 # License
 

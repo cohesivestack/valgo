@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 )
 
-// The [Validation] session in Valgo is the main structure for validating one or
+// Validation The [Validation] session in Valgo is the main structure for validating one or
 // more values. It is called Validation in code.
 //
 // A [Validation] session will contain one or more Validators, where each [Validator]
@@ -31,40 +32,42 @@ type Validation struct {
 	_locale      *locale
 	errors       map[string]*valueError
 	currentIndex int
+
+	sync.RWMutex
 }
 
 // Add a field validator to a [Validation] session.
-func (validation *Validation) Is(v Validator) *Validation {
-	return v.Context().validateIs(validation)
+func (v *Validation) Is(vr Validator) *Validation {
+	return vr.Context().validateIs(v)
 }
 
-// Add a field validator to a [Validation] session. But unlike [Is()] the
+// Check Add a field validator to a [Validation] session. But unlike [Is()] the
 // field validator is not short-circuited.
-func (validation *Validation) Check(v Validator) *Validation {
-	return v.Context().validateCheck(validation)
+func (v *Validation) Check(vr Validator) *Validation {
+	return vr.Context().validateCheck(v)
 }
 
-// A [Validation] session provides this function which returns either true if
+// Valid A [Validation] session provides this function which returns either true if
 // all their validators are valid or false if any one of them is invalid.
 //
 // In the following example, even though the [Validator] for age is valid, the
 // [Validator] for status is invalid, making the entire Validator session
 // invalid.
-func (validation *Validation) Valid() bool {
-	return validation.valid
+func (v *Validation) Valid() bool {
+	return v.valid
 }
 
-// Add a map namespace to a [Validation] session.
-func (validation *Validation) In(name string, _validation *Validation) *Validation {
-	return validation.merge(name, _validation)
+// In Add a map namespace to a [Validation] session.
+func (v *Validation) In(name string, _validation *Validation) *Validation {
+	return v.merge(name, _validation)
 }
 
-// Add an indexed namespace to a [Validation] session.
-func (validation *Validation) InRow(name string, index int, _validation *Validation) *Validation {
-	return validation.merge(fmt.Sprintf("%s[%v]", name, index), _validation)
+// InRow Add an indexed namespace to a [Validation] session.
+func (v *Validation) InRow(name string, index int, _validation *Validation) *Validation {
+	return v.merge(fmt.Sprintf("%s[%v]", name, index), _validation)
 }
 
-// Using [Merge](...) you can merge two [Validation] sessions. When two
+// Merge Using [Merge](...) you can merge two [Validation] sessions. When two
 // validations are merged, errors with the same value name will be merged. It is
 // useful for reusing validation logic.
 //
@@ -72,12 +75,12 @@ func (validation *Validation) InRow(name string, index int, _validation *Validat
 // validatePreStatus function. Since both [Validation] sessions validate a value
 // with the name status, the error returned will return two error messages, and
 // without duplicate the Not().Blank() error message rule.
-func (validation *Validation) Merge(_validation *Validation) *Validation {
-	return validation.merge("", _validation)
+func (v *Validation) Merge(_validation *Validation) *Validation {
+	return v.merge("", _validation)
 }
 
-func (validation *Validation) merge(prefix string, _validation *Validation) *Validation {
-
+//nolint:gocognit // by initial design. should be refactored to be simplified
+func (v *Validation) merge(prefix string, _validation *Validation) *Validation {
 	var _prefix string
 	if len(strings.TrimSpace(prefix)) > 0 {
 		_prefix = prefix + "."
@@ -85,7 +88,7 @@ func (validation *Validation) merge(prefix string, _validation *Validation) *Val
 
 LOOP1:
 	for _field, _err := range _validation.Errors() {
-		for field, err := range validation.Errors() {
+		for field, err := range v.Errors() {
 			if _prefix+_field == field {
 			LOOP2:
 				for _, _errMsg := range _err.Messages() {
@@ -94,19 +97,22 @@ LOOP1:
 							continue LOOP2
 						}
 					}
-					validation.AddErrorMessage(_prefix+_field, _errMsg)
+					v.AddErrorMessage(_prefix+_field, _errMsg)
 				}
+
 				continue LOOP1
 			}
 		}
+
 		for _, _errMsg := range _err.Messages() {
-			validation.AddErrorMessage(_prefix+_field, _errMsg)
+			v.AddErrorMessage(_prefix+_field, _errMsg)
 		}
 	}
-	return validation
+
+	return v
 }
 
-// Add an error message to the [Validation] session without executing a field
+// AddErrorMessage Add an error message to the [Validation] session without executing a field
 // validator. By adding this error message, the [Validation] session will be
 // marked as invalid.
 func (v *Validation) AddErrorMessage(name string, message string) *Validation {
@@ -123,21 +129,21 @@ func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 	return v
 }
 
-func (validation *Validation) invalidate(name *string, fragment *validatorFragment) {
-	if validation.errors == nil {
-		validation.errors = map[string]*valueError{}
+func (v *Validation) invalidate(name *string, fragment *validatorFragment) {
+	if v.errors == nil {
+		v.errors = map[string]*valueError{}
 	}
 
-	validation.valid = false
+	v.valid = false
 
 	var _name string
 	if name == nil {
-		_name = concatString("value_", strconv.Itoa(validation.currentIndex-1))
+		_name = concatString("value_", strconv.Itoa(v.currentIndex-1))
 	} else {
 		_name = *name
 	}
 
-	ev := validation.getOrCreateValueError(_name)
+	ev := v.getOrCreateValueError(_name)
 
 	errorKey := fragment.errorKey
 
@@ -155,46 +161,60 @@ func (validation *Validation) invalidate(name *string, fragment *validatorFragme
 	if len(fragment.template) > 0 {
 		et.template = &fragment.template[0]
 	}
+
 	et.params = fragment.templateParams
 }
 
-// Return a map with the information for each invalid field validator in the
+// Errors Return a map with the information for each invalid field validator in the
 // [Validation] session.
-func (session *Validation) Errors() map[string]*valueError {
-	return session.errors
+//
+//nolint:revive // by design. should be exported as can be annoying to use
+func (v *Validation) Errors() map[string]*valueError {
+	return v.errors
 }
 
-// Return a map with the information for each invalid field validator in the
+// Errors Return a map with the information for each invalid field validator in the
 // [Validation] session.
-func (validation *Validation) Error() error {
-	if !validation.valid {
-		return &Error{
-			errors: validation.errors,
-		}
+//
+//nolint:revive // by design. should be exported as can be annoying to use
+func (v *Validation) ErrorByKey(key string) *valueError {
+	v.RLock()
+	err := v.errors[key]
+	v.RUnlock()
+
+	return err
+}
+
+// Error Return a map with the information for each invalid field validator in the
+// [Validation] session.
+func (v *Validation) Error() error {
+	if v.valid {
+		return nil
 	}
-	return nil
+
+	return &Error{errors: v.errors}
 }
 
-// Return true if a specific field validator is valid.
-func (validation *Validation) IsValid(name string) bool {
-	if _, isNotValid := validation.errors[name]; isNotValid {
+// IsValid Return true if a specific field validator is valid.
+func (v *Validation) IsValid(name string) bool {
+	if _, isNotValid := v.errors[name]; isNotValid {
 		return false
 	}
 
 	return true
 }
 
-func (validation *Validation) getOrCreateValueError(name string) *valueError {
-	if _, ok := validation.errors[name]; !ok {
-		validation.errors[name] = &valueError{
+func (v *Validation) getOrCreateValueError(name string) *valueError {
+	if _, ok := v.errors[name]; !ok {
+		v.errors[name] = &valueError{
 			name:           &name,
 			errorTemplates: map[string]*errorTemplate{},
 			errorMessages:  []string{},
-			validator:      validation,
+			validator:      v,
 		}
 	}
 
-	ev := validation.errors[name]
+	ev := v.errors[name]
 	ev.dirty = true
 
 	return ev

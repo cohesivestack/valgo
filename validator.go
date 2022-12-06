@@ -1,6 +1,6 @@
 package valgo
 
-// Interface implemented by valgo Validators and custom Validators.
+// Validator Interface implemented by valgo Validators and custom Validators.
 type Validator interface {
 	Context() *ValidatorContext
 }

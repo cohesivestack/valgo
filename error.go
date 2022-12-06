@@ -7,7 +7,7 @@ import (
 	"github.com/valyala/fasttemplate"
 )
 
-// Implementation of the Go error interface in Valgo. The [Validation.Error()]
+// Error Implementation of the Go error interface in Valgo. The [Validation.Error()]
 // method returns a value of this type.
 //
 // There is a function in this type, [Errors()], that returns a list of errors
@@ -22,7 +22,7 @@ type errorTemplate struct {
 	params   map[string]interface{}
 }
 
-// Contains information about each invalid field value returned by the
+// valueError Contains information about each invalid field value returned by the
 // [Validation] session.
 type valueError struct {
 	name           *string
@@ -34,17 +34,17 @@ type valueError struct {
 	validator      *Validation
 }
 
-// The title of the invalid field value.
+// Title The title of the invalid field value.
 func (ve *valueError) Title() string {
 	return *ve.title
 }
 
-// The name of the invalid field value.
+// Name The name of the invalid field value.
 func (ve *valueError) Name() string {
 	return *ve.name
 }
 
-// Error messages related to an invalid field value.
+// Messages Error messages related to an invalid field value.
 func (ve *valueError) Messages() []string {
 	if ve.dirty {
 		ve.messages = []string{}
@@ -61,7 +61,6 @@ func (ve *valueError) Messages() []string {
 }
 
 func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
-
 	var ts string
 	if et.template != nil {
 		ts = *et.template
@@ -93,34 +92,36 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 	return t.ExecuteString(et.params)
 }
 
-// Return the error message associated with a Valgo error.
+// Error Return the error message associated with a Valgo error.
 func (e *Error) Error() string {
 	count := len(e.errors)
 	if count == 1 {
-		return fmt.Sprintf("There is 1 error")
-	} else {
-		return fmt.Sprintf("There are %v errors", count)
+		return "There is 1 error"
 	}
+
+	return fmt.Sprintf("There are %v errors", count)
 }
 
-// Return a map with each Invalid value error.
+// Errors Return a map with each Invalid value error.
+//
+//nolint:revive // by design. should be exported as can be annoying to use
 func (e *Error) Errors() map[string]*valueError {
 	return e.errors
 }
 
-// Return the JSON encoding of the validation error messages.
+// MarshalJSON Return the JSON encoding of the validation error messages.
 //
-// A custom function can be set with [SetMarshalJson()]
+// A custom function can be set with [SetMarshalJson()].
 func (e *Error) MarshalJSON() ([]byte, error) {
-	if customMarshalJson != nil {
-		return customMarshalJson(e)
-	} else {
-		errors := map[string]interface{}{}
-
-		for k, v := range e.errors {
-			errors[k] = v.Messages()
-		}
-
-		return json.Marshal(errors)
+	if customMarshalJSON != nil {
+		return customMarshalJSON(e)
 	}
+
+	errors := map[string]interface{}{}
+
+	for k, v := range e.errors {
+		errors[k] = v.Messages()
+	}
+
+	return json.Marshal(errors)
 }

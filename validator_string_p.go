@@ -4,33 +4,32 @@ import (
 	"regexp"
 )
 
-// The String pointer validator type that keeps its validator context.
+// ValidatorStringP The String pointer validator type that keeps its validator context.
 type ValidatorStringP[T ~string] struct {
 	context *ValidatorContext
 }
 
-// Receives a string pointer to validate.
+// StringP Receives a string pointer to validate.
 //
 // The value also can be a custom boolean type such as `type Status *string;`
 //
 // Optionally, the function can receive a name and title, in that order,
-// to be used in the error messages. A `value_%N`` pattern is used as a name in
+// to be used in the error messages. A `value_%N“ pattern is used as a name in
 // error messages if a name and title are not supplied; for example: value_0.
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name `phone_number` will be
-// humanized as `Phone Number`
-
+// humanized as `Phone Number`.
 func StringP[T ~string](value *T, nameAndTitle ...string) *ValidatorStringP[T] {
 	return &ValidatorStringP[T]{context: NewContext(value, nameAndTitle...)}
 }
 
-// Return the context of the validator. The context is useful to create a custom
+// Context Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorStringP[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Invert the logical value associated to the next validator function.
+// Not Invert the logical value associated to the next validator function.
 // For example:
 //
 //	// It will return false because Not() inverts the boolean value associated with the Blank() function
@@ -42,7 +41,7 @@ func (validator *ValidatorStringP[T]) Not() *ValidatorStringP[T] {
 	return validator
 }
 
-// Validate if the value of a string pointer is equal to a another value.
+// EqualTo Validate if the value of a string pointer is equal to a another value.
 // For example:
 //
 //	status := "running"
@@ -50,14 +49,19 @@ func (validator *ValidatorStringP[T]) Not() *ValidatorStringP[T] {
 func (validator *ValidatorStringP[T]) EqualTo(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringEqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
 	return validator
 }
 
-// Validate if a string value is greater than another. This function internally
+// GreaterThan Validate if a string value is greater than another. This function internally
 // uses the golang `>` operator.
 // For example:
 //
@@ -66,31 +70,40 @@ func (validator *ValidatorStringP[T]) EqualTo(value T, template ...string) *Vali
 func (validator *ValidatorStringP[T]) GreaterThan(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringGreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringGreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
 	return validator
 }
 
-// Validate if a string value is greater than or equal to another. This function
+// GreaterOrEqualTo Validate if a string value is greater than or equal to another. This function
 // internally uses the golang `>=` operator.
 // For example:
 //
 //	section := "bc"
 //	Is(v.StringP(&section).GreaterOrEqualTo("bc"))
-
 func (validator *ValidatorStringP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringGreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringGreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
 	return validator
 }
 
-// Validate if a string value is less than another. This function internally
+// LessThan Validate if a string value is less than another. This function internally
 // uses the golang `<` operator.
 // For example:
 //
@@ -99,14 +112,19 @@ func (validator *ValidatorStringP[T]) GreaterOrEqualTo(value T, template ...stri
 func (validator *ValidatorStringP[T]) LessThan(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringLessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringLessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
 	return validator
 }
 
-// Validate if a string value is less or equal to another. This function
+// LessOrEqualTo Validate if a string value is less or equal to another. This function
 // internally uses the golang `<=` operator to compare two strings.
 // For example:
 //
@@ -115,14 +133,19 @@ func (validator *ValidatorStringP[T]) LessThan(value T, template ...string) *Val
 func (validator *ValidatorStringP[T]) LessOrEqualTo(value T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringLessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringLessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
 	return validator
 }
 
-// Validate if a string value is empty. Empty will be false if the length
+// Empty Validate if a string value is empty. Empty will be false if the length
 // of the string is greater than zero, even if the string has only spaces.
 // For checking if the string has only spaces, uses the function `Blank()`
 // instead.
@@ -135,14 +158,19 @@ func (validator *ValidatorStringP[T]) LessOrEqualTo(value T, template ...string)
 func (validator *ValidatorStringP[T]) Empty(template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringEmpty(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringEmpty(*val)
 		},
 		ErrorKeyEmpty, template...)
 
 	return validator
 }
 
-// Validate if a string value is empty or nil. Empty will be false if the length
+// EmptyOrNil Validate if a string value is empty or nil. Empty will be false if the length
 // of the string is greater than zero, even if the string has only spaces.
 // For checking if the string has only spaces, uses the function `BlankOrNil()`
 // instead.
@@ -157,14 +185,19 @@ func (validator *ValidatorStringP[T]) Empty(template ...string) *ValidatorString
 func (validator *ValidatorStringP[T]) EmptyOrNil(template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isStringEmpty(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isStringEmpty(*val)
 		},
 		ErrorKeyEmpty, template...)
 
 	return validator
 }
 
-// Validate if a string value is blank. Blank will be true if the length
+// Blank Validate if a string value is blank. Blank will be true if the length
 // of the string is zero or if the string only has spaces.
 // For example:
 //
@@ -175,14 +208,19 @@ func (validator *ValidatorStringP[T]) EmptyOrNil(template ...string) *ValidatorS
 func (validator *ValidatorStringP[T]) Blank(template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringBlank(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringBlank(*val)
 		},
 		ErrorKeyBlank, template...)
 
 	return validator
 }
 
-// Validate if a string value is blank or nil. Blank will be true if the length
+// BlankOrNil Validate if a string value is blank or nil. Blank will be true if the length
 // of the string is zero or if the string only has spaces.
 // For example:
 //
@@ -195,14 +233,19 @@ func (validator *ValidatorStringP[T]) Blank(template ...string) *ValidatorString
 func (validator *ValidatorStringP[T]) BlankOrNil(template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isStringBlank(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isStringBlank(*val)
 		},
 		ErrorKeyBlank, template...)
 
 	return validator
 }
 
-// Validate if a string pointer pass a custom function.
+// Passing Validate if a string pointer pass a custom function.
 // For example:
 //
 //	status := ""
@@ -212,14 +255,19 @@ func (validator *ValidatorStringP[T]) BlankOrNil(template ...string) *ValidatorS
 func (validator *ValidatorStringP[T]) Passing(function func(v0 *T) bool, template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
 	return validator
 }
 
-// Validate if the value of a string pointer is present in a string slice.
+// InSlice Validate if the value of a string pointer is present in a string slice.
 // For example:
 //
 //	status := "idle"
@@ -228,23 +276,33 @@ func (validator *ValidatorStringP[T]) Passing(function func(v0 *T) bool, templat
 func (validator *ValidatorStringP[T]) InSlice(slice []T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringInSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringInSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value(), template...)
 
 	return validator
 }
 
-// Validate if the value of a string pointer match a regular expression.
+// MatchingTo Validate if the value of a string pointer match a regular expression.
 // For example:
 //
 //	status := "pre-approved"
-//	regex, _ := regexp.Compile("pre-.+")
+//	regex := regexp.MustCompile("pre-.+")
 //	Is(v.StringP(&status).MatchingTo(regex))
 func (validator *ValidatorStringP[T]) MatchingTo(regex *regexp.Regexp, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringMatchingTo(*(validator.context.Value().(*T)), regex)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringMatchingTo(*val, regex)
 		},
 		ErrorKeyMatchingTo,
 		map[string]any{"title": validator.context.title, "regexp": regex},
@@ -253,7 +311,7 @@ func (validator *ValidatorStringP[T]) MatchingTo(regex *regexp.Regexp, template 
 	return validator
 }
 
-// Validate if the maximum length of a string pointer's value.
+// MaxLength Validate if the maximum length of a string pointer's value.
 // For example:
 //
 //	slug := "myname"
@@ -261,7 +319,12 @@ func (validator *ValidatorStringP[T]) MatchingTo(regex *regexp.Regexp, template 
 func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringMaxLength(*(validator.context.Value().(*T)), length)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringMaxLength(*val, length)
 		},
 		ErrorKeyMaxLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -270,7 +333,7 @@ func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) 
 	return validator
 }
 
-// Validate the minimum length of a string pointer's value
+// MinLength Validate the minimum length of a string pointer's value
 // For example:
 //
 //	slug := "myname"
@@ -278,7 +341,12 @@ func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) 
 func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringMinLength(*(validator.context.Value().(*T)), length)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringMinLength(*val, length)
 		},
 		ErrorKeyMinLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -287,7 +355,7 @@ func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) 
 	return validator
 }
 
-// Validate the length of a string pointer's value.
+// OfLength Validate the length of a string pointer's value.
 // For example:
 //
 //	slug := "myname"
@@ -295,7 +363,12 @@ func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) 
 func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringLength(*(validator.context.Value().(*T)), length)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringLength(*val, length)
 		},
 		ErrorKeyLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -304,7 +377,7 @@ func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *
 	return validator
 }
 
-// Validate if the length of a string pointer's value is in a range (inclusive).
+// OfLengthBetween Validate if the length of a string pointer's value is in a range (inclusive).
 // For example:
 //
 //	slug := "myname"
@@ -312,7 +385,12 @@ func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *
 func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringLengthBetween(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringLengthBetween(*val, min, max)
 		},
 		ErrorKeyLengthBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -321,7 +399,7 @@ func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template
 	return validator
 }
 
-// Validate if the value of a string is in a range (inclusive).
+// Between Validate if the value of a string is in a range (inclusive).
 // For example:
 //
 //	slug := "myname"
@@ -329,7 +407,12 @@ func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template
 func (validator *ValidatorStringP[T]) Between(min T, max T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringBetween(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isStringBetween(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -338,7 +421,7 @@ func (validator *ValidatorStringP[T]) Between(min T, max T, template ...string) 
 	return validator
 }
 
-// Validate if a string pointer is nil.
+// Nil Validate if a string pointer is nil.
 // For example:
 //
 //	var status *string
@@ -346,7 +429,12 @@ func (validator *ValidatorStringP[T]) Between(min T, max T, template ...string) 
 func (validator *ValidatorStringP[T]) Nil(template ...string) *ValidatorStringP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 

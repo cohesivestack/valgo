@@ -1,32 +1,36 @@
-package valgo
+package valgo_test
 
 import (
 	"testing"
 
+	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestValidatorBoolPNot(t *testing.T) {
+	t.Parallel()
 
 	bool1 := true
 
-	v := Is(BoolP(&bool1).Not().EqualTo(false))
+	v := valgo.Is(valgo.BoolP(&bool1).Not().EqualTo(false))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valTrue := true
-	v = Is(BoolP(&valTrue).EqualTo(true))
+	v = valgo.Is(valgo.BoolP(&valTrue).EqualTo(true))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	valFalse := false
-	v = Is(BoolP(&valFalse).EqualTo(false))
+	v = valgo.Is(valgo.BoolP(&valFalse).EqualTo(false))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -35,48 +39,50 @@ func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 	var mybool1 MyBool = true
 	var mybool2 MyBool = true
 
-	v = Is(BoolP(&mybool1).EqualTo(mybool2))
+	v = valgo.Is(valgo.BoolP(&mybool1).EqualTo(mybool2))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valTrue := true
 
-	v = Is(BoolP(&valTrue).EqualTo(false))
+	v = valgo.Is(valgo.BoolP(&valTrue).EqualTo(false))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be equal to \"false\"",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	valFalse := false
-	v = Is(BoolP(&valFalse).EqualTo(true))
+	v = valgo.Is(valgo.BoolP(&valFalse).EqualTo(true))
 	assert.Equal(t,
 		"Value 0 must be equal to \"true\"",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	// Custom Type
 	type MyBool bool
 	var mybool1 MyBool = true
 	var mybool2 MyBool = true
 
-	v = Is(BoolP(&mybool1).EqualTo(mybool2))
+	v = valgo.Is(valgo.BoolP(&mybool1).EqualTo(mybool2))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valTrue := true
 
-	v = Is(BoolP(&valTrue).True())
+	v = valgo.Is(valgo.BoolP(&valTrue).True())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -84,92 +90,96 @@ func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
 	type MyBool bool
 	var mybool1 MyBool = true
 
-	v = Is(BoolP(&mybool1).True())
+	v = valgo.Is(valgo.BoolP(&mybool1).True())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valFalse := false
 
-	v = Is(BoolP(&valFalse).True())
+	v = valgo.Is(valgo.BoolP(&valFalse).True())
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be true",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	// Custom Type
 	type MyBool bool
 	var mybool1 MyBool = false
 
-	v = Is(BoolP(&mybool1).True())
+	v = valgo.Is(valgo.BoolP(&mybool1).True())
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be true",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 }
 
 func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	_valFalse := false
 	valFalse := &_valFalse
 
-	v = Is(BoolP(valFalse).False())
+	v = valgo.Is(valgo.BoolP(valFalse).False())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Custom Type
 	type MyBool bool
 	var _mybool1 MyBool = false
-	var mybool1 *MyBool = &_mybool1
+	mybool1 := &_mybool1
 
-	v = Is(BoolP(mybool1).False())
+	v = valgo.Is(valgo.BoolP(mybool1).False())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	_valTrue := true
 	valTrue := &_valTrue
 
-	v = Is(BoolP(valTrue).False())
+	v = valgo.Is(valgo.BoolP(valTrue).False())
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be false",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	// Custom Type
 	// Custom Type
 	type MyBool bool
 	var _mybool1 MyBool = true
-	var mybool1 *MyBool = &_mybool1
+	mybool1 := &_mybool1
 
-	v = Is(BoolP(mybool1).False())
+	v = valgo.Is(valgo.BoolP(mybool1).False())
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be false",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 }
 
 func TestValidatorBoolNilIsValid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	var valTrue *bool
 
-	v = Is(BoolP(valTrue).Nil())
+	v = valgo.Is(valgo.BoolP(valTrue).Nil())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -178,44 +188,46 @@ func TestValidatorBoolNilIsValid(t *testing.T) {
 	type MyBool bool
 	var mybool1 *MyBool
 
-	v = Is(BoolP(mybool1).Nil())
+	v = valgo.Is(valgo.BoolP(mybool1).Nil())
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolNilIsInvalid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valTrue := true
 
-	v = Is(BoolP(&valTrue).Nil())
+	v = valgo.Is(valgo.BoolP(&valTrue).Nil())
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be nil",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	// Custom Type
 	// Custom Type
 	type MyBool bool
 	var mybool1 MyBool = true
 
-	v = Is(BoolP(&mybool1).Nil())
+	v = valgo.Is(valgo.BoolP(&mybool1).Nil())
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be nil",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 }
 
 func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valTrue := true
 
-	v = Is(BoolP(&valTrue).Passing(func(val *bool) bool {
+	v = valgo.Is(valgo.BoolP(&valTrue).Passing(func(val *bool) bool {
 		return *val == true
 	}))
 	assert.True(t, v.Valid())
@@ -226,7 +238,7 @@ func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
 	var mybool1 MyBool = true
 	var mybool2 MyBool = true
 
-	v = Is(BoolP(&mybool1).Passing(func(val *MyBool) bool {
+	v = valgo.Is(valgo.BoolP(&mybool1).Passing(func(val *MyBool) bool {
 		return *val == mybool2
 	}))
 	assert.True(t, v.Valid())
@@ -234,41 +246,43 @@ func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	valFalse := false
 
-	v = Is(BoolP(&valFalse).Passing(func(val *bool) bool {
+	v = valgo.Is(valgo.BoolP(&valFalse).Passing(func(val *bool) bool {
 		return *val == true
 	}))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	// Custom Type
 	type MyBool bool
 	var mybool1 MyBool = false
 
-	v = Is(BoolP(&mybool1).Passing(func(val *MyBool) bool {
+	v = valgo.Is(valgo.BoolP(&mybool1).Passing(func(val *MyBool) bool {
 		return *val == true
 	}))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 }
 
 func TestValidatorBoolPInSliceValid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	boolValue := false
 
-	v = Is(BoolP(&boolValue).InSlice([]bool{true, false, true}))
+	v = valgo.Is(valgo.BoolP(&boolValue).InSlice([]bool{true, false, true}))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -276,40 +290,41 @@ func TestValidatorBoolPInSliceValid(t *testing.T) {
 	type MyBool bool
 	var myBool1 MyBool = false
 
-	v = Is(BoolP(&myBool1).InSlice([]MyBool{true, false, true}))
+	v = valgo.Is(valgo.BoolP(&myBool1).InSlice([]MyBool{true, false, true}))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorBoolPInSliceInvalid(t *testing.T) {
-	TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
-	var v *Validation
+	var v *valgo.Validation
 
 	_boolValue := true
 	boolValue := &_boolValue
 
-	v = Is(BoolP(boolValue).InSlice([]bool{false, false, false}))
+	v = valgo.Is(valgo.BoolP(boolValue).InSlice([]bool{false, false, false}))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	boolValue = nil
 
-	v = Is(BoolP(boolValue).InSlice([]bool{false, false, false}))
+	v = valgo.Is(valgo.BoolP(boolValue).InSlice([]bool{false, false, false}))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 
 	// Custom Type
 	type MyBool bool
 	var myBool1 MyBool = true
 
-	v = Is(BoolP(&myBool1).InSlice([]MyBool{false, false, false}))
+	v = valgo.Is(valgo.BoolP(&myBool1).InSlice([]MyBool{false, false, false}))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.Errors()["value_0"].Messages()[0])
+		v.ErrorByKey("value_0").Messages()[0])
 }

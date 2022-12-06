@@ -1,72 +1,68 @@
-package valgo
+package valgo_test
 
 import (
 	"encoding/json"
 	"fmt"
+	"testing"
+
+	"github.com/cohesivestack/valgo"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-func Example() {
-	val := Is(String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
-		Is(Number(17, "age").GreaterThan(18))
+func TearUpTest(t *testing.T) error {
+	t.Helper()
+	valgo.SetMarshalJSON(nil)
+	valgo.SetDefaultEnglishMessages()
+	valgo.SetDefaultSpanishMessages()
 
-	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
-		fmt.Println(string(out))
+	if err := valgo.SetDefaultLocale("en"); err != nil {
+		return fmt.Errorf("TearDown setting default lang error: %w", err)
 	}
-	// Output: {
-	//   "age": [
-	//     "Age must be greater than \"18\""
-	//   ],
-	//   "full_name": [
-	//     "Full name must have a length between \"4\" and \"20\""
-	//   ]
-	// }
+
+	return nil
 }
 
-func ExampleIs() {
+func TestValidation(t *testing.T) {
+	t.Parallel()
 
-	val := Is(String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
-		Is(Number(17, "age").GreaterThan(18)).
-		Is(String("singl", "status").InSlice([]string{"married", "single"}))
+	val := valgo.Is(valgo.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
+		Is(valgo.Number(17, "age").GreaterThan(18))
 
-	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
-		fmt.Println(string(out))
-	}
+	require.False(t, val.Valid())
 
-	// Output: {
-	//   "age": [
-	//     "Age must be greater than \"18\""
-	//   ],
-	//   "full_name": [
-	//     "Full name must have a length between \"4\" and \"20\""
-	//   ],
-	//   "status": [
-	//     "Status is not valid"
-	//   ]
-	// }
+	out, err := json.Marshal(val.Error())
 
+	require.NoError(t, err)
+	assert.Equal(t, `{"age":["Age must be greater than \"18\""],"full_name":["Full name must have a length between \"4\" and \"20\""]}`, string(out))
 }
 
-func ExampleNew() {
+func TestIs(t *testing.T) {
+	t.Parallel()
 
-	month := 5
-	monthDay := 11
+	val := valgo.Is(valgo.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
+		Is(valgo.Number(17, "age").GreaterThan(18)).
+		Is(valgo.String("singl", "status").InSlice([]string{"married", "single"}))
 
-	val := New()
+	require.False(t, val.Valid())
 
-	if month == 6 {
-		val.Is(Number(monthDay, "month_day").LessOrEqualTo(10))
-	}
+	out, err := json.Marshal(val.Error())
 
-	if val.Valid() {
-		fmt.Println("The validation passes")
-	}
-
-	// Output: The validation passes
+	require.NoError(t, err)
+	assert.Equal(t, `{"age":["Age must be greater than \"18\""],"full_name":["Full name must have a length between \"4\" and \"20\""],"status":["Status is not valid"]}`, string(out))
 }
 
-func ExampleIn() {
+func TestNew(t *testing.T) {
+	t.Parallel()
+
+	val := valgo.New()
+
+	assert.False(t, val.Is(valgo.Number(11, "month_day").LessOrEqualTo(10)).Valid())
+}
+
+func TestIn(t *testing.T) {
+	t.Parallel()
+
 	type Address struct {
 		Name   string
 		Street string
@@ -79,27 +75,22 @@ func ExampleIn() {
 
 	p := Person{"Bob", Address{"", "1600 Amphitheatre Pkwy"}}
 
-	val := Is(String(p.Name, "name").OfLengthBetween(4, 20)).
-		In("address", Is(
-			String(p.Address.Name, "name").Not().Blank()).Is(
-			String(p.Address.Street, "street").Not().Blank()))
+	val := valgo.Is(valgo.String(p.Name, "name").OfLengthBetween(4, 20)).
+		In("address", valgo.Is(
+			valgo.String(p.Address.Name, "name").Not().Blank()).Is(
+			valgo.String(p.Address.Street, "street").Not().Blank()))
 
-	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
-		fmt.Println(string(out))
-	}
+	require.False(t, val.Valid())
 
-	// output: {
-	//   "address.name": [
-	//     "Name can't be blank"
-	//   ],
-	//   "name": [
-	//     "Name must have a length between \"4\" and \"20\""
-	//   ]
-	// }
+	out, err := json.Marshal(val.Error())
+
+	require.NoError(t, err)
+	assert.Equal(t, `{"address.name":["Name can't be blank"],"name":["Name must have a length between \"4\" and \"20\""]}`, string(out))
 }
 
-func ExampleInRow() {
+func TestInRow(t *testing.T) {
+	t.Parallel()
+
 	type Address struct {
 		Name   string
 		Street string
@@ -118,44 +109,31 @@ func ExampleInRow() {
 		},
 	}
 
-	val := Is(String(p.Name, "name").OfLengthBetween(4, 20))
+	val := valgo.Is(valgo.String(p.Name, "name").OfLengthBetween(4, 20))
 
 	for i, a := range p.Addresses {
-		val.InRow("addresses", i, Is(
-			String(a.Name, "name").Not().Blank()).Is(
-			String(a.Street, "street").Not().Blank()))
+		val.InRow("addresses", i, valgo.Is(
+			valgo.String(a.Name, "name").Not().Blank()).Is(
+			valgo.String(a.Street, "street").Not().Blank()))
 	}
 
-	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
-		fmt.Println(string(out))
-	}
+	require.False(t, val.Valid())
 
-	// output: {
-	//   "addresses[0].name": [
-	//     "Name can't be blank"
-	//   ],
-	//   "addresses[1].street": [
-	//     "Street can't be blank"
-	//   ],
-	//   "name": [
-	//     "Name must have a length between \"4\" and \"20\""
-	//   ]
-	// }
+	out, err := json.Marshal(val.Error())
+
+	require.NoError(t, err)
+	assert.Equal(t, `{"addresses[0].name":["Name can't be blank"],"addresses[1].street":["Street can't be blank"],"name":["Name must have a length between \"4\" and \"20\""]}`, string(out))
 }
 
-func ExampleCheck() {
-	val := Check(String("", "full_name").Not().Blank().OfLengthBetween(4, 20))
+func TestCheck(t *testing.T) {
+	t.Parallel()
 
-	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
-		fmt.Println(string(out))
-	}
+	val := valgo.Check(valgo.String("", "full_name").Not().Blank().OfLengthBetween(4, 20))
 
-	// output: {
-	//   "full_name": [
-	//     "Full name can't be blank",
-	//     "Full name must have a length between \"4\" and \"20\""
-	//   ]
-	// }
+	require.False(t, val.Valid())
+
+	out, err := json.Marshal(val.Error())
+
+	require.NoError(t, err)
+	assert.Equal(t, `{"full_name":["Full name can't be blank","Full name must have a length between \"4\" and \"20\""]}`, string(out))
 }

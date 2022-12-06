@@ -4,12 +4,12 @@ import (
 	"reflect"
 )
 
-// The Any validator's type that keeps its validator context.
+// ValidatorAny The Any validator's type that keeps its validator context.
 type ValidatorAny struct {
 	context *ValidatorContext
 }
 
-// Receive a value to validate.
+// Any Receive a value to validate.
 //
 // The value can be any type;
 //
@@ -23,13 +23,13 @@ func Any(value any, nameAndTitle ...string) *ValidatorAny {
 	return &ValidatorAny{context: NewContext(value, nameAndTitle...)}
 }
 
-// Return the context of the validator. The context is useful to create a custom
+// Context Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
 func (validator *ValidatorAny) Context() *ValidatorContext {
 	return validator.context
 }
 
-// Invert the logical value associated with the next validator function.
+// Not Invert the logical value associated with the next validator function.
 // For example:
 //
 //	// It will return false because `Not()` inverts the boolean value associated with the `Equal()` function
@@ -40,7 +40,7 @@ func (validator *ValidatorAny) Not() *ValidatorAny {
 	return validator
 }
 
-// Validate if a value is equal to another. This function internally uses
+// EqualTo Validate if a value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
 //
@@ -56,7 +56,7 @@ func (validator *ValidatorAny) EqualTo(value any, template ...string) *Validator
 	return validator
 }
 
-// Validate if a value passes a custom function.
+// Passing Validate if a value passes a custom function.
 // For example:
 //
 //	status := ""
@@ -73,7 +73,7 @@ func (validator *ValidatorAny) Passing(function func(v any) bool, template ...st
 	return validator
 }
 
-// Validate if a value is nil.
+// Nil Validate if a value is nil.
 // For example:
 //
 //	var status *string

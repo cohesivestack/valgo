@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	types := []string{
 		"uint8",
 		"uint16",
@@ -49,10 +48,10 @@ func main() {
 
 	for _, fileName := range []string{
 		"validator_number.gen.go",
-		"validator_number_test.gen.go",
+		"validator_number.gen_test.go",
 		"validator_number_p.gen.go",
-		"validator_number_p_test.gen.go"} {
-
+		"validator_number_p.gen_test.go",
+	} {
 		templateName := fmt.Sprintf("%s.tpl", fileName)
 
 		output, err := os.Create(fileName)
@@ -65,5 +64,4 @@ func main() {
 			panic(err)
 		}
 	}
-
 }

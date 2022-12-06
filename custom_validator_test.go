@@ -1,14 +1,39 @@
-package custom
+package valgo_test
 
 import (
 	"testing"
 
 	"github.com/cohesivestack/valgo"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
+type ValidatorSecretWord struct {
+	context *valgo.ValidatorContext
+}
+
+func (validator *ValidatorSecretWord) Correct(template ...string) *ValidatorSecretWord {
+	validator.context.Add(
+		func() bool {
+			strVal, ok := validator.context.Value().(string)
+			if !ok {
+				return false
+			}
+
+			return strVal == "cohesive" || strVal == "stack"
+		},
+		"not_valid_secret", template...)
+
+	return validator
+}
+
+func (validator *ValidatorSecretWord) Context() *valgo.ValidatorContext {
+	return validator.context
+}
+
 func TestCustomValidator(t *testing.T) {
-	valgo.TeardownTest()
+	t.Parallel()
+	require.NoError(t, TearUpTest(t))
 
 	errorMessages, err := valgo.GetLocaleMessages(valgo.GetDefaultLocaleCode())
 	assert.NoError(t, err)
@@ -20,32 +45,12 @@ func TestCustomValidator(t *testing.T) {
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)
-	assert.Len(t, v.Errors()["secret"].Messages(), 1)
-	assert.Contains(t, v.Errors()["secret"].Messages(), "Secret is invalid.")
+	assert.Len(t, v.ErrorByKey("secret").Messages(), 1)
+	assert.Contains(t, v.ErrorByKey("secret").Messages(), "Secret is invalid.")
 
 	v = valgo.Is(SecretWord("cohesive").Correct())
 	assert.True(t, v.Valid())
 	assert.Len(t, v.Errors(), 0)
-
-}
-
-type ValidatorSecretWord struct {
-	context *valgo.ValidatorContext
-}
-
-func (validator *ValidatorSecretWord) Correct(template ...string) *ValidatorSecretWord {
-	validator.context.Add(
-		func() bool {
-			return validator.context.Value().(string) == "cohesive" ||
-				validator.context.Value().(string) == "stack"
-		},
-		"not_valid_secret", template...)
-
-	return validator
-}
-
-func (validator *ValidatorSecretWord) Context() *valgo.ValidatorContext {
-	return validator.context
 }
 
 func SecretWord(value string, nameAndTitle ...string) *ValidatorSecretWord {
