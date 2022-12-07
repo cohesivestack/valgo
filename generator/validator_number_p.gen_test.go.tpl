@@ -11,7 +11,7 @@ import (
 {{ range . }}
 func TestValidator{{ .Name }}PNot(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	number1 := {{ .Type }}(2)
 
@@ -22,7 +22,7 @@ func TestValidator{{ .Name }}PNot(t *testing.T) {
 
 func TestValidator{{ .Name }}PEqualToValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(2)
@@ -42,7 +42,7 @@ func TestValidator{{ .Name }}PEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PEqualToInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(2)
@@ -79,7 +79,7 @@ func TestValidator{{ .Name }}PEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PGreaterThanValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(3)
@@ -100,7 +100,7 @@ func TestValidator{{ .Name }}PGreaterThanValid(t *testing.T) {
 
 func TestValidator{{ .Name }}PGreaterThanInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(2)
@@ -142,7 +142,7 @@ func TestValidator{{ .Name }}PGreaterThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PGreaterOrEqualToValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(2)
@@ -168,7 +168,7 @@ func TestValidator{{ .Name }}PGreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PGreaterOrEqualToInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(2)
@@ -202,7 +202,7 @@ func TestValidator{{ .Name }}PGreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PLessThanValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(2)
@@ -222,7 +222,7 @@ func TestValidator{{ .Name }}PLessThanValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PLessThanInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(2)
@@ -264,7 +264,7 @@ func TestValidator{{ .Name }}PLessThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PLessOrEqualToValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(2)
@@ -288,7 +288,7 @@ func TestValidator{{ .Name }}PLessOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PLessOrEqualToInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(3)
@@ -321,7 +321,7 @@ func TestValidator{{ .Name }}PLessOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PBetweenValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(2)
@@ -354,7 +354,7 @@ func TestValidator{{ .Name }}PBetweenValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PBetweenInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(2)
@@ -397,7 +397,7 @@ func TestValidator{{ .Name }}PBetweenInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PZeroValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(0)
@@ -417,7 +417,7 @@ func TestValidator{{ .Name }}PZeroValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PZeroInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(1)
@@ -450,7 +450,7 @@ func TestValidator{{ .Name }}PZeroInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PZeroOrNilValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	_number1 := {{ .Type }}(0)
@@ -476,7 +476,7 @@ func TestValidator{{ .Name }}PZeroOrNilValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PZeroOrNilInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	number1 := {{ .Type }}(1)
@@ -500,7 +500,7 @@ func TestValidator{{ .Name }}PZeroOrNilInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PPassingValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -525,7 +525,7 @@ func TestValidator{{ .Name }}PPassingValid(t *testing.T) {
 
 func TestValidator{{ .Name }}PPassingInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -554,7 +554,7 @@ func TestValidator{{ .Name }}PPassingInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PInSliceValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -574,7 +574,7 @@ func TestValidator{{ .Name }}PInSliceValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}PInSliceInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -608,7 +608,7 @@ func TestValidator{{ .Name }}PInSliceInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PNilIsValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -629,7 +629,7 @@ func TestValidator{{ .Name }}PNilIsValid(t *testing.T) {
 
 func TestValidator{{ .Name }}PNilIsInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 

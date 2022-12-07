@@ -19,7 +19,7 @@ type ValidatorContext struct {
 }
 
 // NewContext Create a new [ValidatorContext] to be used by a custom validator.
-func NewContext[T any](value T, nameAndTitle ...string) *ValidatorContext {
+func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 	context := &ValidatorContext{
 		value:         value,
 		fragments:     []*validatorFragment{},

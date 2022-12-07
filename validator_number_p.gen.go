@@ -47,7 +47,12 @@ func (validator *ValidatorUint8P[T]) Not() *ValidatorUint8P[T] {
 func (validator *ValidatorUint8P[T]) EqualTo(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -63,7 +68,12 @@ func (validator *ValidatorUint8P[T]) EqualTo(value T, template ...string) *Valid
 func (validator *ValidatorUint8P[T]) GreaterThan(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -79,7 +89,12 @@ func (validator *ValidatorUint8P[T]) GreaterThan(value T, template ...string) *V
 func (validator *ValidatorUint8P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -95,7 +110,12 @@ func (validator *ValidatorUint8P[T]) GreaterOrEqualTo(value T, template ...strin
 func (validator *ValidatorUint8P[T]) LessThan(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -111,7 +131,12 @@ func (validator *ValidatorUint8P[T]) LessThan(value T, template ...string) *Vali
 func (validator *ValidatorUint8P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -126,7 +151,12 @@ func (validator *ValidatorUint8P[T]) LessOrEqualTo(value T, template ...string) 
 func (validator *ValidatorUint8P[T]) Between(min T, max T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -144,7 +174,12 @@ func (validator *ValidatorUint8P[T]) Between(min T, max T, template ...string) *
 func (validator *ValidatorUint8P[T]) Zero(template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -160,7 +195,12 @@ func (validator *ValidatorUint8P[T]) Zero(template ...string) *ValidatorUint8P[T
 func (validator *ValidatorUint8P[T]) ZeroOrNil(template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isUint8Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isUint8Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -176,7 +216,12 @@ func (validator *ValidatorUint8P[T]) ZeroOrNil(template ...string) *ValidatorUin
 func (validator *ValidatorUint8P[T]) Nil(template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -193,7 +238,12 @@ func (validator *ValidatorUint8P[T]) Nil(template ...string) *ValidatorUint8P[T]
 func (validator *ValidatorUint8P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint8P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -209,7 +259,12 @@ func (validator *ValidatorUint8P[T]) Passing(function func(v *T) bool, template 
 func (validator *ValidatorUint8P[T]) InSlice(slice []T, template ...string) *ValidatorUint8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint8InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint8InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -262,7 +317,12 @@ func (validator *ValidatorUint16P[T]) Not() *ValidatorUint16P[T] {
 func (validator *ValidatorUint16P[T]) EqualTo(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -278,7 +338,12 @@ func (validator *ValidatorUint16P[T]) EqualTo(value T, template ...string) *Vali
 func (validator *ValidatorUint16P[T]) GreaterThan(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -294,7 +359,12 @@ func (validator *ValidatorUint16P[T]) GreaterThan(value T, template ...string) *
 func (validator *ValidatorUint16P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -310,7 +380,12 @@ func (validator *ValidatorUint16P[T]) GreaterOrEqualTo(value T, template ...stri
 func (validator *ValidatorUint16P[T]) LessThan(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -326,7 +401,12 @@ func (validator *ValidatorUint16P[T]) LessThan(value T, template ...string) *Val
 func (validator *ValidatorUint16P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -341,7 +421,12 @@ func (validator *ValidatorUint16P[T]) LessOrEqualTo(value T, template ...string)
 func (validator *ValidatorUint16P[T]) Between(min T, max T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -359,7 +444,12 @@ func (validator *ValidatorUint16P[T]) Between(min T, max T, template ...string) 
 func (validator *ValidatorUint16P[T]) Zero(template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -375,7 +465,12 @@ func (validator *ValidatorUint16P[T]) Zero(template ...string) *ValidatorUint16P
 func (validator *ValidatorUint16P[T]) ZeroOrNil(template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isUint16Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isUint16Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -391,7 +486,12 @@ func (validator *ValidatorUint16P[T]) ZeroOrNil(template ...string) *ValidatorUi
 func (validator *ValidatorUint16P[T]) Nil(template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -408,7 +508,12 @@ func (validator *ValidatorUint16P[T]) Nil(template ...string) *ValidatorUint16P[
 func (validator *ValidatorUint16P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint16P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -424,7 +529,12 @@ func (validator *ValidatorUint16P[T]) Passing(function func(v *T) bool, template
 func (validator *ValidatorUint16P[T]) InSlice(slice []T, template ...string) *ValidatorUint16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint16InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint16InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -477,7 +587,12 @@ func (validator *ValidatorUint32P[T]) Not() *ValidatorUint32P[T] {
 func (validator *ValidatorUint32P[T]) EqualTo(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -493,7 +608,12 @@ func (validator *ValidatorUint32P[T]) EqualTo(value T, template ...string) *Vali
 func (validator *ValidatorUint32P[T]) GreaterThan(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -509,7 +629,12 @@ func (validator *ValidatorUint32P[T]) GreaterThan(value T, template ...string) *
 func (validator *ValidatorUint32P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -525,7 +650,12 @@ func (validator *ValidatorUint32P[T]) GreaterOrEqualTo(value T, template ...stri
 func (validator *ValidatorUint32P[T]) LessThan(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -541,7 +671,12 @@ func (validator *ValidatorUint32P[T]) LessThan(value T, template ...string) *Val
 func (validator *ValidatorUint32P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -556,7 +691,12 @@ func (validator *ValidatorUint32P[T]) LessOrEqualTo(value T, template ...string)
 func (validator *ValidatorUint32P[T]) Between(min T, max T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -574,7 +714,12 @@ func (validator *ValidatorUint32P[T]) Between(min T, max T, template ...string) 
 func (validator *ValidatorUint32P[T]) Zero(template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -590,7 +735,12 @@ func (validator *ValidatorUint32P[T]) Zero(template ...string) *ValidatorUint32P
 func (validator *ValidatorUint32P[T]) ZeroOrNil(template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isUint32Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isUint32Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -606,7 +756,12 @@ func (validator *ValidatorUint32P[T]) ZeroOrNil(template ...string) *ValidatorUi
 func (validator *ValidatorUint32P[T]) Nil(template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -623,7 +778,12 @@ func (validator *ValidatorUint32P[T]) Nil(template ...string) *ValidatorUint32P[
 func (validator *ValidatorUint32P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint32P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -639,7 +799,12 @@ func (validator *ValidatorUint32P[T]) Passing(function func(v *T) bool, template
 func (validator *ValidatorUint32P[T]) InSlice(slice []T, template ...string) *ValidatorUint32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint32InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint32InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -692,7 +857,12 @@ func (validator *ValidatorUint64P[T]) Not() *ValidatorUint64P[T] {
 func (validator *ValidatorUint64P[T]) EqualTo(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -708,7 +878,12 @@ func (validator *ValidatorUint64P[T]) EqualTo(value T, template ...string) *Vali
 func (validator *ValidatorUint64P[T]) GreaterThan(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -724,7 +899,12 @@ func (validator *ValidatorUint64P[T]) GreaterThan(value T, template ...string) *
 func (validator *ValidatorUint64P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -740,7 +920,12 @@ func (validator *ValidatorUint64P[T]) GreaterOrEqualTo(value T, template ...stri
 func (validator *ValidatorUint64P[T]) LessThan(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -756,7 +941,12 @@ func (validator *ValidatorUint64P[T]) LessThan(value T, template ...string) *Val
 func (validator *ValidatorUint64P[T]) LessOrEqualTo(value T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -771,7 +961,12 @@ func (validator *ValidatorUint64P[T]) LessOrEqualTo(value T, template ...string)
 func (validator *ValidatorUint64P[T]) Between(min T, max T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -789,7 +984,12 @@ func (validator *ValidatorUint64P[T]) Between(min T, max T, template ...string) 
 func (validator *ValidatorUint64P[T]) Zero(template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -805,7 +1005,12 @@ func (validator *ValidatorUint64P[T]) Zero(template ...string) *ValidatorUint64P
 func (validator *ValidatorUint64P[T]) ZeroOrNil(template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isUint64Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isUint64Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -821,7 +1026,12 @@ func (validator *ValidatorUint64P[T]) ZeroOrNil(template ...string) *ValidatorUi
 func (validator *ValidatorUint64P[T]) Nil(template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -838,7 +1048,12 @@ func (validator *ValidatorUint64P[T]) Nil(template ...string) *ValidatorUint64P[
 func (validator *ValidatorUint64P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorUint64P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -854,7 +1069,12 @@ func (validator *ValidatorUint64P[T]) Passing(function func(v *T) bool, template
 func (validator *ValidatorUint64P[T]) InSlice(slice []T, template ...string) *ValidatorUint64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isUint64InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isUint64InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -907,7 +1127,12 @@ func (validator *ValidatorIntP[T]) Not() *ValidatorIntP[T] {
 func (validator *ValidatorIntP[T]) EqualTo(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntEqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -923,7 +1148,12 @@ func (validator *ValidatorIntP[T]) EqualTo(value T, template ...string) *Validat
 func (validator *ValidatorIntP[T]) GreaterThan(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntGreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntGreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -939,7 +1169,12 @@ func (validator *ValidatorIntP[T]) GreaterThan(value T, template ...string) *Val
 func (validator *ValidatorIntP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntGreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntGreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -955,7 +1190,12 @@ func (validator *ValidatorIntP[T]) GreaterOrEqualTo(value T, template ...string)
 func (validator *ValidatorIntP[T]) LessThan(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntLessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntLessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -971,7 +1211,12 @@ func (validator *ValidatorIntP[T]) LessThan(value T, template ...string) *Valida
 func (validator *ValidatorIntP[T]) LessOrEqualTo(value T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntLessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntLessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -986,7 +1231,12 @@ func (validator *ValidatorIntP[T]) LessOrEqualTo(value T, template ...string) *V
 func (validator *ValidatorIntP[T]) Between(min T, max T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntBetween(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntBetween(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -1004,7 +1254,12 @@ func (validator *ValidatorIntP[T]) Between(min T, max T, template ...string) *Va
 func (validator *ValidatorIntP[T]) Zero(template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntZero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntZero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1020,7 +1275,12 @@ func (validator *ValidatorIntP[T]) Zero(template ...string) *ValidatorIntP[T] {
 func (validator *ValidatorIntP[T]) ZeroOrNil(template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isIntZero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isIntZero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1036,7 +1296,12 @@ func (validator *ValidatorIntP[T]) ZeroOrNil(template ...string) *ValidatorIntP[
 func (validator *ValidatorIntP[T]) Nil(template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -1053,7 +1318,12 @@ func (validator *ValidatorIntP[T]) Nil(template ...string) *ValidatorIntP[T] {
 func (validator *ValidatorIntP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorIntP[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -1069,7 +1339,12 @@ func (validator *ValidatorIntP[T]) Passing(function func(v *T) bool, template ..
 func (validator *ValidatorIntP[T]) InSlice(slice []T, template ...string) *ValidatorIntP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isIntInSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isIntInSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -1122,7 +1397,12 @@ func (validator *ValidatorInt8P[T]) Not() *ValidatorInt8P[T] {
 func (validator *ValidatorInt8P[T]) EqualTo(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -1138,7 +1418,12 @@ func (validator *ValidatorInt8P[T]) EqualTo(value T, template ...string) *Valida
 func (validator *ValidatorInt8P[T]) GreaterThan(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -1154,7 +1439,12 @@ func (validator *ValidatorInt8P[T]) GreaterThan(value T, template ...string) *Va
 func (validator *ValidatorInt8P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -1170,7 +1460,12 @@ func (validator *ValidatorInt8P[T]) GreaterOrEqualTo(value T, template ...string
 func (validator *ValidatorInt8P[T]) LessThan(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -1186,7 +1481,12 @@ func (validator *ValidatorInt8P[T]) LessThan(value T, template ...string) *Valid
 func (validator *ValidatorInt8P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -1201,7 +1501,12 @@ func (validator *ValidatorInt8P[T]) LessOrEqualTo(value T, template ...string) *
 func (validator *ValidatorInt8P[T]) Between(min T, max T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -1219,7 +1524,12 @@ func (validator *ValidatorInt8P[T]) Between(min T, max T, template ...string) *V
 func (validator *ValidatorInt8P[T]) Zero(template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1235,7 +1545,12 @@ func (validator *ValidatorInt8P[T]) Zero(template ...string) *ValidatorInt8P[T] 
 func (validator *ValidatorInt8P[T]) ZeroOrNil(template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isInt8Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isInt8Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1251,7 +1566,12 @@ func (validator *ValidatorInt8P[T]) ZeroOrNil(template ...string) *ValidatorInt8
 func (validator *ValidatorInt8P[T]) Nil(template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -1268,7 +1588,12 @@ func (validator *ValidatorInt8P[T]) Nil(template ...string) *ValidatorInt8P[T] {
 func (validator *ValidatorInt8P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt8P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -1284,7 +1609,12 @@ func (validator *ValidatorInt8P[T]) Passing(function func(v *T) bool, template .
 func (validator *ValidatorInt8P[T]) InSlice(slice []T, template ...string) *ValidatorInt8P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt8InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt8InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -1337,7 +1667,12 @@ func (validator *ValidatorInt16P[T]) Not() *ValidatorInt16P[T] {
 func (validator *ValidatorInt16P[T]) EqualTo(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -1353,7 +1688,12 @@ func (validator *ValidatorInt16P[T]) EqualTo(value T, template ...string) *Valid
 func (validator *ValidatorInt16P[T]) GreaterThan(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -1369,7 +1709,12 @@ func (validator *ValidatorInt16P[T]) GreaterThan(value T, template ...string) *V
 func (validator *ValidatorInt16P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -1385,7 +1730,12 @@ func (validator *ValidatorInt16P[T]) GreaterOrEqualTo(value T, template ...strin
 func (validator *ValidatorInt16P[T]) LessThan(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -1401,7 +1751,12 @@ func (validator *ValidatorInt16P[T]) LessThan(value T, template ...string) *Vali
 func (validator *ValidatorInt16P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -1416,7 +1771,12 @@ func (validator *ValidatorInt16P[T]) LessOrEqualTo(value T, template ...string) 
 func (validator *ValidatorInt16P[T]) Between(min T, max T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -1434,7 +1794,12 @@ func (validator *ValidatorInt16P[T]) Between(min T, max T, template ...string) *
 func (validator *ValidatorInt16P[T]) Zero(template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1450,7 +1815,12 @@ func (validator *ValidatorInt16P[T]) Zero(template ...string) *ValidatorInt16P[T
 func (validator *ValidatorInt16P[T]) ZeroOrNil(template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isInt16Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isInt16Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1466,7 +1836,12 @@ func (validator *ValidatorInt16P[T]) ZeroOrNil(template ...string) *ValidatorInt
 func (validator *ValidatorInt16P[T]) Nil(template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -1483,7 +1858,12 @@ func (validator *ValidatorInt16P[T]) Nil(template ...string) *ValidatorInt16P[T]
 func (validator *ValidatorInt16P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt16P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -1499,7 +1879,12 @@ func (validator *ValidatorInt16P[T]) Passing(function func(v *T) bool, template 
 func (validator *ValidatorInt16P[T]) InSlice(slice []T, template ...string) *ValidatorInt16P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt16InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt16InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -1552,7 +1937,12 @@ func (validator *ValidatorInt32P[T]) Not() *ValidatorInt32P[T] {
 func (validator *ValidatorInt32P[T]) EqualTo(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -1568,7 +1958,12 @@ func (validator *ValidatorInt32P[T]) EqualTo(value T, template ...string) *Valid
 func (validator *ValidatorInt32P[T]) GreaterThan(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -1584,7 +1979,12 @@ func (validator *ValidatorInt32P[T]) GreaterThan(value T, template ...string) *V
 func (validator *ValidatorInt32P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -1600,7 +2000,12 @@ func (validator *ValidatorInt32P[T]) GreaterOrEqualTo(value T, template ...strin
 func (validator *ValidatorInt32P[T]) LessThan(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -1616,7 +2021,12 @@ func (validator *ValidatorInt32P[T]) LessThan(value T, template ...string) *Vali
 func (validator *ValidatorInt32P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -1631,7 +2041,12 @@ func (validator *ValidatorInt32P[T]) LessOrEqualTo(value T, template ...string) 
 func (validator *ValidatorInt32P[T]) Between(min T, max T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -1649,7 +2064,12 @@ func (validator *ValidatorInt32P[T]) Between(min T, max T, template ...string) *
 func (validator *ValidatorInt32P[T]) Zero(template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1665,7 +2085,12 @@ func (validator *ValidatorInt32P[T]) Zero(template ...string) *ValidatorInt32P[T
 func (validator *ValidatorInt32P[T]) ZeroOrNil(template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isInt32Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isInt32Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1681,7 +2106,12 @@ func (validator *ValidatorInt32P[T]) ZeroOrNil(template ...string) *ValidatorInt
 func (validator *ValidatorInt32P[T]) Nil(template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -1698,7 +2128,12 @@ func (validator *ValidatorInt32P[T]) Nil(template ...string) *ValidatorInt32P[T]
 func (validator *ValidatorInt32P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt32P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -1714,7 +2149,12 @@ func (validator *ValidatorInt32P[T]) Passing(function func(v *T) bool, template 
 func (validator *ValidatorInt32P[T]) InSlice(slice []T, template ...string) *ValidatorInt32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt32InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt32InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -1767,7 +2207,12 @@ func (validator *ValidatorInt64P[T]) Not() *ValidatorInt64P[T] {
 func (validator *ValidatorInt64P[T]) EqualTo(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -1783,7 +2228,12 @@ func (validator *ValidatorInt64P[T]) EqualTo(value T, template ...string) *Valid
 func (validator *ValidatorInt64P[T]) GreaterThan(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -1799,7 +2249,12 @@ func (validator *ValidatorInt64P[T]) GreaterThan(value T, template ...string) *V
 func (validator *ValidatorInt64P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -1815,7 +2270,12 @@ func (validator *ValidatorInt64P[T]) GreaterOrEqualTo(value T, template ...strin
 func (validator *ValidatorInt64P[T]) LessThan(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -1831,7 +2291,12 @@ func (validator *ValidatorInt64P[T]) LessThan(value T, template ...string) *Vali
 func (validator *ValidatorInt64P[T]) LessOrEqualTo(value T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -1846,7 +2311,12 @@ func (validator *ValidatorInt64P[T]) LessOrEqualTo(value T, template ...string) 
 func (validator *ValidatorInt64P[T]) Between(min T, max T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -1864,7 +2334,12 @@ func (validator *ValidatorInt64P[T]) Between(min T, max T, template ...string) *
 func (validator *ValidatorInt64P[T]) Zero(template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1880,7 +2355,12 @@ func (validator *ValidatorInt64P[T]) Zero(template ...string) *ValidatorInt64P[T
 func (validator *ValidatorInt64P[T]) ZeroOrNil(template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isInt64Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isInt64Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -1896,7 +2376,12 @@ func (validator *ValidatorInt64P[T]) ZeroOrNil(template ...string) *ValidatorInt
 func (validator *ValidatorInt64P[T]) Nil(template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -1913,7 +2398,12 @@ func (validator *ValidatorInt64P[T]) Nil(template ...string) *ValidatorInt64P[T]
 func (validator *ValidatorInt64P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorInt64P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -1929,7 +2419,12 @@ func (validator *ValidatorInt64P[T]) Passing(function func(v *T) bool, template 
 func (validator *ValidatorInt64P[T]) InSlice(slice []T, template ...string) *ValidatorInt64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isInt64InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isInt64InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -1982,7 +2477,12 @@ func (validator *ValidatorFloat32P[T]) Not() *ValidatorFloat32P[T] {
 func (validator *ValidatorFloat32P[T]) EqualTo(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -1998,7 +2498,12 @@ func (validator *ValidatorFloat32P[T]) EqualTo(value T, template ...string) *Val
 func (validator *ValidatorFloat32P[T]) GreaterThan(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -2014,7 +2519,12 @@ func (validator *ValidatorFloat32P[T]) GreaterThan(value T, template ...string) 
 func (validator *ValidatorFloat32P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -2030,7 +2540,12 @@ func (validator *ValidatorFloat32P[T]) GreaterOrEqualTo(value T, template ...str
 func (validator *ValidatorFloat32P[T]) LessThan(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -2046,7 +2561,12 @@ func (validator *ValidatorFloat32P[T]) LessThan(value T, template ...string) *Va
 func (validator *ValidatorFloat32P[T]) LessOrEqualTo(value T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -2061,7 +2581,12 @@ func (validator *ValidatorFloat32P[T]) LessOrEqualTo(value T, template ...string
 func (validator *ValidatorFloat32P[T]) Between(min T, max T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -2079,7 +2604,12 @@ func (validator *ValidatorFloat32P[T]) Between(min T, max T, template ...string)
 func (validator *ValidatorFloat32P[T]) Zero(template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2095,7 +2625,12 @@ func (validator *ValidatorFloat32P[T]) Zero(template ...string) *ValidatorFloat3
 func (validator *ValidatorFloat32P[T]) ZeroOrNil(template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isFloat32Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isFloat32Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2111,7 +2646,12 @@ func (validator *ValidatorFloat32P[T]) ZeroOrNil(template ...string) *ValidatorF
 func (validator *ValidatorFloat32P[T]) Nil(template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -2128,7 +2668,12 @@ func (validator *ValidatorFloat32P[T]) Nil(template ...string) *ValidatorFloat32
 func (validator *ValidatorFloat32P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorFloat32P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -2144,7 +2689,12 @@ func (validator *ValidatorFloat32P[T]) Passing(function func(v *T) bool, templat
 func (validator *ValidatorFloat32P[T]) InSlice(slice []T, template ...string) *ValidatorFloat32P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat32InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat32InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -2197,7 +2747,12 @@ func (validator *ValidatorFloat64P[T]) Not() *ValidatorFloat64P[T] {
 func (validator *ValidatorFloat64P[T]) EqualTo(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -2213,7 +2768,12 @@ func (validator *ValidatorFloat64P[T]) EqualTo(value T, template ...string) *Val
 func (validator *ValidatorFloat64P[T]) GreaterThan(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -2229,7 +2789,12 @@ func (validator *ValidatorFloat64P[T]) GreaterThan(value T, template ...string) 
 func (validator *ValidatorFloat64P[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -2245,7 +2810,12 @@ func (validator *ValidatorFloat64P[T]) GreaterOrEqualTo(value T, template ...str
 func (validator *ValidatorFloat64P[T]) LessThan(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -2261,7 +2831,12 @@ func (validator *ValidatorFloat64P[T]) LessThan(value T, template ...string) *Va
 func (validator *ValidatorFloat64P[T]) LessOrEqualTo(value T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -2276,7 +2851,12 @@ func (validator *ValidatorFloat64P[T]) LessOrEqualTo(value T, template ...string
 func (validator *ValidatorFloat64P[T]) Between(min T, max T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -2294,7 +2874,12 @@ func (validator *ValidatorFloat64P[T]) Between(min T, max T, template ...string)
 func (validator *ValidatorFloat64P[T]) Zero(template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2310,7 +2895,12 @@ func (validator *ValidatorFloat64P[T]) Zero(template ...string) *ValidatorFloat6
 func (validator *ValidatorFloat64P[T]) ZeroOrNil(template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isFloat64Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isFloat64Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2326,7 +2916,12 @@ func (validator *ValidatorFloat64P[T]) ZeroOrNil(template ...string) *ValidatorF
 func (validator *ValidatorFloat64P[T]) Nil(template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -2343,7 +2938,12 @@ func (validator *ValidatorFloat64P[T]) Nil(template ...string) *ValidatorFloat64
 func (validator *ValidatorFloat64P[T]) Passing(function func(v *T) bool, template ...string) *ValidatorFloat64P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -2359,7 +2959,12 @@ func (validator *ValidatorFloat64P[T]) Passing(function func(v *T) bool, templat
 func (validator *ValidatorFloat64P[T]) InSlice(slice []T, template ...string) *ValidatorFloat64P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isFloat64InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isFloat64InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -2412,7 +3017,12 @@ func (validator *ValidatorByteP[T]) Not() *ValidatorByteP[T] {
 func (validator *ValidatorByteP[T]) EqualTo(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteEqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -2428,7 +3038,12 @@ func (validator *ValidatorByteP[T]) EqualTo(value T, template ...string) *Valida
 func (validator *ValidatorByteP[T]) GreaterThan(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteGreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteGreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -2444,7 +3059,12 @@ func (validator *ValidatorByteP[T]) GreaterThan(value T, template ...string) *Va
 func (validator *ValidatorByteP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteGreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteGreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -2460,7 +3080,12 @@ func (validator *ValidatorByteP[T]) GreaterOrEqualTo(value T, template ...string
 func (validator *ValidatorByteP[T]) LessThan(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteLessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteLessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -2476,7 +3101,12 @@ func (validator *ValidatorByteP[T]) LessThan(value T, template ...string) *Valid
 func (validator *ValidatorByteP[T]) LessOrEqualTo(value T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteLessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteLessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -2491,7 +3121,12 @@ func (validator *ValidatorByteP[T]) LessOrEqualTo(value T, template ...string) *
 func (validator *ValidatorByteP[T]) Between(min T, max T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteBetween(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteBetween(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -2509,7 +3144,12 @@ func (validator *ValidatorByteP[T]) Between(min T, max T, template ...string) *V
 func (validator *ValidatorByteP[T]) Zero(template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteZero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteZero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2525,7 +3165,12 @@ func (validator *ValidatorByteP[T]) Zero(template ...string) *ValidatorByteP[T] 
 func (validator *ValidatorByteP[T]) ZeroOrNil(template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isByteZero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isByteZero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2541,7 +3186,12 @@ func (validator *ValidatorByteP[T]) ZeroOrNil(template ...string) *ValidatorByte
 func (validator *ValidatorByteP[T]) Nil(template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -2558,7 +3208,12 @@ func (validator *ValidatorByteP[T]) Nil(template ...string) *ValidatorByteP[T] {
 func (validator *ValidatorByteP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorByteP[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -2574,7 +3229,12 @@ func (validator *ValidatorByteP[T]) Passing(function func(v *T) bool, template .
 func (validator *ValidatorByteP[T]) InSlice(slice []T, template ...string) *ValidatorByteP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isByteInSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isByteInSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
@@ -2627,7 +3287,12 @@ func (validator *ValidatorRuneP[T]) Not() *ValidatorRuneP[T] {
 func (validator *ValidatorRuneP[T]) EqualTo(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneEqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -2643,7 +3308,12 @@ func (validator *ValidatorRuneP[T]) EqualTo(value T, template ...string) *Valida
 func (validator *ValidatorRuneP[T]) GreaterThan(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneGreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneGreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -2659,7 +3329,12 @@ func (validator *ValidatorRuneP[T]) GreaterThan(value T, template ...string) *Va
 func (validator *ValidatorRuneP[T]) GreaterOrEqualTo(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneGreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneGreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -2675,7 +3350,12 @@ func (validator *ValidatorRuneP[T]) GreaterOrEqualTo(value T, template ...string
 func (validator *ValidatorRuneP[T]) LessThan(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneLessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneLessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -2691,7 +3371,12 @@ func (validator *ValidatorRuneP[T]) LessThan(value T, template ...string) *Valid
 func (validator *ValidatorRuneP[T]) LessOrEqualTo(value T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneLessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneLessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -2706,7 +3391,12 @@ func (validator *ValidatorRuneP[T]) LessOrEqualTo(value T, template ...string) *
 func (validator *ValidatorRuneP[T]) Between(min T, max T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneBetween(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneBetween(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -2724,7 +3414,12 @@ func (validator *ValidatorRuneP[T]) Between(min T, max T, template ...string) *V
 func (validator *ValidatorRuneP[T]) Zero(template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneZero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneZero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2740,7 +3435,12 @@ func (validator *ValidatorRuneP[T]) Zero(template ...string) *ValidatorRuneP[T] 
 func (validator *ValidatorRuneP[T]) ZeroOrNil(template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || isRuneZero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || isRuneZero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -2756,7 +3456,12 @@ func (validator *ValidatorRuneP[T]) ZeroOrNil(template ...string) *ValidatorRune
 func (validator *ValidatorRuneP[T]) Nil(template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -2773,7 +3478,12 @@ func (validator *ValidatorRuneP[T]) Nil(template ...string) *ValidatorRuneP[T] {
 func (validator *ValidatorRuneP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorRuneP[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -2789,7 +3499,12 @@ func (validator *ValidatorRuneP[T]) Passing(function func(v *T) bool, template .
 func (validator *ValidatorRuneP[T]) InSlice(slice []T, template ...string) *ValidatorRuneP[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isRuneInSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && isRuneInSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 

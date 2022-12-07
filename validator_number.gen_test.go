@@ -46,7 +46,7 @@ func TestValidatorUint8EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -58,7 +58,7 @@ func TestValidatorUint8EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8GreaterThanValid(t *testing.T) {
@@ -89,13 +89,13 @@ func TestValidatorUint8GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint8(uint8(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -106,7 +106,7 @@ func TestValidatorUint8GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8GreaterOrEqualToValid(t *testing.T) {
@@ -140,7 +140,7 @@ func TestValidatorUint8GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -151,7 +151,7 @@ func TestValidatorUint8GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8LessThanValid(t *testing.T) {
@@ -181,13 +181,13 @@ func TestValidatorUint8LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint8(uint8(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -198,7 +198,7 @@ func TestValidatorUint8LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8LessOrEqualToValid(t *testing.T) {
@@ -232,7 +232,7 @@ func TestValidatorUint8LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -243,7 +243,7 @@ func TestValidatorUint8LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8BetweenValid(t *testing.T) {
@@ -282,13 +282,13 @@ func TestValidatorUint8BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint8(uint8(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -300,7 +300,7 @@ func TestValidatorUint8BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8ZeroValid(t *testing.T) {
@@ -329,7 +329,7 @@ func TestValidatorUint8ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -339,7 +339,7 @@ func TestValidatorUint8ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8PassingValid(t *testing.T) {
@@ -377,7 +377,7 @@ func TestValidatorUint8PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -389,7 +389,7 @@ func TestValidatorUint8PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint8InSliceValid(t *testing.T) {
@@ -421,7 +421,7 @@ func TestValidatorUint8InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint8 uint8
@@ -431,7 +431,7 @@ func TestValidatorUint8InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16Not(t *testing.T) {
@@ -471,7 +471,7 @@ func TestValidatorUint16EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -483,7 +483,7 @@ func TestValidatorUint16EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16GreaterThanValid(t *testing.T) {
@@ -514,13 +514,13 @@ func TestValidatorUint16GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint16(uint16(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -531,7 +531,7 @@ func TestValidatorUint16GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16GreaterOrEqualToValid(t *testing.T) {
@@ -565,7 +565,7 @@ func TestValidatorUint16GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -576,7 +576,7 @@ func TestValidatorUint16GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16LessThanValid(t *testing.T) {
@@ -606,13 +606,13 @@ func TestValidatorUint16LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint16(uint16(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -623,7 +623,7 @@ func TestValidatorUint16LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16LessOrEqualToValid(t *testing.T) {
@@ -657,7 +657,7 @@ func TestValidatorUint16LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -668,7 +668,7 @@ func TestValidatorUint16LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16BetweenValid(t *testing.T) {
@@ -707,13 +707,13 @@ func TestValidatorUint16BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint16(uint16(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -725,7 +725,7 @@ func TestValidatorUint16BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16ZeroValid(t *testing.T) {
@@ -754,7 +754,7 @@ func TestValidatorUint16ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -764,7 +764,7 @@ func TestValidatorUint16ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16PassingValid(t *testing.T) {
@@ -802,7 +802,7 @@ func TestValidatorUint16PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -814,7 +814,7 @@ func TestValidatorUint16PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint16InSliceValid(t *testing.T) {
@@ -846,7 +846,7 @@ func TestValidatorUint16InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint16 uint16
@@ -856,7 +856,7 @@ func TestValidatorUint16InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32Not(t *testing.T) {
@@ -896,7 +896,7 @@ func TestValidatorUint32EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -908,7 +908,7 @@ func TestValidatorUint32EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32GreaterThanValid(t *testing.T) {
@@ -939,13 +939,13 @@ func TestValidatorUint32GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint32(uint32(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -956,7 +956,7 @@ func TestValidatorUint32GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32GreaterOrEqualToValid(t *testing.T) {
@@ -990,7 +990,7 @@ func TestValidatorUint32GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1001,7 +1001,7 @@ func TestValidatorUint32GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32LessThanValid(t *testing.T) {
@@ -1031,13 +1031,13 @@ func TestValidatorUint32LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint32(uint32(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1048,7 +1048,7 @@ func TestValidatorUint32LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32LessOrEqualToValid(t *testing.T) {
@@ -1082,7 +1082,7 @@ func TestValidatorUint32LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1093,7 +1093,7 @@ func TestValidatorUint32LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32BetweenValid(t *testing.T) {
@@ -1132,13 +1132,13 @@ func TestValidatorUint32BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint32(uint32(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1150,7 +1150,7 @@ func TestValidatorUint32BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32ZeroValid(t *testing.T) {
@@ -1179,7 +1179,7 @@ func TestValidatorUint32ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1189,7 +1189,7 @@ func TestValidatorUint32ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32PassingValid(t *testing.T) {
@@ -1227,7 +1227,7 @@ func TestValidatorUint32PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1239,7 +1239,7 @@ func TestValidatorUint32PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint32InSliceValid(t *testing.T) {
@@ -1271,7 +1271,7 @@ func TestValidatorUint32InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint32 uint32
@@ -1281,7 +1281,7 @@ func TestValidatorUint32InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64Not(t *testing.T) {
@@ -1321,7 +1321,7 @@ func TestValidatorUint64EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1333,7 +1333,7 @@ func TestValidatorUint64EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64GreaterThanValid(t *testing.T) {
@@ -1364,13 +1364,13 @@ func TestValidatorUint64GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint64(uint64(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1381,7 +1381,7 @@ func TestValidatorUint64GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64GreaterOrEqualToValid(t *testing.T) {
@@ -1415,7 +1415,7 @@ func TestValidatorUint64GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1426,7 +1426,7 @@ func TestValidatorUint64GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64LessThanValid(t *testing.T) {
@@ -1456,13 +1456,13 @@ func TestValidatorUint64LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint64(uint64(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1473,7 +1473,7 @@ func TestValidatorUint64LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64LessOrEqualToValid(t *testing.T) {
@@ -1507,7 +1507,7 @@ func TestValidatorUint64LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1518,7 +1518,7 @@ func TestValidatorUint64LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64BetweenValid(t *testing.T) {
@@ -1557,13 +1557,13 @@ func TestValidatorUint64BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Uint64(uint64(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1575,7 +1575,7 @@ func TestValidatorUint64BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64ZeroValid(t *testing.T) {
@@ -1604,7 +1604,7 @@ func TestValidatorUint64ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1614,7 +1614,7 @@ func TestValidatorUint64ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64PassingValid(t *testing.T) {
@@ -1652,7 +1652,7 @@ func TestValidatorUint64PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1664,7 +1664,7 @@ func TestValidatorUint64PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorUint64InSliceValid(t *testing.T) {
@@ -1696,7 +1696,7 @@ func TestValidatorUint64InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyUint64 uint64
@@ -1706,7 +1706,7 @@ func TestValidatorUint64InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntNot(t *testing.T) {
@@ -1719,7 +1719,7 @@ func TestValidatorIntNot(t *testing.T) {
 }
 
 func TestValidatorIntEqualToValid(t *testing.T) {
-	//t.Parallel()
+	t.Parallel()
 	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
@@ -1746,7 +1746,7 @@ func TestValidatorIntEqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -1758,7 +1758,7 @@ func TestValidatorIntEqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntGreaterThanValid(t *testing.T) {
@@ -1789,13 +1789,13 @@ func TestValidatorIntGreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int(int(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -1806,7 +1806,7 @@ func TestValidatorIntGreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntGreaterOrEqualToValid(t *testing.T) {
@@ -1840,7 +1840,7 @@ func TestValidatorIntGreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -1851,7 +1851,7 @@ func TestValidatorIntGreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntLessThanValid(t *testing.T) {
@@ -1881,13 +1881,13 @@ func TestValidatorIntLessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int(int(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -1898,7 +1898,7 @@ func TestValidatorIntLessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntLessOrEqualToValid(t *testing.T) {
@@ -1932,7 +1932,7 @@ func TestValidatorIntLessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -1943,7 +1943,7 @@ func TestValidatorIntLessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntBetweenValid(t *testing.T) {
@@ -1982,13 +1982,13 @@ func TestValidatorIntBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int(int(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -2000,7 +2000,7 @@ func TestValidatorIntBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntZeroValid(t *testing.T) {
@@ -2029,7 +2029,7 @@ func TestValidatorIntZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -2039,7 +2039,7 @@ func TestValidatorIntZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntPassingValid(t *testing.T) {
@@ -2077,7 +2077,7 @@ func TestValidatorIntPassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -2089,7 +2089,7 @@ func TestValidatorIntPassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorIntInSliceValid(t *testing.T) {
@@ -2121,7 +2121,7 @@ func TestValidatorIntInSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt int
@@ -2131,7 +2131,7 @@ func TestValidatorIntInSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8Not(t *testing.T) {
@@ -2171,7 +2171,7 @@ func TestValidatorInt8EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2183,7 +2183,7 @@ func TestValidatorInt8EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8GreaterThanValid(t *testing.T) {
@@ -2206,7 +2206,7 @@ func TestValidatorInt8GreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
-	//t.Parallel()
+	t.Parallel()
 	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
@@ -2214,13 +2214,13 @@ func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int8(int8(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2231,7 +2231,7 @@ func TestValidatorInt8GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8GreaterOrEqualToValid(t *testing.T) {
@@ -2265,7 +2265,7 @@ func TestValidatorInt8GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2276,7 +2276,7 @@ func TestValidatorInt8GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8LessThanValid(t *testing.T) {
@@ -2306,13 +2306,13 @@ func TestValidatorInt8LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int8(int8(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2323,7 +2323,7 @@ func TestValidatorInt8LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8LessOrEqualToValid(t *testing.T) {
@@ -2357,7 +2357,7 @@ func TestValidatorInt8LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2368,7 +2368,7 @@ func TestValidatorInt8LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8BetweenValid(t *testing.T) {
@@ -2407,13 +2407,13 @@ func TestValidatorInt8BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int8(int8(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2425,7 +2425,7 @@ func TestValidatorInt8BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8ZeroValid(t *testing.T) {
@@ -2454,7 +2454,7 @@ func TestValidatorInt8ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2464,7 +2464,7 @@ func TestValidatorInt8ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8PassingValid(t *testing.T) {
@@ -2502,7 +2502,7 @@ func TestValidatorInt8PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2514,7 +2514,7 @@ func TestValidatorInt8PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt8InSliceValid(t *testing.T) {
@@ -2546,7 +2546,7 @@ func TestValidatorInt8InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt8 int8
@@ -2556,7 +2556,7 @@ func TestValidatorInt8InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16Not(t *testing.T) {
@@ -2596,7 +2596,7 @@ func TestValidatorInt16EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2608,7 +2608,7 @@ func TestValidatorInt16EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16GreaterThanValid(t *testing.T) {
@@ -2639,13 +2639,13 @@ func TestValidatorInt16GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int16(int16(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2656,7 +2656,7 @@ func TestValidatorInt16GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16GreaterOrEqualToValid(t *testing.T) {
@@ -2690,7 +2690,7 @@ func TestValidatorInt16GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2701,7 +2701,7 @@ func TestValidatorInt16GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16LessThanValid(t *testing.T) {
@@ -2731,13 +2731,13 @@ func TestValidatorInt16LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int16(int16(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2748,7 +2748,7 @@ func TestValidatorInt16LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16LessOrEqualToValid(t *testing.T) {
@@ -2782,7 +2782,7 @@ func TestValidatorInt16LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2793,7 +2793,7 @@ func TestValidatorInt16LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16BetweenValid(t *testing.T) {
@@ -2832,13 +2832,13 @@ func TestValidatorInt16BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int16(int16(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2850,7 +2850,7 @@ func TestValidatorInt16BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16ZeroValid(t *testing.T) {
@@ -2879,7 +2879,7 @@ func TestValidatorInt16ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2889,7 +2889,7 @@ func TestValidatorInt16ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16PassingValid(t *testing.T) {
@@ -2927,7 +2927,7 @@ func TestValidatorInt16PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2939,7 +2939,7 @@ func TestValidatorInt16PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt16InSliceValid(t *testing.T) {
@@ -2971,7 +2971,7 @@ func TestValidatorInt16InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt16 int16
@@ -2981,7 +2981,7 @@ func TestValidatorInt16InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32Not(t *testing.T) {
@@ -3021,7 +3021,7 @@ func TestValidatorInt32EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3033,7 +3033,7 @@ func TestValidatorInt32EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32GreaterThanValid(t *testing.T) {
@@ -3064,13 +3064,13 @@ func TestValidatorInt32GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int32(int32(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3081,7 +3081,7 @@ func TestValidatorInt32GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32GreaterOrEqualToValid(t *testing.T) {
@@ -3107,16 +3107,15 @@ func TestValidatorInt32GreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorInt32GreaterOrEqualToInvalid(t *testing.T) {
-	//t.Parallel()
+	t.Parallel()
 	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.Int32(int32(2)).GreaterOrEqualTo(3))
-
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3127,7 +3126,7 @@ func TestValidatorInt32GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32LessThanValid(t *testing.T) {
@@ -3157,13 +3156,13 @@ func TestValidatorInt32LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int32(int32(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3174,7 +3173,7 @@ func TestValidatorInt32LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32LessOrEqualToValid(t *testing.T) {
@@ -3208,7 +3207,7 @@ func TestValidatorInt32LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3219,7 +3218,7 @@ func TestValidatorInt32LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32BetweenValid(t *testing.T) {
@@ -3258,13 +3257,13 @@ func TestValidatorInt32BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int32(int32(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3276,7 +3275,7 @@ func TestValidatorInt32BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32ZeroValid(t *testing.T) {
@@ -3305,7 +3304,7 @@ func TestValidatorInt32ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3315,7 +3314,7 @@ func TestValidatorInt32ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32PassingValid(t *testing.T) {
@@ -3353,7 +3352,7 @@ func TestValidatorInt32PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3365,7 +3364,7 @@ func TestValidatorInt32PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt32InSliceValid(t *testing.T) {
@@ -3397,7 +3396,7 @@ func TestValidatorInt32InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt32 int32
@@ -3407,7 +3406,7 @@ func TestValidatorInt32InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64Not(t *testing.T) {
@@ -3447,7 +3446,7 @@ func TestValidatorInt64EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3459,7 +3458,7 @@ func TestValidatorInt64EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64GreaterThanValid(t *testing.T) {
@@ -3490,13 +3489,13 @@ func TestValidatorInt64GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int64(int64(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3507,7 +3506,7 @@ func TestValidatorInt64GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64GreaterOrEqualToValid(t *testing.T) {
@@ -3541,7 +3540,7 @@ func TestValidatorInt64GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3552,7 +3551,7 @@ func TestValidatorInt64GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64LessThanValid(t *testing.T) {
@@ -3582,13 +3581,13 @@ func TestValidatorInt64LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int64(int64(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3599,7 +3598,7 @@ func TestValidatorInt64LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64LessOrEqualToValid(t *testing.T) {
@@ -3633,7 +3632,7 @@ func TestValidatorInt64LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3644,7 +3643,7 @@ func TestValidatorInt64LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64BetweenValid(t *testing.T) {
@@ -3683,13 +3682,13 @@ func TestValidatorInt64BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Int64(int64(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3701,7 +3700,7 @@ func TestValidatorInt64BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64ZeroValid(t *testing.T) {
@@ -3730,7 +3729,7 @@ func TestValidatorInt64ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3740,7 +3739,7 @@ func TestValidatorInt64ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64PassingValid(t *testing.T) {
@@ -3778,7 +3777,7 @@ func TestValidatorInt64PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3790,7 +3789,7 @@ func TestValidatorInt64PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorInt64InSliceValid(t *testing.T) {
@@ -3822,7 +3821,7 @@ func TestValidatorInt64InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyInt64 int64
@@ -3832,7 +3831,7 @@ func TestValidatorInt64InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32Not(t *testing.T) {
@@ -3872,7 +3871,7 @@ func TestValidatorFloat32EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -3884,7 +3883,7 @@ func TestValidatorFloat32EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32GreaterThanValid(t *testing.T) {
@@ -3915,13 +3914,13 @@ func TestValidatorFloat32GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Float32(float32(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -3932,7 +3931,7 @@ func TestValidatorFloat32GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32GreaterOrEqualToValid(t *testing.T) {
@@ -3966,7 +3965,7 @@ func TestValidatorFloat32GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -3977,7 +3976,7 @@ func TestValidatorFloat32GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32LessThanValid(t *testing.T) {
@@ -4007,13 +4006,13 @@ func TestValidatorFloat32LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Float32(float32(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -4024,7 +4023,7 @@ func TestValidatorFloat32LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32LessOrEqualToValid(t *testing.T) {
@@ -4058,7 +4057,7 @@ func TestValidatorFloat32LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -4069,7 +4068,7 @@ func TestValidatorFloat32LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32BetweenValid(t *testing.T) {
@@ -4108,13 +4107,13 @@ func TestValidatorFloat32BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Float32(float32(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -4126,7 +4125,7 @@ func TestValidatorFloat32BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32ZeroValid(t *testing.T) {
@@ -4155,7 +4154,7 @@ func TestValidatorFloat32ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -4165,7 +4164,7 @@ func TestValidatorFloat32ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32PassingValid(t *testing.T) {
@@ -4203,7 +4202,7 @@ func TestValidatorFloat32PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -4215,7 +4214,7 @@ func TestValidatorFloat32PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat32InSliceValid(t *testing.T) {
@@ -4247,7 +4246,7 @@ func TestValidatorFloat32InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat32 float32
@@ -4257,7 +4256,7 @@ func TestValidatorFloat32InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64Not(t *testing.T) {
@@ -4297,7 +4296,7 @@ func TestValidatorFloat64EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4309,7 +4308,7 @@ func TestValidatorFloat64EqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64GreaterThanValid(t *testing.T) {
@@ -4340,13 +4339,13 @@ func TestValidatorFloat64GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Float64(float64(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4357,7 +4356,7 @@ func TestValidatorFloat64GreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64GreaterOrEqualToValid(t *testing.T) {
@@ -4391,7 +4390,7 @@ func TestValidatorFloat64GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4402,7 +4401,7 @@ func TestValidatorFloat64GreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64LessThanValid(t *testing.T) {
@@ -4432,13 +4431,13 @@ func TestValidatorFloat64LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Float64(float64(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4449,7 +4448,7 @@ func TestValidatorFloat64LessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64LessOrEqualToValid(t *testing.T) {
@@ -4483,7 +4482,7 @@ func TestValidatorFloat64LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4494,7 +4493,7 @@ func TestValidatorFloat64LessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64BetweenValid(t *testing.T) {
@@ -4533,13 +4532,13 @@ func TestValidatorFloat64BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Float64(float64(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4551,7 +4550,7 @@ func TestValidatorFloat64BetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64ZeroValid(t *testing.T) {
@@ -4580,7 +4579,7 @@ func TestValidatorFloat64ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4590,7 +4589,7 @@ func TestValidatorFloat64ZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64PassingValid(t *testing.T) {
@@ -4628,7 +4627,7 @@ func TestValidatorFloat64PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4640,7 +4639,7 @@ func TestValidatorFloat64PassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorFloat64InSliceValid(t *testing.T) {
@@ -4672,7 +4671,7 @@ func TestValidatorFloat64InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyFloat64 float64
@@ -4682,7 +4681,7 @@ func TestValidatorFloat64InSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteNot(t *testing.T) {
@@ -4722,7 +4721,7 @@ func TestValidatorByteEqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -4734,7 +4733,7 @@ func TestValidatorByteEqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteGreaterThanValid(t *testing.T) {
@@ -4765,13 +4764,13 @@ func TestValidatorByteGreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Byte(byte(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -4782,7 +4781,7 @@ func TestValidatorByteGreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteGreaterOrEqualToValid(t *testing.T) {
@@ -4816,7 +4815,7 @@ func TestValidatorByteGreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -4827,7 +4826,7 @@ func TestValidatorByteGreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteLessThanValid(t *testing.T) {
@@ -4857,13 +4856,13 @@ func TestValidatorByteLessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Byte(byte(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -4874,7 +4873,7 @@ func TestValidatorByteLessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteLessOrEqualToValid(t *testing.T) {
@@ -4908,7 +4907,7 @@ func TestValidatorByteLessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -4919,7 +4918,7 @@ func TestValidatorByteLessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteBetweenValid(t *testing.T) {
@@ -4958,13 +4957,13 @@ func TestValidatorByteBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Byte(byte(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -4976,7 +4975,7 @@ func TestValidatorByteBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteZeroValid(t *testing.T) {
@@ -5005,7 +5004,7 @@ func TestValidatorByteZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -5015,7 +5014,7 @@ func TestValidatorByteZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorBytePassingValid(t *testing.T) {
@@ -5053,7 +5052,7 @@ func TestValidatorBytePassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -5065,7 +5064,7 @@ func TestValidatorBytePassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorByteInSliceValid(t *testing.T) {
@@ -5097,7 +5096,7 @@ func TestValidatorByteInSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyByte byte
@@ -5107,7 +5106,7 @@ func TestValidatorByteInSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneNot(t *testing.T) {
@@ -5147,7 +5146,7 @@ func TestValidatorRuneEqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5159,7 +5158,7 @@ func TestValidatorRuneEqualToInvalid(t *testing.T) {
 	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 must be equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneGreaterThanValid(t *testing.T) {
@@ -5190,13 +5189,13 @@ func TestValidatorRuneGreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Rune(rune(2)).GreaterThan(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5207,7 +5206,7 @@ func TestValidatorRuneGreaterThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneGreaterOrEqualToValid(t *testing.T) {
@@ -5241,7 +5240,7 @@ func TestValidatorRuneGreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5252,7 +5251,7 @@ func TestValidatorRuneGreaterOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be greater than or equal to \"3\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneLessThanValid(t *testing.T) {
@@ -5282,13 +5281,13 @@ func TestValidatorRuneLessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Rune(rune(3)).LessThan(2))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5299,7 +5298,7 @@ func TestValidatorRuneLessThanInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneLessOrEqualToValid(t *testing.T) {
@@ -5333,7 +5332,7 @@ func TestValidatorRuneLessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5344,7 +5343,7 @@ func TestValidatorRuneLessOrEqualToInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be less than or equal to \"2\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneBetweenValid(t *testing.T) {
@@ -5383,13 +5382,13 @@ func TestValidatorRuneBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	v = valgo.Is(valgo.Rune(rune(7)).Between(3, 6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5401,7 +5400,7 @@ func TestValidatorRuneBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be between \"3\" and \"6\"",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneZeroValid(t *testing.T) {
@@ -5430,7 +5429,7 @@ func TestValidatorRuneZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5440,7 +5439,7 @@ func TestValidatorRuneZeroInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must be zero",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRunePassingValid(t *testing.T) {
@@ -5478,7 +5477,7 @@ func TestValidatorRunePassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5490,7 +5489,7 @@ func TestValidatorRunePassingInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorRuneInSliceValid(t *testing.T) {
@@ -5522,7 +5521,7 @@ func TestValidatorRuneInSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 
 	// Custom Type
 	type MyRune rune
@@ -5532,5 +5531,5 @@ func TestValidatorRuneInSliceInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
-		v.ErrorByKey("value_0").Messages()[0])
+		v.Errors()["value_0"].Messages()[0])
 }

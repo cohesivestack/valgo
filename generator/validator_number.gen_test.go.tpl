@@ -11,7 +11,7 @@ import (
 {{ range . }}
 func TestValidator{{ .Name }}Not(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	v := valgo.Is(valgo.{{ .Name }}({{ .Type }}(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -20,7 +20,7 @@ func TestValidator{{ .Name }}Not(t *testing.T) {
 
 func TestValidator{{ .Name }}EqualToValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).EqualTo(2))
@@ -38,7 +38,7 @@ func TestValidator{{ .Name }}EqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}EqualToInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(1)).EqualTo(2))
@@ -63,7 +63,7 @@ func TestValidator{{ .Name }}EqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}GreaterThanValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(3)).GreaterThan(2))
@@ -82,7 +82,7 @@ func TestValidator{{ .Name }}GreaterThanValid(t *testing.T) {
 
 func TestValidator{{ .Name }}GreaterThanInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).GreaterThan(2))
@@ -111,7 +111,7 @@ func TestValidator{{ .Name }}GreaterThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}GreaterOrEqualToValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).GreaterOrEqualTo(2))
@@ -133,7 +133,7 @@ func TestValidator{{ .Name }}GreaterOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}GreaterOrEqualToInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).GreaterOrEqualTo(3))
@@ -156,7 +156,7 @@ func TestValidator{{ .Name }}GreaterOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}LessThanValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).LessThan(3))
@@ -174,7 +174,7 @@ func TestValidator{{ .Name }}LessThanValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}LessThanInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).LessThan(2))
@@ -203,7 +203,7 @@ func TestValidator{{ .Name }}LessThanInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}LessOrEqualToValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).LessOrEqualTo(2))
@@ -225,7 +225,7 @@ func TestValidator{{ .Name }}LessOrEqualToValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}LessOrEqualToInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(3)).LessOrEqualTo(2))
@@ -248,7 +248,7 @@ func TestValidator{{ .Name }}LessOrEqualToInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}BetweenValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).Between(2, 6))
@@ -275,7 +275,7 @@ func TestValidator{{ .Name }}BetweenValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}BetweenInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(2)).Between(3, 6))
@@ -305,7 +305,7 @@ func TestValidator{{ .Name }}BetweenInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(0)).Zero())
@@ -322,7 +322,7 @@ func TestValidator{{ .Name }}ZeroValid(t *testing.T) {
 }
 func TestValidator{{ .Name }}ZeroInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 	var v *valgo.Validation
 
 	v = valgo.Is(valgo.{{ .Name }}({{ .Type }}(1)).Zero())
@@ -344,7 +344,7 @@ func TestValidator{{ .Name }}ZeroInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}PassingValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -367,7 +367,7 @@ func TestValidator{{ .Name }}PassingValid(t *testing.T) {
 
 func TestValidator{{ .Name }}PassingInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -394,7 +394,7 @@ func TestValidator{{ .Name }}PassingInvalid(t *testing.T) {
 
 func TestValidator{{ .Name }}InSliceValid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 
@@ -413,7 +413,7 @@ func TestValidator{{ .Name }}InSliceValid(t *testing.T) {
 
 func TestValidator{{ .Name }}InSliceInvalid(t *testing.T) {
 	t.Parallel()
-	require.NoError(t, TeardownTest())
+	require.NoError(t, TearUpTest(t))
 
 	var v *valgo.Validation
 

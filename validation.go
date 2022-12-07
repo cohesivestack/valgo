@@ -36,7 +36,7 @@ type Validation struct {
 	sync.RWMutex
 }
 
-// Add a field validator to a [Validation] session.
+// Is Add a field validator to a [Validation] session.
 func (v *Validation) Is(vr Validator) *Validation {
 	return vr.Context().validateIs(v)
 }
@@ -173,7 +173,7 @@ func (v *Validation) Errors() map[string]*valueError {
 	return v.errors
 }
 
-// Errors Return a map with the information for each invalid field validator in the
+// ErrorByKey Return a map with the information for each invalid field validator in the
 // [Validation] session.
 //
 //nolint:revive // by design. should be exported as can be annoying to use

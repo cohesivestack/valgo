@@ -17,7 +17,7 @@ type Validator{{ .Name }}P[T ~{{ .Type }}] struct {
 // used as the title as well; for example the name `phone_number` will be
 // humanized as `Phone Number`
 func {{ .Name }}P[T ~{{ .Type }}](value *T, nameAndTitle ...string) *Validator{{ .Name }}P[T] {
-	return &Validator{{ .Name }}P[T]{context: NewContext[T](*value, nameAndTitle...)}
+	return &Validator{{ .Name }}P[T]{context: NewContext(value, nameAndTitle...)}
 }
 
 // Return the context of the validator. The context is useful to create a custom
@@ -47,7 +47,12 @@ func (validator *Validator{{ .Name }}P[T]) Not() *Validator{{ .Name }}P[T] {
 func (validator *Validator{{ .Name }}P[T]) EqualTo(value T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}EqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}EqualTo(*val, value)
 		},
 		ErrorKeyEqualTo, value, template...)
 
@@ -63,7 +68,12 @@ func (validator *Validator{{ .Name }}P[T]) EqualTo(value T, template ...string) 
 func (validator *Validator{{ .Name }}P[T]) GreaterThan(value T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}GreaterThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}GreaterThan(*val, value)
 		},
 		ErrorKeyGreaterThan, value, template...)
 
@@ -79,7 +89,12 @@ func (validator *Validator{{ .Name }}P[T]) GreaterThan(value T, template ...stri
 func (validator *Validator{{ .Name }}P[T]) GreaterOrEqualTo(value T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}GreaterOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}GreaterOrEqualTo(*val, value)
 		},
 		ErrorKeyGreaterOrEqualTo, value, template...)
 
@@ -95,7 +110,12 @@ func (validator *Validator{{ .Name }}P[T]) GreaterOrEqualTo(value T, template ..
 func (validator *Validator{{ .Name }}P[T]) LessThan(value T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}LessThan(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}LessThan(*val, value)
 		},
 		ErrorKeyLessThan, value, template...)
 
@@ -111,7 +131,12 @@ func (validator *Validator{{ .Name }}P[T]) LessThan(value T, template ...string)
 func (validator *Validator{{ .Name }}P[T]) LessOrEqualTo(value T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}LessOrEqualTo(*(validator.context.Value().(*T)), value)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}LessOrEqualTo(*val, value)
 		},
 		ErrorKeyLessOrEqualTo, value, template...)
 
@@ -126,7 +151,12 @@ func (validator *Validator{{ .Name }}P[T]) LessOrEqualTo(value T, template ...st
 func (validator *Validator{{ .Name }}P[T]) Between(min T, max T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}Between(*(validator.context.Value().(*T)), min, max)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}Between(*val, min, max)
 		},
 		ErrorKeyBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -144,7 +174,12 @@ func (validator *Validator{{ .Name }}P[T]) Between(min T, max T, template ...str
 func (validator *Validator{{ .Name }}P[T]) Zero(template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -160,7 +195,12 @@ func (validator *Validator{{ .Name }}P[T]) Zero(template ...string) *Validator{{
 func (validator *Validator{{ .Name }}P[T]) ZeroOrNil(template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil || is{{ .Name }}Zero(*(validator.context.Value().(*T)))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil || is{{ .Name }}Zero(*val)
 		},
 		ErrorKeyZero, template...)
 
@@ -176,7 +216,12 @@ func (validator *Validator{{ .Name }}P[T]) ZeroOrNil(template ...string) *Valida
 func (validator *Validator{{ .Name }}P[T]) Nil(template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.Add(
 		func() bool {
-			return validator.context.Value().(*T) == nil
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val == nil
 		},
 		ErrorKeyNil, template...)
 
@@ -193,7 +238,12 @@ func (validator *Validator{{ .Name }}P[T]) Nil(template ...string) *Validator{{ 
 func (validator *Validator{{ .Name }}P[T]) Passing(function func(v *T) bool, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.Add(
 		func() bool {
-			return function(validator.context.Value().(*T))
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return function(val)
 		},
 		ErrorKeyPassing, template...)
 
@@ -209,7 +259,12 @@ func (validator *Validator{{ .Name }}P[T]) Passing(function func(v *T) bool, tem
 func (validator *Validator{{ .Name }}P[T]) InSlice(slice []T, template ...string) *Validator{{ .Name }}P[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return validator.context.Value().(*T) != nil && is{{ .Name }}InSlice(*(validator.context.Value().(*T)), slice)
+			val, ok := validator.context.Value().(*T)
+			if !ok {
+				return false
+			}
+
+			return val != nil && is{{ .Name }}InSlice(*val, slice)
 		},
 		ErrorKeyInSlice, validator.context.Value().(*T), template...)
 
