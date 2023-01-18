@@ -8,38 +8,15 @@
 // Additionally, Valgo supports customizing and localizing validation messages.
 package valgo
 
-import (
-	"fmt"
-)
-
-var customMarshalJson func(e *Error) ([]byte, error)
-
-func TeardownTest() {
-	SetMarshalJSON(nil)
-	setDefaultEnglishMessages()
-	setDefaultSpanishMessages()
-	SetDefaultLocale("en")
-}
-
-// Create a localized [Validation] factory.
-func Localized(code string) (*localized, error) {
-	if _locale, exist := getLocales()[code]; exist {
-		return &localized{
-			_locale: _locale,
-		}, nil
-	} else {
-		return nil, fmt.Errorf("doesn't exist a registered locale with code '%s'", code)
-	}
-}
-
 // This function allows you to create a new Validation session without a
 // Validator. This is useful for conditional validation or reusing validation
 // logic.
 //
 // The following example conditionally adds a validator rule for the month_day
 // value.
-func New() *Validation {
-	return newValidation(getDefaultLocale())
+func New(options ...Options) *Validation {
+
+	return newValidation(options...)
 }
 
 // The [Is](...) function allows you to pass a [Validator] with the value and
@@ -94,9 +71,4 @@ func Check(v Validator) *Validation {
 // session will be marked as invalid.
 func AddErrorMessage(name string, message string) *Validation {
 	return New().AddErrorMessage(name, message)
-}
-
-// Set a custom function to serialize the validator messages as JSON.
-func SetMarshalJSON(customFunc func(e *Error) ([]byte, error)) {
-	customMarshalJson = customFunc
 }

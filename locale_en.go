@@ -1,7 +1,7 @@
 package valgo
 
-func setDefaultEnglishMessages() {
-	getLocales()["en"] = &locale{
+func getLocaleEn() *Locale {
+	return &Locale{
 		Messages: map[string]string{
 			ErrorKeyBetween:    "{{title}} must be between \"{{min}}\" and \"{{max}}\"",
 			ErrorKeyNotBetween: "{{title}} can't be a value between \"{{min}}\" and \"{{max}}\"",

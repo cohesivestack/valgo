@@ -28,9 +28,16 @@ import (
 type Validation struct {
 	valid bool
 
-	_locale      *locale
-	errors       map[string]*valueError
-	currentIndex int
+	_locale         *Locale
+	errors          map[string]*valueError
+	currentIndex    int
+	marshalJsonFunc func(e *Error) ([]byte, error)
+}
+
+type Options struct {
+	LocaleCode      string
+	Locale          *Locale
+	MarshalJsonFunc func(e *Error) ([]byte, error)
 }
 
 // Add a field validator to a [Validation] session.
@@ -169,7 +176,8 @@ func (session *Validation) Errors() map[string]*valueError {
 func (validation *Validation) Error() error {
 	if !validation.valid {
 		return &Error{
-			errors: validation.errors,
+			errors:          validation.errors,
+			marshalJsonFunc: validation.marshalJsonFunc,
 		}
 	}
 	return nil
@@ -200,10 +208,21 @@ func (validation *Validation) getOrCreateValueError(name string) *valueError {
 	return ev
 }
 
-func newValidation(_locale *locale) *Validation {
+func newValidation(options ...Options) *Validation {
 	v := &Validation{
-		valid:   true,
-		_locale: _locale,
+		valid: true,
+	}
+
+	if len(options) == 0 {
+		v._locale = getLocale(localeDefault)
+	} else {
+		_options := options[0]
+
+		v._locale = getLocale(_options.LocaleCode)
+		if _options.Locale != nil {
+			v._locale.merge(_options.Locale)
+		}
+		v.marshalJsonFunc = _options.MarshalJsonFunc
 	}
 
 	return v
