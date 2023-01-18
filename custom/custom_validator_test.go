@@ -8,15 +8,14 @@ import (
 )
 
 func TestCustomValidator(t *testing.T) {
-	valgo.TeardownTest()
 
-	errorMessages, err := valgo.GetLocaleMessages(valgo.GetDefaultLocaleCode())
-	assert.NoError(t, err)
+	locale := &valgo.Locale{Messages: map[string]string{
+		"not_valid_secret": "{{title}} is invalid.",
+	}}
 
-	errorMessages["not_valid_secret"] = "{{title}} is invalid."
-	valgo.SetLocaleMessages(valgo.GetDefaultLocaleCode(), errorMessages)
-
-	v := valgo.Is(SecretWord("loose", "secret").Correct())
+	v := valgo.New(valgo.Options{Locale: locale}).
+		Is(SecretWord("loose", "secret").
+			Correct())
 
 	assert.False(t, v.Valid())
 	assert.Len(t, v.Errors(), 1)
