@@ -10,7 +10,6 @@ import (
 )
 
 func TestValidationMergeMessages(t *testing.T) {
-	TeardownTest()
 
 	v0 := Is(String("up", "status").EqualTo("down")).
 		Is(String("", "name").Not().Blank()).
@@ -98,7 +97,6 @@ func TestValidationMergeInvalidate(t *testing.T) {
 }
 
 func TestValidationIn(t *testing.T) {
-	TeardownTest()
 
 	v := In("address",
 		Is(String("", "line1").Not().Blank()).
@@ -127,7 +125,6 @@ func TestValidationIn(t *testing.T) {
 }
 
 func TestValidationInDeeply(t *testing.T) {
-	TeardownTest()
 
 	v := In("address",
 		Is(String("", "line1").Not().Blank()).
@@ -153,7 +150,6 @@ func TestValidationInDeeply(t *testing.T) {
 }
 
 func TestValidationInRow(t *testing.T) {
-	TeardownTest()
 
 	v := InRow("addresses", 0,
 		Is(String("", "line1").Not().Blank()).
@@ -197,7 +193,6 @@ func TestValidationInRow(t *testing.T) {
 }
 
 func TestValidationInRowDeeply(t *testing.T) {
-	TeardownTest()
 
 	v := InRow("addresses", 0,
 		Is(String("", "line1").Not().Blank()).
@@ -259,7 +254,6 @@ func TestValidationInRowDeeply(t *testing.T) {
 }
 
 func TestLastValidationIsNotAlteringPreviousOne(t *testing.T) {
-	TeardownTest()
 
 	// With validation
 	v := Is(String("up", "status").EqualTo("down")).

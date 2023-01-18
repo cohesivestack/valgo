@@ -16,7 +16,6 @@ func TestValidatorBoolPNot(t *testing.T) {
 }
 
 func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -41,7 +40,6 @@ func TestValidatorBoolPEqualToWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -70,7 +68,6 @@ func TestValidatorBoolPEqualToWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -90,7 +87,6 @@ func TestValidatorBoolPTrueWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -114,7 +110,6 @@ func TestValidatorBoolPTrueWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -136,7 +131,6 @@ func TestValidatorBoolPFalseWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -163,7 +157,6 @@ func TestValidatorBoolPFalseWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolNilIsValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -184,7 +177,6 @@ func TestValidatorBoolNilIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolNilIsInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -209,7 +201,6 @@ func TestValidatorBoolNilIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -234,7 +225,6 @@ func TestValidatorBoolPPassingWhenIsValid(t *testing.T) {
 }
 
 func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -262,7 +252,6 @@ func TestValidatorBoolPPassingWhenIsInvalid(t *testing.T) {
 }
 
 func TestValidatorBoolPInSliceValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -282,7 +271,6 @@ func TestValidatorBoolPInSliceValid(t *testing.T) {
 }
 
 func TestValidatorBoolPInSliceInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
