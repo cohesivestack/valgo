@@ -1,26 +1,15 @@
-// Valgo is a type-safe, expressive, and extensible validator library for
-// Golang. Valgo is built with generics, so Go 1.18 or higher is required.
-//
-// Valgo differs from other Golang validation libraries in that the rules are
-// written in functions and not in struct tags. This allows greater flexibility
-// and freedom when it comes to where and how data is validated.
-//
-// Additionally, Valgo supports customizing and localizing validation messages.
 package valgo
 
-func Factory(options FactoryOptions) *validationFactory {
+type FactoryOptions struct {
+	LocaleCodeDefault string
+	Locales           map[string]*Locale
+	MarshalJsonFunc   func(e *Error) ([]byte, error)
+}
 
-	factory := &validationFactory{
-		localeCodeDefault: localeDefault,
-		locales:           options.Locales,
-		marshalJsonFunc:   options.MarshalJsonFunc,
-	}
-
-	if options.LocaleCodeDefault != "" {
-		factory.localeCodeDefault = options.LocaleCodeDefault
-	}
-
-	return factory
+type validationFactory struct {
+	localeCodeDefault string
+	locales           map[string]*Locale
+	marshalJsonFunc   func(e *Error) ([]byte, error)
 }
 
 // This function allows you to create a new Validation session without a
@@ -29,7 +18,30 @@ func Factory(options FactoryOptions) *validationFactory {
 //
 // The following example conditionally adds a validator rule for the month_day
 // value.
-func New(options ...Options) *Validation {
+func (_factory *validationFactory) New(options ...Options) *Validation {
+
+	var _options *Options
+	finalOptions := Options{
+		localeCodeDefaultFromFactory: _factory.localeCodeDefault,
+	}
+
+	if _factory.locales != nil {
+		finalOptions.localesFromFactory = _factory.locales
+	}
+
+	if len(options) > 0 {
+		_options = &options[0]
+	}
+
+	if _options != nil && _options.LocaleCode != "" {
+		finalOptions.LocaleCode = _options.LocaleCode
+	}
+
+	if _options != nil && _options.MarshalJsonFunc != nil {
+		finalOptions.MarshalJsonFunc = _options.MarshalJsonFunc
+	} else if _factory.marshalJsonFunc != nil {
+		finalOptions.MarshalJsonFunc = _factory.marshalJsonFunc
+	}
 
 	return newValidation(options...)
 }
@@ -42,8 +54,8 @@ func New(options ...Options) *Validation {
 // the [Validator] for the full_name value. The function returns a [Validation]
 // session that allows us to add more Validators to validate more values; in the
 // example case the values age and status:
-func Is(v Validator) *Validation {
-	return New().Is(v)
+func (_factory *validationFactory) Is(v Validator) *Validation {
+	return _factory.New().Is(v)
 }
 
 // The [In](...) function executes one or more validators in a namespace, so the
@@ -53,8 +65,8 @@ func Is(v Validator) *Validation {
 // In the following example we are validating the Person and the nested
 // Address structure. We can distinguish the errors of the nested Address
 // structure in the error results.
-func In(name string, v *Validation) *Validation {
-	return New().In(name, v)
+func (_factory *validationFactory) In(name string, v *Validation) *Validation {
+	return _factory.New().In(name, v)
 }
 
 // The [InRow](...) function executes one or more validators in a namespace
@@ -65,8 +77,8 @@ func In(name string, v *Validation) *Validation {
 // In the following example we validate the Person and the nested list
 // Addresses. The error results can distinguish the errors of the nested list
 // Addresses.
-func InRow(name string, index int, v *Validation) *Validation {
-	return New().InRow(name, index, v)
+func (_factory *validationFactory) InRow(name string, index int, v *Validation) *Validation {
+	return _factory.New().InRow(name, index, v)
 }
 
 // The [Check](...) function, similar to the [Is](...) function, however with
@@ -77,13 +89,13 @@ func InRow(name string, index int, v *Validation) *Validation {
 // This example shows two rules that fail due to the empty value in the full_name
 // [Validator], and since the [Validator] is not short-circuited, both error
 // messages are added to the error result.
-func Check(v Validator) *Validation {
-	return New().Check(v)
+func (_factory *validationFactory) Check(v Validator) *Validation {
+	return _factory.New().Check(v)
 }
 
 // Create a new [Validation] session and add an error message to it without
 // executing a field validator. By adding this error message, the [Validation]
 // session will be marked as invalid.
-func AddErrorMessage(name string, message string) *Validation {
-	return New().AddErrorMessage(name, message)
+func (_factory *validationFactory) AddErrorMessage(name string, message string) *Validation {
+	return _factory.New().AddErrorMessage(name, message)
 }

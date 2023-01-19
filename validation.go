@@ -35,9 +35,11 @@ type Validation struct {
 }
 
 type Options struct {
-	LocaleCode      string
-	Locale          *Locale
-	MarshalJsonFunc func(e *Error) ([]byte, error)
+	localeCodeDefaultFromFactory string // Only specified by the factory
+	localesFromFactory           map[string]*Locale
+	LocaleCode                   string
+	Locale                       *Locale
+	MarshalJsonFunc              func(e *Error) ([]byte, error)
 }
 
 // Add a field validator to a [Validation] session.
@@ -218,7 +220,20 @@ func newValidation(options ...Options) *Validation {
 	} else {
 		_options := options[0]
 
-		v._locale = getLocale(_options.LocaleCode)
+		// If the factory has default locale specified, we try to use it as fallback
+		if options[0].localeCodeDefaultFromFactory != "" {
+			// Skipping default option will return nil, so we can use the factory
+			// locale default
+			v._locale = getLocaleAndSkipDefaultOption(_options.LocaleCode, options[0].localesFromFactory)
+			if v._locale == nil {
+				v._locale = getLocale(options[0].localeCodeDefaultFromFactory, options[0].localesFromFactory)
+			}
+		} else {
+			v._locale = getLocale(_options.LocaleCode, options[0].localesFromFactory)
+		}
+
+		// If locale entries were specified, then we merge it with the calculated
+		// Locale from the options localeCode
 		if _options.Locale != nil {
 			v._locale.merge(_options.Locale)
 		}
