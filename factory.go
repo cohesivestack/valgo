@@ -43,7 +43,7 @@ func (_factory *validationFactory) New(options ...Options) *Validation {
 		finalOptions.MarshalJsonFunc = _factory.marshalJsonFunc
 	}
 
-	return newValidation(options...)
+	return newValidation(finalOptions)
 }
 
 // The [Is](...) function allows you to pass a [Validator] with the value and
