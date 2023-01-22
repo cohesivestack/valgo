@@ -11,13 +11,36 @@ package valgo
 func Factory(options FactoryOptions) *validationFactory {
 
 	factory := &validationFactory{
-		localeCodeDefault: localeDefault,
-		locales:           options.Locales,
+		localeCodeDefault: localeCodeDefault,
 		marshalJsonFunc:   options.MarshalJsonFunc,
 	}
 
 	if options.LocaleCodeDefault != "" {
 		factory.localeCodeDefault = options.LocaleCodeDefault
+	}
+
+	// Create factory locales for the case when locales was specified
+	if len(options.Locales) > 0 {
+		factory.locales = map[string]*Locale{
+			LocaleCodeEn: getLocaleEn().merge(options.Locales[LocaleCodeEn]),
+			LocaleCodeEs: getLocaleEs().merge(options.Locales[LocaleCodeEs]),
+		}
+
+		// Add unexisting locales
+
+		// Determine what is the default locale, since an unexisting locale,
+		// can't be created with an unexisting default locale. In that case use
+		// the Valgo default locale as fallback
+		_localeCodeDefault := factory.localeCodeDefault
+		if _, exists := factory.locales[_localeCodeDefault]; !exists {
+			_localeCodeDefault = localeCodeDefault
+		}
+
+		for k, l := range options.Locales {
+			if _, exists := factory.locales[k]; !exists {
+				factory.locales[k] = factory.locales[_localeCodeDefault].merge(l)
+			}
+		}
 	}
 
 	return factory

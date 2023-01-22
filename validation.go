@@ -216,7 +216,7 @@ func newValidation(options ...Options) *Validation {
 	}
 
 	if len(options) == 0 {
-		v._locale = getLocale(localeDefault)
+		v._locale = getLocale(localeCodeDefault)
 	} else {
 		_options := options[0]
 
