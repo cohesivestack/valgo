@@ -32,19 +32,19 @@ func TestFactoryUseLocaleCodeDefault(t *testing.T) {
 
 func TestFactoryChangeLocaleEntries(t *testing.T) {
 
-	originalErrorMessage0 := getLocaleEn().Messages[ErrorKeyNotBlank]
+	originalErrorMessage0 := (*getLocaleEn())[ErrorKeyNotBlank]
 	modifiedErrorMessage0 := "{{title}} should not be blank"
 
-	originalErrorMessage1 := getLocaleEn().Messages[ErrorKeyBlank]
+	originalErrorMessage1 := (*getLocaleEn())[ErrorKeyBlank]
 	modifiedErrorMessage1 := "{{title}} should be blank"
 
 	assert.NotEqual(t, originalErrorMessage0, modifiedErrorMessage0)
 	assert.NotEqual(t, originalErrorMessage1, modifiedErrorMessage1)
 
-	locale := &Locale{Messages: map[string]string{
+	locale := &Locale{
 		ErrorKeyNotBlank: modifiedErrorMessage0,
 		ErrorKeyBlank:    modifiedErrorMessage1,
-	}}
+	}
 
 	factory := Factory(FactoryOptions{
 		Locales: map[string]*Locale{
@@ -68,19 +68,19 @@ func TestFactoryChangeLocaleEntries(t *testing.T) {
 
 func TestFactoryUseOtherLocaleAndChangeLocaleEntries(t *testing.T) {
 
-	originalErrorMessage0 := getLocaleEs().Messages[ErrorKeyNotBlank]
+	originalErrorMessage0 := (*getLocaleEs())[ErrorKeyNotBlank]
 	modifiedErrorMessage0 := "{{title}} no debería estar en blanco"
 
-	originalErrorMessage1 := getLocaleEs().Messages[ErrorKeyBlank]
+	originalErrorMessage1 := (*getLocaleEs())[ErrorKeyBlank]
 	modifiedErrorMessage1 := "{{title}} debería estar en blanco"
 
 	assert.NotEqual(t, originalErrorMessage0, modifiedErrorMessage0)
 	assert.NotEqual(t, originalErrorMessage1, modifiedErrorMessage1)
 
-	locale := &Locale{Messages: map[string]string{
+	locale := &Locale{
 		ErrorKeyNotBlank: modifiedErrorMessage0,
 		ErrorKeyBlank:    modifiedErrorMessage1,
-	}}
+	}
 
 	factory := Factory(FactoryOptions{
 		Locales: map[string]*Locale{
@@ -104,10 +104,10 @@ func TestFactoryUseOtherLocaleAndChangeLocaleEntries(t *testing.T) {
 
 func TestFactoryAddNewLocaleEntries(t *testing.T) {
 
-	locale := &Locale{Messages: map[string]string{
+	locale := &Locale{
 		ErrorKeyNotBlank: "{{title}} can't be blank (XX)",
 		ErrorKeyBlank:    "{{title}} must be blank (XX)",
-	}}
+	}
 
 	factory := Factory(FactoryOptions{
 		Locales: map[string]*Locale{

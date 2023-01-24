@@ -66,7 +66,7 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 	var ts string
 	if et.template != nil {
 		ts = *et.template
-	} else if _ts, ok := ve.validator._locale.Messages[et.key]; ok {
+	} else if _ts, ok := (*ve.validator._locale)[et.key]; ok {
 		ts = _ts
 	} else {
 		ts = concatString("ERROR: THERE IS NOT A MESSAGE WITH THE KEY: ", et.key)

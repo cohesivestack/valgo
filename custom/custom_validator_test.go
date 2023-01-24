@@ -9,9 +9,9 @@ import (
 
 func TestCustomValidator(t *testing.T) {
 
-	locale := &valgo.Locale{Messages: map[string]string{
+	locale := &valgo.Locale{
 		"not_valid_secret": "{{title}} is invalid.",
-	}}
+	}
 
 	v := valgo.New(valgo.Options{Locale: locale}).
 		Is(SecretWord("loose", "secret").

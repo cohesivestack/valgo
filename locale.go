@@ -7,9 +7,8 @@ const (
 
 const localeCodeDefault = LocaleCodeEn
 
-type Locale struct {
-	Messages map[string]string
-}
+// Interface implemented by valgo Validators and custom Validators.
+type Locale map[string]string
 
 func getLocaleWithSkipDefaultOption(code string, skipDefault bool, factoryLocales ...map[string]*Locale) *Locale {
 
@@ -50,8 +49,8 @@ func getLocale(code string, factoryLocales ...map[string]*Locale) *Locale {
 
 func (_locale *Locale) merge(locale *Locale) *Locale {
 	if locale != nil {
-		for k, v := range locale.Messages {
-			_locale.Messages[k] = v
+		for k, v := range *locale {
+			(*_locale)[k] = v
 		}
 	}
 
