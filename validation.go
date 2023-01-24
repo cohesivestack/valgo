@@ -34,12 +34,23 @@ type Validation struct {
 	marshalJsonFunc func(e *Error) ([]byte, error)
 }
 
+// Options struct is used to specify options when creating a new [Validation]
+// session with the [New()] function.
+//
+// It contains parameters for specifying a specific locale code, modify or add a
+// locale, and set a custom JSON marshaler for [Error].
+
 type Options struct {
-	localeCodeDefaultFromFactory string // Only specified by the factory
-	localesFromFactory           map[string]*Locale
-	LocaleCode                   string
-	Locale                       *Locale
-	MarshalJsonFunc              func(e *Error) ([]byte, error)
+	localeCodeDefaultFromFactory string             // Only specified by the factory
+	localesFromFactory           map[string]*Locale // Only specified by the factory
+
+	// A string field that represents the locale code to use by the [Validation]
+	// session
+	LocaleCode string
+	// A map field that allows to modify or add a new [Locale]
+	Locale *Locale
+	// A function field that allows to set a custom JSON marshaler for [Error]
+	MarshalJsonFunc func(e *Error) ([]byte, error)
 }
 
 // Add a field validator to a [Validation] session.

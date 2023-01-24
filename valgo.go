@@ -8,6 +8,17 @@
 // Additionally, Valgo supports customizing and localizing validation messages.
 package valgo
 
+// Factory is a function used to create a Valgo factory.
+//
+// With a Valgo factory, you can create Validation sessions with preset options,
+// avoiding having to pass options each time when a Validation session is
+// created.
+//
+// This allows for more flexibility and easier management of options.
+//
+// The Factory function accepts an options parameter of type [FactoryOptions]
+// struct, which allows you to specify options such as the default locale code,
+// available locales and a custom JSON marshaler for errors.
 func Factory(options FactoryOptions) *validationFactory {
 
 	factory := &validationFactory{
@@ -46,9 +57,13 @@ func Factory(options FactoryOptions) *validationFactory {
 	return factory
 }
 
-// This function allows you to create a new Validation session without a
-// Validator. This is useful for conditional validation or reusing validation
-// logic.
+// This function allows you to create a new [Validation] session without a
+// Validator. This is useful for conditional validation, reusing validation
+// logic or just to pass optional parameters to the [Validation] session.
+//
+// The function accepts an optional parameter of type [Options] struct, which
+// allows you to specify options such as the specific locale code and locale
+// to use, and a custom JSON marshaler for errors.
 //
 // The following example conditionally adds a validator rule for the month_day
 // value.
@@ -92,7 +107,7 @@ func InRow(name string, index int, v *Validation) *Validation {
 	return New().InRow(name, index, v)
 }
 
-// The [Check](...) function, similar to the [Is](...) function, however with
+// The [Check](...) function is similar to the [Is](...) function, however with
 // [Check](...)` the Rules of the [Validator] parameter are not short-circuited,
 // which means that regardless of whether a previous rule was valid, all rules
 // are checked.
