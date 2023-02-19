@@ -764,6 +764,8 @@ Uint32(v uint32)   Uint32P(v *uint32)
 Uint64(v uint64)   Uint64P(v *uint64)
 Float32(v float32) Float32P(v *float32)
 Float64(v float64) Float64P(v *float64)
+Byte(v byte)       ByteP(v *byte)
+Rune(v byte)       RuneP(v *byte)
 ```
 
 These validators have the same rule functions as the `Number` validator.
