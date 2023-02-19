@@ -978,7 +978,7 @@ output:
   - `FalseOrNil`
   - `Nil`
 
-- `Number` and `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Float32`, `Float64` - for number pointer
+- `Number` and `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Float32`, `Float64`, `Byte`, `Rune` - for number pointer
   - `EqualTo`
   - `GreaterThan`
   - `GreaterOrEqualTo`
@@ -989,7 +989,7 @@ output:
   - `InSlice`
   - `Passing`
   
-- `NumberP` and `IntP`, `Int8P`, `Int16P`, `Int32P`, `Int64P`, `UintP`, `Uint8P`, `Uint16P`, `Uint32P`, `Uint64P`, `Float32P`, `Float64P` - for number pointer
+- `NumberP` and `IntP`, `Int8P`, `Int16P`, `Int32P`, `Int64P`, `UintP`, `Uint8P`, `Uint16P`, `Uint32P`, `Uint64P`, `Float32P`, `Float64P`, `ByteP`, `RuneP` - for number pointer
   - `EqualTo`
   - `GreaterThan`
   - `GreaterOrEqualTo`
