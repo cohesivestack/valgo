@@ -8,38 +8,68 @@
 // Additionally, Valgo supports customizing and localizing validation messages.
 package valgo
 
-import (
-	"fmt"
-)
+// Factory is a function used to create a Valgo factory.
+//
+// With a Valgo factory, you can create Validation sessions with preset options,
+// avoiding having to pass options each time when a Validation session is
+// created.
+//
+// This allows for more flexibility and easier management of options.
+//
+// The Factory function accepts an options parameter of type [FactoryOptions]
+// struct, which allows you to specify options such as the default locale code,
+// available locales and a custom JSON marshaler for errors.
+func Factory(options FactoryOptions) *validationFactory {
 
-var customMarshalJson func(e *Error) ([]byte, error)
-
-func TeardownTest() {
-	SetMarshalJSON(nil)
-	setDefaultEnglishMessages()
-	setDefaultSpanishMessages()
-	SetDefaultLocale("en")
-}
-
-// Create a localized [Validation] factory.
-func Localized(code string) (*localized, error) {
-	if _locale, exist := getLocales()[code]; exist {
-		return &localized{
-			_locale: _locale,
-		}, nil
-	} else {
-		return nil, fmt.Errorf("doesn't exist a registered locale with code '%s'", code)
+	factory := &validationFactory{
+		localeCodeDefault: localeCodeDefault,
+		marshalJsonFunc:   options.MarshalJsonFunc,
 	}
+
+	if options.LocaleCodeDefault != "" {
+		factory.localeCodeDefault = options.LocaleCodeDefault
+	}
+
+	// Create factory locales for the case when locales was specified
+	if len(options.Locales) > 0 {
+		factory.locales = map[string]*Locale{
+			LocaleCodeEn: getLocaleEn().merge(options.Locales[LocaleCodeEn]),
+			LocaleCodeEs: getLocaleEs().merge(options.Locales[LocaleCodeEs]),
+		}
+
+		// Add unexisting locales
+
+		// Determine what is the default locale, since an unexisting locale,
+		// can't be created with an unexisting default locale. In that case use
+		// the Valgo default locale as fallback
+		_localeCodeDefault := factory.localeCodeDefault
+		if _, exists := factory.locales[_localeCodeDefault]; !exists {
+			_localeCodeDefault = localeCodeDefault
+		}
+
+		for k, l := range options.Locales {
+			if _, exists := factory.locales[k]; !exists {
+				factory.locales[k] = factory.locales[_localeCodeDefault].merge(l)
+			}
+		}
+	}
+
+	return factory
 }
 
-// This function allows you to create a new Validation session without a
-// Validator. This is useful for conditional validation or reusing validation
-// logic.
+// This function allows you to create a new [Validation] session without a
+// Validator. This is useful for conditional validation, reusing validation
+// logic or just to pass optional parameters to the [Validation] session.
+//
+// The function accepts an optional parameter of type [Options] struct, which
+// allows you to specify options such as the specific locale code and locale
+// to use, and a custom JSON marshaler for errors.
 //
 // The following example conditionally adds a validator rule for the month_day
 // value.
-func New() *Validation {
-	return newValidation(getDefaultLocale())
+func New(options ...Options) *Validation {
+
+	return newValidation(options...)
 }
 
 // The [Is](...) function allows you to pass a [Validator] with the value and
@@ -77,7 +107,7 @@ func InRow(name string, index int, v *Validation) *Validation {
 	return New().InRow(name, index, v)
 }
 
-// The [Check](...) function, similar to the [Is](...) function, however with
+// The [Check](...) function is similar to the [Is](...) function, however with
 // [Check](...)` the Rules of the [Validator] parameter are not short-circuited,
 // which means that regardless of whether a previous rule was valid, all rules
 // are checked.
@@ -94,9 +124,4 @@ func Check(v Validator) *Validation {
 // session will be marked as invalid.
 func AddErrorMessage(name string, message string) *Validation {
 	return New().AddErrorMessage(name, message)
-}
-
-// Set a custom function to serialize the validator messages as JSON.
-func SetMarshalJSON(customFunc func(e *Error) ([]byte, error)) {
-	customMarshalJson = customFunc
 }

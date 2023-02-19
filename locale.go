@@ -1,69 +1,61 @@
 package valgo
 
-import (
-	"fmt"
-	"log"
+const (
+	LocaleCodeEn = "en"
+	LocaleCodeEs = "es"
 )
 
-type locale struct {
-	Messages map[string]string
-}
+const localeCodeDefault = LocaleCodeEn
 
-var locales map[string]*locale
+// Locale is a type alias that represents a map of locale entries.
+// The keys in the map are strings that represent the entry's identifier, and
+// the values are strings that contain the corresponding localized text
+// for that entry
+type Locale map[string]string
 
-var defaultLocaleCode string
+func getLocaleWithSkipDefaultOption(code string, skipDefault bool, factoryLocales ...map[string]*Locale) *Locale {
 
-func init() {
-	setDefaultEnglishMessages()
-	setDefaultSpanishMessages()
+	if len(factoryLocales) > 0 && factoryLocales[0] != nil {
 
-	err := SetDefaultLocale("en")
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func getLocales() map[string]*locale {
-	if locales == nil {
-		locales = map[string]*locale{}
-	}
-	return locales
-}
-
-func getDefaultLocale() *locale {
-	return getLocales()[defaultLocaleCode]
-}
-
-// Get the default locale code.
-func GetDefaultLocaleCode() string {
-	return defaultLocaleCode
-}
-
-// Set the default locale.
-func SetDefaultLocale(code string) error {
-	if _, exist := getLocales()[code]; exist {
-		defaultLocaleCode = code
-		return nil
-	} else {
-		return fmt.Errorf("there is not a locale registered with code %s", code)
-	}
-
-}
-
-// Add or change the messages of a specific locale.
-func SetLocaleMessages(code string, messages map[string]string) {
-	getLocales()[code] = &locale{Messages: messages}
-}
-
-// Get the messages of a specific locale.
-func GetLocaleMessages(code string) (messages map[string]string, err error) {
-	if _, exist := getLocales()[code]; exist {
-		messages = map[string]string{}
-		for k, v := range getLocales()[code].Messages {
-			messages[k] = v
+		if locale, exists := factoryLocales[0][code]; exists {
+			return locale
 		}
+		if skipDefault {
+			return nil
+		}
+		return getLocaleEn()
+
 	} else {
-		err = fmt.Errorf("there is not a locale registered with code %s", code)
+
+		switch code {
+		case LocaleCodeEs:
+			return getLocaleEs()
+		case LocaleCodeEn:
+			return getLocaleEn()
+		default:
+			if skipDefault {
+				return nil
+			}
+			return getLocaleEn()
+		}
+
 	}
-	return
+}
+
+func getLocaleAndSkipDefaultOption(code string, factoryLocales ...map[string]*Locale) *Locale {
+	return getLocaleWithSkipDefaultOption(code, true, factoryLocales...)
+}
+
+func getLocale(code string, factoryLocales ...map[string]*Locale) *Locale {
+	return getLocaleWithSkipDefaultOption(code, false, factoryLocales...)
+}
+
+func (_locale *Locale) merge(locale *Locale) *Locale {
+	if locale != nil {
+		for k, v := range *locale {
+			(*_locale)[k] = v
+		}
+	}
+
+	return _locale
 }

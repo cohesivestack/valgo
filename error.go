@@ -13,7 +13,8 @@ import (
 // There is a function in this type, [Errors()], that returns a list of errors
 // in a [Validation] session.
 type Error struct {
-	errors map[string]*valueError
+	errors          map[string]*valueError
+	marshalJsonFunc func(e *Error) ([]byte, error)
 }
 
 type errorTemplate struct {
@@ -65,7 +66,7 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 	var ts string
 	if et.template != nil {
 		ts = *et.template
-	} else if _ts, ok := ve.validator._locale.Messages[et.key]; ok {
+	} else if _ts, ok := (*ve.validator._locale)[et.key]; ok {
 		ts = _ts
 	} else {
 		ts = concatString("ERROR: THERE IS NOT A MESSAGE WITH THE KEY: ", et.key)
@@ -112,8 +113,8 @@ func (e *Error) Errors() map[string]*valueError {
 //
 // A custom function can be set with [SetMarshalJson()]
 func (e *Error) MarshalJSON() ([]byte, error) {
-	if customMarshalJson != nil {
-		return customMarshalJson(e)
+	if e.marshalJsonFunc != nil {
+		return e.marshalJsonFunc(e)
 	} else {
 		errors := map[string]interface{}{}
 

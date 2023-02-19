@@ -8,7 +8,6 @@ import (
 )
 
 func TestValidatorStringPNot(t *testing.T) {
-	TeardownTest()
 
 	text1 := "text1"
 
@@ -18,7 +17,6 @@ func TestValidatorStringPNot(t *testing.T) {
 }
 
 func TestValidatorStringPEqualToValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "text"
@@ -37,7 +35,6 @@ func TestValidatorStringPEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPEqualToInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "text1"
@@ -73,7 +70,6 @@ func TestValidatorStringPEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPGreaterThanValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "ab"
@@ -93,7 +89,6 @@ func TestValidatorStringPGreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorStringPGreaterThanInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "aa"
@@ -134,7 +129,6 @@ func TestValidatorStringPGreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPGreaterOrEqualToValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "aa"
@@ -159,7 +153,6 @@ func TestValidatorStringPGreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPGreaterOrEqualToInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "aa"
@@ -192,7 +185,6 @@ func TestValidatorStringPGreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPLessThanValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "aa"
@@ -211,7 +203,6 @@ func TestValidatorStringPLessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPLessThanInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "aa"
@@ -252,7 +243,6 @@ func TestValidatorStringPLessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPLessOrEqualToValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "aa"
@@ -275,7 +265,6 @@ func TestValidatorStringPLessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPLessOrEqualToInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "ab"
@@ -307,7 +296,6 @@ func TestValidatorStringPLessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPBetweenValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "aa"
@@ -339,7 +327,6 @@ func TestValidatorStringPBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPBetweenInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "aa"
@@ -381,7 +368,6 @@ func TestValidatorStringPBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPEmptyValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := ""
@@ -400,7 +386,6 @@ func TestValidatorStringPEmptyValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPEmptyInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "a"
@@ -440,7 +425,6 @@ func TestValidatorStringPEmptyInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPEmptyOrNilValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := ""
@@ -465,7 +449,6 @@ func TestValidatorStringPEmptyOrNilValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPEmptyOrNilInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "a"
@@ -496,7 +479,6 @@ func TestValidatorStringPEmptyOrNilInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPBlankValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := ""
@@ -521,7 +503,6 @@ func TestValidatorStringPBlankValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPBlankInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := "a"
@@ -553,7 +534,6 @@ func TestValidatorStringPBlankInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPBlankOrNilValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	_text1 := ""
@@ -584,7 +564,6 @@ func TestValidatorStringPBlankOrNilValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPBlankOrNilInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	text1 := "a"
@@ -607,7 +586,6 @@ func TestValidatorStringPBlankOrNilInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPPassingValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -631,7 +609,6 @@ func TestValidatorStringPPassingValid(t *testing.T) {
 }
 
 func TestValidatorStringPPassingInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -659,7 +636,6 @@ func TestValidatorStringPPassingInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPInSliceValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -678,7 +654,6 @@ func TestValidatorStringPInSliceValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPInSliceInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -711,7 +686,6 @@ func TestValidatorStringPInSliceInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPMatchingToValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -732,7 +706,6 @@ func TestValidatorStringPMatchingToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPMatchingToInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -767,7 +740,6 @@ func TestValidatorStringPMatchingToInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPMaxLengthValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -792,7 +764,6 @@ func TestValidatorStringPMaxLengthValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPMaxLengthInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -825,7 +796,6 @@ func TestValidatorStringPMaxLengthInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPMinLengthValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -856,7 +826,6 @@ func TestValidatorStringPMinLengthValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPMinLengthInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -889,7 +858,6 @@ func TestValidatorStringPMinLengthInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPLengthValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -908,7 +876,6 @@ func TestValidatorStringPLengthValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPLengthInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -957,7 +924,6 @@ func TestValidatorStringPLengthInvalid(t *testing.T) {
 }
 
 func TestValidatorStringPLengthBetweenValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -998,7 +964,6 @@ func TestValidatorStringPLengthBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorStringPLengthBetweenInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -1046,7 +1011,6 @@ func TestValidatorStringPLengthBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorStringNilIsValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -1066,7 +1030,6 @@ func TestValidatorStringNilIsValid(t *testing.T) {
 }
 
 func TestValidatorStringNilIsInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 

@@ -6,57 +6,111 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDefaultLocalization(t *testing.T) {
-	TeardownTest()
+func TestUseOtherLocale(t *testing.T) {
 
-	SetDefaultLocale("es")
-	v := Is(String(" ").Not().Blank())
+	v := New(Options{LocaleCode: LocaleCodeEs}).Is(String(" ").Not().Blank())
 	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 no puede estar en blanco")
 
-	// Default localization must be persistent
-	v = Is(String(" ").Empty())
-	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 debe estar vacío")
+	// Default localization must be persistent in the same validation
+	v = v.Is(String(" ").Empty())
+	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 debe estar vacío")
 }
 
-func TestSeparatedLocalization(t *testing.T) {
-	TeardownTest()
+func TestChangeLocaleEntries(t *testing.T) {
 
-	err := SetDefaultLocale("en")
-	assert.NoError(t, err)
+	originalErrorMessage0 := (*getLocaleEn())[ErrorKeyNotBlank]
+	modifiedErrorMessage0 := "{{title}} should not be blank"
 
-	localized, err := Localized("es")
-	assert.NoError(t, err)
+	originalErrorMessage1 := (*getLocaleEn())[ErrorKeyBlank]
+	modifiedErrorMessage1 := "{{title}} should be blank"
 
-	v := localized.New().Check(String(" ", "my_value").Not().Blank().Empty())
-	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value no puede estar en blanco")
-	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value debe estar vacío")
+	assert.NotEqual(t, originalErrorMessage0, modifiedErrorMessage0)
+	assert.NotEqual(t, originalErrorMessage1, modifiedErrorMessage1)
 
-	// Default localization must not be changed
-	v = Is(String(" ").Not().Blank())
-	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 can't be blank")
+	locale := &Locale{
+		ErrorKeyNotBlank: modifiedErrorMessage0,
+		ErrorKeyBlank:    modifiedErrorMessage1,
+	}
+
+	v := New(Options{Locale: locale}).Is(String(" ").Not().Blank())
+	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 should not be blank")
+
+	v = v.Is(String("a").Blank())
+	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 should be blank")
+
+	// Other entries should not be modified
+	v = v.Is(String("").Not().Empty())
+	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 can't be empty")
+
+	v = v.Is(String(" ").Empty())
+	assert.Contains(t, v.Errors()["value_3"].Messages(), "Value 3 must be empty")
 }
 
-func TestAddLocalization(t *testing.T) {
-	TeardownTest()
+func TestUseOtherLocaleAndChangeLocaleEntries(t *testing.T) {
 
-	err := SetDefaultLocale("en")
-	assert.NoError(t, err)
+	originalErrorMessage0 := (*getLocaleEs())[ErrorKeyNotBlank]
+	modifiedErrorMessage0 := "{{title}} no debería estar en blanco"
 
-	messages, err := GetLocaleMessages("en")
-	assert.NoError(t, err)
+	originalErrorMessage1 := (*getLocaleEs())[ErrorKeyBlank]
+	modifiedErrorMessage1 := "{{title}} debería estar en blanco"
 
-	messages[ErrorKeyNotBlank] = "{{title}} ei tohi olla tühi"
+	assert.NotEqual(t, originalErrorMessage0, modifiedErrorMessage0)
+	assert.NotEqual(t, originalErrorMessage1, modifiedErrorMessage1)
 
-	SetLocaleMessages("ee", messages)
-	assert.NoError(t, err)
+	locale := &Locale{
+		ErrorKeyNotBlank: modifiedErrorMessage0,
+		ErrorKeyBlank:    modifiedErrorMessage1,
+	}
 
-	localized, err := Localized("ee")
-	assert.NoError(t, err)
+	v := New(Options{LocaleCode: LocaleCodeEs, Locale: locale}).Is(String(" ").Not().Blank())
+	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 no debería estar en blanco")
 
-	v := localized.New().Check(String(" ", "my_value").Not().Blank())
-	assert.Contains(t, v.Errors()["my_value"].Messages(), "My value ei tohi olla tühi")
+	v = v.Is(String("a").Blank())
+	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 debería estar en blanco")
 
-	// Default localization must not be changed
-	v = Is(String(" ").Not().Blank())
+	// Other entries should not be modified
+	v = v.Is(String("").Not().Empty())
+	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 no puede estar vacío")
+
+	v = v.Is(String(" ").Empty())
+	assert.Contains(t, v.Errors()["value_3"].Messages(), "Value 3 debe estar vacío")
+}
+
+func TestAddNewLocaleEntries(t *testing.T) {
+
+	locale := &Locale{
+		ErrorKeyNotBlank: "{{title}} can't be blank (XX)",
+		ErrorKeyBlank:    "{{title}} must be blank (XX)",
+	}
+
+	v := New(Options{LocaleCode: "xx", Locale: locale}).Is(String(" ").Not().Blank())
+	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 can't be blank (XX)")
+
+	v = v.Is(String("a").Blank())
+	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 must be blank (XX)")
+
+	// For the unexisting keys, then should use the default language
+	v = v.Is(String("").Not().Empty())
+	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 can't be empty")
+
+	v = v.Is(String(" ").Empty())
+	assert.Contains(t, v.Errors()["value_3"].Messages(), "Value 3 must be empty")
+}
+
+func TestLocalesIsInValidationScope(t *testing.T) {
+	originalErrorMessage0 := (*getLocaleEn())[ErrorKeyNotBlank]
+	modifiedErrorMessage0 := "{{title}} should not be blank"
+
+	assert.NotEqual(t, originalErrorMessage0, modifiedErrorMessage0)
+
+	locale := &Locale{
+		ErrorKeyNotBlank: modifiedErrorMessage0,
+	}
+
+	v := New(Options{Locale: locale}).Is(String(" ").Not().Blank())
+	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 should not be blank")
+
+	// New validation
+	v = New().Is(String(" ").Not().Blank())
 	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 can't be blank")
 }

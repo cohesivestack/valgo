@@ -2,7 +2,6 @@ package valgo
 
 import (
 	"encoding/json"
-	"fmt"
 	"regexp"
 	"testing"
 
@@ -24,7 +23,6 @@ func TestError(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValidator(t *testing.T) {
-	TeardownTest()
 
 	v := Is(String("Vitalik Buterin", "name").Blank())
 
@@ -44,7 +42,6 @@ func TestAddErrorMessageFromValidator(t *testing.T) {
 }
 
 func TestAddErrorMessageFromValgo(t *testing.T) {
-	TeardownTest()
 
 	v := AddErrorMessage("email", "Email is invalid")
 
@@ -127,7 +124,6 @@ func TestIsValidByName(t *testing.T) {
 }
 
 func TestCustomErrorMarshallJSON(t *testing.T) {
-	TeardownTest()
 
 	customFunc := func(e *Error) ([]byte, error) {
 
@@ -145,16 +141,13 @@ func TestCustomErrorMarshallJSON(t *testing.T) {
 		return json.Marshal(map[string]map[string]interface{}{"errors": errors})
 	}
 
-	SetMarshalJSON(customFunc)
-
 	r, _ := regexp.Compile("a")
-	v := Check(String("", "email").Not().Blank().MatchingTo(r)).
+	v := New(Options{MarshalJsonFunc: customFunc}).
+		Check(String("", "email").Not().Blank().MatchingTo(r)).
 		Check(String("", "name").Not().Blank())
 
 	jsonByte, err := json.Marshal(v.Error())
 	assert.NoError(t, err)
-
-	fmt.Println(string(jsonByte))
 
 	jsonMap := map[string]map[string]interface{}{}
 	err = json.Unmarshal(jsonByte, &jsonMap)

@@ -28,9 +28,29 @@ import (
 type Validation struct {
 	valid bool
 
-	_locale      *locale
-	errors       map[string]*valueError
-	currentIndex int
+	_locale         *Locale
+	errors          map[string]*valueError
+	currentIndex    int
+	marshalJsonFunc func(e *Error) ([]byte, error)
+}
+
+// Options struct is used to specify options when creating a new [Validation]
+// session with the [New()] function.
+//
+// It contains parameters for specifying a specific locale code, modify or add a
+// locale, and set a custom JSON marshaler for [Error].
+
+type Options struct {
+	localeCodeDefaultFromFactory string             // Only specified by the factory
+	localesFromFactory           map[string]*Locale // Only specified by the factory
+
+	// A string field that represents the locale code to use by the [Validation]
+	// session
+	LocaleCode string
+	// A map field that allows to modify or add a new [Locale]
+	Locale *Locale
+	// A function field that allows to set a custom JSON marshaler for [Error]
+	MarshalJsonFunc func(e *Error) ([]byte, error)
 }
 
 // Add a field validator to a [Validation] session.
@@ -169,7 +189,8 @@ func (session *Validation) Errors() map[string]*valueError {
 func (validation *Validation) Error() error {
 	if !validation.valid {
 		return &Error{
-			errors: validation.errors,
+			errors:          validation.errors,
+			marshalJsonFunc: validation.marshalJsonFunc,
 		}
 	}
 	return nil
@@ -200,10 +221,34 @@ func (validation *Validation) getOrCreateValueError(name string) *valueError {
 	return ev
 }
 
-func newValidation(_locale *locale) *Validation {
+func newValidation(options ...Options) *Validation {
 	v := &Validation{
-		valid:   true,
-		_locale: _locale,
+		valid: true,
+	}
+
+	if len(options) == 0 {
+		v._locale = getLocale(localeCodeDefault)
+	} else {
+		_options := options[0]
+
+		// If the factory has default locale specified, we try to use it as fallback
+		if options[0].localeCodeDefaultFromFactory != "" {
+			// Skipping default option will return nil, so we can use the factory
+			// locale default
+			v._locale = getLocaleAndSkipDefaultOption(_options.LocaleCode, options[0].localesFromFactory)
+			if v._locale == nil {
+				v._locale = getLocale(options[0].localeCodeDefaultFromFactory, options[0].localesFromFactory)
+			}
+		} else {
+			v._locale = getLocale(_options.LocaleCode, options[0].localesFromFactory)
+		}
+
+		// If locale entries were specified, then we merge it with the calculated
+		// Locale from the options localeCode
+		if _options.Locale != nil {
+			v._locale.merge(_options.Locale)
+		}
+		v.marshalJsonFunc = _options.MarshalJsonFunc
 	}
 
 	return v

@@ -7,7 +7,6 @@ import (
 )
 
 func TestValidatorNumberNot(t *testing.T) {
-	TeardownTest()
 
 	v := Is(Number(1).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -15,7 +14,6 @@ func TestValidatorNumberNot(t *testing.T) {
 }
 
 func TestValidatorNumberEqualToValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).EqualTo(2))
@@ -32,7 +30,6 @@ func TestValidatorNumberEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberEqualToInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(1).EqualTo(2))
@@ -56,7 +53,6 @@ func TestValidatorNumberEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberGreaterThanValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(3).GreaterThan(2))
@@ -74,7 +70,6 @@ func TestValidatorNumberGreaterThanValid(t *testing.T) {
 }
 
 func TestValidatorNumberGreaterThanInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).GreaterThan(2))
@@ -102,7 +97,6 @@ func TestValidatorNumberGreaterThanInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberGreaterOrEqualToValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).GreaterOrEqualTo(2))
@@ -123,7 +117,6 @@ func TestValidatorNumberGreaterOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberGreaterOrEqualToInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).GreaterOrEqualTo(3))
@@ -145,7 +138,6 @@ func TestValidatorNumberGreaterOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberLessThanValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).LessThan(3))
@@ -162,7 +154,6 @@ func TestValidatorNumberLessThanValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberLessThanInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).LessThan(2))
@@ -190,7 +181,6 @@ func TestValidatorNumberLessThanInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberLessOrEqualToValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).LessOrEqualTo(2))
@@ -211,7 +201,6 @@ func TestValidatorNumberLessOrEqualToValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberLessOrEqualToInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(3).LessOrEqualTo(2))
@@ -233,7 +222,6 @@ func TestValidatorNumberLessOrEqualToInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberBetweenValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).Between(2, 6))
@@ -259,7 +247,6 @@ func TestValidatorNumberBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberBetweenInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(2).Between(3, 6))
@@ -288,7 +275,6 @@ func TestValidatorNumberBetweenInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberZeroValid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(0).Zero())
@@ -304,7 +290,6 @@ func TestValidatorNumberZeroValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 func TestValidatorNumberZeroInvalid(t *testing.T) {
-	TeardownTest()
 	var v *Validation
 
 	v = Is(Number(1).Zero())
@@ -331,7 +316,6 @@ func TestValidatorNumberZeroInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberPassingValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -353,7 +337,6 @@ func TestValidatorNumberPassingValid(t *testing.T) {
 }
 
 func TestValidatorNumberPassingInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -379,7 +362,6 @@ func TestValidatorNumberPassingInvalid(t *testing.T) {
 }
 
 func TestValidatorNumberInSliceValid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 
@@ -397,7 +379,6 @@ func TestValidatorNumberInSliceValid(t *testing.T) {
 }
 
 func TestValidatorNumberInSliceInvalid(t *testing.T) {
-	TeardownTest()
 
 	var v *Validation
 

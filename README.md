@@ -53,13 +53,17 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
 - [Using Valgo](#using-valgo)
   - [`Validation` session](#validation-session)
   - [`Is(...)` function](#is-function)
-  - [`New()` function](#new-function)
   - [`Validation.Valid()` function](#validationvalid-function)
   - [`Validation.IsValid(...)` function](#validationisvalid-function)
   - [`In(...)` function](#in-function)
   - [`InRow(...)` function](#inrow-function)
   - [`Check(...)` function](#check-function)
   - [Merging two `Validation` sessions with `Validation.Merge( ... )`](#merging-two-validation-sessions-with-validationmerge--)
+  - [`New()` function](#new-function)
+  - [Custom error message template](#custom-error-message-template)
+  - [Localizing a validation session with New(...options) function](#localizing-a-validation-session-with-newoptions-function)
+  - [Managing common options with Factory](#managing-common-options-with-factory)
+  - [Custom errors JSON output with Factory](#custom-errors-json-output-with-factory)
 - [Validators](#validators)
   - [Validator value's name and title.](#validator-values-name-and-title)
   - [`Not()` validator function](#not-validator-function)
@@ -72,11 +76,7 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [Boolean pointer validator](#boolean-pointer-validator)
   - [Any validator](#any-validator)
   - [Custom type validators](#custom-type-validators)
-- [Customizing](#customizing)
-  - [Custom errors JSON output](#custom-errors-json-output)
-  - [Custom error message template](#custom-error-message-template)
-  - [Extending Valgo with custom validators](#extending-valgo-with-custom-validators)
-- [Localizing validator messages](#localizing-validator-messages)
+- [Extending Valgo with custom validators](#extending-valgo-with-custom-validators)
 - [List of rules by validator type](#list-of-rules-by-validator-type)
 - [License](#license)
 
@@ -145,32 +145,6 @@ output:
   ]
 }
 ```
-
-## `New()` function
-
-This function allows you to create a new `Validation` session without a `Validator`. This is useful for conditional validation or reusing validation logic.
-
-The following example conditionally adds a `Validator` rule for the `month_day` value.
-
-```go
-month := 5
-monthDay := 11
-
-val := v.New()
-
-if month == 6 {
-  val.Is(v.Number(monthDay, "month_day").LessOrEqualTo(10))
-}
-
-if val.Valid() {
-  fmt.Println("The validation passes")
-}
-```
-output:
-```bash
-The validation passes
-```
-
 
 ## `Validation.Valid()` function
 
@@ -376,6 +350,217 @@ output:
 	  "Status can't be blank",
 	  "Status must match to \"pre-.+\""
   ]
+}
+```
+
+## `New()` function
+
+This function allows you to create a new `Validation` session without a `Validator`. This is useful for conditional validation or reusing validation logic.
+
+The function accepts an optional parameter of type [Options] struct, which allows you to specify options such as the specific locale code and locale to use, and a custom JSON marshaler for errors.
+
+The following example conditionally adds a `Validator` rule for the `month_day` value.
+
+```go
+month := 5
+monthDay := 11
+
+val := v.New()
+
+if month == 6 {
+  val.Is(v.Number(monthDay, "month_day").LessOrEqualTo(10))
+}
+
+if val.Valid() {
+  fmt.Println("The validation passes")
+}
+```
+output:
+```bash
+The validation passes
+```
+
+As we mentioned above, you can pass the Options type to the New() function, in order to specify additional options when creating a new Validation session, such as the specific locale code and locale to use, and a custom JSON marshaler for errors. More information about the Options parameter in the following sections.
+
+## Custom error message template
+
+Customizing the default Valgo error messages is possible through the `New()` function as it's explained in the [Localizing a validation session with New](#localizing-a-validation-session-with-newoptions-function) section, however the Valgo validators allow to customize the template of a specific template validator rule. Below is an example illustrating this with the String empty validator rule.
+
+```go
+val := v.Is(v.String("", "address_field", "Address").Not().Empty("{{title}} must not be empty. Please provide the value in the input {{name}}."))
+
+out, _ := json.MarshalIndent(val.Error(), "", "  ")
+fmt.Println(string(out))
+```
+
+output:
+```json
+{
+  "address": [
+         "Address must not be empty. Please provide the value in the input address_field."
+  ]
+}
+```
+
+## Localizing a validation session with New(...options) function
+
+Valgo has localized error messages. The error messages are currently available in English (default) and Spanish. However, it is possible to set error messages for any locale by passing the Options parameter to the `New()` function. Using this parameter, you can also customize the existing Valgo locale messages.
+
+There are two options for localization: `localeCode` and `locale`. Below, we list the different ways to customize localization with these two parameters.
+
+* Changing the validation session's locale
+  In the following example, we are setting the Spanish locale:
+
+  ```go
+  // Creating the new validation session with other locale
+  val := v.New(v.Options{ LocaleCode: "es" })
+
+  // Testing the output
+  val := val.Check(v.String(" ", "nombre").Not().Blank())
+
+  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  fmt.Println(string(out))
+  ```
+
+  output:
+  ```json
+  {
+    "name": [
+      "Nombre no puede estar en blanco"
+    ]
+  }
+  ```
+
+  If the specified locale does not exist, Valgo's default English locale will be used. If you wish to change the default locale, you should use a Factory function, which is explained in the [Factory section](#managing-common-options-with-factory).
+
+* Changing the locale entries
+  In the example below, we are changing the entry for the "Not Blank" error. Since we are not specifying the `localeCode`, we are using and replacing the default English locale. However, you can also specify another localeCode if necessary.
+
+  ```go
+  // Creating a new validation session and changing a locale entry
+  val := v.New(v.Options{
+    Locale: &Locale{
+		  ErrorKeyNotBlank: "{{title}} should not be blank",
+	  }
+  })
+
+  // Testing the output
+  val := val.Check(v.String(" ", "name").Not().Blank())
+
+  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  fmt.Println(string(out))
+  ```
+
+  output:
+  ```json
+  {
+    "name": [
+      "Name should not be blank"
+    ]
+  }
+  ```
+
+* Adding a new locale
+  As mentioned previously, Valgo currently only has the English and Spanish locales, but we hope to have more soon. However, you can add your own custom locale. Below is an example using the Estonian language:
+
+  ```go
+  // Creating a new validation session and adding a new locale with two entries
+  val := v.New(v.Options{
+    LocaleCode: "ee",
+    Locale: &Locale{
+		  ErrorKeyNotBlank: "{{title}} ei tohi olla tühi",
+      ErrorKeyNotFalse: "{{title}} ei tohi olla vale",
+	  }
+  })
+
+  // Testing the output
+  val := val.
+    Is(v.String(" ", "name").Not().Blank()).
+    Is(v.Bool(false, "active").Not().False())
+
+  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  fmt.Println(string(out))
+  ```
+
+  output:
+  ```json
+  {
+    "name": [
+      "Name ei tohi olla tühi"
+    ],
+    "active": [
+      "Active ei tohi olla vale"
+    ]
+  }
+  ```
+
+  For entries not specified in the custom locale, the default Valgo locale (English) will be used. If you wish to change the default locale, you can use the `Factory` function, which is further explained in the [Factory section](#managing-common-options-with-factory).
+
+We welcome pull requests for adding new locale messages, but please ensure that the translations are of high quality.
+
+## Managing common options with Factory
+
+Valgo provides the `Factory()` function which allows you to create a valgo factory. With a valgo factory, you can create `Validation` sessions with preset options, avoiding having to pass options each time when a Validation is created. This allows more flexibility and easier management of options when creating `Validation` sessions.
+
+The `Factory` function takes a parameter of type `FactoryOptions` struct, which allows you to modify the default locale code, add new locales, and set a custom JSON marshaler for errors. The `factory` instance created by this function has all the functions to create Validations available in the package level (`Is()`, `In()`, `Check()`, `New()`) which creates a new Validation session with the preset options in the factory.
+
+In the following example, we create a `Factory` with the default locale code set to Spanish, a new locale added for Estonian. This factory instance enables us to create validation sessions.
+
+```go
+factory := v.Factory(v.FactoryOptions{
+  LocaleCodeDefault: "es",
+  Locales: map[string]*Locale{
+      "ee": {
+          v.ErrorKeyNotBlank: "{{title}} ei tohi olla tühi",
+          v.ErrorKeyNotFalse: "{{title}} ei tohi olla vale",
+      },
+  }
+})
+
+// Error will contain the spanish error "Nombre no puede estar en blanco"
+v1 := factory.Is(String(" ", "nombre").NotBlank())
+
+// Error will contain the spanish error "Nime ei tohi olla tühi"
+v2 := factory.New(Options{LocaleCode: "ee"}).Is(String(" ", "nime").Not().Blank())
+```
+
+## Custom errors JSON output with Factory
+
+It is possible to use the `MarshalJsonFunc` parameter of `Factory` for customizing the JSON output for errors.
+
+```go
+customMarshalJson := func(e *Error) ([]byte, error) {
+
+  errors := map[string]interface{}{}
+
+  for k, v := range e.errors {
+    errors[k] = v.Messages()
+  }
+
+  // Add a root key level called errors, which is not set by default in the Valgo implementation.
+  return json.Marshal(map[string]map[string]interface{}{"errors": errors})
+}
+
+// Set the custom Marshal JSON function
+factory := v.Factory(v.FactoryOptions{
+  MarshalJsonFunc: customMarshalJson
+})
+
+// Now validate something to check if the output JSON contains the errors root key
+
+val := factory.Is(v.String("", "name").Not().Empty())
+
+out, _ := json.MarshalIndent(val.Error(), "", "  ")
+fmt.Println(string(out))
+```
+output:
+```json
+{
+  "errors": {
+    "name": [
+      "Name can't be empty"
+    ]
+  }
 }
 ```
 
@@ -667,66 +852,7 @@ var stage Stage = 2
 val := v.Is(v.NumberP(&stage).GreaterThan(Stage(1)))
 ```
 
-# Customizing
-
-## Custom errors JSON output
-
-It is possible to customize the JSON output for errors using the function `SetMarshalJSON(err Error)`. The parameter in this function receives a `valgo.Error` structure, which provides all information regarding output validation errors. Below is an example of a customized function.
-
-```go
-customMarshalJson := func(e *Error) ([]byte, error) {
-
-  errors := map[string]interface{}{}
-
-  for k, v := range e.errors {
-    errors[k] = v.Messages()
-  }
-
-  // Add a root key level called errors, which is not set by default in the Valgo implementation.
-  return json.Marshal(map[string]map[string]interface{}{"errors": errors})
-}
-
-// Set the custom Marshal JSON function
-v.SetMarshalJSON(customMarshalJson)
-
-// Now validate something to check if the output JSON contains the errors root key
-
-val := v.Is(v.String("", "name").Not().Empty())
-
-out, _ := json.MarshalIndent(val.Error(), "", "  ")
-fmt.Println(string(out))
-```
-output:
-```json
-{
-  "errors": {
-    "name": [
-      "Name can't be empty"
-    ]
-  }
-}
-```
-
-## Custom error message template
-
-Customizing the default Valgo error messages is possible through the Valgo localization functions as it's explained in the [Localizing validator messages](#localizing-validator-messages) section, however the Valgo validators allow to customize the template of a specific template validator rule. Below is an example illustrating this with the String empty validator rule.
-
-```go
-val := v.Is(v.String("", "address_field", "Address").Not().Empty("{{title}} must not be empty. Please provide the value in the input {{name}}."))
-
-out, _ := json.MarshalIndent(val.Error(), "", "  ")
-fmt.Println(string(out))
-```
-output:
-```json
-{
-  "address": [
-	  "Address must not be empty. Please provide the value in the input address_field."
-  ]
-}
-```
-
-## Extending Valgo with custom validators
+# Extending Valgo with custom validators
 
 While all validators in Golang provide a `Passing(...)` function, which allows you to use a custom validator function, Valgo also allows you to create your own validator.
 
@@ -795,44 +921,6 @@ output:
   ]
 }
 ```
-
-# Localizing validator messages
-
-Valgo has localized error messages. The error messages are only available in English (default) and Spanish at the moment. It is possible, however, to set the error messages for any locale using the function `SetDefaultLocale(code string)`. Using this function, you can also customize the existing Valgo locale messages.
-
-In the following example we are adding localized messages for the Estonian language. Essentially, we are copying the Valgo English messages and customizing the Not Blank error message template.
-
-```go
-messages, _ := v.GetLocaleMessages("en")
-
-messages[ErrorKeyNotBlank] = "{{title}} ei tohi olla tühi"
-v.SetLocaleMessages("ee", messages)
-
-localized, err := v.Localized("ee")
-
-// Testing the output
-val := localized.New().Check(v.String(" ", "name").Not().Blank())
-
-out, _ := json.MarshalIndent(val.Error(), "", "  ")
-fmt.Println(string(out))
-
-```
-output:
-```json
-{
-  "name": [
-	  "Name ei tohi olla tühi"
-  ]
-}
-```
-
-For setting the default locale used by Valgo, you can just use the function `SetDefaultLocale(code string)` as shown in the following example.
-
-```go
-v.SetDefaultLocale("es")
-```
-
-PRs are welcome if you want to add locale messages for your language, but please make sure that your translations are high quality.
 
 # List of rules by validator type
 
