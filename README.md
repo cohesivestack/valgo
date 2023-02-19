@@ -78,6 +78,7 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [Custom type validators](#custom-type-validators)
 - [Extending Valgo with custom validators](#extending-valgo-with-custom-validators)
 - [List of rules by validator type](#list-of-rules-by-validator-type)
+- [Github Code Contribution Guide](#github-code-contribution-guide)
 - [License](#license)
 
 # Getting started
@@ -1005,6 +1006,22 @@ output:
   - `EqualTo`
   - `Passing`
   - `Nil`
+
+# Github Code Contribution Guide
+
+We welcome contributions to our project! To make the process smooth and efficient, please follow these guidelines when submitting code:
+
+* **Discuss changes with the community**: We encourage contributors to discuss their proposed changes or improvements with the [community](https://github.com/cohesivestack/valgo/discussions/categories/ideas) before starting to code. This ensures that the changes align with the focus and purpose of the project, and that other contributors are aware of the work being done.
+
+* **Make commits small and cohesive**: It is important to keep your commits focused on a single task or change. This makes it easier to review and understand your changes.
+
+* **Check code formatting with go fmt**: Before submitting your code, please ensure that it is properly formatted using the go fmt command.
+
+* **Make tests to cover your changes**: Please include tests that cover the changes you have made. This ensures that your code is functional and reduces the likelihood of bugs.
+
+* **Update golang docs and README to cover your changes**: If you have made changes that affect documentation or the README file, please update them accordingly.
+
+* **Keep a respectful language with a collaborative tune**: We value a positive and collaborative community. Please use respectful language when communicating with other contributors or maintainers.
 
 # License
 
