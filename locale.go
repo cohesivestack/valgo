@@ -3,6 +3,7 @@ package valgo
 const (
 	LocaleCodeEn = "en"
 	LocaleCodeEs = "es"
+	LocaleCodeDe = "de"
 )
 
 const localeCodeDefault = LocaleCodeEn
@@ -32,6 +33,8 @@ func getLocaleWithSkipDefaultOption(code string, skipDefault bool, factoryLocale
 			return getLocaleEs()
 		case LocaleCodeEn:
 			return getLocaleEn()
+		case LocaleCodeDe:
+			return getLocaleDe()
 		default:
 			if skipDefault {
 				return nil
