@@ -58,6 +58,7 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [`In(...)` function](#in-function)
   - [`InRow(...)` function](#inrow-function)
   - [`Check(...)` function](#check-function)
+  - [`AddErrorMessage(...)` function](#adderrormessage-function)
   - [Merging two `Validation` sessions with `Validation.Merge( ... )`](#merging-two-validation-sessions-with-validationmerge--)
   - [`New()` function](#new-function)
   - [Custom error message template](#custom-error-message-template)
@@ -310,6 +311,48 @@ output:
 }
 ```
 
+## `AddErrorMessage(...)` function
+
+The `AddErrorMessage` function allows to add an error message to a Validation session without executing a field validator. This function takes in two arguments: `name`, which is the name of the field for which the error message is being added, and `message`, which is the error message being added to the session.
+
+When an error message is added using this function, the Validation session is marked as invalid, indicating that at least one validation error has occurred.
+
+One use case for the `AddErrorMessage` function is to add a general error message for the validation of an entity structure. As shown in the example below, if you have an entity structure for an `address` and need to validate multiple fields within it, such as the `city` and `street`, you can use `AddErrorMessage` to include a general error message for the entire `address` in case any of the fields fail validation.
+
+```go
+type Address struct {
+  City string
+  Street string
+}
+
+a := Address{"", "1600 Amphitheatre Pkwy"}
+
+val := v.
+  Is(String(a.city, "city").Not().Blank()).
+  Is(String(a.Street, "street").Not().Blank())
+
+if !val.Valid() {
+  v.AddErrorMessage("address", "The address is wrong!")
+
+  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  fmt.Println(string(out))
+}
+
+```
+output:
+```json
+{
+  "address": [
+    "The address is wrong!"
+  ],
+  "city": [
+    "City can't be blank"
+  ]
+}
+```
+
+ It's worth noting that there may be other use cases for this function as well.
+
 ## Merging two `Validation` sessions with `Validation.Merge( ... )`
 
 Using `Merge(...)` you can merge two `Validation` sessions. When two validations are merged, errors with the same value name will be merged. It is useful for reusing validation logic.
@@ -405,7 +448,7 @@ output:
 
 ## Localizing a validation session with New(...options) function
 
-Valgo has localized error messages. The error messages are currently available in English (default) and Spanish. However, it is possible to set error messages for any locale by passing the Options parameter to the `New()` function. Using this parameter, you can also customize the existing Valgo locale messages.
+Valgo has localized error messages. The error messages are currently available in English (default), Spanish and German. However, it is possible to set error messages for any locale by passing the Options parameter to the `New()` function. Using this parameter, you can also customize the existing Valgo locale messages.
 
 There are two options for localization: `localeCode` and `locale`. Below, we list the different ways to customize localization with these two parameters.
 
@@ -462,7 +505,7 @@ There are two options for localization: `localeCode` and `locale`. Below, we lis
   ```
 
 * Adding a new locale
-  As mentioned previously, Valgo currently only has the English and Spanish locales, but we hope to have more soon. However, you can add your own custom locale. Below is an example using the Estonian language:
+  As mentioned previously, Valgo currently only has the English, Spanish and German locales, but we hope to have more soon. However, you can add your own custom locale. Below is an example using the Estonian language:
 
   ```go
   // Creating a new validation session and adding a new locale with two entries
@@ -1027,6 +1070,6 @@ We welcome contributions to our project! To make the process smooth and efficien
 
 # License
 
-Copyright © 2022 Carlos Forero
+Copyright © 2023 Carlos Forero
 
 Valgo is released under the [MIT License](LICENSE)
