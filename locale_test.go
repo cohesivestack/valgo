@@ -8,12 +8,19 @@ import (
 
 func TestUseOtherLocale(t *testing.T) {
 
-	v := New(Options{LocaleCode: LocaleCodeEs}).Is(String(" ").Not().Blank())
-	assert.Contains(t, v.Errors()["value_0"].Messages(), "Value 0 no puede estar en blanco")
+	vEs := New(Options{LocaleCode: LocaleCodeEs}).Is(String(" ").Not().Blank())
+	assert.Contains(t, vEs.Errors()["value_0"].Messages(), "Value 0 no puede estar en blanco")
 
 	// Default localization must be persistent in the same validation
-	v = v.Is(String(" ").Empty())
-	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 debe estar vacío")
+	vEs = vEs.Is(String(" ").Empty())
+	assert.Contains(t, vEs.Errors()["value_1"].Messages(), "Value 1 debe estar vacío")
+
+	vDe := New(Options{LocaleCode: LocaleCodeDe}).Is(String(" ").Not().Blank())
+	assert.Contains(t, vDe.Errors()["value_0"].Messages(), "Value 0 muss ausgefüllt sein")
+
+	// Default localization must be persistent in the same validation
+	vDe = vDe.Is(String(" ").Empty())
+	assert.Contains(t, vDe.Errors()["value_1"].Messages(), "Value 1 muss leer sein")
 }
 
 func TestChangeLocaleEntries(t *testing.T) {
