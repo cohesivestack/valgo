@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"text/template"
 
 	"golang.org/x/text/cases"
@@ -42,7 +42,7 @@ func main() {
 		})
 	}
 
-	tmpl, err := template.ParseGlob(path.Join("generator", "*.tpl"))
+	tmpl, err := template.ParseGlob(filepath.Join("generator", "*.tpl"))
 	if err != nil {
 		panic(err)
 	}
