@@ -12,6 +12,21 @@ type FactoryOptions struct {
 	MarshalJsonFunc func(e *Error) ([]byte, error)
 }
 
+// ValidationFactory is a struct provided by Valgo that enables the creation of
+// Validation sessions with preset options. This allows for more flexibility and
+// easier management of options when creating [Validation] sessions, as it avoids
+// having to pass options each time a new [Validation] is created.
+//
+// The [Factory()] function is used to create a ValidationFactory instance, and
+// it takes a [FactoryOptions] struct as a parameter. This allows customization
+// of the default locale code, addition of new locales, and setting a custom
+// JSON marshaler for errors.
+//
+// A ValidationFactory instance offers all the functions for creating
+// Validations available at the package level ([Is()], [In()], [Check()], [New()]),
+// which create new Validation sessions with the preset options defined in the
+// factory.
+
 type ValidationFactory struct {
 	localeCodeDefault string
 	locales           map[string]*Locale
