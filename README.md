@@ -546,7 +546,7 @@ We welcome pull requests for adding new locale messages, but please ensure that 
 
 Valgo provides the `Factory()` function which allows you to create a valgo factory. With a valgo factory, you can create `Validation` sessions with preset options, avoiding having to pass options each time when a Validation is created. This allows more flexibility and easier management of options when creating `Validation` sessions.
 
-The `Factory` function takes a parameter of type `FactoryOptions` struct, which allows you to modify the default locale code, add new locales, and set a custom JSON marshaler for errors. The `factory` instance created by this function has all the functions to create Validations available in the package level (`Is()`, `In()`, `Check()`, `New()`) which creates a new Validation session with the preset options in the factory.
+The `Factory` function takes a parameter of type `FactoryOptions` struct, which allows you to modify the default locale code, add new locales, and set a custom JSON marshaler for errors. The `ValidationFactory` instance created by this function has all the functions to create Validations available in the package level (`Is()`, `In()`, `Check()`, `New()`) which creates a new Validation session with the preset options in the factory.
 
 In the following example, we create a `Factory` with the default locale code set to Spanish, a new locale added for Estonian. This factory instance enables us to create validation sessions.
 
