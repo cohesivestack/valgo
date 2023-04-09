@@ -19,9 +19,9 @@ package valgo
 // The Factory function accepts an options parameter of type [FactoryOptions]
 // struct, which allows you to specify options such as the default locale code,
 // available locales and a custom JSON marshaler for errors.
-func Factory(options FactoryOptions) *validationFactory {
+func Factory(options FactoryOptions) *ValidationFactory {
 
-	factory := &validationFactory{
+	factory := &ValidationFactory{
 		localeCodeDefault: localeCodeDefault,
 		marshalJsonFunc:   options.MarshalJsonFunc,
 	}

@@ -12,7 +12,7 @@ type FactoryOptions struct {
 	MarshalJsonFunc func(e *Error) ([]byte, error)
 }
 
-type validationFactory struct {
+type ValidationFactory struct {
 	localeCodeDefault string
 	locales           map[string]*Locale
 	marshalJsonFunc   func(e *Error) ([]byte, error)
@@ -24,7 +24,7 @@ type validationFactory struct {
 //
 // The function is similar to the [New()] function, but it uses a factory.
 // For more information see the [New()] function.
-func (_factory *validationFactory) New(options ...Options) *Validation {
+func (_factory *ValidationFactory) New(options ...Options) *Validation {
 
 	var _options *Options
 	finalOptions := Options{
@@ -59,7 +59,7 @@ func (_factory *validationFactory) New(options ...Options) *Validation {
 //
 // The function is similar to the [Is()] function, but it uses a factory.
 // For more information see the [Is()] function.
-func (_factory *validationFactory) Is(v Validator) *Validation {
+func (_factory *ValidationFactory) Is(v Validator) *Validation {
 	return _factory.New().Is(v)
 }
 
@@ -69,7 +69,7 @@ func (_factory *validationFactory) Is(v Validator) *Validation {
 //
 // The function is similar to the [In()] function, but it uses a factory.
 // For more information see the [In()] function.
-func (_factory *validationFactory) In(name string, v *Validation) *Validation {
+func (_factory *ValidationFactory) In(name string, v *Validation) *Validation {
 	return _factory.New().In(name, v)
 }
 
@@ -80,7 +80,7 @@ func (_factory *validationFactory) In(name string, v *Validation) *Validation {
 //
 // The function is similar to the [InRow()] function, but it uses a factory.
 // For more information see the [InRow()] function.
-func (_factory *validationFactory) InRow(name string, index int, v *Validation) *Validation {
+func (_factory *ValidationFactory) InRow(name string, index int, v *Validation) *Validation {
 	return _factory.New().InRow(name, index, v)
 }
 
@@ -91,13 +91,13 @@ func (_factory *validationFactory) InRow(name string, index int, v *Validation) 
 //
 // The function is similar to the [Check()] function, but it uses a factory.
 // For more information see the [Check()] function.
-func (_factory *validationFactory) Check(v Validator) *Validation {
+func (_factory *ValidationFactory) Check(v Validator) *Validation {
 	return _factory.New().Check(v)
 }
 
 // Create a new [Validation] session, through a factory, and add an error
 // message to it without executing a field validator. By adding this error
 // message, the [Validation] session will be marked as invalid.
-func (_factory *validationFactory) AddErrorMessage(name string, message string) *Validation {
+func (_factory *ValidationFactory) AddErrorMessage(name string, message string) *Validation {
 	return _factory.New().AddErrorMessage(name, message)
 }
