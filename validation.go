@@ -143,6 +143,50 @@ func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 	return v
 }
 
+func (v *Validation) mergeError(prefix string, err *Error) *Validation {
+
+	if err != nil && len(err.errors) > 0 {
+		if v.errors == nil {
+			v.errors = map[string]*valueError{}
+		}
+
+		v.valid = false
+
+		var _prefix string
+		if len(strings.TrimSpace(prefix)) > 0 {
+			_prefix = prefix + "."
+		}
+
+		for name, _ev := range err.errors {
+			for _, message := range _ev.Messages() {
+				v.AddErrorMessage(_prefix+name, message)
+			}
+		}
+	}
+
+	return v
+}
+
+// MergeError allows merging Valgo errors from an already validated [Validation] session.
+// The function takes an Valgo [Error] pointer as an argument and returns a [Validation] pointer.
+func (v *Validation) MergeError(err *Error) *Validation {
+	return v.mergeError("", err)
+}
+
+// MergeErrorIn allows merging Valgo errors from already validated [Validation] sessions
+// within a map namespace. The function takes a namespace name and an [Error] pointer
+// as arguments and returns a [Validation] pointer.
+func (v *Validation) MergeErrorIn(name string, err *Error) *Validation {
+	return v.mergeError(name, err)
+}
+
+// MergeErrorInRow allows merging Valgo errors from already validated [Validation] sessions
+// within an indexed namespace. The function takes a namespace name, an index, and an [Error] pointer
+// as arguments and returns a [Validation] pointer.
+func (v *Validation) MergeErrorInRow(name string, index int, err *Error) *Validation {
+	return v.mergeError(fmt.Sprintf("%s[%v]", name, index), err)
+}
+
 func (validation *Validation) invalidate(name *string, fragment *validatorFragment) {
 	if validation.errors == nil {
 		validation.errors = map[string]*valueError{}
