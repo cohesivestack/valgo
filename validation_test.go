@@ -286,6 +286,128 @@ func TestLastValidationIsNotAlteringPreviousOne(t *testing.T) {
 	assert.False(t, ok)
 }
 
+func TestValidationMergeError(t *testing.T) {
+
+	v0 := Is(String("up", "status").EqualTo("up"))
+	assert.True(t, v0.Valid())
+	assert.Empty(t, v0.Errors())
+
+	v1 := Is(String("", "name").Not().Blank())
+	assert.False(t, v1.Valid())
+	assert.Equal(t,
+		"Name can't be blank",
+		v1.Errors()["name"].Messages()[0])
+
+	// v0 is initially valid, but merging to v1 must be invalidated
+	v0.MergeError(v1.Error().(*Error))
+
+	assert.False(t, v0.Valid())
+	assert.Equal(t,
+		"Name can't be blank",
+		v0.Errors()["name"].Messages()[0])
+
+	assert.True(t, v0.IsValid("status"))
+
+	// Check that mergin error is not replacing existing errors
+
+	v0 = Is(String("up", "status").EqualTo("down"))
+	assert.False(t, v0.IsValid("status"))
+	assert.Len(t, v0.Errors(), 1)
+
+	v0.Is(String("", "name").Not().Blank())
+	assert.False(t, v0.IsValid("name"))
+	assert.Len(t, v0.Errors(), 2)
+
+	v1 = Is(String("", "status").Not().Blank())
+	assert.False(t, v1.Valid())
+	assert.Equal(t,
+		"Status can't be blank",
+		v1.Errors()["status"].Messages()[0])
+
+	// v0 is initially valid, but merging to v1 must be invalidated
+	v0.MergeError(v1.Error().(*Error))
+
+	assert.False(t, v0.IsValid("status"))
+	assert.Equal(t,
+		"Status must be equal to \"down\"",
+		v0.Errors()["status"].Messages()[0])
+
+	assert.False(t, v0.IsValid("status"))
+	assert.Equal(t,
+		"Status can't be blank",
+		v0.Errors()["status"].Messages()[1])
+
+	assert.False(t, v0.IsValid("name"))
+	assert.Equal(t,
+		"Name can't be blank",
+		v0.Errors()["name"].Messages()[0])
+}
+
+func TestValidationMergeErrorIn(t *testing.T) {
+
+	v0 := Is(String("up", "status").EqualTo("up"))
+	assert.True(t, v0.Valid())
+	assert.Empty(t, v0.Errors())
+
+	v1 := Is(String("", "firstName").Not().Blank())
+	assert.False(t, v1.Valid())
+	assert.Equal(t,
+		"First name can't be blank",
+		v1.Errors()["firstName"].Messages()[0])
+
+	v1.Is(String("", "lastName").Not().Blank())
+	assert.False(t, v1.Valid())
+	assert.Equal(t,
+		"Last name can't be blank",
+		v1.Errors()["lastName"].Messages()[1])
+
+	// v0 is initially valid, but merging to v1 Errors must be invalidated
+	v0.MergeErrorIn("user", v1.Error().(*Error))
+
+	assert.False(t, v0.Valid())
+	assert.Equal(t,
+		"First Name can't be blank",
+		v0.Errors()["user.firstName"].Messages()[0])
+
+	assert.Equal(t,
+		"Last Name can't be blank",
+		v0.Errors()["user.lastName"].Messages()[0])
+
+	assert.True(t, v0.IsValid("status"))
+
+}
+
+func TestValidationMergeErrorInRow(t *testing.T) {
+
+	v0 := Is(String("up", "status").EqualTo("up"))
+	assert.True(t, v0.Valid())
+	assert.Empty(t, v0.Errors())
+
+	v1 := Is(String("", "name").Not().Blank())
+	assert.False(t, v1.Valid())
+	assert.Equal(t,
+		"Name can't be blank",
+		v1.Errors()["name"].Messages()[0])
+
+	// v0 is initially valid, but merging to v1 Errors must be invalidated
+	v0.MergeErrorInRow("user", 0, v1.Error().(*Error))
+
+	// v0 is initially valid, but merging to v1 Errors must be invalidated
+	v0.MergeErrorInRow("user", 1, v1.Error().(*Error))
+
+	assert.False(t, v0.Valid())
+	assert.Equal(t,
+		"Name can't be blank",
+		v0.Errors()["user[0].name"].Messages()[0])
+
+	assert.Equal(t,
+		"Name can't be blank",
+		v0.Errors()["user[1].name"].Messages()[0])
+
+	assert.True(t, v0.IsValid("status"))
+
+}
+
 func ExampleValidation_Valid() {
 	val := Is(Number(21, "age").GreaterThan(18)).
 		Is(String("singl", "status").InSlice([]string{"married", "single"}))
