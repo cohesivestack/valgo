@@ -1,6 +1,18 @@
 package valgo
 
 const (
+	ErrorKeyAfter    = "after"
+	ErrorKeyNotAfter = "not_after"
+
+	ErrorKeyAfterOrEqualTo    = "after_equal_to"
+	ErrorKeyNotAfterOrEqualTo = "not_after_equal_to"
+
+	ErrorKeyBefore    = "before"
+	ErrorKeyNotBefore = "not_before"
+
+	ErrorKeyBeforeOrEqualTo    = "before_equal_to"
+	ErrorKeyNotBeforeOrEqualTo = "not_before_equal_to"
+
 	ErrorKeyBetween    = "between"
 	ErrorKeyNotBetween = "not_between"
 
