@@ -75,6 +75,8 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [Number specific type validators](#number-specific-type-validators)
   - [Bool validator](#bool-validator)
   - [Boolean pointer validator](#boolean-pointer-validator)
+  - [Time validator](#time-validator)
+  - [Time pointer validator](#time-pointer-validator)
   - [Any validator](#any-validator)
   - [Custom type validators](#custom-type-validators)
 - [Extending Valgo with custom validators](#extending-valgo-with-custom-validators)
@@ -845,6 +847,48 @@ x := false;  v.Is(v.BoolP(&x).FalseOrNil())
 var x *bool; v.Is(v.BoolP(x).Nil())
 ```
 
+## Time validator
+
+The `ValidatorTime` provides functions for setting validation rules for a `time.Time` type value, or a custom type based on a `time.Time`.
+
+Below is a valid example for every Time validator rule.
+
+```go
+import "time"
+
+v.Is(v.Time(time.Now()).EqualTo(time.Now()))
+v.Is(v.Time(time.Now()).After(time.Now().Add(-time.Hour)))
+v.Is(v.Time(time.Now()).AfterOrEqualTo(time.Now().Add(-time.Hour)))
+v.Is(v.Time(time.Now()).Before(time.Now().Add(time.Hour)))
+v.Is(v.Time(time.Now()).BeforeOrEqualTo(time.Now().Add(time.Hour)))
+v.Is(v.Time(time.Now()).Between(time.Now().Add(-time.Hour), time.Now().Add(2*time.Hour))) // Inclusive
+v.Is(v.Time(time.Time{}).Zero())
+v.Is(v.Time(time.Now()).Passing(func(val time.Time) bool { return val.Before(time.Now().Add(2*time.Hour)) }))
+v.Is(v.Time(time.Now()).InSlice([]time.Time{time.Now(), time.Now().Add(time.Hour)}))
+```
+
+## Time pointer validator
+
+The `ValidatorTimeP` provides functions for setting validation rules for a `time.Time` type pointer, or a custom type based on a `time.Time` pointer.
+
+Below is a valid example for every Time pointer validator rule.
+
+```go
+import "time"
+
+x := time.Now(); v.Is(v.TimeP(&x).EqualTo(time.Now()))
+x = time.Now(); v.Is(v.TimeP(&x).After(time.Now().Add(-time.Hour)))
+x = time.Now(); v.Is(v.TimeP(&x).AfterOrEqualTo(time.Now().Add(-time.Hour)))
+x = time.Now(); v.Is(v.TimeP(&x).Before(time.Now().Add(time.Hour)))
+x = time.Now(); v.Is(v.TimeP(&x).BeforeOrEqualTo(time.Now().Add(time.Hour)))
+x = time.Now(); v.Is(v.TimeP(&x).Between(time.Now().Add(-time.Hour), time.Now().Add(2*time.Hour))) // Inclusive
+x = time.Time{}; v.Is(v.TimeP(&x).Zero())
+x = time.Now(); v.Is(v.TimeP(&x).Passing(func(val *time.Time) bool { return val.Before(time.Now().Add(2*time.Hour)) }))
+x = time.Now(); v.Is(v.TimeP(&x).InSlice([]time.Time{time.Now(), time.Now().Add(time.Hour)}))
+var x *time.Time; v.Is(v.TimeP(x).Nil())
+x = new(time.Time); v.Is(v.TimeP(x).NilOrZero())
+```
+
 ## Any validator
 
 With the Any validator, you can set validation rules for any value or pointer.
@@ -1046,6 +1090,30 @@ output:
   - `Passing`
   - `ZeroOrNil`
   - `Nil`
+
+- `Time` validator
+  - `EqualTo`
+  - `After`
+  - `AfterOrEqualTo`
+  - `Before`
+  - `BeforeOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Passing`
+  - `InSlice`
+ 
+- `TimeP` validator - for `time.Time` pointer
+  - `EqualTo`
+  - `After`
+  - `AfterOrEqualTo`
+  - `Before`
+  - `BeforeOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Passing`
+  - `InSlice`
+  - `Nil`
+  - `NilOrZero`
 
 - `Any` validator
   - `EqualTo`
