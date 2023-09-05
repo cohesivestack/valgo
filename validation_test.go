@@ -359,18 +359,18 @@ func TestValidationMergeErrorIn(t *testing.T) {
 	assert.False(t, v1.Valid())
 	assert.Equal(t,
 		"Last name can't be blank",
-		v1.Errors()["lastName"].Messages()[1])
+		v1.Errors()["lastName"].Messages()[0])
 
 	// v0 is initially valid, but merging to v1 Errors must be invalidated
 	v0.MergeErrorIn("user", v1.Error().(*Error))
 
 	assert.False(t, v0.Valid())
 	assert.Equal(t,
-		"First Name can't be blank",
+		"First name can't be blank",
 		v0.Errors()["user.firstName"].Messages()[0])
 
 	assert.Equal(t,
-		"Last Name can't be blank",
+		"Last name can't be blank",
 		v0.Errors()["user.lastName"].Messages()[0])
 
 	assert.True(t, v0.IsValid("status"))
