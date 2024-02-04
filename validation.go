@@ -136,7 +136,7 @@ func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 
 	v.valid = false
 
-	ev := v.getOrCreateValueError(name)
+	ev := v.getOrCreateValueError(name, "")
 
 	ev.errorMessages = append(ev.errorMessages, message)
 
@@ -187,7 +187,7 @@ func (v *Validation) MergeErrorInRow(name string, index int, err *Error) *Valida
 	return v.mergeError(fmt.Sprintf("%s[%v]", name, index), err)
 }
 
-func (validation *Validation) invalidate(name *string, fragment *validatorFragment) {
+func (validation *Validation) invalidate(name *string, title *string, fragment *validatorFragment) {
 	if validation.errors == nil {
 		validation.errors = map[string]*valueError{}
 	}
@@ -201,7 +201,12 @@ func (validation *Validation) invalidate(name *string, fragment *validatorFragme
 		_name = *name
 	}
 
-	ev := validation.getOrCreateValueError(_name)
+	var _title string
+	if title != nil {
+		_title = *title
+	}
+
+	ev := validation.getOrCreateValueError(_name, _title)
 
 	errorKey := fragment.errorKey
 
@@ -249,10 +254,11 @@ func (validation *Validation) IsValid(name string) bool {
 	return true
 }
 
-func (validation *Validation) getOrCreateValueError(name string) *valueError {
+func (validation *Validation) getOrCreateValueError(name string, title string) *valueError {
 	if _, ok := validation.errors[name]; !ok {
 		validation.errors[name] = &valueError{
 			name:           &name,
+			title:          &title,
 			errorTemplates: map[string]*errorTemplate{},
 			errorMessages:  []string{},
 			validator:      validation,

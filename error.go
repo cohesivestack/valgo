@@ -73,7 +73,7 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 	}
 
 	var title string
-	if ve.title == nil {
+	if ve.title == nil || *ve.title == "" {
 		title = humanizeName(*ve.name)
 	} else {
 		title = *ve.title

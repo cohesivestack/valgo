@@ -408,6 +408,36 @@ func TestValidationMergeErrorInRow(t *testing.T) {
 
 }
 
+func TestValidationCustomTitle(t *testing.T) {
+	v0 := Is(String("", "company_name").Not().Empty())
+
+	assert.False(t, v0.Valid())
+	assert.Equal(t,
+		"Company name can't be empty",
+		v0.Errors()["company_name"].Messages()[0])
+
+	v1 := Is(String("", "company_name", "Customer").Not().Empty())
+	assert.False(t, v1.Valid())
+	assert.Equal(t,
+		"Customer can't be empty",
+		v1.Errors()["company_name"].Messages()[0])
+}
+
+func TestValidationCustomTitlePanic(t *testing.T) {
+	v0 := Is(String("", "company_name").Not().Empty())
+	assert.False(t, v0.Valid())
+
+	if !v0.Valid() {
+		// calling valErr.Title() should not panic even if there is no
+		// custom title given
+		for _, valErr := range v0.Errors() {
+			assert.NotPanics(t, func() {
+				valErr.Title()
+			})
+		}
+	}
+}
+
 func ExampleValidation_Valid() {
 	val := Is(Number(21, "age").GreaterThan(18)).
 		Is(String("singl", "status").InSlice([]string{"married", "single"}))

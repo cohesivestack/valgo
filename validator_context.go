@@ -104,7 +104,7 @@ func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool)
 
 		valid = fragment.function() == fragment.boolOperation && valid
 		if !valid {
-			validation.invalidate(ctx.name, fragment)
+			validation.invalidate(ctx.name, ctx.title, fragment)
 		}
 	}
 
