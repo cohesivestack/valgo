@@ -92,6 +92,22 @@ func (validator *ValidatorNumber[T]) Not() *ValidatorNumber[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := 0
+//	isValid := v.Is(v.Number(input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorNumber[T]) Or() *ValidatorNumber[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if a numeric value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:

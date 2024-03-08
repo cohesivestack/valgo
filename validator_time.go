@@ -81,6 +81,21 @@ func (validator *ValidatorTime) Not() *ValidatorTime {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the time is before or equal to time.Now().
+//	t := time.Now()
+//	isValid := v.Is(v.Time(t).Zero().Or().BeforeOrEqualTo(time.Now())).Valid()
+func (validator *ValidatorTime) Or() *ValidatorTime {
+	validator.context.Or()
+	return validator
+}
+
 // The EqualTo method validates if the time value is equal to another given time
 // value. It uses the equality (`==`) operator from Go for the comparison.
 //

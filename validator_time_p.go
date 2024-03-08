@@ -37,6 +37,21 @@ func (validator *ValidatorTimeP) Not() *ValidatorTimeP {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the time is before or equal to time.Now().
+//	t := time.Now()
+//	isValid := v.Is(v.TimeP(&t).Nil().Or().BeforeOrEqualTo(time.Now())).Valid()
+func (validator *ValidatorTimeP) Or() *ValidatorTimeP {
+	validator.context.Or()
+	return validator
+}
+
 // EqualTo validates that the time pointer is equal to the specified time value.
 //
 // Usage example:
