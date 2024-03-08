@@ -79,6 +79,11 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [Time pointer validator](#time-pointer-validator)
   - [Any validator](#any-validator)
   - [Custom type validators](#custom-type-validators)
+- [Or Operator in Validators](#or-operator-in-validators)
+  - [Overview](#overview)
+  - [Usage](#usage)
+  - [Key Points](#key-points)
+  - [Examples](#examples)
 - [Extending Valgo with custom validators](#extending-valgo-with-custom-validators)
 - [List of rules by validator type](#list-of-rules-by-validator-type)
 - [Github Code Contribution Guide](#github-code-contribution-guide)
@@ -941,6 +946,51 @@ type Stage int64
 var stage Stage = 2
 val := v.Is(v.NumberP(&stage).GreaterThan(Stage(1)))
 ```
+
+# Or Operator in Validators
+
+The `Or` operator function enables developers to combine validator rules using a logical OR chain. This addition allows for more nuanced validator scenarios, where a value may satisfy one of multiple conditions to be considered valid.
+
+## Overview
+
+In Valgo, validator rules are typically chained together using an implicit AND logic. This means that for a value to be deemed valid, it must satisfy all specified conditions. The `Or` operator provides an alternative by allowing conditions to be linked with OR logic. In such cases, a value is considered valid if it meets at least one of the chained conditions.
+
+The `Or` operator follows a simple left-to-right boolean priority, akin to the Go language's approach to evaluating boolean expressions. Valgo does not have an equivalent to parentheses in API functions, in order to keep the syntax simple and readable. We believe that complex boolean logic becomes harder to read with a Fluent API interface, so for those cases, it is preferred to use imperative Go programming language constructs.
+
+## Usage
+
+To utilize the `Or` operator, simply insert `.Or().` between two conditions within your validator chain. Here's a basic example:
+
+```go
+v := Is(Bool(true).True().Or().False())
+```
+
+In this case, the validator passes because the boolean value `true` satisfies the first condition before the `Or()` operator.
+
+## Key Points
+
+- **Implicit AND Logic**: By default, when validators are chained without specifying the `Or()` operator, they are combined using an AND logic. Each condition must be met for the validation to pass.
+- **No Short-circuiting for `Check`**: Unlike the `Is` function, which evaluates conditions lazily and may short-circuit (stop evaluating once the overall outcome is determined), the `Check` function ensures that all conditions are evaluated, regardless of their order and the use of `Or`.
+
+## Examples
+
+Below are examples demonstrating different scenarios using the `Or` operator, including combinations with the `Not` operator and multiple `Or` conditions in sequence. These examples illustrate how you can tailor complex validation logic to suit your needs.
+
+```go
+// Validation with two valid OR conditions
+v = Is(Bool(true).True().Or().True())
+assert.True(t, v.Valid())
+
+// Validation with a valid OR condition followed by an invalid AND condition
+v = Is(Bool(true).False().Or().True().False())
+assert.False(t, v.Valid())
+
+// Validation combining NOT and OR operators
+v = Is(Bool(true).Not().False().Or().False())
+assert.True(t, v.Valid())
+```
+
+These examples are intended to provide a clear understanding of how to effectively use the `Or` operator in your validations. By leveraging this functionality, you can create more flexible and powerful validation rules, enhancing the robustness and usability of your applications.
 
 # Extending Valgo with custom validators
 
