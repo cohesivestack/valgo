@@ -228,3 +228,182 @@ func TestValidatorPTimeZeroInvalid(t *testing.T) {
 		"Value 0 must be zero",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorTimePOrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	timeZero := time.Time{}
+	timeOne := time.Time{}.Add(time.Second)
+
+	// Testing Or operation with two valid conditions
+	v = Is(TimeP(&timeOne).EqualTo(timeOne).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(TimeP(&timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeZero))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(TimeP(&timeOne).EqualTo(timeOne).EqualTo(timeZero))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(TimeP(&timeOne).Not().EqualTo(timeZero).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(TimeP(&timeOne).Not().EqualTo(timeOne).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(TimeP(&timeOne).EqualTo(timeOne).Or().EqualTo(timeZero).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeZero).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeZero))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(TimeP(&timeOne).EqualTo(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(TimeP(&timeOne).EqualTo(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorTimePOrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	timeZero := time.Time{}
+	timeOne := time.Time{}.Add(time.Second)
+
+	// Testing Or operation with two valid conditions
+	v = Check(TimeP(&timeOne).EqualTo(timeOne).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(TimeP(&timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeZero))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(TimeP(&timeOne).EqualTo(timeOne).EqualTo(timeZero))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(TimeP(&timeOne).Not().EqualTo(timeZero).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(TimeP(&timeOne).Not().EqualTo(timeOne).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(TimeP(&timeOne).EqualTo(timeOne).Or().EqualTo(timeZero).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeZero).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(TimeP(&timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeZero))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(TimeP(&timeOne).EqualTo(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(TimeP(&timeOne).EqualTo(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
