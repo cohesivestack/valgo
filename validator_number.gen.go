@@ -68,6 +68,22 @@ func (validator *ValidatorUint8[T]) Not() *ValidatorUint8[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := uint8(0)
+//	isValid := v.Is(v.Uint8(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorUint8[T]) Or() *ValidatorUint8[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the uint8 value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -274,6 +290,22 @@ func (validator *ValidatorUint16[T]) Context() *ValidatorContext {
 //	Is(v.Uint16(uint16(0)).Not().Zero()).Valid()
 func (validator *ValidatorUint16[T]) Not() *ValidatorUint16[T] {
 	validator.context.Not()
+
+	return validator
+}
+
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := uint16(0)
+//	isValid := v.Is(v.Uint16(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorUint16[T]) Or() *ValidatorUint16[T] {
+	validator.context.Or()
 
 	return validator
 }
@@ -488,6 +520,22 @@ func (validator *ValidatorUint32[T]) Not() *ValidatorUint32[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := uint32(0)
+//	isValid := v.Is(v.Uint32(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorUint32[T]) Or() *ValidatorUint32[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the uint32 value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -694,6 +742,22 @@ func (validator *ValidatorUint64[T]) Context() *ValidatorContext {
 //	Is(v.Uint64(uint64(0)).Not().Zero()).Valid()
 func (validator *ValidatorUint64[T]) Not() *ValidatorUint64[T] {
 	validator.context.Not()
+
+	return validator
+}
+
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := uint64(0)
+//	isValid := v.Is(v.Uint64(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorUint64[T]) Or() *ValidatorUint64[T] {
+	validator.context.Or()
 
 	return validator
 }
@@ -908,6 +972,22 @@ func (validator *ValidatorInt[T]) Not() *ValidatorInt[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := int(0)
+//	isValid := v.Is(v.Int(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorInt[T]) Or() *ValidatorInt[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the int value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -1114,6 +1194,22 @@ func (validator *ValidatorInt8[T]) Context() *ValidatorContext {
 //	Is(v.Int8(int8(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt8[T]) Not() *ValidatorInt8[T] {
 	validator.context.Not()
+
+	return validator
+}
+
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := int8(0)
+//	isValid := v.Is(v.Int8(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorInt8[T]) Or() *ValidatorInt8[T] {
+	validator.context.Or()
 
 	return validator
 }
@@ -1328,6 +1424,22 @@ func (validator *ValidatorInt16[T]) Not() *ValidatorInt16[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := int16(0)
+//	isValid := v.Is(v.Int16(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorInt16[T]) Or() *ValidatorInt16[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the int16 value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -1534,6 +1646,22 @@ func (validator *ValidatorInt32[T]) Context() *ValidatorContext {
 //	Is(v.Int32(int32(0)).Not().Zero()).Valid()
 func (validator *ValidatorInt32[T]) Not() *ValidatorInt32[T] {
 	validator.context.Not()
+
+	return validator
+}
+
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := int32(0)
+//	isValid := v.Is(v.Int32(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorInt32[T]) Or() *ValidatorInt32[T] {
+	validator.context.Or()
 
 	return validator
 }
@@ -1748,6 +1876,22 @@ func (validator *ValidatorInt64[T]) Not() *ValidatorInt64[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := int64(0)
+//	isValid := v.Is(v.Int64(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorInt64[T]) Or() *ValidatorInt64[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the int64 value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -1954,6 +2098,22 @@ func (validator *ValidatorFloat32[T]) Context() *ValidatorContext {
 //	Is(v.Float32(float32(0)).Not().Zero()).Valid()
 func (validator *ValidatorFloat32[T]) Not() *ValidatorFloat32[T] {
 	validator.context.Not()
+
+	return validator
+}
+
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := float32(0)
+//	isValid := v.Is(v.Float32(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorFloat32[T]) Or() *ValidatorFloat32[T] {
+	validator.context.Or()
 
 	return validator
 }
@@ -2168,6 +2328,22 @@ func (validator *ValidatorFloat64[T]) Not() *ValidatorFloat64[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := float64(0)
+//	isValid := v.Is(v.Float64(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorFloat64[T]) Or() *ValidatorFloat64[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the float64 value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -2378,6 +2554,22 @@ func (validator *ValidatorByte[T]) Not() *ValidatorByte[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := byte(0)
+//	isValid := v.Is(v.Byte(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorByte[T]) Or() *ValidatorByte[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the byte value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:
@@ -2584,6 +2776,22 @@ func (validator *ValidatorRune[T]) Context() *ValidatorContext {
 //	Is(v.Rune(rune(0)).Not().Zero()).Valid()
 func (validator *ValidatorRune[T]) Not() *ValidatorRune[T] {
 	validator.context.Not()
+
+	return validator
+}
+
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is Zero.
+//	input := rune(0)
+//	isValid := v.Is(v.Rune(&input).GreaterThan(5).Or().Zero()).Valid()
+func (validator *ValidatorRune[T]) Or() *ValidatorRune[T] {
+	validator.context.Or()
 
 	return validator
 }

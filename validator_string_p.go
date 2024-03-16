@@ -42,6 +42,22 @@ func (validator *ValidatorStringP[T]) Not() *ValidatorStringP[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the string is equals "test".
+//	input := "test"
+//	isValid := v.Is(v.StringP(&input).MinLength(5).Or().EqualTo("test")).Valid()
+func (validator *ValidatorStringP[T]) Or() *ValidatorStringP[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if the value of a string pointer is equal to a another value.
 // For example:
 //
