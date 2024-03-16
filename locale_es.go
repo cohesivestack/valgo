@@ -2,6 +2,18 @@ package valgo
 
 func getLocaleEs() *Locale {
 	return &Locale{
+		ErrorKeyAfter:    "{{title}} debe ser después \"{{value}}\"",
+		ErrorKeyNotAfter: "{{title}} no puede ser después \"{{value}}\"",
+
+		ErrorKeyAfterOrEqualTo:    "{{title}} debe ser después o igual a \"{{value}}\"",
+		ErrorKeyNotAfterOrEqualTo: "{{title}} no puede ser después o igual a \"{{value}}\"",
+
+		ErrorKeyBefore:    "{{title}} debe ser antes \"{{value}}\"",
+		ErrorKeyNotBefore: "{{title}} no puede ser antes \"{{value}}\"",
+
+		ErrorKeyBeforeOrEqualTo:    "{{title}} debe ser antes o igual a \"{{value}}\"",
+		ErrorKeyNotBeforeOrEqualTo: "{{title}} no puede ser antes o igual a \"{{value}}\"",
+
 		ErrorKeyBetween:    "{{title}} debe estar entre \"{{min}}\" y \"{{max}}\"",
 		ErrorKeyNotBetween: "{{title}} no puede ser un valor entre \"{{min}}\" y \"{{max}}\"",
 
