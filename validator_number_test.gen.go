@@ -388,6 +388,180 @@ func TestValidatorUint8InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorUint8OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(1)).EqualTo(uint8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Uint8(uint8(1)).Not().EqualTo(uint8(0)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Uint8(uint8(1)).Not().EqualTo(uint8(1)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(0)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(0)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)).EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)).EqualTo(uint8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Uint8(uint8(1)).EqualTo(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorUint8OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(1)).EqualTo(uint8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Uint8(uint8(1)).Not().EqualTo(uint8(0)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Uint8(uint8(1)).Not().EqualTo(uint8(1)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(0)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(0)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)).EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)).EqualTo(uint8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(1)).EqualTo(uint8(1)).Or().EqualTo(uint8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Uint8(uint8(1)).EqualTo(uint8(1)).EqualTo(uint8(0)).Or().EqualTo(uint8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorUint16Not(t *testing.T) {
 	v := Is(Uint16(uint16(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -769,6 +943,180 @@ func TestValidatorUint16InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorUint16OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(1)).EqualTo(uint16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Uint16(uint16(1)).Not().EqualTo(uint16(0)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Uint16(uint16(1)).Not().EqualTo(uint16(1)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(0)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(0)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)).EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)).EqualTo(uint16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Uint16(uint16(1)).EqualTo(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorUint16OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(1)).EqualTo(uint16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Uint16(uint16(1)).Not().EqualTo(uint16(0)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Uint16(uint16(1)).Not().EqualTo(uint16(1)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(0)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(0)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)).EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)).EqualTo(uint16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(1)).EqualTo(uint16(1)).Or().EqualTo(uint16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Uint16(uint16(1)).EqualTo(uint16(1)).EqualTo(uint16(0)).Or().EqualTo(uint16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorUint32Not(t *testing.T) {
 	v := Is(Uint32(uint32(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1150,6 +1498,180 @@ func TestValidatorUint32InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorUint32OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(1)).EqualTo(uint32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Uint32(uint32(1)).Not().EqualTo(uint32(0)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Uint32(uint32(1)).Not().EqualTo(uint32(1)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(0)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(0)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)).EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)).EqualTo(uint32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Uint32(uint32(1)).EqualTo(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorUint32OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(1)).EqualTo(uint32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Uint32(uint32(1)).Not().EqualTo(uint32(0)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Uint32(uint32(1)).Not().EqualTo(uint32(1)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(0)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(0)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)).EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)).EqualTo(uint32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(1)).EqualTo(uint32(1)).Or().EqualTo(uint32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Uint32(uint32(1)).EqualTo(uint32(1)).EqualTo(uint32(0)).Or().EqualTo(uint32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorUint64Not(t *testing.T) {
 	v := Is(Uint64(uint64(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1531,6 +2053,180 @@ func TestValidatorUint64InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorUint64OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(1)).EqualTo(uint64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Uint64(uint64(1)).Not().EqualTo(uint64(0)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Uint64(uint64(1)).Not().EqualTo(uint64(1)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(0)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(0)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)).EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)).EqualTo(uint64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Uint64(uint64(1)).EqualTo(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorUint64OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(1)).EqualTo(uint64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Uint64(uint64(1)).Not().EqualTo(uint64(0)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Uint64(uint64(1)).Not().EqualTo(uint64(1)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(0)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(0)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)).EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)).EqualTo(uint64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(1)).EqualTo(uint64(1)).Or().EqualTo(uint64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Uint64(uint64(1)).EqualTo(uint64(1)).EqualTo(uint64(0)).Or().EqualTo(uint64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorIntNot(t *testing.T) {
 	v := Is(Int(int(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -1912,6 +2608,180 @@ func TestValidatorIntInSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorIntOrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Int(int(1)).EqualTo(int(1)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Int(int(1)).EqualTo(int(1)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Int(int(1)).EqualTo(int(1)).EqualTo(int(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Int(int(1)).Not().EqualTo(int(0)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Int(int(1)).Not().EqualTo(int(1)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Int(int(1)).EqualTo(int(1)).Or().EqualTo(int(0)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(0)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)).EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)).EqualTo(int(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Int(int(1)).EqualTo(int(1)).EqualTo(int(1)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Int(int(1)).EqualTo(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorIntOrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Int(int(1)).EqualTo(int(1)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Int(int(1)).EqualTo(int(1)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Int(int(1)).EqualTo(int(1)).EqualTo(int(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Int(int(1)).Not().EqualTo(int(0)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Int(int(1)).Not().EqualTo(int(1)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Int(int(1)).EqualTo(int(1)).Or().EqualTo(int(0)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(0)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)).EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Int(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)).EqualTo(int(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Int(int(1)).EqualTo(int(1)).EqualTo(int(1)).Or().EqualTo(int(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Int(int(1)).EqualTo(int(1)).EqualTo(int(0)).Or().EqualTo(int(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorInt8Not(t *testing.T) {
 	v := Is(Int8(int8(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2293,6 +3163,180 @@ func TestValidatorInt8InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorInt8OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Int8(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Int8(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Int8(int8(1)).EqualTo(int8(1)).EqualTo(int8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Int8(int8(1)).Not().EqualTo(int8(0)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Int8(int8(1)).Not().EqualTo(int8(1)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Int8(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(0)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(0)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)).EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)).EqualTo(int8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Int8(int8(1)).EqualTo(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Int8(int8(1)).EqualTo(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorInt8OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Int8(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Int8(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Int8(int8(1)).EqualTo(int8(1)).EqualTo(int8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Int8(int8(1)).Not().EqualTo(int8(0)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Int8(int8(1)).Not().EqualTo(int8(1)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Int8(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(0)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(0)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)).EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Int8(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)).EqualTo(int8(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Int8(int8(1)).EqualTo(int8(1)).EqualTo(int8(1)).Or().EqualTo(int8(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Int8(int8(1)).EqualTo(int8(1)).EqualTo(int8(0)).Or().EqualTo(int8(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorInt16Not(t *testing.T) {
 	v := Is(Int16(int16(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -2674,6 +3718,180 @@ func TestValidatorInt16InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorInt16OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Int16(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Int16(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Int16(int16(1)).EqualTo(int16(1)).EqualTo(int16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Int16(int16(1)).Not().EqualTo(int16(0)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Int16(int16(1)).Not().EqualTo(int16(1)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Int16(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(0)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(0)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)).EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)).EqualTo(int16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Int16(int16(1)).EqualTo(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Int16(int16(1)).EqualTo(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorInt16OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Int16(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Int16(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Int16(int16(1)).EqualTo(int16(1)).EqualTo(int16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Int16(int16(1)).Not().EqualTo(int16(0)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Int16(int16(1)).Not().EqualTo(int16(1)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Int16(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(0)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(0)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)).EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Int16(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)).EqualTo(int16(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Int16(int16(1)).EqualTo(int16(1)).EqualTo(int16(1)).Or().EqualTo(int16(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Int16(int16(1)).EqualTo(int16(1)).EqualTo(int16(0)).Or().EqualTo(int16(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorInt32Not(t *testing.T) {
 	v := Is(Int32(int32(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3055,6 +4273,180 @@ func TestValidatorInt32InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorInt32OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Int32(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Int32(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Int32(int32(1)).EqualTo(int32(1)).EqualTo(int32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Int32(int32(1)).Not().EqualTo(int32(0)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Int32(int32(1)).Not().EqualTo(int32(1)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Int32(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(0)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(0)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)).EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)).EqualTo(int32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Int32(int32(1)).EqualTo(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Int32(int32(1)).EqualTo(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorInt32OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Int32(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Int32(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Int32(int32(1)).EqualTo(int32(1)).EqualTo(int32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Int32(int32(1)).Not().EqualTo(int32(0)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Int32(int32(1)).Not().EqualTo(int32(1)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Int32(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(0)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(0)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)).EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Int32(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)).EqualTo(int32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Int32(int32(1)).EqualTo(int32(1)).EqualTo(int32(1)).Or().EqualTo(int32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Int32(int32(1)).EqualTo(int32(1)).EqualTo(int32(0)).Or().EqualTo(int32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorInt64Not(t *testing.T) {
 	v := Is(Int64(int64(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3436,6 +4828,180 @@ func TestValidatorInt64InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorInt64OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Int64(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Int64(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Int64(int64(1)).EqualTo(int64(1)).EqualTo(int64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Int64(int64(1)).Not().EqualTo(int64(0)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Int64(int64(1)).Not().EqualTo(int64(1)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Int64(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(0)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(0)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)).EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)).EqualTo(int64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Int64(int64(1)).EqualTo(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Int64(int64(1)).EqualTo(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorInt64OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Int64(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Int64(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Int64(int64(1)).EqualTo(int64(1)).EqualTo(int64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Int64(int64(1)).Not().EqualTo(int64(0)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Int64(int64(1)).Not().EqualTo(int64(1)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Int64(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(0)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(0)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)).EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Int64(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)).EqualTo(int64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Int64(int64(1)).EqualTo(int64(1)).EqualTo(int64(1)).Or().EqualTo(int64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Int64(int64(1)).EqualTo(int64(1)).EqualTo(int64(0)).Or().EqualTo(int64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorFloat32Not(t *testing.T) {
 	v := Is(Float32(float32(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -3817,6 +5383,180 @@ func TestValidatorFloat32InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorFloat32OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Float32(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Float32(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Float32(float32(1)).EqualTo(float32(1)).EqualTo(float32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Float32(float32(1)).Not().EqualTo(float32(0)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Float32(float32(1)).Not().EqualTo(float32(1)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Float32(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(0)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(0)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)).EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)).EqualTo(float32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Float32(float32(1)).EqualTo(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Float32(float32(1)).EqualTo(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorFloat32OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Float32(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Float32(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Float32(float32(1)).EqualTo(float32(1)).EqualTo(float32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Float32(float32(1)).Not().EqualTo(float32(0)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Float32(float32(1)).Not().EqualTo(float32(1)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Float32(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(0)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(0)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)).EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Float32(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)).EqualTo(float32(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Float32(float32(1)).EqualTo(float32(1)).EqualTo(float32(1)).Or().EqualTo(float32(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Float32(float32(1)).EqualTo(float32(1)).EqualTo(float32(0)).Or().EqualTo(float32(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorFloat64Not(t *testing.T) {
 	v := Is(Float64(float64(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4198,6 +5938,180 @@ func TestValidatorFloat64InSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorFloat64OrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Float64(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Float64(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Float64(float64(1)).EqualTo(float64(1)).EqualTo(float64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Float64(float64(1)).Not().EqualTo(float64(0)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Float64(float64(1)).Not().EqualTo(float64(1)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Float64(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(0)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(0)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)).EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)).EqualTo(float64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Float64(float64(1)).EqualTo(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Float64(float64(1)).EqualTo(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorFloat64OrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Float64(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Float64(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Float64(float64(1)).EqualTo(float64(1)).EqualTo(float64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Float64(float64(1)).Not().EqualTo(float64(0)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Float64(float64(1)).Not().EqualTo(float64(1)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Float64(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(0)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(0)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)).EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Float64(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)).EqualTo(float64(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Float64(float64(1)).EqualTo(float64(1)).EqualTo(float64(1)).Or().EqualTo(float64(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Float64(float64(1)).EqualTo(float64(1)).EqualTo(float64(0)).Or().EqualTo(float64(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorByteNot(t *testing.T) {
 	v := Is(Byte(byte(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4579,6 +6493,180 @@ func TestValidatorByteInSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorByteOrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Byte(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Byte(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Byte(byte(1)).EqualTo(byte(1)).EqualTo(byte(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Byte(byte(1)).Not().EqualTo(byte(0)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Byte(byte(1)).Not().EqualTo(byte(1)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Byte(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(0)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(0)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)).EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)).EqualTo(byte(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Byte(byte(1)).EqualTo(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Byte(byte(1)).EqualTo(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorByteOrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Byte(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Byte(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Byte(byte(1)).EqualTo(byte(1)).EqualTo(byte(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Byte(byte(1)).Not().EqualTo(byte(0)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Byte(byte(1)).Not().EqualTo(byte(1)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Byte(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(0)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(0)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)).EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Byte(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)).EqualTo(byte(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Byte(byte(1)).EqualTo(byte(1)).EqualTo(byte(1)).Or().EqualTo(byte(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Byte(byte(1)).EqualTo(byte(1)).EqualTo(byte(0)).Or().EqualTo(byte(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
 func TestValidatorRuneNot(t *testing.T) {
 	v := Is(Rune(rune(1)).Not().EqualTo(2))
 	assert.True(t, v.Valid())
@@ -4960,3 +7048,177 @@ func TestValidatorRuneInSliceInvalid(t *testing.T) {
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
+
+func TestValidatorRuneOrOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Is(Rune(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Is(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Is(Rune(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Is(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Is(Rune(rune(1)).EqualTo(rune(1)).EqualTo(rune(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Is(Rune(rune(1)).Not().EqualTo(rune(0)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Is(Rune(rune(1)).Not().EqualTo(rune(1)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Is(Rune(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(0)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Is(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(0)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Is(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)).EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Is(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)).EqualTo(rune(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Is(Rune(rune(1)).EqualTo(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Is(Rune(rune(1)).EqualTo(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+}
+
+func TestValidatorRuneOrOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check are Non-Short-circuited operations
+
+	var _true = true
+	var _false = false
+
+	// Testing Or operation with two valid conditions
+	v = Check(Rune(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left invalid and right valid conditions
+	v = Check(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with left valid and right invalid conditions
+	v = Check(Rune(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing Or operation with two invalid conditions
+	v = Check(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, _false || false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
+	v = Check(Rune(rune(1)).EqualTo(rune(1)).EqualTo(rune(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left valid and right invalid conditions
+	v = Check(Rune(rune(1)).Not().EqualTo(rune(0)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing combination of Not and Or operators with left invalid and right valid conditions
+	v = Check(Rune(rune(1)).Not().EqualTo(rune(1)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, !true || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the first condition being valid
+	v = Check(Rune(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(0)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true || _false || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing multiple Or operations in sequence with the last condition being valid
+	v = Check(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(0)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _false || false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid Or operation then valid And operation
+	v = Check(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)).EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, false || _true && true, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing valid Or operation then invalid And operation
+	v = Check(Rune(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)).EqualTo(rune(0)))
+	assert.False(t, v.Valid())
+	assert.Equal(t, false || true && false, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing valid And operation then invalid Or operation
+	v = Check(Rune(rune(1)).EqualTo(rune(1)).EqualTo(rune(1)).Or().EqualTo(rune(0)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, _true && true || false, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing invalid And operation then valid Or operation
+	v = Check(Rune(rune(1)).EqualTo(rune(1)).EqualTo(rune(0)).Or().EqualTo(rune(1)))
+	assert.True(t, v.Valid())
+	assert.Equal(t, true && false || true, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+

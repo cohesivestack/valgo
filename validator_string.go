@@ -91,6 +91,22 @@ func (validator *ValidatorString[T]) Not() *ValidatorString[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the string is equals "test".
+//	input := "test"
+//	isValid := v.Is(v.String(input).MinLength(5).Or().EqualTo("test")).Valid()
+func (validator *ValidatorString[T]) Or() *ValidatorString[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if a string value is equal to another. This function internally uses
 // the golang `==` operator.
 // For example:

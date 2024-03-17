@@ -2,6 +2,18 @@ package valgo
 
 func getLocaleDe() *Locale {
 	return &Locale{
+		ErrorKeyAfter:    "{{title}} muss nach \"{{value}}\" sein",
+		ErrorKeyNotAfter: "{{title}} darf nicht nach \"{{value}}\" sein",
+
+		ErrorKeyAfterOrEqualTo:    "{{title}} muss nach oder gleich \"{{value}}\" sein",
+		ErrorKeyNotAfterOrEqualTo: "{{title}} darf nicht nach oder gleich \"{{value}}\" sein",
+
+		ErrorKeyBefore:    "{{title}} muss vor \"{{value}}\" sein",
+		ErrorKeyNotBefore: "{{title}} darf nicht vor \"{{value}}\" sein",
+
+		ErrorKeyBeforeOrEqualTo:    "{{title}} muss vor oder gleich \"{{value}}\" sein",
+		ErrorKeyNotBeforeOrEqualTo: "{{title}} darf nicht vor oder gleich \"{{value}}\" sein",
+
 		ErrorKeyBetween:    "{{title}} muss zwischen \"{{min}}\" und \"{{max}}\" sein",
 		ErrorKeyNotBetween: "{{title}} darf nicht zwischen \"{{min}}\" und \"{{max}}\" sein",
 

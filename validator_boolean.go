@@ -58,6 +58,22 @@ func (validator *ValidatorBool[T]) Not() *ValidatorBool[T] {
 	return validator
 }
 
+// Introduces a logical OR in the chain of validation conditions, affecting the
+// evaluation order and priority of subsequent validators. A value passes the
+// validation if it meets any one condition following the Or() call, adhering to
+// a left-to-right evaluation. This mechanism allows for validating against
+// multiple criteria where satisfying any single criterion is sufficient.
+// Example:
+//
+//	// This validator will pass because the input is equals false.
+//	input := true
+//	isValid := v.Is(v.Bool(input).False().Or().True()).Valid()
+func (validator *ValidatorBool[T]) Or() *ValidatorBool[T] {
+	validator.context.Or()
+
+	return validator
+}
+
 // Validate if a boolean value is equal to another.
 // For example:
 //

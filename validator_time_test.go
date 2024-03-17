@@ -2,309 +2,322 @@ package valgo
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestValidatorBoolNot(t *testing.T) {
+func TestValidatorTimeNot(t *testing.T) {
 
-	v := Is(Bool(true).Not().EqualTo(false))
+	v := Is(Time(time.Now()).Not().EqualTo(time.Now().Add(1 * time.Hour)))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestValidatorBoolEqualToWhenIsValid(t *testing.T) {
-
+func TestValidatorTimeEqualToValid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(true).EqualTo(true))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	v = Is(Bool(false).EqualTo(false))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = true
-	var mybool2 MyBool = true
-
-	v = Is(Bool(mybool1).EqualTo(mybool2))
+	v = Is(Time(now).EqualTo(now))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestValidatorBoolEqualToWhenIsInvalid(t *testing.T) {
-
+func TestValidatorTimeEqualToInvalid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(true).EqualTo(false))
+	v = Is(Time(now).EqualTo(now.Add(1 * time.Hour)))
 	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
-		"Value 0 must be equal to \"false\"",
-		v.Errors()["value_0"].Messages()[0])
-
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = true
-	var mybool2 MyBool = false
-
-	v = Is(Bool(mybool1).EqualTo(mybool2))
-	assert.False(t, v.Valid())
-	assert.Equal(t,
-		"Value 0 must be equal to \"false\"",
+		"Value 0 must be equal to \""+now.Add(1*time.Hour).String()+"\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorBoolTrueWhenIsValid(t *testing.T) {
-
+func TestValidatorTimeAfterValid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(true).True())
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = true
-
-	v = Is(Bool(mybool1).True())
+	v = Is(Time(now.Add(1 * time.Hour)).After(now))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestValidatorBoolTrueWhenIsInvalid(t *testing.T) {
-
+func TestValidatorTimeAfterInvalid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(false).True())
+	v = Is(Time(now).After(now))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must be true",
+		"Value 0 must be after \""+now.String()+"\"",
 		v.Errors()["value_0"].Messages()[0])
 
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = false
-
-	v = Is(Bool(mybool1).True())
+	v = Is(Time(now).After(now.Add(1 * time.Hour)))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must be true",
+		"Value 0 must be after \""+now.Add(1*time.Hour).String()+"\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorBoolFalseWhenIsValid(t *testing.T) {
-
+func TestValidatorTimeAfterOrEqualToValid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(false).False())
+	v = Is(Time(now).AfterOrEqualTo(now))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = false
-
-	v = Is(Bool(mybool1).False())
+	v = Is(Time(now.Add(1 * time.Hour)).AfterOrEqualTo(now))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestValidatorBoolFalseWhenIsInvalid(t *testing.T) {
-
+func TestValidatorTimeAfterOrEqualToInvalid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(true).False())
+	v = Is(Time(now).AfterOrEqualTo(now.Add(1 * time.Hour)))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must be false",
-		v.Errors()["value_0"].Messages()[0])
-
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = true
-
-	v = Is(Bool(mybool1).False())
-	assert.False(t, v.Valid())
-	assert.Equal(t,
-		"Value 0 must be false",
+		"Value 0 must be after or equal to \""+now.Add(1*time.Hour).String()+"\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorBoolPassingWhenIsValid(t *testing.T) {
-
+func TestValidatorTimeBeforeValid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(true).Passing(func(val bool) bool {
-		return val == true
-	}))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = true
-	var mybool2 MyBool = true
-
-	v = Is(Bool(mybool1).Passing(func(val MyBool) bool {
-		return val == mybool2
-	}))
+	v = Is(Time(now).Before(now.Add(1 * time.Hour)))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestValidatorBoolPassingWhenIsInvalid(t *testing.T) {
-
+func TestValidatorTimeBeforeInvalid(t *testing.T) {
 	var v *Validation
+	now := time.Now()
 
-	v = Is(Bool(false).Passing(func(val bool) bool {
-		return val == true
-	}))
+	v = Is(Time(now).Before(now))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 is not valid",
+		"Value 0 must be before \""+now.String()+"\"",
 		v.Errors()["value_0"].Messages()[0])
 
-	// Custom Type
-	type MyBool bool
-	var mybool1 MyBool = false
-
-	v = Is(Bool(mybool1).Passing(func(val MyBool) bool {
-		return val == true
-	}))
+	v = Is(Time(now.Add(1 * time.Hour)).Before(now))
 	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must be before \""+now.String()+"\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorTimeBeforeOrEqualToValid(t *testing.T) {
+	var v *Validation
+	now := time.Now()
+
+	v = Is(Time(now).BeforeOrEqualTo(now))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(Time(now).BeforeOrEqualTo(now.Add(1 * time.Hour)))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorTimeBeforeOrEqualToInvalid(t *testing.T) {
+	var v *Validation
+	now := time.Now()
+
+	v = Is(Time(now.Add(1 * time.Hour)).BeforeOrEqualTo(now))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must be before or equal to \""+now.String()+"\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorTimeBetweenValid(t *testing.T) {
+	var v *Validation
+	now := time.Now()
+
+	v = Is(Time(now).Between(now.Add(-1*time.Hour), now.Add(1*time.Hour)))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorTimeBetweenInvalid(t *testing.T) {
+	var v *Validation
+	now := time.Now()
+
+	v = Is(Time(now).Between(now.Add(1*time.Hour), now.Add(2*time.Hour)))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must be between \""+now.Add(1*time.Hour).String()+"\" and \""+now.Add(2*time.Hour).String()+"\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorTimeInSliceValid(t *testing.T) {
+	var v *Validation
+	now := time.Now()
+	timeSlice := []time.Time{now.Add(-1 * time.Hour), now, now.Add(1 * time.Hour)}
+
+	v = Is(Time(now).InSlice(timeSlice))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorTimeInSliceInvalid(t *testing.T) {
+	var v *Validation
+	now := time.Now()
+	timeSlice := []time.Time{now.Add(-1 * time.Hour), now.Add(-30 * time.Minute), now.Add(-15 * time.Minute)}
+
+	v = Is(Time(now).InSlice(timeSlice))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
 	assert.Equal(t,
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorBoolInSliceValid(t *testing.T) {
+func TestValidatorTimePassingValid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(Bool(false).InSlice([]bool{true, false, true}))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyBool bool
-	var myBool1 MyBool = false
-
-	v = Is(Bool(myBool1).InSlice([]MyBool{true, false, true}))
+	now := time.Now()
+	v = Is(Time(now).Passing(func(val time.Time) bool {
+		return val.Equal(now)
+	}))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
 
-func TestValidatorBoolInSliceInvalid(t *testing.T) {
+func TestValidatorTimePassingInvalid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(Bool(true).InSlice([]bool{false, false, false}))
-	assert.False(t, v.Valid())
-	assert.Equal(t,
-		"Value 0 is not valid",
-		v.Errors()["value_0"].Messages()[0])
-
-	// Custom Type
-	type MyBool bool
-	var myBool1 MyBool = true
-
-	v = Is(Bool(myBool1).InSlice([]MyBool{false, false, false}))
+	now := time.Now()
+	v = Is(Time(now).Passing(func(val time.Time) bool {
+		return val.Equal(now.Add(1 * time.Hour))
+	}))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 is not valid",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorBoolOrOperatorWithIs(t *testing.T) {
+func TestValidatorTimeZeroValid(t *testing.T) {
+
+	var v *Validation
+
+	zeroTime := time.Time{}
+
+	v = Is(Time(zeroTime).Zero())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorTimeZeroInvalid(t *testing.T) {
+
+	var v *Validation
+
+	nonZeroTime := time.Now()
+
+	v = Is(Time(nonZeroTime).Zero())
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must be zero",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorTimeOrOperatorWithIs(t *testing.T) {
 	var v *Validation
 
 	var _true = true
 	var _false = false
 
+	timeZero := time.Time{}
+	timeOne := time.Time{}.Add(time.Second)
+
 	// Testing Or operation with two valid conditions
-	v = Is(Bool(true).EqualTo(true).Or().EqualTo(true))
+	v = Is(Time(timeOne).EqualTo(timeOne).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, _true || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing Or operation with left invalid and right valid conditions
-	v = Is(Bool(true).EqualTo(false).Or().EqualTo(true))
+	v = Is(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing Or operation with left valid and right invalid conditions
-	v = Is(Bool(true).EqualTo(true).Or().EqualTo(false))
+	v = Is(Time(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, true || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing Or operation with two invalid conditions
-	v = Is(Bool(true).EqualTo(false).Or().EqualTo(false))
+	v = Is(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeZero))
 	assert.False(t, v.Valid())
 	assert.Equal(t, _false || false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 
 	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
-	v = Is(Bool(true).EqualTo(true).EqualTo(false))
+	v = Is(Time(timeOne).EqualTo(timeOne).EqualTo(timeZero))
 	assert.False(t, v.Valid())
 	assert.Equal(t, true && false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 
 	// Testing combination of Not and Or operators with left valid and right invalid conditions
-	v = Is(Bool(true).Not().EqualTo(false).Or().EqualTo(false))
+	v = Is(Time(timeOne).Not().EqualTo(timeZero).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, !false || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing combination of Not and Or operators with left invalid and right valid conditions
-	v = Is(Bool(true).Not().EqualTo(true).Or().EqualTo(true))
+	v = Is(Time(timeOne).Not().EqualTo(timeOne).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, !true || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing multiple Or operations in sequence with the first condition being valid
-	v = Is(Bool(true).EqualTo(true).Or().EqualTo(false).Or().EqualTo(false))
+	v = Is(Time(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, true || _false || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing multiple Or operations in sequence with the last condition being valid
-	v = Is(Bool(true).EqualTo(false).Or().EqualTo(false).Or().EqualTo(true))
+	v = Is(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeZero).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, _false || false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing invalid Or operation then valid And operation
-	v = Is(Bool(true).EqualTo(false).Or().EqualTo(true).EqualTo(true))
+	v = Is(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, false || _true && true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing valid Or operation then invalid And operation
-	v = Is(Bool(true).EqualTo(false).Or().EqualTo(true).EqualTo(false))
+	v = Is(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeZero))
 	assert.False(t, v.Valid())
 	assert.Equal(t, false || true && false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 
 	// Testing valid And operation then invalid Or operation
-	v = Is(Bool(true).EqualTo(true).EqualTo(true).Or().EqualTo(false))
+	v = Is(Time(timeOne).EqualTo(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, _true && true || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing invalid And operation then valid Or operation
-	v = Is(Bool(true).EqualTo(true).EqualTo(false).Or().EqualTo(true))
+	v = Is(Time(timeOne).EqualTo(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 }
 
-func TestValidatorBoolOrOperatorWithCheck(t *testing.T) {
+func TestValidatorTimeOrOperatorWithCheck(t *testing.T) {
 	var v *Validation
 
 	// Check are Non-Short-circuited operations
@@ -312,80 +325,83 @@ func TestValidatorBoolOrOperatorWithCheck(t *testing.T) {
 	var _true = true
 	var _false = false
 
+	timeZero := time.Time{}
+	timeOne := time.Time{}.Add(time.Second)
+
 	// Testing Or operation with two valid conditions
-	v = Check(Bool(true).EqualTo(true).Or().EqualTo(true))
+	v = Check(Time(timeOne).EqualTo(timeOne).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, _true || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing Or operation with left invalid and right valid conditions
-	v = Check(Bool(true).EqualTo(false).Or().EqualTo(true))
+	v = Check(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing Or operation with left valid and right invalid conditions
-	v = Check(Bool(true).EqualTo(true).Or().EqualTo(false))
+	v = Check(Time(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, true || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing Or operation with two invalid conditions
-	v = Check(Bool(true).EqualTo(false).Or().EqualTo(false))
+	v = Check(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeZero))
 	assert.False(t, v.Valid())
 	assert.Equal(t, _false || false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 
 	// Testing And operation (default when no Or() function is used) with left valid and right invalid conditions
-	v = Check(Bool(true).EqualTo(true).EqualTo(false))
+	v = Check(Time(timeOne).EqualTo(timeOne).EqualTo(timeZero))
 	assert.False(t, v.Valid())
 	assert.Equal(t, true && false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 
 	// Testing combination of Not and Or operators with left valid and right invalid conditions
-	v = Check(Bool(true).Not().EqualTo(false).Or().EqualTo(false))
+	v = Check(Time(timeOne).Not().EqualTo(timeZero).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, !false || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing combination of Not and Or operators with left invalid and right valid conditions
-	v = Check(Bool(true).Not().EqualTo(true).Or().EqualTo(true))
+	v = Check(Time(timeOne).Not().EqualTo(timeOne).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, !true || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing multiple Or operations in sequence with the first condition being valid
-	v = Check(Bool(true).EqualTo(true).Or().EqualTo(false).Or().EqualTo(false))
+	v = Check(Time(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, true || _false || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing multiple Or operations in sequence with the last condition being valid
-	v = Check(Bool(true).EqualTo(false).Or().EqualTo(false).Or().EqualTo(true))
+	v = Check(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeZero).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, _false || false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing invalid Or operation then valid And operation
-	v = Check(Bool(true).EqualTo(false).Or().EqualTo(true).EqualTo(true))
+	v = Check(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, false || _true && true, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing valid Or operation then invalid And operation
-	v = Check(Bool(true).EqualTo(false).Or().EqualTo(true).EqualTo(false))
+	v = Check(Time(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne).EqualTo(timeZero))
 	assert.False(t, v.Valid())
 	assert.Equal(t, false || true && false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 
 	// Testing valid And operation then invalid Or operation
-	v = Check(Bool(true).EqualTo(true).EqualTo(true).Or().EqualTo(false))
+	v = Check(Time(timeOne).EqualTo(timeOne).EqualTo(timeOne).Or().EqualTo(timeZero))
 	assert.True(t, v.Valid())
 	assert.Equal(t, _true && true || false, v.Valid())
 	assert.Empty(t, v.Errors())
 
 	// Testing invalid And operation then valid Or operation
-	v = Check(Bool(true).EqualTo(true).EqualTo(false).Or().EqualTo(true))
+	v = Check(Time(timeOne).EqualTo(timeOne).EqualTo(timeZero).Or().EqualTo(timeOne))
 	assert.True(t, v.Valid())
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
