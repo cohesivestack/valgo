@@ -150,7 +150,7 @@ func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool)
 
 	for _, fragment := range ctx.fragments {
 		if !fragment.isValid {
-			validation.invalidate(ctx.name, fragment)
+			validation.invalidate(ctx.name, ctx.title, fragment)
 		}
 	}
 
