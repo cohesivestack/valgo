@@ -37,6 +37,10 @@ type valueError struct {
 
 // The title of the invalid field value.
 func (ve *valueError) Title() string {
+	// Lazy load the title
+	if ve.title == nil {
+		return humanizeName(*ve.name)
+	}
 	return *ve.title
 }
 
@@ -73,7 +77,7 @@ func (ve *valueError) buildMessageFromTemplate(et *errorTemplate) string {
 	}
 
 	var title string
-	if ve.title == nil || *ve.title == "" {
+	if ve.title == nil {
 		title = humanizeName(*ve.name)
 	} else {
 		title = *ve.title

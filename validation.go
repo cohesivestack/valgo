@@ -136,7 +136,7 @@ func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 
 	v.valid = false
 
-	ev := v.getOrCreateValueError(name, "")
+	ev := v.getOrCreateValueError(name, nil)
 
 	ev.errorMessages = append(ev.errorMessages, message)
 
@@ -201,12 +201,7 @@ func (validation *Validation) invalidate(name *string, title *string, fragment *
 		_name = *name
 	}
 
-	var _title string
-	if title != nil {
-		_title = *title
-	}
-
-	ev := validation.getOrCreateValueError(_name, _title)
+	ev := validation.getOrCreateValueError(_name, title)
 
 	errorKey := fragment.errorKey
 
@@ -254,11 +249,11 @@ func (validation *Validation) IsValid(name string) bool {
 	return true
 }
 
-func (validation *Validation) getOrCreateValueError(name string, title string) *valueError {
+func (validation *Validation) getOrCreateValueError(name string, title *string) *valueError {
 	if _, ok := validation.errors[name]; !ok {
 		validation.errors[name] = &valueError{
 			name:           &name,
-			title:          &title,
+			title:          title,
 			errorTemplates: map[string]*errorTemplate{},
 			errorMessages:  []string{},
 			validator:      validation,
