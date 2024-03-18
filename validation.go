@@ -54,14 +54,20 @@ type Options struct {
 }
 
 // Add a field validator to a [Validation] session.
-func (validation *Validation) Is(v Validator) *Validation {
-	return v.Context().validateIs(validation)
+func (validation *Validation) Is(validators ...Validator) *Validation {
+	for _, v := range validators {
+		validation = v.Context().validateIs(validation)
+	}
+	return validation
 }
 
 // Add a field validator to a [Validation] session. But unlike [Is()] the
 // field validator is not short-circuited.
-func (validation *Validation) Check(v Validator) *Validation {
-	return v.Context().validateCheck(validation)
+func (validation *Validation) Check(validators ...Validator) *Validation {
+	for _, v := range validators {
+		validation = v.Context().validateCheck(validation)
+	}
+	return validation
 }
 
 // A [Validation] session provides this function which returns either true if
