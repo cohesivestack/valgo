@@ -53,7 +53,7 @@ type Options struct {
 	MarshalJsonFunc func(e *Error) ([]byte, error)
 }
 
-// Add a field validator to a [Validation] session.
+// Add one or more validators to a [Validation] session.
 func (validation *Validation) Is(validators ...Validator) *Validation {
 	for _, v := range validators {
 		validation = v.Context().validateIs(validation)
@@ -61,8 +61,8 @@ func (validation *Validation) Is(validators ...Validator) *Validation {
 	return validation
 }
 
-// Add a field validator to a [Validation] session. But unlike [Is()] the
-// field validator is not short-circuited.
+// Add one or more validators to a [Validation] session. But unlike [Is()],
+// the validators are not short-circuited.
 func (validation *Validation) Check(validators ...Validator) *Validation {
 	for _, v := range validators {
 		validation = v.Context().validateCheck(validation)
