@@ -15,9 +15,10 @@ package main
 import v "github.com/cohesivestack/valgo"
 
 func main() {
-  val := v.
-    Is(v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
-    Is(v.Number(17, "age").GreaterThan(18))
+  val := v.Is(
+    v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
+    v.Number(17, "age").GreaterThan(18),
+  )
 
   if !val.Valid() {
     out, _ := json.MarshalIndent(val.Error(), "", "  ")
@@ -125,21 +126,22 @@ There are multiple functions to create a `Validation` session, depending on the 
 
 ## `Is(...)` function
 
-The `Is(...)` function allows you to pass a `Validator` with the value and the rules for validating it. At the same time, create a `Validation` session, which lets you add more Validators in order to verify more values.
+The `Is(...)` function allows you to pass one or multiple `Validator`s, each with their respective values and rules for validation. This creates a `Validation` session, which can be used to validate multiple values.
 
-As shown in the following example, we are passing to the function `Is(...)` the `Validator` for the `full_name` value. The function returns a `Validation` session that allows us to add more Validators to validate more values; in the example case the values `age` and `status`:
+
+In the following example, we pass multiple `Validator`s for the `full_name`, `age`, and `status` values to the `Is(...)` function:
 
 ```go
-val := v.
-  Is(v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
-  Is(v.Number(17, "age").GreaterThan(18)).
-  Is(v.String("singl", "status").InSlice([]string{"married", "single"}))
+val := v.Is(
+  v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
+  v.Number(17, "age").GreaterThan(18),
+  v.String("singl", "status").InSlice([]string{"married", "single"})
+)
 
 if !val.Valid() {
   out, _ := json.MarshalIndent(val.Error(), "", "  ")
   fmt.Println(string(out))
 }
-```
 output:
 ```json
 {
@@ -162,8 +164,10 @@ A `Validation` session provide this function, which returns either `true` if all
 In the following example, even though the Validator for `age` is valid, the `Validator` for `status` is invalid, making the entire `Validator` session invalid.
 
 ```go
-val := v.Is(v.Number(21, "age").GreaterThan(18)).
-  Is(v.String("singl", "status").InSlice([]string{"married", "single"}))
+val := v.Is(
+  v.Number(21, "age").GreaterThan(18),
+  v.String("singl", "status").InSlice([]string{"married", "single"}),
+)
 
 if !val.Valid() {
   out, _ := json.MarshalIndent(val.Error(), "", "  ")
@@ -219,9 +223,10 @@ p := Person{"Bob", Address{"", "1600 Amphitheatre Pkwy"}}
 
 val := v.
   Is(v.String(p.Name, "name").OfLengthBetween(4, 20)).
-  In("address",
-    Is(String(p.Address.Name, "name").Not().Blank()).
-    Is(String(p.Address.Street, "street").Not().Blank()))
+  In("address", v.Is(
+    String(p.Address.Name, "name").Not().Blank(),
+    String(p.Address.Street, "street").Not().Blank(),
+  ))
 
 if !val.Valid() {
   out, _ := json.MarshalIndent(val.Error(), "", "  ")
@@ -269,9 +274,10 @@ p := Person{
 val := v.Is(String(p.Name, "name").OfLengthBetween(4, 20))
 
 for i, a := range p.Addresses {
-  val.InRow("addresses", i,
-    v.Is(v.String(a.Name, "name").Not().Blank()).
-    v.Is(v.String(a.Street, "street").Not().Blank()))
+  val.InRow("addresses", i, v.Is(
+    v.String(a.Name, "name").Not().Blank(),
+    v.String(a.Street, "street").Not().Blank(),
+  ))
 }
 
 if !val.Valid() {
@@ -334,9 +340,10 @@ type Address struct {
 
 a := Address{"", "1600 Amphitheatre Pkwy"}
 
-val := v.
-  Is(String(a.city, "city").Not().Blank()).
-  Is(String(a.Street, "street").Not().Blank())
+val := v.Is(
+  v.String(a.city, "city").Not().Blank(),
+  v.String(a.Street, "street").Not().Blank(),
+)
 
 if !val.Valid() {
   v.AddErrorMessage("address", "The address is wrong!")
@@ -382,9 +389,10 @@ validatePreStatus := func(status string) *Validation {
 
 r := Record{"Classified", ""}
 
-val := v.
-  Is(v.String(r.Name, "name").Not().Blank()).
-  Is(v.String(r.Status, "status").Not().Blank())
+val := v.Is(
+  v.String(r.Name, "name").Not().Blank(),
+  v.String(r.Status, "status").Not().Blank(),
+)
 
 val.Merge(validatePreStatus(r.Status))
 
@@ -525,9 +533,10 @@ There are two options for localization: `localeCode` and `locale`. Below, we lis
   })
 
   // Testing the output
-  val := val.
-    Is(v.String(" ", "name").Not().Blank()).
-    Is(v.Bool(false, "active").Not().False())
+  val := val.Is(
+    v.String(" ", "name").Not().Blank(),
+    v.Bool(false, "active").Not().False(),
+  )
 
   out, _ := json.MarshalIndent(val.Error(), "", "  ")
   fmt.Println(string(out))
@@ -724,7 +733,7 @@ x := "Rust";           v.Is(v.StringP(&x).Between("Go", "Typescript")) // Inclus
 x := "";               v.Is(v.StringP(&x).Empty())
 x := " ";              v.Is(v.StringP(&x).Blank())
 x := "Dart";           v.Is(v.StringP(&x).Passing(func(val *string) bool { return *val == "Dart" }))
-x := "processing";     v.Is(v.StringP(&x).InSlice([]string{"idle", "processing", "ready"})
+x := "processing";     v.Is(v.StringP(&x).InSlice([]string{"idle", "processing", "ready"}))
 x := "123456";         v.Is(v.StringP(&x).MaxLength(6))
 x := "123";            v.Is(v.StringP(&x).MinLength(3))
 x := "1234";           v.Is(v.StringP(&x).MinLength(4))
