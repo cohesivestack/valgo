@@ -80,8 +80,8 @@ func New(options ...Options) *Validation {
 // the [Validator] for the full_name value. The function returns a [Validation]
 // session that allows us to add more Validators to validate more values; in the
 // example case the values age and status:
-func Is(v Validator) *Validation {
-	return New().Is(v)
+func Is(validators ...Validator) *Validation {
+	return New().Is(validators...)
 }
 
 // The [In](...) function executes one or more validators in a namespace, so the
@@ -115,8 +115,8 @@ func InRow(name string, index int, v *Validation) *Validation {
 // This example shows two rules that fail due to the empty value in the full_name
 // [Validator], and since the [Validator] is not short-circuited, both error
 // messages are added to the error result.
-func Check(v Validator) *Validation {
-	return New().Check(v)
+func Check(validators ...Validator) *Validation {
+	return New().Check(validators...)
 }
 
 // Create a new [Validation] session and add an error message to it without

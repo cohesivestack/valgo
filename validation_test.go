@@ -130,8 +130,9 @@ func TestValidationInDeeply(t *testing.T) {
 		Is(String("", "line1").Not().Blank()).
 			Is(String("", "line2").Not().Blank()).
 			In("phone",
-				Is(String("", "code").Not().Empty()).
-					Is(String("", "number").Not().Empty())),
+				Is(
+					String("", "code").Not().Empty(),
+					String("", "number").Not().Empty())), // Passing multiple validators to Is
 	)
 
 	assert.False(t, v.Valid())
@@ -155,8 +156,8 @@ func TestValidationInRow(t *testing.T) {
 		Is(String("", "line1").Not().Blank()).
 			Is(String("", "line2").Not().Blank()),
 	).InRow("addresses", 1,
-		Is(String("", "line1").Not().Blank()).
-			Is(String("", "line2").Not().Blank()))
+		Is(String("", "line1").Not().Blank(),
+			String("", "line2").Not().Blank())) // Passing multiple validators to Is
 
 	assert.False(t, v.Valid())
 	assert.Equal(t,
@@ -201,8 +202,8 @@ func TestValidationInRowDeeply(t *testing.T) {
 				Is(String("", "code").Not().Empty()).
 					Is(String("", "number").Not().Empty())).
 			InRow("phones", 1,
-				Is(String("", "code").Not().Empty()).
-					Is(String("", "number").Not().Empty())),
+				Is(String("", "code").Not().Empty(),
+					String("", "number").Not().Empty())), // Passing multiple validators to Is
 	).InRow("addresses", 1,
 		Is(String("", "line1").Not().Blank()).
 			Is(String("", "line2").Not().Blank()).
@@ -210,8 +211,8 @@ func TestValidationInRowDeeply(t *testing.T) {
 				Is(String("", "code").Not().Empty()).
 					Is(String("", "number").Not().Empty())).
 			InRow("phones", 1,
-				Is(String("", "code").Not().Empty()).
-					Is(String("", "number").Not().Empty())),
+				Is(String("", "code").Not().Empty(),
+					String("", "number").Not().Empty())), // Passing multiple validators to Is
 	)
 
 	assert.False(t, v.Valid())
@@ -496,4 +497,38 @@ func ExampleValidation_Merge() {
 	//     "Status must match to \"pre-.+\""
 	//   ]
 	// }
+}
+
+func TestIsFunctionWithMultipleValidators(t *testing.T) {
+	v1 := String("testValue", "field1").EqualTo("testValue")
+	v2 := Number(100, "field2").GreaterThan(50)
+
+	v := Is(v1, v2)
+	assert.True(t, v.Valid(), "Expected multiple validators passed to Is function to be valid")
+
+	vInvalid := Is(
+		String("testValue", "field1").EqualTo("testValue"), // This should be valid
+		Number(10, "field2").GreaterThan(50),               // This should be invalid
+	)
+	assert.False(t, vInvalid.Valid())
+	assert.Contains(t, vInvalid.Errors(), "field2", "Error map should contain field2")
+}
+
+func TestCheckFunctionWithMultipleValidators(t *testing.T) {
+	v1 := String("testValue", "field1").Not().EqualTo("wrongValue")
+	v2 := Number(42, "field2").LessThan(100)
+
+	validation := Check(v1, v2)
+	assert.True(t, validation.Valid())
+
+	vInvalid1 := String("wrongValue", "field1").EqualTo("rightValue") // This should be invalid
+	vInvalid2 := Number(150, "field2").LessThan(100)                  // This should be invalid
+
+	validationMixed := Check(vInvalid1, v2) // Mix of valid and invalid
+	assert.False(t, validationMixed.Valid())
+
+	validationAllInvalid := Check(vInvalid1, vInvalid2) // All invalid
+	assert.False(t, validationAllInvalid.Valid())
+	assert.Contains(t, validationAllInvalid.Errors(), "field1", "Error map should contain field1")
+	assert.Contains(t, validationAllInvalid.Errors(), "field2", "Error map should contain field2")
 }
