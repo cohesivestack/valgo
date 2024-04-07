@@ -1,6 +1,8 @@
 package valgo
 
 import (
+	"encoding/json"
+	"sort"
 	"strings"
 	"unicode"
 )
@@ -64,4 +66,27 @@ func humanizeName(name string) string {
 	}
 
 	return out.String()
+}
+
+// serializes the error messages into sorted JSON for consistency in
+// documentation examples.
+func sortedErrorMarshalForDocs(e *Error) ([]byte, error) {
+	// Create a slice to hold the keys from the map, so we can sort them.
+	keys := make([]string, 0, len(e.errors))
+	for k := range e.errors {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys) // Sort the keys alphabetically.
+
+	// Create a map to hold the sorted key-value pairs.
+	sortedErrors := make(map[string]interface{}, len(keys))
+	for _, k := range keys {
+		messages := make([]string, len(e.errors[k].Messages()))
+		copy(messages, e.errors[k].Messages())
+		sort.Strings(messages)
+		sortedErrors[k] = messages
+	}
+
+	// Marshal the sorted map to JSON.
+	return json.Marshal(sortedErrors)
 }
