@@ -113,9 +113,10 @@ func (e *Error) Errors() map[string]*valueError {
 	return e.errors
 }
 
-// Return the JSON encoding of the validation error messages.
+// Returns the JSON encoding of the validation error messages.
 //
-// A custom function can be set with [SetMarshalJson()]
+// A custom function can be set either by passing it as a parameter to
+// [validation.Error()] or through [FactoryOptions].
 func (e *Error) MarshalJSON() ([]byte, error) {
 	if e.marshalJsonFunc != nil {
 		return e.marshalJsonFunc(e)
