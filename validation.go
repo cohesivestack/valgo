@@ -228,19 +228,27 @@ func (validation *Validation) invalidate(name *string, title *string, fragment *
 	et.params = fragment.templateParams
 }
 
-// Return a map with the information for each invalid field validator in the
-// [Validation] session.
+// Return a map with the information for each invalid field validator
+// in the Validation session.
 func (session *Validation) Errors() map[string]*valueError {
 	return session.errors
 }
 
-// Return a map with the information for each invalid field validator in the
-// [Validation] session.
-func (validation *Validation) Error() error {
+// Return an error object that encapsulates the validation errors created during
+// the Validation session. If the session is valid, it returns nil.
+//
+// An optional JSON marshaling function can be passed to customize how the
+// validation errors are serialized into JSON. If no function is provided, a
+// default marshaling behavior is used.
+func (validation *Validation) Error(marshalJsonFun ...func(e *Error) ([]byte, error)) error {
 	if !validation.valid {
+		fn := validation.marshalJsonFunc
+		if len(marshalJsonFun) > 0 {
+			fn = marshalJsonFun[0]
+		}
 		return &Error{
 			errors:          validation.errors,
-			marshalJsonFunc: validation.marshalJsonFunc,
+			marshalJsonFunc: fn,
 		}
 	}
 	return nil

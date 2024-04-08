@@ -158,3 +158,39 @@ func TestCustomErrorMarshallJSON(t *testing.T) {
 	assert.Contains(t, emailErrors, "Email can't be blank")
 	assert.Contains(t, emailErrors, "Email must match to \"a\"")
 }
+
+func TestCustomErrorMarshallJSONParameter(t *testing.T) {
+
+	customFunc := func(e *Error) ([]byte, error) {
+
+		errors := map[string]interface{}{}
+
+		for k, v := range e.errors {
+			if len(v.Messages()) == 1 {
+				errors[k] = v.Messages()[0]
+			} else {
+				errors[k] = v.Messages()
+			}
+		}
+
+		// Add root level errors to customize errors interface
+		return json.Marshal(map[string]map[string]interface{}{"errors": errors})
+	}
+
+	r, _ := regexp.Compile("a")
+	v := Check(
+		String("", "email").Not().Blank().MatchingTo(r),
+		String("", "name").Not().Blank())
+
+	jsonByte, err := json.Marshal(v.Error(customFunc))
+	assert.NoError(t, err)
+
+	jsonMap := map[string]map[string]interface{}{}
+	err = json.Unmarshal(jsonByte, &jsonMap)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "Name can't be blank", jsonMap["errors"]["name"])
+	emailErrors := jsonMap["errors"]["email"].([]interface{})
+	assert.Contains(t, emailErrors, "Email can't be blank")
+	assert.Contains(t, emailErrors, "Email must match to \"a\"")
+}

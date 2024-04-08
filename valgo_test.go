@@ -10,7 +10,9 @@ func Example() {
 		Is(Number(17, "age").GreaterThan(18))
 
 	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
 		fmt.Println(string(out))
 	}
 	// Output: {
@@ -30,7 +32,9 @@ func ExampleIs() {
 		Is(String("singl", "status").InSlice([]string{"married", "single"}))
 
 	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
 		fmt.Println(string(out))
 	}
 
@@ -85,7 +89,9 @@ func ExampleIn() {
 			String(p.Address.Street, "street").Not().Blank()))
 
 	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
 		fmt.Println(string(out))
 	}
 
@@ -127,7 +133,9 @@ func ExampleInRow() {
 	}
 
 	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
 		fmt.Println(string(out))
 	}
 
@@ -148,7 +156,9 @@ func ExampleCheck() {
 	val := Check(String("", "full_name").Not().Blank().OfLengthBetween(4, 20))
 
 	if !val.Valid() {
-		out, _ := json.MarshalIndent(val.Error(), "", "  ")
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
 		fmt.Println(string(out))
 	}
 
