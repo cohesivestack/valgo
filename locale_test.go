@@ -21,6 +21,13 @@ func TestUseOtherLocale(t *testing.T) {
 	// Default localization must be persistent in the same validation
 	vDe = vDe.Is(String(" ").Empty())
 	assert.Contains(t, vDe.Errors()["value_1"].Messages(), "Value 1 muss leer sein")
+
+	vHu := New(Options{LocaleCode: LocaleCodeHu}).Is(String(" ").Not().Blank())
+	assert.Contains(t, vHu.Errors()["value_0"].Messages(), "Value 0 nem állhat csak szóközökből")
+
+	// Default localization must be persistent in the same validation
+	vHu = vHu.Is(String(" ").Empty())
+	assert.Contains(t, vHu.Errors()["value_1"].Messages(), "Value 1 üres kell legyen")
 }
 
 func TestChangeLocaleEntries(t *testing.T) {

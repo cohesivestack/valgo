@@ -4,6 +4,7 @@ const (
 	LocaleCodeEn = "en"
 	LocaleCodeEs = "es"
 	LocaleCodeDe = "de"
+	LocaleCodeHu = "hu"
 )
 
 const localeCodeDefault = LocaleCodeEn
@@ -35,6 +36,8 @@ func getLocaleWithSkipDefaultOption(code string, skipDefault bool, factoryLocale
 			return getLocaleEn()
 		case LocaleCodeDe:
 			return getLocaleDe()
+		case LocaleCodeHu:
+			return getLocaleHu()
 		default:
 			if skipDefault {
 				return nil
