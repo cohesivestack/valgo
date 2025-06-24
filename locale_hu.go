@@ -62,8 +62,8 @@ func getLocaleHu() *Locale {
 		ErrorKeyNil:    "{{title}} nil kell legyen",
 		ErrorKeyNotNil: "{{title}} nem lehet nil",
 
-		ErrorKeyPassing:    "{{title}} is not valid",
-		ErrorKeyNotPassing: "{{title}} is not valid",
+		ErrorKeyPassing:    "{{title}} nem érvényes",
+		ErrorKeyNotPassing: "{{title}} nem érvényes",
 
 		ErrorKeyTrue:    "{{title}} igaz kell legyen",
 		ErrorKeyNotTrue: "{{title}} nem lehet igaz",
