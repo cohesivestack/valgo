@@ -463,7 +463,7 @@ output:
 
 ## Localizing a validation session with New(...options) function
 
-Valgo has localized error messages. The error messages are currently available in English (default), Spanish and German. However, it is possible to set error messages for any locale by passing the Options parameter to the `New()` function. Using this parameter, you can also customize the existing Valgo locale messages.
+Valgo has localized error messages. The error messages are currently available in English (default), Spanish, German and Hungarian. However, it is possible to set error messages for any locale by passing the Options parameter to the `New()` function. Using this parameter, you can also customize the existing Valgo locale messages.
 
 There are two options for localization: `localeCode` and `locale`. Below, we list the different ways to customize localization with these two parameters.
 
@@ -520,7 +520,7 @@ There are two options for localization: `localeCode` and `locale`. Below, we lis
   ```
 
 * Adding a new locale
-  As mentioned previously, Valgo currently only has the English, Spanish and German locales, but we hope to have more soon. However, you can add your own custom locale. Below is an example using the Estonian language:
+  As mentioned previously, Valgo currently only has the English, Spanish, German and Hungarian locales, but we hope to have more soon. However, you can add your own custom locale. Below is an example using the Estonian language:
 
   ```go
   // Creating a new validation session and adding a new locale with two entries
