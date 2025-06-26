@@ -21,7 +21,7 @@ func main() {
   )
 
   if !val.Valid() {
-    out, _ := json.MarshalIndent(val.Error(), "", "  ")
+    out, _ := json.MarshalIndent(val.ToError(), "", "  ")
     fmt.Println(string(out))
   }
 }
@@ -62,6 +62,7 @@ Valgo is used in production by [Statsignal](https://statsignal.dev), but we want
   - [`AddErrorMessage(...)` function](#adderrormessage-function)
   - [Merging two `Validation` sessions with `Validation.Merge( ... )`](#merging-two-validation-sessions-with-validationmerge--)
   - [`New()` function](#new-function)
+  - [Error handling functions](#error-handling-functions)
   - [Custom error message template](#custom-error-message-template)
   - [Localizing a validation session with New(...options) function](#localizing-a-validation-session-with-newoptions-function)
   - [Managing common options with Factory](#managing-common-options-with-factory)
@@ -139,9 +140,10 @@ val := v.Is(
 )
 
 if !val.Valid() {
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
+```
 output:
 ```json
 {
@@ -170,7 +172,7 @@ val := v.Is(
 )
 
 if !val.Valid() {
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
 ```
@@ -229,7 +231,7 @@ val := v.
   ))
 
 if !val.Valid() {
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
 
@@ -281,7 +283,7 @@ for i, a := range p.Addresses {
 }
 
 if !val.Valid() {
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
 ```
@@ -310,7 +312,7 @@ This example shows two rules that fail due to the empty value in the `full_name`
 val := v.Check(v.String("", "full_name").Not().Blank().OfLengthBetween(4, 20))
 
 if !val.Valid() {
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
 ```
@@ -348,7 +350,7 @@ val := v.Is(
 if !val.Valid() {
   v.AddErrorMessage("address", "The address is wrong!")
 
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
 
@@ -397,7 +399,7 @@ val := v.Is(
 val.Merge(validatePreStatus(r.Status))
 
 if !val.Valid() {
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
 
@@ -441,6 +443,72 @@ The validation passes
 
 As we mentioned above, you can pass the Options type to the New() function, in order to specify additional options when creating a new Validation session, such as the specific locale code and locale to use, and a custom JSON marshaler for errors. More information about the Options parameter in the following sections.
 
+## Error handling functions
+
+Valgo provides three functions for handling validation errors:
+
+### `ToError()` function
+
+The `ToError()` function returns the same value as `ToValgoError()` but as a standard Go `error` interface. This function is ideal for idiomatic error handling and integration with Go's native error system.
+
+```go
+val := v.Is(v.String("", "name").Not().Blank())
+
+if err := val.ToError(); err != nil {
+    log.Printf("Validation failed: %v", err)
+    return err
+}
+```
+
+### `ToValgoError()` function
+
+The `ToValgoError()` function returns the same value as `ToError()` but as a concrete `*valgo.Error` type instead of the standard `error` interface. It's essentially a shortcut to `ToError().(*valgo.Error)`, providing access to rich, structured error details.
+
+
+
+```go
+val := v.Is(v.String("", "name").Not().Blank())
+
+if errInfo := val.ToValgoError(); errInfo != nil {
+    for field, valueError := range errInfo.Errors() {
+        fmt.Printf("Field '%s': %v\n", field, valueError.Messages())
+    }
+}
+```
+
+### `Error()` function (Deprecated)
+
+The `Error()` function is deprecated in favor of `ToError()` or `ToValgoError()`. The `Error()` function name conflicts with Go's error interface implementation convention, where `Error()` typically implements the error interface for a type. This function will be removed when Valgo reaches version 1.
+
+```go
+// DEPRECATED: Use ToError() or ToValgoError() instead
+val := v.Is(v.String("", "name").Not().Blank())
+if !val.Valid() {
+    out, _ := json.MarshalIndent(val.Error(), "", "  ")
+    fmt.Println(string(out))
+}
+```
+
+### When to use each function
+
+- **Use `ToError()`** for standard error handling and integration with Go's error system
+- **Use `ToValgoError()`** when you need detailed validation information, per-field messages, or custom error processing
+- **Avoid `Error()`** as it's deprecated and may be removed when Valgo reaches version 1
+
+### Custom JSON marshaling
+
+All three functions support custom JSON marshaling functions:
+
+```go
+customFunc := func(e *Error) ([]byte, error) {
+    return []byte(`{"custom": "error"}`), nil
+}
+
+// Using custom marshaling with any of the functions
+err := val.ToError(customFunc)
+errInfo := val.ToValgoError(customFunc)
+```
+
 ## Custom error message template
 
 Customizing the default Valgo error messages is possible through the `New()` function as it's explained in the [Localizing a validation session with New](#localizing-a-validation-session-with-newoptions-function) section, however the Valgo validators allow to customize the template of a specific template validator rule. Below is an example illustrating this with the String empty validator rule.
@@ -448,7 +516,7 @@ Customizing the default Valgo error messages is possible through the `New()` fun
 ```go
 val := v.Is(v.String("", "address_field", "Address").Not().Empty("{{title}} must not be empty. Please provide the value in the input {{name}}."))
 
-out, _ := json.MarshalIndent(val.Error(), "", "  ")
+out, _ := json.MarshalIndent(val.ToError(), "", "  ")
 fmt.Println(string(out))
 ```
 
@@ -477,7 +545,7 @@ There are two options for localization: `localeCode` and `locale`. Below, we lis
   // Testing the output
   val := val.Check(v.String(" ", "nombre").Not().Blank())
 
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
   ```
 
@@ -506,7 +574,7 @@ There are two options for localization: `localeCode` and `locale`. Below, we lis
   // Testing the output
   val := val.Check(v.String(" ", "name").Not().Blank())
 
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
   ```
 
@@ -538,7 +606,7 @@ There are two options for localization: `localeCode` and `locale`. Below, we lis
     v.Bool(false, "active").Not().False(),
   )
 
-  out, _ := json.MarshalIndent(val.Error(), "", "  ")
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
   ```
 
@@ -610,7 +678,7 @@ factory := v.Factory(v.FactoryOptions{
 
 val := factory.Is(v.String("", "name").Not().Empty())
 
-out, _ := json.MarshalIndent(val.Error(), "", "  ")
+out, _ := json.MarshalIndent(val.ToError(), "", "  ")
 fmt.Println(string(out))
 ```
 output:
@@ -639,7 +707,7 @@ Validators only require the value to be validated, so, for example, the followin
 ```go
 val := v.New(v.String("").Empty())
 ```
-`val.Error()` output:
+`val.ToError()` output:
 ```json
 {
   "value_0": [
@@ -655,7 +723,7 @@ Validator with value's name:
 ```go
 val := v.New(v.String("", "company_name").Not().Empty())
 ```
-`val.Error()` output:
+`val.ToError()` output:
 ```json
 {
   "company_name": [
@@ -668,7 +736,7 @@ Validator with value's name and title:
 ```go
 val := v.New(v.String("", "company_name", "Customer").Not().Empty())
 ```
-`val.Error()` output:
+`val.ToError()` output:
 ```json
 {
   "company_name": [
@@ -1059,7 +1127,7 @@ using our validator:
 ```go
 val := v.Is(IDValue(ID{}, "id").Not().Empty())
 
-out, _ := json.MarshalIndent(val.Error(), "", "  ")
+out, _ := json.MarshalIndent(val.ToError(), "", "  ")
 fmt.Println(string(out))
 ```
 output:
