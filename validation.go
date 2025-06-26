@@ -234,13 +234,67 @@ func (session *Validation) Errors() map[string]*valueError {
 	return session.errors
 }
 
-// Return an error object that encapsulates the validation errors created during
-// the Validation session. If the session is valid, it returns nil.
+// Error returns the validation errors as a standard Go error interface.
+//
+// DEPRECATED: This method is deprecated in favor of ToError() or ToValgoError().
+// The Error() method name conflicts with Go's error interface implementation
+// convention, where Error() typically implements the error interface for a type.
+//
+// Use ToError() for standard error handling or ToValgoError() for detailed
+// validation error information.
+func (validation *Validation) Error(marshalJsonFun ...func(e *Error) ([]byte, error)) error {
+	return validation.ToError(marshalJsonFun...)
+}
+
+// ToError returns the validation errors as a standard Go error interface.
+//
+// This method is useful for idiomatic error handling and integration with
+// Go's native error system. It returns the same underlying error value as
+// ToValgoError() but typed as the error interface.
+//
+// Example:
+//
+//	val := Is(String("", "name").Not().Blank())
+//	if err := val.ToError(); err != nil {
+//	    log.Printf("Validation failed: %v", err)
+//	    return err
+//	}
 //
 // An optional JSON marshaling function can be passed to customize how the
-// validation errors are serialized into JSON. If no function is provided, a
-// default marshaling behavior is used.
-func (validation *Validation) Error(marshalJsonFun ...func(e *Error) ([]byte, error)) error {
+// validation errors are serialized into JSON. If no function is provided,
+// a default marshaling behavior is used.
+func (validation *Validation) ToError(marshalJsonFun ...func(e *Error) ([]byte, error)) error {
+	// We cannot simply return validation.ToValgoError(marshalJsonFun...) because
+	// when ToValgoError returns nil, it's a nil *Error (concrete type), not a nil
+	// error interface. This causes issues with error checking functions like
+	// assert.NoError() which expect a proper nil error interface.
+	if err := validation.ToValgoError(marshalJsonFun...); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ToValgoError returns the validation errors as a *valgo.Error type, providing
+// access to rich, structured error details. It's essentially a shortcut to
+// `ToError().(*valgo.Error)`.
+//
+// This method returns the underlying *valgo.Error type directly, exposing
+// detailed validation information such as per-field messages, templates,
+// and localized titles. It's the single source of truth for validation errors.
+//
+// Example:
+//
+//	val := Is(String("", "name").Not().Blank())
+//	if errInfo := val.ToValgoError(); errInfo != nil {
+//	    for field, valueError := range errInfo.Errors() {
+//	        fmt.Printf("Field '%s': %v\n", field, valueError.Messages())
+//	    }
+//	}
+//
+// An optional JSON marshaling function can be passed to customize how the
+// validation errors are serialized into JSON. If no function is provided,
+// a default marshaling behavior is used.
+func (validation *Validation) ToValgoError(marshalJsonFun ...func(e *Error) ([]byte, error)) *Error {
 	if !validation.valid {
 		fn := validation.marshalJsonFunc
 		if len(marshalJsonFun) > 0 {
