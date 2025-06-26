@@ -300,7 +300,7 @@ func TestValidationMergeError(t *testing.T) {
 		v1.Errors()["name"].Messages()[0])
 
 	// v0 is initially valid, but merging to v1 must be invalidated
-	v0.MergeError(v1.Error().(*Error))
+	v0.MergeError(v1.ToValgoError())
 
 	assert.False(t, v0.Valid())
 	assert.Equal(t,
@@ -326,7 +326,7 @@ func TestValidationMergeError(t *testing.T) {
 		v1.Errors()["status"].Messages()[0])
 
 	// v0 is initially valid, but merging to v1 must be invalidated
-	v0.MergeError(v1.Error().(*Error))
+	v0.MergeError(v1.ToValgoError())
 
 	assert.False(t, v0.IsValid("status"))
 	assert.Equal(t,
@@ -363,7 +363,7 @@ func TestValidationMergeErrorIn(t *testing.T) {
 		v1.Errors()["lastName"].Messages()[0])
 
 	// v0 is initially valid, but merging to v1 Errors must be invalidated
-	v0.MergeErrorIn("user", v1.Error().(*Error))
+	v0.MergeErrorIn("user", v1.ToValgoError())
 
 	assert.False(t, v0.Valid())
 	assert.Equal(t,
@@ -391,10 +391,10 @@ func TestValidationMergeErrorInRow(t *testing.T) {
 		v1.Errors()["name"].Messages()[0])
 
 	// v0 is initially valid, but merging to v1 Errors must be invalidated
-	v0.MergeErrorInRow("user", 0, v1.Error().(*Error))
+	v0.MergeErrorInRow("user", 0, v1.ToValgoError())
 
 	// v0 is initially valid, but merging to v1 Errors must be invalidated
-	v0.MergeErrorInRow("user", 1, v1.Error().(*Error))
+	v0.MergeErrorInRow("user", 1, v1.ToValgoError())
 
 	assert.False(t, v0.Valid())
 	assert.Equal(t,

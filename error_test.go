@@ -12,14 +12,14 @@ func TestNotError(t *testing.T) {
 	for _, value := range []string{"", " "} {
 		v := Is(String(value).Blank())
 		assert.True(t, v.Valid())
-		assert.NoError(t, v.Error())
+		assert.NoError(t, v.ToError())
 	}
 }
 
 func TestError(t *testing.T) {
 	v := Is(String("Vitalik Buterin").Blank())
 	assert.False(t, v.Valid())
-	assert.Error(t, v.Error())
+	assert.Error(t, v.ToError())
 }
 
 func TestAddErrorMessageFromValidator(t *testing.T) {
@@ -193,4 +193,88 @@ func TestCustomErrorMarshallJSONParameter(t *testing.T) {
 	emailErrors := jsonMap["errors"]["email"].([]interface{})
 	assert.Contains(t, emailErrors, "Email can't be blank")
 	assert.Contains(t, emailErrors, "Email must match to \"a\"")
+}
+
+// TestDeprecatedErrorFunction tests that the deprecated Error() function
+// returns the same value as ToError() for both valid and invalid validations.
+func TestDeprecatedErrorFunction(t *testing.T) {
+	// Test case 1: Valid validation (should return nil)
+	v1 := Is(String("").Blank())
+	assert.True(t, v1.Valid())
+
+	assert.NoError(t, v1.Error())
+	assert.NoError(t, v1.ToError())
+
+	// Both should be equal
+	assert.Equal(t, v1.Error(), v1.ToError())
+
+	// Test case 2: Invalid validation (should return error)
+	v2 := Is(String("Vitalik Buterin").Blank())
+	assert.False(t, v2.Valid())
+
+	assert.NotNil(t, v2.Error())
+	assert.NotNil(t, v2.ToError())
+
+	assert.Equal(t, v2.Error(), v2.ToError())
+
+	// Test case 3: Multiple errors
+	v3 := Check(
+		String("", "email").Not().Blank(),
+		String("", "name").Not().Blank(),
+	)
+	assert.False(t, v3.Valid())
+
+	assert.NotNil(t, v3.Error())
+	assert.NotNil(t, v3.ToError())
+
+	assert.Equal(t, v3.Error(), v3.ToError())
+}
+
+// TestToErrorVsToValgoError tests that ToError() returns the same underlying
+// error as ToValgoError() for both valid and invalid validations.
+func TestToErrorVsToValgoError(t *testing.T) {
+	// Test case 1: Valid validation (should return nil)
+	v1 := Is(String("").Blank())
+	assert.True(t, v1.Valid())
+
+	assert.NoError(t, v1.ToError())
+	assert.Nil(t, v1.ToValgoError())
+
+	// Test case 2: Invalid validation (should return error)
+	v2 := Is(String("Vitalik Buterin").Blank())
+	assert.False(t, v2.Valid())
+
+	assert.Error(t, v2.ToError())
+	assert.NotNil(t, v2.ToValgoError())
+
+	// Type assertion to verify they're the same underlying error
+	errorInterface := v2.ToError()
+	valgoError := v2.ToValgoError()
+
+	assert.Equal(t, valgoError, errorInterface)
+
+	// Test case 3: Multiple errors with custom marshaling
+	customFunc := func(e *Error) ([]byte, error) {
+		return []byte(`{"custom": "error"}`), nil
+	}
+
+	v3 := Check(
+		String("", "email").Not().Blank(),
+		String("", "name").Not().Blank(),
+	)
+	assert.False(t, v3.Valid())
+
+	errorWithCustom := v3.ToError(customFunc)
+	valgoErrorWithCustom := v3.ToValgoError(customFunc)
+
+	assert.Error(t, errorWithCustom)
+	assert.NotNil(t, valgoErrorWithCustom)
+
+	// Compare error content instead of function pointers
+	// Both should have the same error messages
+	assert.Equal(t, errorWithCustom.Error(), valgoErrorWithCustom.Error())
+
+	// Both should have the same underlying errors map
+	errorAsValgo := errorWithCustom.(*Error)
+	assert.Equal(t, valgoErrorWithCustom.Errors(), errorAsValgo.Errors())
 }
