@@ -777,7 +777,7 @@ v.Is(v.String("Rust").Between("Go", "Typescript")) // Inclusive
 v.Is(v.String("").Empty())
 v.Is(v.String(" ").Blank())
 v.Is(v.String("Dart").Passing(func(val string) bool { return val == "Dart" }))
-v.Is(v.String("processing").InSlice([]string{"idle", "processing", "ready"})
+v.Is(v.String("processing").InSlice([]string{"idle", "processing", "ready"}))
 v.Is(v.String("123456").MaxLength(6))
 v.Is(v.String("123").MinLength(3))
 v.Is(v.String("1234").MinLength(4))
