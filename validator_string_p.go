@@ -420,7 +420,7 @@ func (validator *ValidatorStringP[T]) OfRuneLengthBetween(min int, max int, temp
 // For example:
 //
 //	slug := "ab"
-//	Is(v.String(&slug).Between("ab","ac"))
+//	Is(v.StringP(&slug).Between("ab","ac"))
 func (validator *ValidatorStringP[T]) Between(min T, max T, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
