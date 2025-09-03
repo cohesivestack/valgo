@@ -857,7 +857,7 @@ func TestValidatorStringPMinLengthInvalid(t *testing.T) {
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorStringPLengthValid(t *testing.T) {
+func TestValidatorStringPOfLengthValid(t *testing.T) {
 
 	var v *Validation
 
@@ -875,7 +875,7 @@ func TestValidatorStringPLengthValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorStringPLengthInvalid(t *testing.T) {
+func TestValidatorStringPOfLengthInvalid(t *testing.T) {
 
 	var v *Validation
 
@@ -923,7 +923,7 @@ func TestValidatorStringPLengthInvalid(t *testing.T) {
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorStringPLengthBetweenValid(t *testing.T) {
+func TestValidatorStringPOfLengthBetweenValid(t *testing.T) {
 
 	var v *Validation
 
@@ -963,7 +963,7 @@ func TestValidatorStringPLengthBetweenValid(t *testing.T) {
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorStringPLengthBetweenInvalid(t *testing.T) {
+func TestValidatorStringPOfLengthBetweenInvalid(t *testing.T) {
 
 	var v *Validation
 
@@ -1007,6 +1007,138 @@ func TestValidatorStringPLengthBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length between \"6\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringPRuneMaxLengthValid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々" // 4 runes
+	v = Is(StringP(&text).RuneMaxLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(StringP(&text).RuneMaxLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringPRuneMaxLengthInvalid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).RuneMaxLength(3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length longer than \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	textP := (*string)(nil)
+	v = Is(StringP(textP).RuneMaxLength(3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length longer than \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringPRuneMinLengthValid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).RuneMinLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(StringP(&text).RuneMinLength(3))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringPRuneMinLengthInvalid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).RuneMinLength(5))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"5\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	textP := (*string)(nil)
+	v = Is(StringP(textP).RuneMinLength(5))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"5\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringPOfRuneLengthValid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).OfRuneLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringPOfRuneLengthInvalid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).OfRuneLength(3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(StringP(&text).OfRuneLength(5))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"5\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	textP := (*string)(nil)
+	v = Is(StringP(textP).OfRuneLength(5))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"5\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringPOfRuneLengthBetweenValid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).OfRuneLengthBetween(4, 10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(StringP(&text).OfRuneLengthBetween(2, 4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringPOfRuneLengthBetweenInvalid(t *testing.T) {
+	var v *Validation
+
+	text := "虎視眈々"
+	v = Is(StringP(&text).OfRuneLengthBetween(5, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"5\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(StringP(&text).OfRuneLengthBetween(1, 3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"1\" and \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	textP := (*string)(nil)
+	v = Is(StringP(textP).OfRuneLengthBetween(1, 3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"1\" and \"3\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 

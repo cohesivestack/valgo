@@ -7221,4 +7221,3 @@ func TestValidatorRuneOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-
