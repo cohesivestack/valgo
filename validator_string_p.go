@@ -269,17 +269,17 @@ func (validator *ValidatorStringP[T]) MatchingTo(regex *regexp.Regexp, template 
 	return validator
 }
 
-// Validate if the maximum length of a string pointer's value.
+// Validate the maximum length (in bytes) of a string pointer's value.
 // For example:
 //
 //	slug := "myname"
-//	Is(v.StringP(&slug).MaxLength(6))
+//	Is(v.StringP(&slug).MaxBytes(6))
 //
-// If you want to validate max number of "characters" in a string, you can use the `RuneMaxLength` instead.
-func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) *ValidatorStringP[T] {
+// For character count, use `MaxLength` instead.
+func (validator *ValidatorStringP[T]) MaxBytes(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringMaxLength(*(validator.context.Value().(*T)), length)
+			return validator.context.Value().(*T) != nil && isStringByteMaxLength(*(validator.context.Value().(*T)), length)
 		},
 		ErrorKeyMaxLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -288,17 +288,17 @@ func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) 
 	return validator
 }
 
-// Validate the minimum length of a string pointer's value
+// Validate the minimum length (in bytes) of a string pointer's value.
 // For example:
 //
 //	slug := "myname"
-//	Is(v.StringP(&slug).MinLength(6))
+//	Is(v.StringP(&slug).MinBytes(6))
 //
-// If you want to validate min number of "characters" in a string, you can use the `RuneMinLength` instead.
-func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) *ValidatorStringP[T] {
+// For character count, use `MinLength` instead.
+func (validator *ValidatorStringP[T]) MinBytes(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringMinLength(*(validator.context.Value().(*T)), length)
+			return validator.context.Value().(*T) != nil && isStringByteMinLength(*(validator.context.Value().(*T)), length)
 		},
 		ErrorKeyMinLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -307,17 +307,17 @@ func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) 
 	return validator
 }
 
-// Validate the length of a string pointer's value.
+// Validate the length (in bytes) of a string pointer's value.
 // For example:
 //
 //	slug := "myname"
-//	Is(v.StringP(&slug).OfLength(6))
+//	Is(v.StringP(&slug).OfByteLength(6))
 //
-// If you want to validate number of "characters" in a string, you can use the `OfRuneLength` instead.
-func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *ValidatorStringP[T] {
+// For character count, use `OfLength` instead.
+func (validator *ValidatorStringP[T]) OfByteLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringLength(*(validator.context.Value().(*T)), length)
+			return validator.context.Value().(*T) != nil && isStringByteLength(*(validator.context.Value().(*T)), length)
 		},
 		ErrorKeyLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -326,17 +326,17 @@ func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *
 	return validator
 }
 
-// Validate if the length of a string pointer's value is in a range (inclusive).
+// Validate if the length (in bytes) of a string pointer's value is in a range (inclusive).
 // For example:
 //
 //	slug := "myname"
-//	Is(v.StringP(&slug).OfLengthBetween(2,6))
+//	Is(v.StringP(&slug).OfByteLengthBetween(2,6))
 //
-// If you want to validate number of "characters" in a string is within a range (inclusive), you can use the `OfRuneLengthBetween` instead.
-func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
+// For character count, use `OfLengthBetween` instead.
+func (validator *ValidatorStringP[T]) OfByteLengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return validator.context.Value().(*T) != nil && isStringLengthBetween(*(validator.context.Value().(*T)), min, max)
+			return validator.context.Value().(*T) != nil && isStringByteLengthBetween(*(validator.context.Value().(*T)), min, max)
 		},
 		ErrorKeyLengthBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -345,12 +345,12 @@ func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template
 	return validator
 }
 
-// Validate the maximum rune length of a string pointer's value.
+// Validate the maximum length (in runes/characters) of a string pointer's value.
 // For example:
 //
 //	slug := "虎視眈々" // 4 runes, len(slug) = 12 bytes
-//	Is(v.StringP(&slug).RuneMaxLength(4))
-func (validator *ValidatorStringP[T]) RuneMaxLength(length int, template ...string) *ValidatorStringP[T] {
+//	Is(v.StringP(&slug).MaxLength(4))
+func (validator *ValidatorStringP[T]) MaxLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isStringRuneMaxLength(*(validator.context.Value().(*T)), length)
@@ -362,12 +362,12 @@ func (validator *ValidatorStringP[T]) RuneMaxLength(length int, template ...stri
 	return validator
 }
 
-// Validate the minimum rune length of a string pointer's value
+// Validate the minimum length (in runes/characters) of a string pointer's value.
 // For example:
 //
 //	slug := "虎視眈々" // 4 runes, len(slug) = 12 bytes
-//	Is(v.StringP(&slug).RuneMinLength(4))
-func (validator *ValidatorStringP[T]) RuneMinLength(length int, template ...string) *ValidatorStringP[T] {
+//	Is(v.StringP(&slug).MinLength(4))
+func (validator *ValidatorStringP[T]) MinLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isStringRuneMinLength(*(validator.context.Value().(*T)), length)
@@ -379,12 +379,12 @@ func (validator *ValidatorStringP[T]) RuneMinLength(length int, template ...stri
 	return validator
 }
 
-// Validate the rune length of a string pointer's value.
+// Validate the length (in runes/characters) of a string pointer's value.
 // For example:
 //
 //	slug := "虎視眈々" // 4 runes, len(slug) = 12 bytes
-//	Is(v.StringP(&slug).OfRuneLength(4))
-func (validator *ValidatorStringP[T]) OfRuneLength(length int, template ...string) *ValidatorStringP[T] {
+//	Is(v.StringP(&slug).OfLength(4))
+func (validator *ValidatorStringP[T]) OfLength(length int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isStringRuneLength(*(validator.context.Value().(*T)), length)
@@ -396,12 +396,12 @@ func (validator *ValidatorStringP[T]) OfRuneLength(length int, template ...strin
 	return validator
 }
 
-// Validate if the rune length of a string pointer's value is in a range (inclusive).
+// Validate if the length (in runes/characters) of a string pointer's value is in a range (inclusive).
 // For example:
 //
 //	slug := "虎視眈々" // 4 runes, len(slug) = 12 bytes
-//	Is(v.StringP(&slug).OfRuneLengthBetween(2,4))
-func (validator *ValidatorStringP[T]) OfRuneLengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
+//	Is(v.StringP(&slug).OfLengthBetween(2,4))
+func (validator *ValidatorStringP[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorStringP[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			if validator.context.Value().(*T) == nil {
@@ -416,7 +416,7 @@ func (validator *ValidatorStringP[T]) OfRuneLengthBetween(min int, max int, temp
 	return validator
 }
 
-// Validate if the value of a string is in a range (inclusive).
+// Validate if the value of a string pointer's value is in a range (inclusive).
 // For example:
 //
 //	slug := "ab"

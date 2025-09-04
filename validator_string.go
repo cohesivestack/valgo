@@ -41,16 +41,16 @@ func isStringInSlice[T ~string](v T, slice []T) bool {
 func isStringMatchingTo[T ~string](v T, regex *regexp.Regexp) bool {
 	return regex.MatchString(string(v))
 }
-func isStringMaxLength[T ~string](v T, length int) bool {
+func isStringByteMaxLength[T ~string](v T, length int) bool {
 	return len(v) <= length
 }
-func isStringMinLength[T ~string](v T, length int) bool {
+func isStringByteMinLength[T ~string](v T, length int) bool {
 	return len(v) >= length
 }
-func isStringLength[T ~string](v T, length int) bool {
+func isStringByteLength[T ~string](v T, length int) bool {
 	return len(v) == length
 }
-func isStringLengthBetween[T ~string](v T, min int, max int) bool {
+func isStringByteLengthBetween[T ~string](v T, min int, max int) bool {
 	return len(v) >= min && len(v) <= max
 }
 func isStringRuneMaxLength[T ~string](v T, length int) bool {
@@ -287,17 +287,17 @@ func (validator *ValidatorString[T]) MatchingTo(regex *regexp.Regexp, template .
 	return validator
 }
 
-// Validate the maximum length of a string.
+// Validate the maximum length (in bytes) of a string.
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(slug).MaxLength(6))
+//	Is(v.String(slug).MaxBytes(6))
 //
-// If you want to validate max number of "characters" in a string, you can use the `RuneMaxLength` instead.
-func (validator *ValidatorString[T]) MaxLength(length int, template ...string) *ValidatorString[T] {
+// For character count, use `MaxLength` instead.
+func (validator *ValidatorString[T]) MaxBytes(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isStringMaxLength(validator.context.Value().(T), length)
+			return isStringByteMaxLength(validator.context.Value().(T), length)
 		},
 		ErrorKeyMaxLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -306,17 +306,17 @@ func (validator *ValidatorString[T]) MaxLength(length int, template ...string) *
 	return validator
 }
 
-// Validate the minimum length of a string.
+// Validate the minimum length (in bytes) of a string.
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(slug).MinLength(6))
+//	Is(v.String(slug).MinBytes(6))
 //
-// If you want to validate min number of "characters" in a string, you can use the `RuneMinLength` instead.
-func (validator *ValidatorString[T]) MinLength(length int, template ...string) *ValidatorString[T] {
+// For character count, use `MinLength` instead.
+func (validator *ValidatorString[T]) MinBytes(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isStringMinLength(validator.context.Value().(T), length)
+			return isStringByteMinLength(validator.context.Value().(T), length)
 		},
 		ErrorKeyMinLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -325,17 +325,17 @@ func (validator *ValidatorString[T]) MinLength(length int, template ...string) *
 	return validator
 }
 
-// Validate the length of a string.
+// Validate the length (in bytes) of a string.
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(slug).OfLength(6))
+//	Is(v.String(slug).OfByteLength(6))
 //
-// If you want to validate number of "characters" in a string, you can use the `OfRuneLength` instead.
-func (validator *ValidatorString[T]) OfLength(length int, template ...string) *ValidatorString[T] {
+// For character count, use `OfLength` instead.
+func (validator *ValidatorString[T]) OfByteLength(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isStringLength(validator.context.Value().(T), length)
+			return isStringByteLength(validator.context.Value().(T), length)
 		},
 		ErrorKeyLength,
 		map[string]any{"title": validator.context.title, "length": length},
@@ -344,17 +344,17 @@ func (validator *ValidatorString[T]) OfLength(length int, template ...string) *V
 	return validator
 }
 
-// Validate if the length of a string is within a range (inclusive).
+// Validate if the length (in bytes) of a string is within a range (inclusive).
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(slug).OfLengthBetween(2,6))
+//	Is(v.String(slug).OfByteLengthBetween(2,6))
 //
-// If you want to validate number of "characters" in a string is within a range (inclusive), you can use the `OfRuneLengthBetween` instead.
-func (validator *ValidatorString[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
+// For character count, use `OfLengthBetween` instead.
+func (validator *ValidatorString[T]) OfByteLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
-			return isStringLengthBetween(validator.context.Value().(T), min, max)
+			return isStringByteLengthBetween(validator.context.Value().(T), min, max)
 		},
 		ErrorKeyLengthBetween,
 		map[string]any{"title": validator.context.title, "min": min, "max": max},
@@ -363,12 +363,12 @@ func (validator *ValidatorString[T]) OfLengthBetween(min int, max int, template 
 	return validator
 }
 
-// Validate the maximum rune length of a string.
+// Validate the maximum length (in runes/characters) of a string.
 // For example:
 //
 //	word := "虎視眈々" // 4 runes, len(word) = 12 bytes
-//	Is(v.String(word).RuneMaxLength(4))
-func (validator *ValidatorString[T]) RuneMaxLength(length int, template ...string) *ValidatorString[T] {
+//	Is(v.String(word).MaxLength(4))
+func (validator *ValidatorString[T]) MaxLength(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringRuneMaxLength(validator.context.Value().(T), length)
@@ -380,12 +380,12 @@ func (validator *ValidatorString[T]) RuneMaxLength(length int, template ...strin
 	return validator
 }
 
-// Validate the minimum rune length of a string.
+// Validate the minimum length (in runes/characters) of a string.
 // For example:
 //
 //	word := "虎視眈々" // 4 runes, len(word) = 12 bytes
-//	Is(v.String(word).RuneMinLength(4))
-func (validator *ValidatorString[T]) RuneMinLength(length int, template ...string) *ValidatorString[T] {
+//	Is(v.String(word).MinLength(4))
+func (validator *ValidatorString[T]) MinLength(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringRuneMinLength(validator.context.Value().(T), length)
@@ -397,12 +397,12 @@ func (validator *ValidatorString[T]) RuneMinLength(length int, template ...strin
 	return validator
 }
 
-// Validate the rune length of a string.
+// Validate the length (in runes/characters) of a string.
 // For example:
 //
 //	word := "虎視眈々" // 4 runes, len(word) = 12 bytes
-//	Is(v.String(word).OfRuneLength(4))
-func (validator *ValidatorString[T]) OfRuneLength(length int, template ...string) *ValidatorString[T] {
+//	Is(v.String(word).OfLength(4))
+func (validator *ValidatorString[T]) OfLength(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringRuneLength(validator.context.Value().(T), length)
@@ -414,12 +414,12 @@ func (validator *ValidatorString[T]) OfRuneLength(length int, template ...string
 	return validator
 }
 
-// Validate if the rune length of a string is within a range (inclusive).
+// Validate if the length (in runes/characters) of a string is within a range (inclusive).
 // For example:
 //
 //	word := "虎視眈々" // 4 runes, len(word) = 12 bytes
-//	Is(v.String(word).OfRuneLengthBetween(2,4))
-func (validator *ValidatorString[T]) OfRuneLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
+//	Is(v.String(word).OfLengthBetween(2,4))
+func (validator *ValidatorString[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringRuneLengthBetween(validator.context.Value().(T), min, max)

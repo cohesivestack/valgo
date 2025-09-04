@@ -779,18 +779,18 @@ v.Is(v.String(" ").Blank())
 v.Is(v.String("Dart").Passing(func(val string) bool { return val == "Dart" }))
 v.Is(v.String("processing").InSlice([]string{"idle", "processing", "ready"}))
 
-// Byte-length based i.e. len("string")
-v.Is(v.String("123456").MaxLength(6))
-v.Is(v.String("123").MinLength(3))
-v.Is(v.String("1234").OfLength(4))
-v.Is(v.String("12345").OfLengthBetween(4,6)) // Inclusive
+// Byte-length based
+v.Is(v.String("123456").MaxBytes(6))
+v.Is(v.String("123").MinBytes(3))
+v.Is(v.String("1234").OfByteLength(4))
+v.Is(v.String("12345").OfByteLengthBetween(4,6)) // Inclusive
 
 // Rune-length based (unicode code points, tends to matter for languages that use non-Latin alphabet)
 // 虎視眈々 is 4 runes/characters, but len(x) = 12 bytes
-v.Is(v.String("虎視眈々").RuneMaxLength(4))
-v.Is(v.String("虎視眈々").RuneMinLength(4))
-v.Is(v.String("虎視眈々").OfRuneLength(4))
-v.Is(v.String("虎視眈々").OfRuneLengthBetween(2,4)) // Inclusive
+v.Is(v.String("虎視眈々").MaxLength(4))
+v.Is(v.String("虎視眈々").MinLength(4))
+v.Is(v.String("虎視眈々").OfLength(4))
+v.Is(v.String("虎視眈々").OfLengthBetween(2,4)) // Inclusive
 
 regex, _ := regexp.Compile("pre-.+"); v.Is(String("pre-approved").MatchingTo(regex))
 ```
@@ -813,18 +813,18 @@ x := " ";              v.Is(v.StringP(&x).Blank())
 x := "Dart";           v.Is(v.StringP(&x).Passing(func(val *string) bool { return *val == "Dart" }))
 x := "processing";     v.Is(v.StringP(&x).InSlice([]string{"idle", "processing", "ready"}))
 
-// Byte-length based i.e. len("string")
-x := "123456";         v.Is(v.StringP(&x).MaxLength(6))
-x := "123";            v.Is(v.StringP(&x).MinLength(3))
-x := "1234";           v.Is(v.StringP(&x).OfLength(4))
-x := "12345";          v.Is(v.StringP(&x).OfLengthBetween(4,6)) // Inclusive
+// Byte-length based
+x := "123456";         v.Is(v.StringP(&x).MaxBytes(6))
+x := "123";            v.Is(v.StringP(&x).MinBytes(3))
+x := "1234";           v.Is(v.StringP(&x).OfByteLength(4))
+x := "12345";          v.Is(v.StringP(&x).OfByteLengthBetween(4,6)) // Inclusive
 
-// Rune-length based (unicode code points, tends to matter for languages that use non-Latin alphabet)
+// Rune-length based (counts characters instead of bytes)
 // 虎視眈々 is 4 runes/characters, but len(x) = 12 bytes
-x := "虎視眈々";      v.Is(v.StringP(&x).RuneMaxLength(4))
-x := "虎視眈々";      v.Is(v.StringP(&x).RuneMinLength(4))
-x := "虎視眈々";      v.Is(v.StringP(&x).OfRuneLength(4))
-x := "虎視眈々";      v.Is(v.StringP(&x).OfRuneLengthBetween(2,4)) // Inclusive
+x := "虎視眈々";      v.Is(v.StringP(&x).MaxLength(4))
+x := "虎視眈々";      v.Is(v.StringP(&x).MinLength(4))
+x := "虎視眈々";      v.Is(v.StringP(&x).OfLength(4))
+x := "虎視眈々";      v.Is(v.StringP(&x).OfLengthBetween(2,4)) // Inclusive
 
 x := "pre-approved"; regex, _ := regexp.Compile("pre-.+"); v.Is(StringP(&x).MatchingTo(regex))
 x := "";               v.Is(v.StringP(&x).EmptyOrNil())
@@ -1173,14 +1173,14 @@ output:
   - `Passing`
   - `InSlice`
   - `MatchingTo`
+  - `MaxBytes`
+  - `MinBytes`
+  - `OfByteLength`
+  - `OfByteLengthBetween`
   - `MaxLength`
   - `MinLength`
   - `OfLength`
   - `OfLengthBetween`
-  - `RuneMaxLength`
-  - `RuneMinLength`
-  - `OfRuneLength`
-  - `OfRuneLengthBetween`
 
 - `StringP` validator - for string pointer
   - `EqualTo`
@@ -1194,14 +1194,14 @@ output:
   - `Passing`
   - `InSlice`
   - `MatchingTo`
+  - `MaxBytes`
+  - `MinBytes`
+  - `OfByteLength`
+  - `OfByteLengthBetween`
   - `MaxLength`
   - `MinLength`
   - `OfLength`
   - `OfLengthBetween`
-  - `RuneMaxLength`
-  - `RuneMinLength`
-  - `OfRuneLength`
-  - `OfRuneLengthBetween`
   - `BlankOrNil`
   - `EmptyOrNil`
   - `Nil`
