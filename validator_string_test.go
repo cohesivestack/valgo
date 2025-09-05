@@ -480,15 +480,15 @@ func TestValidatorStringMatchingToInvalid(t *testing.T) {
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorStringMaxLengthValid(t *testing.T) {
+func TestValidatorStringMaxBytesValid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(String("123456").MaxLength(6))
+	v = Is(String("123456").MaxBytes(6))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	v = Is(String("12345").MaxLength(6))
+	v = Is(String("12345").MaxBytes(6))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
@@ -496,15 +496,15 @@ func TestValidatorStringMaxLengthValid(t *testing.T) {
 	type MyString string
 	var myString1 MyString = "123456"
 
-	v = Is(String(myString1).MaxLength(6))
+	v = Is(String(myString1).MaxBytes(6))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorStringMaxLengthInvalid(t *testing.T) {
+func TestValidatorStringMaxBytesInvalid(t *testing.T) {
 
 	var v *Validation
 
-	v = Is(String("1234567").MaxLength(6))
+	v = Is(String("1234567").MaxBytes(6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must not have a length longer than \"6\"",
@@ -514,145 +514,241 @@ func TestValidatorStringMaxLengthInvalid(t *testing.T) {
 	type MyString string
 	var myString1 MyString = "1234567"
 
-	v = Is(String(myString1).MaxLength(6))
+	v = Is(String(myString1).MaxBytes(6))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must not have a length longer than \"6\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
+func TestValidatorStringMinBytesValid(t *testing.T) {
+
+	var v *Validation
+
+	v = Is(String("123456").MinBytes(6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("1234567").MinBytes(6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "123456"
+
+	v = Is(String(myString1).MinBytes(6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+func TestValidatorStringMinBytesInvalid(t *testing.T) {
+
+	var v *Validation
+
+	v = Is(String("12345").MinBytes(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "12345"
+
+	v = Is(String(myString1).MinBytes(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringOfByteLengthValid(t *testing.T) {
+	var v *Validation
+
+	v = Is(String("123456").OfByteLength(6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "123456"
+
+	v = Is(String(myString1).OfByteLength(6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+func TestValidatorStringOfByteLengthInvalid(t *testing.T) {
+
+	var v *Validation
+
+	v = Is(String("12345").OfByteLength(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(String("1234567").OfByteLength(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "12345"
+
+	v = Is(String(myString1).OfByteLength(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringOfByteLengthBetweenValid(t *testing.T) {
+
+	var v *Validation
+
+	v = Is(String("123456").OfByteLengthBetween(6, 10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("12345678").OfByteLengthBetween(6, 10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("1234567890").OfByteLengthBetween(6, 10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "123456"
+
+	v = Is(String(myString1).OfByteLengthBetween(6, 10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+func TestValidatorStringOfByteLengthBetweenInvalid(t *testing.T) {
+
+	var v *Validation
+
+	v = Is(String("12345").OfByteLengthBetween(6, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"6\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(String("12345678901").OfByteLengthBetween(6, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"6\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "12345"
+
+	v = Is(String(myString1).OfByteLengthBetween(6, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"6\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
+func TestValidatorStringMaxLengthValid(t *testing.T) {
+	var v *Validation
+
+	// "虎視眈々" has 4 runes, 12 bytes
+	v = Is(String("虎視眈々").MaxLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("虎視眈々").MaxLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringMaxLengthInvalid(t *testing.T) {
+	var v *Validation
+
+	v = Is(String("虎視眈々").MaxLength(3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length longer than \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+}
+
 func TestValidatorStringMinLengthValid(t *testing.T) {
-
 	var v *Validation
 
-	v = Is(String("123456").MinLength(6))
+	v = Is(String("虎視眈々").MinLength(4))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	v = Is(String("1234567").MinLength(6))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyString string
-	var myString1 MyString = "123456"
-
-	v = Is(String(myString1).MinLength(6))
+	v = Is(String("虎視眈々").MinLength(3))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
 func TestValidatorStringMinLengthInvalid(t *testing.T) {
-
 	var v *Validation
 
-	v = Is(String("12345").MinLength(6))
+	v = Is(String("虎視眈々").MinLength(5))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must not have a length shorter than \"6\"",
-		v.Errors()["value_0"].Messages()[0])
-
-	// Custom Type
-	type MyString string
-	var myString1 MyString = "12345"
-
-	v = Is(String(myString1).MinLength(6))
-	assert.False(t, v.Valid())
-	assert.Equal(t,
-		"Value 0 must not have a length shorter than \"6\"",
+		"Value 0 must not have a length shorter than \"5\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorStringLengthValid(t *testing.T) {
-
+func TestValidatorStringOfLengthValid(t *testing.T) {
 	var v *Validation
 
-	v = Is(String("123456").OfLength(6))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyString string
-	var myString1 MyString = "123456"
-
-	v = Is(String(myString1).OfLength(6))
+	v = Is(String("虎視眈々").OfLength(4))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorStringLengthInvalid(t *testing.T) {
 
+func TestValidatorStringOfLengthInvalid(t *testing.T) {
 	var v *Validation
 
-	v = Is(String("12345").OfLength(6))
+	v = Is(String("虎視眈々").OfLength(3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must have a length equal to \"6\"",
+		"Value 0 must have a length equal to \"3\"",
 		v.Errors()["value_0"].Messages()[0])
 
-	v = Is(String("1234567").OfLength(6))
+	v = Is(String("虎視眈々").OfLength(5))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must have a length equal to \"6\"",
-		v.Errors()["value_0"].Messages()[0])
-
-	// Custom Type
-	type MyString string
-	var myString1 MyString = "12345"
-
-	v = Is(String(myString1).OfLength(6))
-	assert.False(t, v.Valid())
-	assert.Equal(t,
-		"Value 0 must have a length equal to \"6\"",
+		"Value 0 must have a length equal to \"5\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
-func TestValidatorStringLengthBetweenValid(t *testing.T) {
-
+func TestValidatorStringOfLengthBetweenValid(t *testing.T) {
 	var v *Validation
 
-	v = Is(String("123456").OfLengthBetween(6, 10))
+	v = Is(String("虎視眈々").OfLengthBetween(4, 10))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 
-	v = Is(String("12345678").OfLengthBetween(6, 10))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	v = Is(String("1234567890").OfLengthBetween(6, 10))
-	assert.True(t, v.Valid())
-	assert.Empty(t, v.Errors())
-
-	// Custom Type
-	type MyString string
-	var myString1 MyString = "123456"
-
-	v = Is(String(myString1).OfLengthBetween(6, 10))
+	v = Is(String("虎視眈々").OfLengthBetween(2, 4))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
-func TestValidatorStringLengthBetweenInvalid(t *testing.T) {
 
+func TestValidatorStringOfLengthBetweenInvalid(t *testing.T) {
 	var v *Validation
 
-	v = Is(String("12345").OfLengthBetween(6, 10))
+	v = Is(String("虎視眈々").OfLengthBetween(5, 10))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must have a length between \"6\" and \"10\"",
+		"Value 0 must have a length between \"5\" and \"10\"",
 		v.Errors()["value_0"].Messages()[0])
 
-	v = Is(String("12345678901").OfLengthBetween(6, 10))
+	v = Is(String("虎視眈々").OfLengthBetween(1, 3))
 	assert.False(t, v.Valid())
 	assert.Equal(t,
-		"Value 0 must have a length between \"6\" and \"10\"",
-		v.Errors()["value_0"].Messages()[0])
-
-	// Custom Type
-	type MyString string
-	var myString1 MyString = "12345"
-
-	v = Is(String(myString1).OfLengthBetween(6, 10))
-	assert.False(t, v.Valid())
-	assert.Equal(t,
-		"Value 0 must have a length between \"6\" and \"10\"",
+		"Value 0 must have a length between \"1\" and \"3\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
