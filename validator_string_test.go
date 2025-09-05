@@ -666,6 +666,32 @@ func TestValidatorStringMaxLengthValid(t *testing.T) {
 	v = Is(String("虎視眈々").MaxLength(5))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").MaxLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("Hello").MaxLength(6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").MaxLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("Café").MaxLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).MaxLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorStringMaxLengthInvalid(t *testing.T) {
@@ -675,6 +701,30 @@ func TestValidatorStringMaxLengthInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must not have a length longer than \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").MaxLength(4))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length longer than \"4\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").MaxLength(3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length longer than \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).MaxLength(4))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length longer than \"4\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 
@@ -688,6 +738,32 @@ func TestValidatorStringMinLengthValid(t *testing.T) {
 	v = Is(String("虎視眈々").MinLength(3))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").MinLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("Hello").MinLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").MinLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("Café").MinLength(3))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).MinLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
 }
 
 func TestValidatorStringMinLengthInvalid(t *testing.T) {
@@ -698,12 +774,54 @@ func TestValidatorStringMinLengthInvalid(t *testing.T) {
 	assert.Equal(t,
 		"Value 0 must not have a length shorter than \"5\"",
 		v.Errors()["value_0"].Messages()[0])
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").MinLength(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").MinLength(5))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"5\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).MinLength(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must not have a length shorter than \"6\"",
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorStringOfLengthValid(t *testing.T) {
 	var v *Validation
 
 	v = Is(String("虎視眈々").OfLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").OfLength(5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").OfLength(4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).OfLength(5))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -722,6 +840,42 @@ func TestValidatorStringOfLengthInvalid(t *testing.T) {
 	assert.Equal(t,
 		"Value 0 must have a length equal to \"5\"",
 		v.Errors()["value_0"].Messages()[0])
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").OfLength(4))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"4\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(String("Hello").OfLength(6))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"6\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").OfLength(3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(String("Café").OfLength(5))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"5\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).OfLength(4))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length equal to \"4\"",
+		v.Errors()["value_0"].Messages()[0])
 }
 
 func TestValidatorStringOfLengthBetweenValid(t *testing.T) {
@@ -732,6 +886,32 @@ func TestValidatorStringOfLengthBetweenValid(t *testing.T) {
 	assert.Empty(t, v.Errors())
 
 	v = Is(String("虎視眈々").OfLengthBetween(2, 4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").OfLengthBetween(4, 6))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("Hello").OfLengthBetween(5, 5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").OfLengthBetween(3, 5))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	v = Is(String("Café").OfLengthBetween(4, 4))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).OfLengthBetween(4, 6))
 	assert.True(t, v.Valid())
 	assert.Empty(t, v.Errors())
 }
@@ -749,6 +929,42 @@ func TestValidatorStringOfLengthBetweenInvalid(t *testing.T) {
 	assert.False(t, v.Valid())
 	assert.Equal(t,
 		"Value 0 must have a length between \"1\" and \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Latin characters - "Hello" has 5 runes
+	v = Is(String("Hello").OfLengthBetween(6, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"6\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(String("Hello").OfLengthBetween(1, 4))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"1\" and \"4\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Mixed Latin characters with accents - "Café" has 4 runes
+	v = Is(String("Café").OfLengthBetween(5, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"5\" and \"10\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	v = Is(String("Café").OfLengthBetween(1, 3))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"1\" and \"3\"",
+		v.Errors()["value_0"].Messages()[0])
+
+	// Custom Type
+	type MyString string
+	var myString1 MyString = "Hello"
+
+	v = Is(String(myString1).OfLengthBetween(6, 10))
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Value 0 must have a length between \"6\" and \"10\"",
 		v.Errors()["value_0"].Messages()[0])
 }
 

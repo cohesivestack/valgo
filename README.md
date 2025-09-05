@@ -44,6 +44,39 @@ Valgo is in its early stages, so backward compatibility won't be guaranteed unti
 
 Valgo is used in production by [Statsignal](https://statsignal.dev), but we want community feedback before releasing version 1.
 
+## 🚨 Breaking Change in v0.6.0 — String Length Validation
+
+Starting from **v0.6.0**, all string length validators now measure length in **characters (runes)** instead of bytes.
+This means that multi-byte UTF-8 characters (such as Japanese/Chinese/Korean characters, accented letters, and other international characters) are now counted as one character each, making the validators more intuitive for international (i18n) applications.
+
+### What Changed
+
+* `MaxLength`, `MinLength`, `OfLength`, and `OfLengthBetween` now use `utf8.RuneCountInString`.
+
+### Migration
+
+If your code relied on **byte length** (using `len` semantics), use the new explicit byte-based validators:
+
+* `MaxBytes`
+* `MinBytes`
+* `OfByteLength`
+* `OfByteLengthBetween`
+
+### Example
+
+```go
+s := "你好" // 2 characters (runes), 6 bytes
+japanese := "こんにちは" // 5 characters (runes), 15 bytes
+
+// New default: counts characters (runes)
+v.String(s, "field").MaxLength(2)        // ✅ passes
+v.String(japanese, "field").MaxLength(5) // ✅ passes
+
+// Byte-based: counts bytes
+v.String(s, "field").MaxBytes(6)         // ✅ passes
+v.String(japanese, "field").MaxBytes(15) // ✅ passes
+```
+
 # Table of content
 
 - [Valgo](#valgo)
