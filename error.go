@@ -113,6 +113,14 @@ func (e *Error) Errors() map[string]*valueError {
 	return e.errors
 }
 
+func (e *Error) prepareErrorsForMarshal() map[string]interface{} {
+	errors := map[string]interface{}{}
+	for k, v := range e.errors {
+		errors[k] = v.Messages()
+	}
+	return errors
+}
+
 // Returns the JSON encoding of the validation error messages.
 //
 // A custom function can be set either by passing it as a parameter to
@@ -121,12 +129,21 @@ func (e *Error) MarshalJSON() ([]byte, error) {
 	if e.marshalJsonFunc != nil {
 		return e.marshalJsonFunc(e)
 	} else {
-		errors := map[string]interface{}{}
-
-		for k, v := range e.errors {
-			errors[k] = v.Messages()
-		}
-
-		return json.Marshal(errors)
+		return json.Marshal(e.prepareErrorsForMarshal())
 	}
+}
+
+// Returns the JSON encoding of the validation error messages with the given prefix and indent.
+//
+// This function does not call a custom marshalJsonFunc function if it is set.
+func (e *Error) MarshalJSONIndent(prefix, indent string) ([]byte, error) {
+	return json.MarshalIndent(e.prepareErrorsForMarshal(), prefix, indent)
+}
+
+// Returns the JSON encoding of the validation error messages with the pretty format.
+//
+// This is a shortcut for MarshalJSONIndent("", "  ").
+// It does not call a custom marshalJSONFunc function if it is set.
+func (e *Error) MarshalJSONPretty() ([]byte, error) {
+	return json.MarshalIndent(e.prepareErrorsForMarshal(), "", "  ")
 }
