@@ -80,11 +80,11 @@ func (validator *ValidatorAny) EqualTo(value any, template ...string) *Validator
 //		return v == getNewStatus()
 //	})
 func (validator *ValidatorAny) Passing(function func(v any) bool, template ...string) *ValidatorAny {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value())
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }
@@ -95,7 +95,7 @@ func (validator *ValidatorAny) Passing(function func(v any) bool, template ...st
 //	var status *string
 //	Is(v.Any(status).Nil())
 func (validator *ValidatorAny) Nil(template ...string) *ValidatorAny {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			val := validator.context.Value()
 			// In Golang nil sometimes is not equal to raw nil, such as it's explained
@@ -104,7 +104,7 @@ func (validator *ValidatorAny) Nil(template ...string) *ValidatorAny {
 			return val == nil ||
 				(reflect.ValueOf(val).Kind() == reflect.Ptr && reflect.ValueOf(val).IsNil())
 		},
-		ErrorKeyNil, template...)
+		ErrorKeyNil, validator.context.Value(), template...)
 
 	return validator
 }

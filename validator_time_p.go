@@ -164,11 +164,11 @@ func (validator *ValidatorTimeP) Between(min time.Time, max time.Time, template 
 //	var t *time.Time
 //	Is(v.TimeP(t).Zero()).Valid()  // Will return true as t is nil and thus pointing to a zero time.
 func (validator *ValidatorTimeP) Zero(template ...string) *ValidatorTimeP {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*time.Time) != nil && isTimeZero(*(validator.context.Value().(*time.Time)))
 		},
-		ErrorKeyZero, template...)
+		ErrorKeyZero, validator.context.Value(), template...)
 
 	return validator
 }
@@ -180,11 +180,11 @@ func (validator *ValidatorTimeP) Zero(template ...string) *ValidatorTimeP {
 //	t := time.Now()
 //	Is(v.TimeP(&t).Passing(func(v0 *time.Time) bool { return v0.After(time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)) })).Valid()  // Custom validation.
 func (validator *ValidatorTimeP) Passing(function func(v0 *time.Time) bool, template ...string) *ValidatorTimeP {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value().(*time.Time))
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }
@@ -213,11 +213,11 @@ func (validator *ValidatorTimeP) InSlice(slice []time.Time, template ...string) 
 //	var t *time.Time
 //	Is(v.TimeP(t).Nil()).Valid()  // Will return true as t is nil.
 func (validator *ValidatorTimeP) Nil(template ...string) *ValidatorTimeP {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*time.Time) == nil
 		},
-		ErrorKeyNil, template...)
+		ErrorKeyNil, validator.context.Value(), template...)
 
 	return validator
 }
@@ -229,12 +229,12 @@ func (validator *ValidatorTimeP) Nil(template ...string) *ValidatorTimeP {
 //	var t *time.Time
 //	Is(v.TimeP(t).NilOrZero()).Valid()  // Will return true as t is nil.
 func (validator *ValidatorTimeP) NilOrZero(template ...string) *ValidatorTimeP {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*time.Time) == nil || isTimeZero(*(validator.context.Value().(*time.Time)))
 
 		},
-		ErrorKeyNil, template...)
+		ErrorKeyNil, validator.context.Value(), template...)
 
 	return validator
 }

@@ -95,11 +95,11 @@ func (validator *ValidatorBool[T]) EqualTo(value T, template ...string) *Validat
 //	activated := true
 //	Is(v.Bool(activated).True())
 func (validator *ValidatorBool[T]) True(template ...string) *ValidatorBool[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return isBoolTrue(validator.context.Value().(T))
 		},
-		ErrorKeyTrue, template...)
+		ErrorKeyTrue, validator.context.Value(), template...)
 
 	return validator
 }
@@ -110,11 +110,11 @@ func (validator *ValidatorBool[T]) True(template ...string) *ValidatorBool[T] {
 //	activated := false
 //	Is(v.Bool(activated).Equal(true)).Valid()
 func (validator *ValidatorBool[T]) False(template ...string) *ValidatorBool[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return isBoolFalse(validator.context.Value().(T))
 		},
-		ErrorKeyFalse, template...)
+		ErrorKeyFalse, validator.context.Value(), template...)
 
 	return validator
 }
@@ -127,11 +127,11 @@ func (validator *ValidatorBool[T]) False(template ...string) *ValidatorBool[T] {
 //		return v == someBoolFunction()
 //	})
 func (validator *ValidatorBool[T]) Passing(function func(v T) bool, template ...string) *ValidatorBool[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value().(T))
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }

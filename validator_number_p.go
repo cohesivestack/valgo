@@ -147,7 +147,7 @@ func (validator *ValidatorNumberP[T]) Between(min T, max T, template ...string) 
 			return validator.context.Value().(*T) != nil && isNumberBetween(*(validator.context.Value().(*T)), min, max)
 		},
 		ErrorKeyBetween,
-		map[string]any{"title": validator.context.title, "min": min, "max": max},
+		map[string]any{"title": validator.context.title, "min": min, "max": max, "value": validator.context.Value()},
 		template...)
 
 	return validator
@@ -160,11 +160,11 @@ func (validator *ValidatorNumberP[T]) Between(min T, max T, template ...string) 
 //	n := 0
 //	Is(v.NumberP(&n).Zero())
 func (validator *ValidatorNumberP[T]) Zero(template ...string) *ValidatorNumberP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isNumberZero(*(validator.context.Value().(*T)))
 		},
-		ErrorKeyZero, template...)
+		ErrorKeyZero, validator.context.Value(), template...)
 
 	return validator
 }
@@ -176,11 +176,11 @@ func (validator *ValidatorNumberP[T]) Zero(template ...string) *ValidatorNumberP
 //	var _quantity *int
 //	Is(v.NumberP(_quantity).ZeroOrNil()) // Will be true
 func (validator *ValidatorNumberP[T]) ZeroOrNil(template ...string) *ValidatorNumberP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) == nil || isNumberZero(*(validator.context.Value().(*T)))
 		},
-		ErrorKeyZero, template...)
+		ErrorKeyZero, validator.context.Value(), template...)
 
 	return validator
 }
@@ -192,11 +192,11 @@ func (validator *ValidatorNumberP[T]) ZeroOrNil(template ...string) *ValidatorNu
 //	var quantity *int
 //	Is(v.NumberP(quantity).Nil()) // Will be true
 func (validator *ValidatorNumberP[T]) Nil(template ...string) *ValidatorNumberP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) == nil
 		},
-		ErrorKeyNil, template...)
+		ErrorKeyNil, validator.context.Value(), template...)
 
 	return validator
 }
@@ -209,11 +209,11 @@ func (validator *ValidatorNumberP[T]) Nil(template ...string) *ValidatorNumberP[
 //		return *v == getAllowedQuantity()
 //	})
 func (validator *ValidatorNumberP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorNumberP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value().(*T))
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }
