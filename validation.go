@@ -18,8 +18,13 @@ import (
 //   - [New]()
 //   - [Is](...)
 //   - [In](...)
-//   - [InRow](...)
 //   - [Check](...)
+//   - [InRow](...)
+//   - [InCell](...)
+//   - [If](...)
+//   - [Do](...)
+//   - [When](...)
+//   - [Merge](...)
 //   - [AddErrorMessage](...)
 //
 // the function [Is](...) is likely to be the most frequently used function in your
@@ -61,7 +66,55 @@ func (validation *Validation) Is(validators ...Validator) *Validation {
 	return validation
 }
 
-// Add one or more validators to a [Validation] session. But unlike [Is()],
+// [If](...) is similar to [Merge](...), but merge the [Validation] session
+// only when the condition is true, and returns the same [Validation] instance.
+// When the condition is false, no operation is performed and the original
+// instance is returned unchanged.
+//
+// See [Merge](...) for more information.
+//
+//	v.If(isAdmin, v.Is(v.String(username, "username").Not().Blank()) )
+func (validation *Validation) If(condition bool, _validation *Validation) *Validation {
+	if condition {
+		return validation.merge("", _validation)
+	}
+	return validation
+}
+
+// The [Do](...) function executes the given function with the current
+// [Validation] instance and returns the same instance.
+//
+// This allows you to extend a validation chain with additional or
+// conditional rules in a concise way:
+//
+//	v.Is(v.String(username, "username").Not().Blank()).Do(func(val *v.Validation) {
+//		if isAdmin {
+//			val.Is(v.String(role, "role").Equal("admin"))
+//		}
+//	})
+func (validation *Validation) Do(function func(val *Validation)) *Validation {
+	function(validation)
+	return validation
+}
+
+// [When](...) is similar to [Do](...), but executes the given function
+// only when the condition is true, and returns the same [Validation] instance.
+// When the condition is false, no operation is performed and the original
+// instance is returned unchanged.
+//
+// See [Do](...) for the unconditional variant.
+//
+//	v.Is(v.String(username, "username").Not().Blank()).When(isAdmin, func(val *v.Validation) {
+//		val.Is(v.String(role, "role").Equal("admin"))
+//	})
+func (validation *Validation) When(condition bool, function func(val *Validation)) *Validation {
+	if condition {
+		function(validation)
+	}
+	return validation
+}
+
+// [Check](...) adds one or more validators to a [Validation] session. But unlike [Is()],
 // the validators are not short-circuited.
 func (validation *Validation) Check(validators ...Validator) *Validation {
 	for _, v := range validators {
@@ -88,6 +141,34 @@ func (validation *Validation) In(name string, _validation *Validation) *Validati
 // Add an indexed namespace to a [Validation] session.
 func (validation *Validation) InRow(name string, index int, _validation *Validation) *Validation {
 	return validation.merge(fmt.Sprintf("%s[%v]", name, index), _validation)
+}
+
+// Add an indexed namespace to a [Validation] session where the target is a
+// single, scalar value (e.g., entries of a primitive slice). This is useful
+// for validating arrays or slices of primitives. Example:
+//
+//	validation := valgo.InCell("tag_priority", 0,
+//		valgo.Is(valgo.String("", "tag_priority", "Tag priority").Not().Blank()),
+//	)
+//
+// The example above validates the value at tag_priority[0].
+func (validation *Validation) InCell(name string, index int, _validation *Validation) *Validation {
+
+	fieldName := fmt.Sprintf("%s[%v]", name, index)
+
+	for _, _err := range _validation.Errors() {
+		for _, _errMsg := range _err.Messages() {
+			if err, ok := validation.Errors()[fieldName]; ok {
+				for _, errMsg := range err.Messages() {
+					if _errMsg == errMsg {
+						continue
+					}
+				}
+			}
+			validation.AddErrorMessage(fieldName, _errMsg)
+		}
+	}
+	return validation
 }
 
 // Using [Merge](...) you can merge two [Validation] sessions. When two
@@ -189,7 +270,19 @@ func (v *Validation) MergeErrorIn(name string, err *Error) *Validation {
 // MergeErrorInRow allows merging Valgo errors from already validated [Validation] sessions
 // within an indexed namespace. The function takes a namespace name, an index, and an [Error] pointer
 // as arguments and returns a [Validation] pointer.
+//
+// DEPRECATED: This method is deprecated in favor of MergeErrorInIndex().
+// The MergeErrorInIndex() method is a generic name to cover errors added by
+// InRow() and InCell() validations.
 func (v *Validation) MergeErrorInRow(name string, index int, err *Error) *Validation {
+	return v.mergeError(fmt.Sprintf("%s[%v]", name, index), err)
+}
+
+// MergeErrorInRow allows merging Valgo errors from already validated [Validation] sessions
+// within an indexed namespace. These are errors added by InRow() and InCell() validations.
+// The function takes a namespace name, an index, and an [Error] pointer
+// as arguments and returns a [Validation] pointer.
+func (v *Validation) MergeErrorInIndex(name string, index int, err *Error) *Validation {
 	return v.mergeError(fmt.Sprintf("%s[%v]", name, index), err)
 }
 
