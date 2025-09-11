@@ -91,7 +91,11 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
   - [`Validation.IsValid(...)` function](#validationisvalid-function)
   - [`In(...)` function](#in-function)
   - [`InRow(...)` function](#inrow-function)
+  - [`InCell(...)` function](#incell-function)
   - [`Check(...)` function](#check-function)
+  - [`If(...)` function](#if-function)
+  - [`Do(...)` function](#do-function)
+  - [`When(...)` function](#when-function)
   - [`AddErrorMessage(...)` function](#adderrormessage-function)
   - [Merging two `Validation` sessions with `Validation.Merge( ... )`](#merging-two-validation-sessions-with-validationmerge--)
   - [`New()` function](#new-function)
@@ -153,6 +157,7 @@ There are multiple functions to create a `Validation` session, depending on the 
   * `Is(...)`,
   * `In(...)`,
   * `InRow(...)`,
+  * `InCell(...)`,
   * `Check(...)`,
   * `AddErrorMessage(...)`
 
@@ -194,7 +199,7 @@ output:
 
 ## `Validation.Valid()` function
 
-A `Validation` session provide this function, which returns either `true` if all their validators are valid or `false` if any one of them is invalid.
+A `Validation` session provides this function, which returns either `true` if all their validators are valid or `false` if any one of them is invalid.
 
 In the following example, even though the Validator for `age` is valid, the `Validator` for `status` is invalid, making the entire `Validator` session invalid.
 
@@ -220,7 +225,7 @@ output:
 
 ## `Validation.IsValid(...)` function
 
-This functions allows to check if an specific value in a `Validation` session is valid or not. This is very useful for conditional logic.
+This function allows checking if a specific value in a `Validation` session is valid or not. This is very useful for conditional logic.
 
 The following example prints an error message if the `age` value is invalid.
 
@@ -335,6 +340,39 @@ output:
 }
 ```
 
+## `InCell(...)` function
+
+The `InCell(...)` function executes one or more validators in an indexed namespace where the target is a scalar value (e.g., entries of a primitive slice). The value names in the error result are prefixed with this indexed namespace. It is useful for validating lists of primitive values.
+
+In the following example, we validate a list of tag names. The error results can distinguish the errors for each list entry.
+
+```go
+tags := []string{"", ""}
+
+val := v.New()
+for i, tag := range tags {
+  val.InCell("tags", i, v.Is(
+    v.String(tag, "name").Not().Blank(),
+  ))
+}
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
+}
+```
+output:
+```json
+{
+  "tags[0]": [
+    "Name can't be blank"
+  ],
+  "tags[1]": [
+    "Name can't be blank"
+  ]
+}
+```
+
 ## `Check(...)` function
 
 The `Check(...)` function, similar to the `Is(...)` function, however with `Check(...)` the Rules of the Validator parameter are not short-circuited, which means that regardless of whether a previous rule was valid, all rules are checked.
@@ -356,6 +394,63 @@ output:
     "Full name can't be blank",
 	  "Full name must have a length between \"4\" and \"20\""
   ]
+}
+```
+
+## `If(...)` function
+
+The `If(...)` function is similar to `Merge(...)`, but merges the `Validation` session only when the condition is true, and returns the same `Validation` instance. When the condition is false, no operation is performed and the original instance is returned unchanged.
+
+This function allows you to write validation code in a more fluent and compact way, especially useful for conditional merging of validation sessions without the need for separate if statements or complex branching logic.
+
+```go
+
+// Only merge admin validation if user is admin
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  If(isAdmin, v.Is(v.String(role, "role").EqualTo("admin")))
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
+}
+```
+
+## `Do(...)` function
+
+The `Do(...)` function executes the given function with the current `Validation` instance and returns the same instance. This allows you to extend a validation chain with additional or conditional rules in a concise way.
+
+```go
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  Do(func(val *v.Validation) {
+    if isAdmin {
+      val.Is(v.String(role, "role").EqualTo("admin"))
+    }
+  })
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
+}
+```
+
+## `When(...)` function
+
+The `When(...)` function is similar to `Do(...)`, but executes the given function only when the condition is true, and returns the same `Validation` instance. When the condition is false, no operation is performed and the original instance is returned unchanged.
+
+This function provides a more concise way to add conditional validation logic compared to using `Do(...)` with an internal if statement.
+
+```go
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  When(isAdmin, func(val *v.Validation) {
+    val.Is(v.String(role, "role").EqualTo("admin"))
+  })
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
 }
 ```
 
@@ -945,7 +1040,7 @@ Uint64(v uint64)   Uint64P(v *uint64)
 Float32(v float32) Float32P(v *float32)
 Float64(v float64) Float64P(v *float64)
 Byte(v byte)       ByteP(v *byte)
-Rune(v byte)       RuneP(v *byte)
+Rune(v rune)       RuneP(v *rune)
 ```
 
 These validators have the same rule functions as the `Number` validator.
@@ -1061,7 +1156,7 @@ v.Is(v.Any(&numberA).EqualTo(&numberB)).Valid()
 
 ## Custom type validators
 
-All golang validators allow to pass a custom type based on its value type. Bellow some valid examples.
+All golang validators allow to pass a custom type based on its value type. Below some valid examples.
 
 ```go
 type Status string
@@ -1326,6 +1421,6 @@ We welcome contributions to our project! To make the process smooth and efficien
 
 # License
 
-Copyright © 2023 Carlos Forero
+Copyright © 2025 Carlos Forero
 
 Valgo is released under the [MIT License](LICENSE)
