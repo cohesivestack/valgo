@@ -103,7 +103,7 @@ func TestAddNewLocaleEntries(t *testing.T) {
 	v = v.Is(String("a").Blank())
 	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 must be blank (XX)")
 
-	// For the unexisting keys, then should use the default language
+	// For the nonexisting keys, then should use the default language
 	v = v.Is(String("").Not().Empty())
 	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 can't be empty")
 
