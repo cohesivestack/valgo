@@ -70,5 +70,29 @@ func getLocaleHu() *Locale {
 
 		ErrorKeyZero:    "{{title}} nulla kell legyen",
 		ErrorKeyNotZero: "{{title}} nem lehet nulla",
+
+		ErrorKeyPositive:    "{{title}} pozitív kell legyen",
+		ErrorKeyNotPositive: "{{title}} nem lehet pozitív",
+
+		ErrorKeyNegative:    "{{title}} negatív kell legyen",
+		ErrorKeyNotNegative: "{{title}} nem lehet negatív",
+
+		ErrorKeyZeroOrNil:    "{{title}} nulla vagy nil kell legyen",
+		ErrorKeyNotZeroOrNil: "{{title}} nem lehet nulla vagy nil",
+
+		ErrorKeyPositiveOrNil:    "{{title}} pozitív vagy nil kell legyen",
+		ErrorKeyNotPositiveOrNil: "{{title}} nem lehet pozitív vagy nil",
+
+		ErrorKeyNegativeOrNil:    "{{title}} negatív vagy nil kell legyen",
+		ErrorKeyNotNegativeOrNil: "{{title}} nem lehet negatív vagy nil",
+
+		ErrorKeyNaN:    "{{title}} NaN kell legyen",
+		ErrorKeyNotNaN: "{{title}} nem lehet NaN",
+
+		ErrorKeyInfinite:    "{{title}} végtelen kell legyen",
+		ErrorKeyNotInfinite: "{{title}} nem lehet végtelen",
+
+		ErrorKeyFinite:    "{{title}} véges kell legyen",
+		ErrorKeyNotFinite: "{{title}} nem lehet véges",
 	}
 }

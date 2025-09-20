@@ -70,5 +70,29 @@ func getLocaleEs() *Locale {
 
 		ErrorKeyZero:    "{{title}} debe ser cero",
 		ErrorKeyNotZero: "{{title}} no debe ser cero",
+
+		ErrorKeyPositive:    "{{title}} debe ser positivo",
+		ErrorKeyNotPositive: "{{title}} no debe ser positivo",
+
+		ErrorKeyNegative:    "{{title}} debe ser negativo",
+		ErrorKeyNotNegative: "{{title}} no debe ser negativo",
+
+		ErrorKeyZeroOrNil:    "{{title}} debe ser cero o nil",
+		ErrorKeyNotZeroOrNil: "{{title}} no debe ser cero o nil",
+
+		ErrorKeyPositiveOrNil:    "{{title}} debe ser positivo o nil",
+		ErrorKeyNotPositiveOrNil: "{{title}} no debe ser positivo o nil",
+
+		ErrorKeyNegativeOrNil:    "{{title}} debe ser negativo o nil",
+		ErrorKeyNotNegativeOrNil: "{{title}} no debe ser negativo o nil",
+
+		ErrorKeyNaN:    "{{title}} debe ser NaN",
+		ErrorKeyNotNaN: "{{title}} no debe ser NaN",
+
+		ErrorKeyInfinite:    "{{title}} debe ser infinito",
+		ErrorKeyNotInfinite: "{{title}} no debe ser infinito",
+
+		ErrorKeyFinite:    "{{title}} debe ser finito",
+		ErrorKeyNotFinite: "{{title}} no debe ser finito",
 	}
 }
