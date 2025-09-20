@@ -1551,33 +1551,17 @@ With the Any validator, you can set validation rules for any value or pointer.
 Below is a valid example of every Any validator rule.
 
 ```go
-v.Is(v.Any("react").EqualTo("react"))
-v.Is(v.Any("svelte").Passing(func(val *bool) bool { return val == "svelte" }))
+v.Is(v.Any("svelte").Passing(func(val any) bool { return val == "svelte" }))
 var x *bool; v.Is(v.Any(x).Nil())
 ```
 
-For the `EqualTo(v any)` rule function, the parameter type must match the type used by the `Any()` function, otherwise it will be invalid. In the following example, since the value passed to the `Any(...)` function is `int`, and `EqualTo(...)` compares it with int64, the validation is invalid.
+**EqualTo (DEPRECATED)**
+`any` is not safely comparable. Do not use `EqualTo` on `ValidatorAny`; use `EqualTo` on `ValidatorComparable` instead. `EqualTo` on `ValidatorAny` will be removed in Valgo v1.0.0.
 
 ```go
-valid := v.Is(v.Any(10).EqualTo(int64(10))).Valid()
-fmt.Println(valid)
-```
-output
-```
-false
+v.Is(v.Any("react").EqualTo("react"))
 ```
 
-If a pointer is used, the same pointer must be passed to `EqualTo(v any)` as it is passed to `Any(v any)`, in order to get a valid validation. The following example illustrates it.
-
-```go
-// Valid since the same pointers are compared
-numberA := 10
-v.Is(v.Any(&numberA).EqualTo(&numberA)).Valid()
-
-// Invalid since different pointers are compared
-numberB := 10
-v.Is(v.Any(&numberA).EqualTo(&numberB)).Valid()
-```
 
 ## Custom type validators
 

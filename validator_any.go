@@ -62,6 +62,9 @@ func (validator *ValidatorAny) Or() *ValidatorAny {
 //
 //	status := "running"
 //	Is(v.Any(status).Equal("running"))
+//
+// DEPRECATED: 'any' is not safely comparable. Use the Comparable validator instead.
+// This function will be removed in Valgo v1.0.0.
 func (validator *ValidatorAny) EqualTo(value any, template ...string) *ValidatorAny {
 	validator.context.AddWithValue(
 		func() bool {
