@@ -636,3 +636,16 @@ func TestValidationWhen(t *testing.T) {
 	assert.True(t, v2.Valid())
 	assert.NotContains(t, v2.Errors(), "email")
 }
+
+func TestValidationDo(t *testing.T) {
+	isAdmin := false
+	v := Is(String("test", "name").Not().Blank()).
+		Do(func(val *Validation) {
+			if !isAdmin {
+				val.Is(String("", "role").Not().Blank())
+			}
+		})
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "role")
+	assert.Equal(t, "Role can't be blank", v.Errors()["role"].Messages()[0])
+}
