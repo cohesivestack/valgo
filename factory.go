@@ -99,6 +99,17 @@ func (_factory *ValidationFactory) InRow(name string, index int, v *Validation) 
 	return _factory.New().InRow(name, index, v)
 }
 
+// The InCell function executes, through a factory, one or more validators in an
+// indexed namespace where the target is a scalar value (e.g., entries of a
+// primitive slice). The value names in the error result are prefixed with this
+// indexed namespace.
+//
+// The function is similar to the [InCell()] function, but it uses a factory.
+// For more information see the [InCell()] function.
+func (_factory *ValidationFactory) InCell(name string, index int, v *Validation) *Validation {
+	return _factory.New().InCell(name, index, v)
+}
+
 // The Check function, through a factory, is similar to the Is function, however
 // with Check the Rules of the [Validator] parameter are not short-circuited,
 // which means that regardless of whether a previous rule was valid, all rules
@@ -108,6 +119,32 @@ func (_factory *ValidationFactory) InRow(name string, index int, v *Validation) 
 // For more information see the [Check()] function.
 func (_factory *ValidationFactory) Check(v Validator) *Validation {
 	return _factory.New().Check(v)
+}
+
+// [If](...) is similar to [Merge](...), but merge the [Validation] session
+// only when the condition is true, and returns the same [Validation] instance.
+// When the condition is false, no operation is performed and the original
+// instance is returned unchanged.
+//
+// See [Merge](...) for more information.
+func (_factory *ValidationFactory) If(condition bool, _validation *Validation) *Validation {
+	return _factory.New().If(condition, _validation)
+}
+
+// The Do function executes the given function with the current [Validation] instance
+// and returns the same instance.
+//
+// See [Validation.Do](...) for more information.
+func (_factory *ValidationFactory) Do(function func(val *Validation)) *Validation {
+	return _factory.New().Do(function)
+}
+
+// The When function executes the given function passing the [Validation] instance only
+// if the condition is true. When the condition is false, no operation is performed.
+//
+// See [Validation.When](...) for more information.
+func (_factory *ValidationFactory) When(condition bool, function func(val *Validation)) *Validation {
+	return _factory.New().When(condition, function)
 }
 
 // Create a new [Validation] session, through a factory, and add an error

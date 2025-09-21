@@ -169,3 +169,103 @@ func ExampleCheck() {
 	//   ]
 	// }
 }
+
+func ExampleInCell() {
+	// Example: Validating a slice of primitive values (strings)
+	tags := []string{"", "important", "urgent", ""}
+
+	val := Is(String("Project", "name").Not().Blank())
+
+	// Validate each tag in the slice using InCell
+	for i, tag := range tags {
+		val.InCell("tags", i, Is(String(tag, "tag").Not().Blank()))
+	}
+
+	if !val.Valid() {
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
+		fmt.Println(string(out))
+	}
+
+	// output: {
+	//   "tags[0]": [
+	//     "Tag can't be blank"
+	//   ],
+	//   "tags[3]": [
+	//     "Tag can't be blank"
+	//   ]
+	// }
+}
+
+func ExampleIf() {
+	mustBeAdmin := true
+	val := Is(String("", "username").Not().Blank()).
+		If(mustBeAdmin, Is(String("staff", "role").EqualTo("admin")))
+
+	if !val.Valid() {
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
+		fmt.Println(string(out))
+	}
+
+	// output: {
+	//   "role": [
+	//     "Role must be equal to \"admin\""
+	//   ],
+	//   "username": [
+	//     "Username can't be blank"
+	//   ]
+	// }
+}
+
+func ExampleDo() {
+	mustBeAdmin := true
+	val := Is(String("", "username").Not().Blank()).
+		Do(func(val *Validation) {
+			if mustBeAdmin {
+				val.Is(String("staff", "role").EqualTo("admin"))
+			}
+		})
+
+	if !val.Valid() {
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
+		fmt.Println(string(out))
+	}
+
+	// output: {
+	//   "role": [
+	//     "Role must be equal to \"admin\""
+	//   ],
+	//   "username": [
+	//     "Username can't be blank"
+	//   ]
+	// }
+}
+
+func ExampleWhen() {
+	mustBeAdmin := true
+	val := Is(String("", "username").Not().Blank()).
+		When(mustBeAdmin, func(val *Validation) {
+			val.Is(String("staff", "role").EqualTo("admin"))
+		})
+
+	if !val.Valid() {
+		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for
+		// documentation purposes to ensure the order of keys in the JSON output.
+		out, _ := json.MarshalIndent(val.Error(sortedErrorMarshalForDocs), "", "  ")
+		fmt.Println(string(out))
+	}
+
+	// output: {
+	//   "role": [
+	//     "Role must be equal to \"admin\""
+	//   ],
+	//   "username": [
+	//     "Username can't be blank"
+	//   ]
+	// }
+}

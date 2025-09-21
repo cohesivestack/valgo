@@ -1,42 +1,42 @@
 package valgo
 
-import (
-	"reflect"
-)
+import "reflect"
 
-// The Any validator's type that keeps its validator context.
-type ValidatorAny struct {
+// The Typed validator's type that keeps its validator context.
+// T can be any Go type (pointer, struct, slice, map, etc.).
+type ValidatorTyped[T any] struct {
 	context *ValidatorContext
 }
 
-// Receive a value to validate.
-//
-// The value can be any type;
+// Receive a value of type T to validate.
 //
 // Optionally, the function can receive a name and title, in that order, to be
-// displayed in the error messages. A value_%N` pattern is used as a name in the
+// displayed in the error messages. A value_%N pattern is used as a name in the
 // error messages if a name and title are not supplied; for example: value_0.
 // When the name is provided but not the title, then the name is humanized to be
 // used as the title as well; for example the name phone_number will be
 // humanized as Phone Number.
-func Any(value any, nameAndTitle ...string) *ValidatorAny {
-	return &ValidatorAny{context: NewContext(value, nameAndTitle...)}
+//
+// Example:
+//
+//	v.Is(v.Typed(user).Not().Nil())
+func Typed[T any](value T, nameAndTitle ...string) *ValidatorTyped[T] {
+	return &ValidatorTyped[T]{context: NewContext(value, nameAndTitle...)}
 }
 
 // Return the context of the validator. The context is useful to create a custom
 // validator by extending this validator.
-func (validator *ValidatorAny) Context() *ValidatorContext {
+func (validator *ValidatorTyped[T]) Context() *ValidatorContext {
 	return validator.context
 }
 
 // Invert the logical value associated with the next validator function.
 // For example:
 //
-//	// It will return false because `Not()` inverts the boolean value associated with the `Equal()` function
-//	Is(v.Any("a").Not().Equal("a")).Valid()
-func (validator *ValidatorAny) Not() *ValidatorAny {
+//	// It will return false because `Not()` inverts the boolean value associated with `EqualTo()`
+//	v.Is(v.Typed("a").Not().EqualTo("a")).Valid()
+func (validator *ValidatorTyped[T]) Not() *ValidatorTyped[T] {
 	validator.context.Not()
-
 	return validator
 }
 
@@ -50,42 +50,28 @@ func (validator *ValidatorAny) Not() *ValidatorAny {
 //	// This validator will pass because the string is equals "test".
 //	input := "test"
 //	isValid := v.Is(v.String(input).MinLength(5).Or().EqualTo("test")).Valid()
-func (validator *ValidatorAny) Or() *ValidatorAny {
+func (validator *ValidatorTyped[T]) Or() *ValidatorTyped[T] {
 	validator.context.Or()
-
-	return validator
-}
-
-// Validate if a value is equal to another. This function internally uses
-// the golang `==` operator.
-// For example:
-//
-//	status := "running"
-//	Is(v.Any(status).Equal("running"))
-//
-// DEPRECATED: 'any' is not safely comparable. Use the Comparable validator instead.
-// This function will be removed in Valgo v1.0.0.
-func (validator *ValidatorAny) EqualTo(value any, template ...string) *ValidatorAny {
-	validator.context.AddWithValue(
-		func() bool {
-			return validator.context.Value() == value
-		},
-		ErrorKeyEqualTo, value, template...)
-
 	return validator
 }
 
 // Validate if a value passes a custom function.
+// The function receives a typed T value, enabling compile-time type safety.
+//
 // For example:
 //
-//	status := ""
-//	Is(v.Any(status).Passing((v any) bool {
-//		return v == getNewStatus()
-//	})
-func (validator *ValidatorAny) Passing(function func(v any) bool, template ...string) *ValidatorAny {
+//	type Status string
+//	status := Status("running")
+//	isValid := v.Is(
+//	  v.Typed(status).Passing(func(s Status) bool {
+//	    return s == "running" || s == "paused"
+//	  }),
+//	).Valid()
+func (validator *ValidatorTyped[T]) Passing(function func(v T) bool, template ...string) *ValidatorTyped[T] {
 	validator.context.AddWithValue(
 		func() bool {
-			return function(validator.context.Value())
+			// Value is stored as interface{} inside the context; assert back to T.
+			return function(validator.context.Value().(T))
 		},
 		ErrorKeyPassing, validator.context.Value(), template...)
 
@@ -93,11 +79,14 @@ func (validator *ValidatorAny) Passing(function func(v any) bool, template ...st
 }
 
 // Validate if a value is nil.
+// Works for nil-able kinds: pointers, slices, maps, chans, funcs, and interfaces.
+// For non-nil-able types, this will return false.
+//
 // For example:
 //
-//	var status *string
-//	Is(v.Any(status).Nil())
-func (validator *ValidatorAny) Nil(template ...string) *ValidatorAny {
+//	var s *string
+//	v.Is(v.Typed(s).Nil())
+func (validator *ValidatorTyped[T]) Nil(template ...string) *ValidatorTyped[T] {
 	validator.context.AddWithValue(
 		func() bool {
 			val := validator.context.Value()

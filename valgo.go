@@ -37,10 +37,10 @@ func Factory(options FactoryOptions) *ValidationFactory {
 			LocaleCodeEs: getLocaleEs().merge(options.Locales[LocaleCodeEs]),
 		}
 
-		// Add unexisting locales
+		// Add nonexisting locales
 
-		// Determine what is the default locale, since an unexisting locale,
-		// can't be created with an unexisting default locale. In that case use
+		// Determine what is the default locale, since an nonexisting locale,
+		// can't be created with an nonexisting default locale. In that case use
 		// the Valgo default locale as fallback
 		_localeCodeDefault := factory.localeCodeDefault
 		if _, exists := factory.locales[_localeCodeDefault]; !exists {
@@ -107,6 +107,14 @@ func InRow(name string, index int, v *Validation) *Validation {
 	return New().InRow(name, index, v)
 }
 
+// The [InCell](...) function executes one or more validators in an indexed
+// namespace where the target is a scalar value (e.g., entries of a primitive
+// slice). The value names in the error result are prefixed with this indexed
+// namespace.
+func InCell(name string, index int, v *Validation) *Validation {
+	return New().InCell(name, index, v)
+}
+
 // The [Check](...) function is similar to the [Is](...) function, however with
 // [Check](...)` the Rules of the [Validator] parameter are not short-circuited,
 // which means that regardless of whether a previous rule was valid, all rules
@@ -117,6 +125,32 @@ func InRow(name string, index int, v *Validation) *Validation {
 // messages are added to the error result.
 func Check(validators ...Validator) *Validation {
 	return New().Check(validators...)
+}
+
+// The [If](...) function is similar to [Merge](...), but merge the [Validation] session
+// only when the condition is true, and returns the same [Validation] instance.
+// When the condition is false, no operation is performed and the original
+// instance is returned unchanged.
+//
+// See [Merge](...) for more information.
+func If(condition bool, _validation *Validation) *Validation {
+	return New().If(condition, _validation)
+}
+
+// The [Do](...) function executes the given function with the current
+// [Validation] instance and returns the same instance.
+//
+// See [Validation.Do](...) for more information.
+func Do(function func(val *Validation)) *Validation {
+	return New().Do(function)
+}
+
+// [When](...) executes the given function passing the [Validation] instance only
+// if the condition is true. When the condition is false, no operation is performed.
+//
+// See [Validation.When](...) for more information.
+func When(condition bool, function func(val *Validation)) *Validation {
+	return New().When(condition, function)
 }
 
 // Create a new [Validation] session and add an error message to it without

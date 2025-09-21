@@ -121,7 +121,7 @@ func TestFactoryAddNewLocaleEntries(t *testing.T) {
 	v = v.Is(String("a").Blank())
 	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 must be blank (XX)")
 
-	// For the unexisting keys, then should use the default language
+	// For the nonexisting keys, then should use the default language
 	v = v.Is(String("").Not().Empty())
 	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 can't be empty")
 
@@ -142,7 +142,7 @@ func TestFactoryAddNewLocaleEntries(t *testing.T) {
 	v = v.Is(String("a").Blank())
 	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 must be blank (XX)")
 
-	// For the unexisting keys, then should use the default language
+	// For the nonexisting keys, then should use the default language
 	v = v.Is(String("").Not().Empty())
 	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 no puede estar vacío")
 
@@ -150,7 +150,7 @@ func TestFactoryAddNewLocaleEntries(t *testing.T) {
 	assert.Contains(t, v.Errors()["value_3"].Messages(), "Value 3 debe estar vacío")
 
 	// Use new locale Entries but changing the default in the Factory to be the
-	// same new unexisting locale. That will use the Valgo default locale ("en")
+	// same new nonexisting locale. That will use the Valgo default locale ("en")
 	factory = Factory(FactoryOptions{
 		LocaleCodeDefault: "xx",
 		Locales: map[string]*Locale{
@@ -164,7 +164,7 @@ func TestFactoryAddNewLocaleEntries(t *testing.T) {
 	v = v.Is(String("a").Blank())
 	assert.Contains(t, v.Errors()["value_1"].Messages(), "Value 1 must be blank (XX)")
 
-	// For the unexisting keys, then should use the default language
+	// For the nonexisting keys, then should use the default language
 	v = v.Is(String("").Not().Empty())
 	assert.Contains(t, v.Errors()["value_2"].Messages(), "Value 2 can't be empty")
 
@@ -232,4 +232,98 @@ func TestFactoryCustomErrorMarshallJSON(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "overridden", jsonMapAtValidationLevel["errors"])
+}
+
+func TestFactoryIs(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory Is function
+	v := factory.Is(String("", "name").Not().Blank())
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestFactoryCheck(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory Check function
+	v := factory.Check(String("", "name").Not().Blank())
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestFactoryIn(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory In function
+	v := factory.In("address", Is(String("", "street").Not().Blank()))
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "address.street")
+	assert.Equal(t, "Street can't be blank", v.Errors()["address.street"].Messages()[0])
+}
+
+func TestFactoryInRow(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory InRow function
+	v := factory.InRow("addresses", 0, Is(String("", "street").Not().Blank()))
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "addresses[0].street")
+	assert.Equal(t, "Street can't be blank", v.Errors()["addresses[0].street"].Messages()[0])
+}
+
+func TestFactoryInCell(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory InCell function
+	v := factory.InCell("tags", 0, Is(String("", "tag").Not().Blank()))
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "tags[0]")
+	assert.Equal(t, "Tag can't be blank", v.Errors()["tags[0]"].Messages()[0])
+}
+
+func TestFactoryAddErrorMessage(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory AddErrorMessage function
+	v := factory.AddErrorMessage("field", "Custom error message")
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "field")
+	assert.Equal(t, "Custom error message", v.Errors()["field"].Messages()[0])
+}
+
+func TestFactoryIf(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory If function
+	v := factory.If(true, Is(String("", "name").Not().Blank()))
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestFactoryDo(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory Do function
+	v := factory.Do(func(val *Validation) {
+		val.Is(String("", "name").Not().Blank())
+	})
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestFactoryWhen(t *testing.T) {
+	factory := Factory(FactoryOptions{})
+
+	// Test factory When function
+	v := factory.When(true, func(val *Validation) {
+		val.Is(String("", "name").Not().Blank())
+	})
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
 }

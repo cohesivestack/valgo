@@ -74,11 +74,11 @@ func (validator *ValidatorBoolP[T]) EqualTo(value T, template ...string) *Valida
 //	activated := true
 //	Is(v.BoolP(&activated).True())
 func (validator *ValidatorBoolP[T]) True(template ...string) *ValidatorBoolP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isBoolTrue(*(validator.context.Value().(*T)))
 		},
-		ErrorKeyTrue, template...)
+		ErrorKeyTrue, validator.context.Value(), template...)
 
 	return validator
 }
@@ -89,11 +89,11 @@ func (validator *ValidatorBoolP[T]) True(template ...string) *ValidatorBoolP[T] 
 //	activated := false
 //	Is(v.BoolP(&activated).False())
 func (validator *ValidatorBoolP[T]) False(template ...string) *ValidatorBoolP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) != nil && isBoolFalse(*(validator.context.Value().(*T)))
 		},
-		ErrorKeyFalse, template...)
+		ErrorKeyFalse, validator.context.Value(), template...)
 
 	return validator
 }
@@ -106,11 +106,11 @@ func (validator *ValidatorBoolP[T]) False(template ...string) *ValidatorBoolP[T]
 //	*activated = false
 //	Is(v.BoolP(activated).FalseOrNil())
 func (validator *ValidatorBoolP[T]) FalseOrNil(template ...string) *ValidatorBoolP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) == nil || isBoolFalse(*(validator.context.Value().(*T)))
 		},
-		ErrorKeyFalse, template...)
+		ErrorKeyFalse, validator.context.Value(), template...)
 
 	return validator
 }
@@ -121,11 +121,11 @@ func (validator *ValidatorBoolP[T]) FalseOrNil(template ...string) *ValidatorBoo
 //	var activated *bool
 //	Is(v.BoolP(activated).Nil())
 func (validator *ValidatorBoolP[T]) Nil(template ...string) *ValidatorBoolP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return validator.context.Value().(*T) == nil
 		},
-		ErrorKeyNil, template...)
+		ErrorKeyNil, validator.context.Value(), template...)
 
 	return validator
 }
@@ -138,11 +138,11 @@ func (validator *ValidatorBoolP[T]) Nil(template ...string) *ValidatorBoolP[T] {
 //		return *v == someBoolFunction()
 //	})
 func (validator *ValidatorBoolP[T]) Passing(function func(v *T) bool, template ...string) *ValidatorBoolP[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value().(*T))
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }

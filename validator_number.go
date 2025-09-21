@@ -198,7 +198,7 @@ func (validator *ValidatorNumber[T]) Between(min T, max T, template ...string) *
 			return isNumberBetween(validator.context.Value().(T), min, max)
 		},
 		ErrorKeyBetween,
-		map[string]any{"title": validator.context.title, "min": min, "max": max},
+		map[string]any{"title": validator.context.title, "min": min, "max": max, "value": validator.context.Value()},
 		template...)
 
 	return validator
@@ -210,11 +210,11 @@ func (validator *ValidatorNumber[T]) Between(min T, max T, template ...string) *
 //
 //	Is(v.Number(0).Zero())
 func (validator *ValidatorNumber[T]) Zero(template ...string) *ValidatorNumber[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return isNumberZero(validator.context.Value().(T))
 		},
-		ErrorKeyZero, template...)
+		ErrorKeyZero, validator.context.Value(), template...)
 
 	return validator
 }
@@ -227,11 +227,11 @@ func (validator *ValidatorNumber[T]) Zero(template ...string) *ValidatorNumber[T
 //		return v == getAllowedQuantity()
 //	})
 func (validator *ValidatorNumber[T]) Passing(function func(v T) bool, template ...string) *ValidatorNumber[T] {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value().(T))
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }

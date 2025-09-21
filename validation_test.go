@@ -254,6 +254,69 @@ func TestValidationInRowDeeply(t *testing.T) {
 		v.Errors()["addresses[1].phones[1].number"].Messages()[0])
 }
 
+func TestValidationInCell(t *testing.T) {
+
+	v := InCell("names", 0,
+		Is(String("", "name").Not().Blank()),
+	).InCell("names", 1,
+		Is(String("", "name").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Equal(t,
+		"Name can't be blank",
+		v.Errors()["names[0]"].Messages()[0])
+	assert.Equal(t,
+		"Name can't be blank",
+		v.Errors()["names[1]"].Messages()[0])
+}
+
+func TestValidationInCellDeeply(t *testing.T) {
+
+	v := InCell("addresses", 0,
+		Is(String("", "name").Not().Blank()).
+			Is(String("", "street").Not().Blank()).
+			In("phone",
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())),
+	).InCell("addresses", 1,
+		Is(String("", "name").Not().Blank()).
+			Is(String("", "street").Not().Blank()).
+			In("phone",
+				Is(String("", "code").Not().Empty()).
+					Is(String("", "number").Not().Empty())),
+	)
+
+	assert.False(t, v.Valid())
+
+	assert.Len(t, v.Errors()["addresses[0]"].Messages(), 4)
+	assert.Len(t, v.Errors()["addresses[1]"].Messages(), 4)
+
+	assert.Contains(t,
+		v.Errors()["addresses[0]"].Messages(),
+		"Name can't be blank")
+	assert.Contains(t,
+		v.Errors()["addresses[0]"].Messages(),
+		"Street can't be blank")
+	assert.Contains(t,
+		v.Errors()["addresses[0]"].Messages(),
+		"Code can't be empty")
+	assert.Contains(t,
+		v.Errors()["addresses[0]"].Messages(),
+		"Number can't be empty")
+	assert.Contains(t,
+		v.Errors()["addresses[1]"].Messages(),
+		"Name can't be blank")
+	assert.Contains(t,
+		v.Errors()["addresses[1]"].Messages(),
+		"Street can't be blank")
+	assert.Contains(t,
+		v.Errors()["addresses[1]"].Messages(),
+		"Code can't be empty")
+	assert.Contains(t,
+		v.Errors()["addresses[1]"].Messages(),
+		"Number can't be empty")
+}
+
 func TestLastValidationIsNotAlteringPreviousOne(t *testing.T) {
 
 	// With validation
@@ -531,4 +594,58 @@ func TestCheckFunctionWithMultipleValidators(t *testing.T) {
 	assert.False(t, validationAllInvalid.Valid())
 	assert.Contains(t, validationAllInvalid.Errors(), "field1", "Error map should contain field1")
 	assert.Contains(t, validationAllInvalid.Errors(), "field2", "Error map should contain field2")
+}
+
+func TestValidationIf(t *testing.T) {
+	// Test If with true condition - should execute function
+	v := Is(String("test", "name").Not().Blank()).
+		Is(String("", "phone").Not().Blank()).
+		Is(String("", "email").EqualTo("test@test.com")).
+		If(true, Is(String("", "email").Not().Blank()))
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "email")
+	assert.Contains(t, v.Errors(), "phone")
+	assert.Equal(t, "Phone can't be blank", v.Errors()["phone"].Messages()[0])
+	assert.Equal(t, "Email must be equal to \"test@test.com\"", v.Errors()["email"].Messages()[0])
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[1])
+}
+
+func TestValidationIfWithFalseCondition(t *testing.T) {
+	// Test If with false condition - should not execute function
+	v := Is(String("test", "name").Not().Blank()).
+		If(false, Is(String("", "email").Not().Blank()))
+	assert.True(t, v.Valid())
+	assert.NotContains(t, v.Errors(), "email")
+}
+
+func TestValidationWhen(t *testing.T) {
+	// Test When with true condition - should execute function
+	v := Is(String("test", "name").Not().Blank()).
+		When(true, func(val *Validation) {
+			val.Is(String("", "email").Not().Blank())
+		})
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "email")
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+
+	// Test When with false condition - should not execute function
+	v2 := Is(String("test", "name").Not().Blank()).
+		When(false, func(val *Validation) {
+			val.Is(String("", "email").Not().Blank())
+		})
+	assert.True(t, v2.Valid())
+	assert.NotContains(t, v2.Errors(), "email")
+}
+
+func TestValidationDo(t *testing.T) {
+	isAdmin := false
+	v := Is(String("test", "name").Not().Blank()).
+		Do(func(val *Validation) {
+			if !isAdmin {
+				val.Is(String("", "role").Not().Blank())
+			}
+		})
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "role")
+	assert.Equal(t, "Role can't be blank", v.Errors()["role"].Messages()[0])
 }

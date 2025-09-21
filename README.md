@@ -44,7 +44,9 @@ Valgo is in its early stages, so backward compatibility won't be guaranteed unti
 
 Valgo is used in production by [Statsignal](https://statsignal.dev), but we want community feedback before releasing version 1.
 
-## 🚨 Breaking Change in v0.6.0 — String Length Validation
+## 🚨 Breaking Changes
+
+### v0.6.0 — String Length Validation
 
 Starting from **v0.6.0**, all string length validators now measure length in **characters (runes)** instead of bytes.
 This means that multi-byte UTF-8 characters (such as Japanese/Chinese/Korean characters, accented letters, and other international characters) are now counted as one character each, making the validators more intuitive for international (i18n) applications.
@@ -52,6 +54,52 @@ This means that multi-byte UTF-8 characters (such as Japanese/Chinese/Korean cha
 ### What Changed
 
 * `MaxLength`, `MinLength`, `OfLength`, and `OfLengthBetween` now use `utf8.RuneCountInString`.
+
+### v0.7.0 — Numeric Validators: Codegen removed → one generic per family
+
+We removed code generation for **numeric validators** and replaced it with **type-safe generics**. Each numeric family now has **one generic validator type** that replaces all the previous width-specific types.
+
+#### Replacements (numeric families)
+
+**Signed integers**
+
+* **New:** `ValidatorInt[T ~int | ~int8 | ~int16 | ~int32 | ~int64]`
+  **Replaces:** `ValidatorInt`, `ValidatorInt8`, `ValidatorInt16`, `ValidatorInt32`, `ValidatorInt64`
+
+**Unsigned integers**
+
+* **New:** `ValidatorUint[T ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64]`
+  **Replaces:** `ValidatorUint`, `ValidatorUint8`, `ValidatorUint16`, `ValidatorUint32`, `ValidatorUint64`
+
+**Floats**
+
+* **New:** `ValidatorFloat[T ~float32 | ~float64]`
+  **Replaces:** `ValidatorFloat32`, `ValidatorFloat64`
+
+#### Impact (when you declare variables/params)
+
+Most call sites don’t change—constructors like `v.Int16(...)`, `v.Uint64(...)`, `v.Float32(...)` **still exist** and now return the generic validators.
+You only need to update **declared types** of variables/parameters.
+
+**Before (pre-v0.7.0)**
+
+```go
+age := int16(10)
+var validatorAge ValidatorInt16
+validatorAge = v.Int16(age).EqualTo(18)
+```
+
+**After (v0.7.0+)**
+
+```go
+age := int16(10)
+var validatorAge *ValidatorInt[int16]
+validatorAge = v.Int16(age).EqualTo(18)
+```
+
+#### Not affected
+
+* Non-numeric validators (e.g., string/time/etc.) are unchanged.
 
 ### Migration
 
@@ -91,7 +139,11 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
   - [`Validation.IsValid(...)` function](#validationisvalid-function)
   - [`In(...)` function](#in-function)
   - [`InRow(...)` function](#inrow-function)
+  - [`InCell(...)` function](#incell-function)
   - [`Check(...)` function](#check-function)
+  - [`If(...)` function](#if-function)
+  - [`Do(...)` function](#do-function)
+  - [`When(...)` function](#when-function)
   - [`AddErrorMessage(...)` function](#adderrormessage-function)
   - [Merging two `Validation` sessions with `Validation.Merge( ... )`](#merging-two-validation-sessions-with-validationmerge--)
   - [`New()` function](#new-function)
@@ -107,11 +159,19 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
   - [String pointer validator](#string-pointer-validator)
   - [Number validator](#number-validator)
   - [Number pointer validator](#number-pointer-validator)
-  - [Number specific type validators](#number-specific-type-validators)
+  - [Int validators](#int-validators)
+  - [Int pointer validator](#int-pointer-validator)
+  - [Uint validators](#uint-validators)
+  - [Uint pointer validator](#uint-pointer-validator)
+  - [Float validators](#float-validators)
+  - [Float pointer validator](#float-pointer-validator)
   - [Bool validator](#bool-validator)
   - [Boolean pointer validator](#boolean-pointer-validator)
   - [Time validator](#time-validator)
   - [Time pointer validator](#time-pointer-validator)
+  - [Comparable validator](#comparable-validator)
+  - [Comparable pointer validator](#comparable-pointer-validator)
+  - [Typed validator](#typed-validator)
   - [Any validator](#any-validator)
   - [Custom type validators](#custom-type-validators)
 - [Or Operator in Validators](#or-operator-in-validators)
@@ -153,6 +213,7 @@ There are multiple functions to create a `Validation` session, depending on the 
   * `Is(...)`,
   * `In(...)`,
   * `InRow(...)`,
+  * `InCell(...)`,
   * `Check(...)`,
   * `AddErrorMessage(...)`
 
@@ -194,7 +255,7 @@ output:
 
 ## `Validation.Valid()` function
 
-A `Validation` session provide this function, which returns either `true` if all their validators are valid or `false` if any one of them is invalid.
+A `Validation` session provides this function, which returns either `true` if all their validators are valid or `false` if any one of them is invalid.
 
 In the following example, even though the Validator for `age` is valid, the `Validator` for `status` is invalid, making the entire `Validator` session invalid.
 
@@ -220,7 +281,7 @@ output:
 
 ## `Validation.IsValid(...)` function
 
-This functions allows to check if an specific value in a `Validation` session is valid or not. This is very useful for conditional logic.
+This function allows checking if a specific value in a `Validation` session is valid or not. This is very useful for conditional logic.
 
 The following example prints an error message if the `age` value is invalid.
 
@@ -335,6 +396,39 @@ output:
 }
 ```
 
+## `InCell(...)` function
+
+The `InCell(...)` function executes one or more validators in an indexed namespace where the target is a scalar value (e.g., entries of a primitive slice). The value names in the error result are prefixed with this indexed namespace. It is useful for validating lists of primitive values.
+
+In the following example, we validate a list of tag names. The error results can distinguish the errors for each list entry.
+
+```go
+tags := []string{"", ""}
+
+val := v.New()
+for i, tag := range tags {
+  val.InCell("tags", i, v.Is(
+    v.String(tag, "name").Not().Blank(),
+  ))
+}
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
+}
+```
+output:
+```json
+{
+  "tags[0]": [
+    "Name can't be blank"
+  ],
+  "tags[1]": [
+    "Name can't be blank"
+  ]
+}
+```
+
 ## `Check(...)` function
 
 The `Check(...)` function, similar to the `Is(...)` function, however with `Check(...)` the Rules of the Validator parameter are not short-circuited, which means that regardless of whether a previous rule was valid, all rules are checked.
@@ -356,6 +450,63 @@ output:
     "Full name can't be blank",
 	  "Full name must have a length between \"4\" and \"20\""
   ]
+}
+```
+
+## `If(...)` function
+
+The `If(...)` function is similar to `Merge(...)`, but merges the `Validation` session only when the condition is true, and returns the same `Validation` instance. When the condition is false, no operation is performed and the original instance is returned unchanged.
+
+This function allows you to write validation code in a more fluent and compact way, especially useful for conditional merging of validation sessions without the need for separate if statements or complex branching logic.
+
+```go
+
+// Only merge admin validation if user is admin
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  If(isAdmin, v.Is(v.String(role, "role").EqualTo("admin")))
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
+}
+```
+
+## `Do(...)` function
+
+The `Do(...)` function executes the given function with the current `Validation` instance and returns the same instance. This allows you to extend a validation chain with additional or conditional rules in a concise way.
+
+```go
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  Do(func(val *v.Validation) {
+    if isAdmin {
+      val.Is(v.String(role, "role").EqualTo("admin"))
+    }
+  })
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
+}
+```
+
+## `When(...)` function
+
+The `When(...)` function is similar to `Do(...)`, but executes the given function only when the condition is true, and returns the same `Validation` instance. When the condition is false, no operation is performed and the original instance is returned unchanged.
+
+This function provides a more concise way to add conditional validation logic compared to using `Do(...)` with an internal if statement.
+
+```go
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  When(isAdmin, func(val *v.Validation) {
+    val.Is(v.String(role, "role").EqualTo("admin"))
+  })
+
+if !val.Valid() {
+  out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+  fmt.Println(string(out))
 }
 ```
 
@@ -540,6 +691,36 @@ customFunc := func(e *Error) ([]byte, error) {
 // Using custom marshaling with any of the functions
 err := val.ToError(customFunc)
 errInfo := val.ToValgoError(customFunc)
+```
+
+### Additional JSON marshaling methods
+
+Valgo provides additional JSON marshaling methods for enhanced error output:
+
+#### `MarshalJSONIndent()` function
+
+The `MarshalJSONIndent()` function provides custom JSON indentation for error output:
+
+```go
+val := v.Is(v.String("", "name").Not().Blank())
+
+if err := val.ToValgoError(); err != nil {
+    jsonData, _ := err.MarshalJSONIndent("  ", "  ")
+    fmt.Println(string(jsonData))
+}
+```
+
+#### `MarshalJSONPretty()` function
+
+The `MarshalJSONPretty()` function provides pretty-printed JSON output for better readability:
+
+```go
+val := v.Is(v.String("", "name").Not().Blank())
+
+if err := val.ToValgoError(); err != nil {
+    jsonData, _ := err.MarshalJSONPretty()
+    fmt.Println(string(jsonData))
+}
 ```
 
 ## Custom error message template
@@ -925,32 +1106,274 @@ x := 0;     v.Is(v.NumberP(&x).ZeroOrNil())
 var x *int; v.Is(v.NumberP(x).Nil())
 ```
 
-## Number specific type validators
+## Int validators
 
-While the validator `Number` works with all golang number types, Valgo also has a validator for each type. You can use them if you prefer or need a stronger safe type code.
+The `ValidatorInt[T]` provides functions for setting validation rules for int, int8, int16, int32, int64, and rune types, or custom types based on them.
 
-Following is a list of functions for every specific number type validator, along with their equivalent pointer validators.
+Below is a valid example for every Int validator rule.
 
 ```go
-Int(v int)         IntP(v *int)
-Int8(v int8)       Int8P(v *int8)
-Int16(v int16)     Int16P(v *int16)
-Int32(v int32)     Int32P(v *int32)
-Int64(v int64)     Int64P(v *int64)
-Uint(v uint)       UintP(v *uint)
-Uint8(v uint8)     Uint8P(v *uint8)
-Uint16(v uint16)   Uint16P(v *uint16)
-Uint32(v uint32)   Uint32P(v *uint32)
-Uint64(v uint64)   Uint64P(v *uint64)
-Float32(v float32) Float32P(v *float32)
-Float64(v float64) Float64P(v *float64)
-Byte(v byte)       ByteP(v *byte)
-Rune(v byte)       RuneP(v *byte)
+// Basic numeric validations
+age := int(25)
+v.Is(v.Int(age).EqualTo(25))
+v.Is(v.Int(age).GreaterThan(18))
+v.Is(v.Int(age).LessThan(65))
+v.Is(v.Int(age).Between(18, 65))
+
+// Zero, positive, and negative validations
+v.Is(v.Int(0).Zero())
+v.Is(v.Int(5).Positive())
+v.Is(v.Int(-3).Negative())
+
+// Custom validation and slice checking
+v.Is(v.Int(age).Passing(func(a int) bool { return a >= 18 }))
+v.Is(v.Int(age).InSlice([]int{18, 25, 30, 35}))
+
+// Works with all int variants
+v.Is(v.Int8(int8(10)).GreaterThan(int8(5)))
+v.Is(v.Int16(int16(100)).LessThan(int16(200)))
+v.Is(v.Int32(int32(1000)).Between(int32(500), int32(1500)))
+v.Is(v.Int64(int64(10000)).EqualTo(int64(10000)))
+v.Is(v.Rune('A').EqualTo('A'))
+
+// Works with custom int types
+type UserID int
+userID := UserID(123)
+v.Is(v.Int(userID).GreaterThan(UserID(0)))
 ```
 
-These validators have the same rule functions as the `Number` validator.
+## Int pointer validator
 
-Similar to the `Number` validator, custom types can be passed based on the specific number type.
+The `ValidatorIntP[T]` provides functions for setting validation rules for int, int8, int16, int32, int64, and rune pointer types, or custom types based on them.
+
+Below is a valid example for every Int pointer validator rule.
+
+```go
+// Basic numeric validations
+age := int(25)
+v.Is(v.IntP(&age).EqualTo(25))
+v.Is(v.IntP(&age).GreaterThan(18))
+v.Is(v.IntP(&age).LessThan(65))
+v.Is(v.IntP(&age).Between(18, 65))
+
+// Zero, positive, and negative validations
+zero := int(0)
+positive := int(5)
+negative := int(-3)
+v.Is(v.IntP(&zero).Zero())
+v.Is(v.IntP(&positive).Positive())
+v.Is(v.IntP(&negative).Negative())
+
+// Custom validation and slice checking
+v.Is(v.IntP(&age).Passing(func(a *int) bool { return *a >= 18 }))
+v.Is(v.IntP(&age).InSlice([]int{18, 25, 30, 35}))
+
+// Nil and zero-or-nil validations
+var nilInt *int
+v.Is(v.IntP(nilInt).Nil())
+
+zeroInt := int(0)
+v.Is(v.IntP(&zeroInt).ZeroOrNil())
+
+// Works with all int variants
+int8Val := int8(10)
+v.Is(v.Int8P(&int8Val).GreaterThan(int8(5)))
+
+int16Val := int16(100)
+v.Is(v.Int16P(&int16Val).LessThan(int16(200)))
+
+int32Val := int32(1000)
+v.Is(v.Int32P(&int32Val).Between(int32(500), int32(1500)))
+
+int64Val := int64(10000)
+v.Is(v.Int64P(&int64Val).EqualTo(int64(10000)))
+
+runeVal := rune('A')
+v.Is(v.RuneP(&runeVal).EqualTo('A'))
+
+// Works with custom int pointer types
+type UserID int
+userID := UserID(123)
+v.Is(v.IntP(&userID).GreaterThan(UserID(0)))
+```
+
+## Uint validators
+
+The `ValidatorUint[T]` provides functions for setting validation rules for uint, uint8, uint16, uint32, uint64, and byte types, or custom types based on them.
+
+Below is a valid example for every Uint validator rule.
+
+```go
+// Basic numeric validations
+count := uint(10)
+v.Is(v.Uint(count).EqualTo(10))
+v.Is(v.Uint(count).GreaterThan(5))
+v.Is(v.Uint(count).LessThan(20))
+v.Is(v.Uint(count).Between(5, 20))
+
+// Zero validation (uint values are always >= 0)
+v.Is(v.Uint(0).Zero())
+
+// Custom validation and slice checking
+v.Is(v.Uint(count).Passing(func(c uint) bool { return c > 0 }))
+v.Is(v.Uint(count).InSlice([]uint{5, 10, 15, 20}))
+
+// Works with all uint variants
+v.Is(v.Uint8(uint8(10)).GreaterThan(uint8(5)))
+v.Is(v.Uint16(uint16(100)).LessThan(uint16(200)))
+v.Is(v.Uint32(uint32(1000)).Between(uint32(500), uint32(1500)))
+v.Is(v.Uint64(uint64(10000)).EqualTo(uint64(10000)))
+v.Is(v.Byte(byte(65)).EqualTo(byte(65)))
+
+// Works with custom uint types
+type Count uint
+count := Count(5)
+v.Is(v.Uint(count).GreaterThan(Count(0)))
+```
+
+## Uint pointer validator
+
+The `ValidatorUintP[T]` provides functions for setting validation rules for uint, uint8, uint16, uint32, uint64, and byte pointer types, or custom types based on them.
+
+Below is a valid example for every Uint pointer validator rule.
+
+```go
+// Basic numeric validations
+count := uint(10)
+v.Is(v.UintP(&count).EqualTo(10))
+v.Is(v.UintP(&count).GreaterThan(5))
+v.Is(v.UintP(&count).LessThan(20))
+v.Is(v.UintP(&count).Between(5, 20))
+
+// Zero validation (uint values are always >= 0)
+zero := uint(0)
+v.Is(v.UintP(&zero).Zero())
+
+// Custom validation and slice checking
+v.Is(v.UintP(&count).Passing(func(c *uint) bool { return *c > 0 }))
+v.Is(v.UintP(&count).InSlice([]uint{5, 10, 15, 20}))
+
+// Nil and zero-or-nil validations
+var nilUint *uint
+v.Is(v.UintP(nilUint).Nil())
+
+zeroUint := uint(0)
+v.Is(v.UintP(&zeroUint).ZeroOrNil())
+
+// Works with all uint variants
+uint8Val := uint8(10)
+v.Is(v.Uint8P(&uint8Val).GreaterThan(uint8(5)))
+
+uint16Val := uint16(100)
+v.Is(v.Uint16P(&uint16Val).LessThan(uint16(200)))
+
+uint32Val := uint32(1000)
+v.Is(v.Uint32P(&uint32Val).Between(uint32(500), uint32(1500)))
+
+uint64Val := uint64(10000)
+v.Is(v.Uint64P(&uint64Val).EqualTo(uint64(10000)))
+
+byteVal := byte(65)
+v.Is(v.ByteP(&byteVal).EqualTo(byte(65)))
+
+// Works with custom uint pointer types
+type Count uint
+count := Count(5)
+v.Is(v.UintP(&count).GreaterThan(Count(0)))
+```
+
+## Float validators
+
+The `ValidatorFloat[T]` provides functions for setting validation rules for `float32` and `float64` types, or custom types based on them.
+
+Below is a valid example for every Float validator rule.
+
+```go
+// Basic numeric validations
+price := 19.99
+v.Is(v.Float64(price).EqualTo(19.99))
+v.Is(v.Float64(price).GreaterThan(10.0))
+v.Is(v.Float64(price).LessThan(50.0))
+v.Is(v.Float64(price).Between(10.0, 50.0))
+
+// Zero, positive, and negative validations
+v.Is(v.Float64(0.0).Zero())
+v.Is(v.Float64(5.5).Positive())
+v.Is(v.Float64(-3.14).Negative())
+
+// Special float validations
+v.Is(v.Float64(math.NaN()).NaN())
+v.Is(v.Float64(math.Inf(1)).Infinite())
+v.Is(v.Float64(3.14).Finite())
+
+// Custom validation and slice checking
+v.Is(v.Float64(price).Passing(func(p float64) bool { return p > 0 }))
+v.Is(v.Float64(price).InSlice([]float64{9.99, 19.99, 29.99}))
+
+// Work with Float32 variant
+v.Is(v.Float32(float32(0.0)).Zero())
+v.Is(v.Float32(float32(5.5)).Positive())
+v.Is(v.Float32(float32(-3.14)).Negative())
+
+// Works with custom float types
+type Price float64
+price := Price(29.99)
+v.Is(v.Float64(price).GreaterThan(Price(20.0)))
+```
+
+## Float pointer validator
+
+The `ValidatorFloatP[T]` provides functions for setting validation rules for float32 and float64 pointer types, or custom types based on them.
+
+Below is a valid example for every Float pointer validator rule.
+
+```go
+// Basic numeric validations
+price := 19.99
+v.Is(v.Float64P(&price).EqualTo(19.99))
+v.Is(v.Float64P(&price).GreaterThan(10.0))
+v.Is(v.Float64P(&price).LessThan(50.0))
+v.Is(v.Float64P(&price).Between(10.0, 50.0))
+
+// Zero, positive, and negative validations
+zero := 0.0
+positive := 5.5
+negative := -3.14
+v.Is(v.Float64P(&zero).Zero())
+v.Is(v.Float64P(&positive).Positive())
+v.Is(v.Float64P(&negative).Negative())
+
+// Special float validations
+nan := math.NaN()
+inf := math.Inf(1)
+finite := 3.14
+v.Is(v.Float64P(&nan).NaN())
+v.Is(v.Float64P(&inf).Infinite())
+v.Is(v.Float64P(&finite).Finite())
+
+// Custom validation and slice checking
+v.Is(v.Float64P(&price).Passing(func(p *float64) bool { return *p > 0 }))
+v.Is(v.Float64P(&price).InSlice([]float64{9.99, 19.99, 29.99}))
+
+// Nil and zero-or-nil validations
+var nilFloat *float64
+v.Is(v.Float64P(nilFloat).Nil())
+
+zeroFloat := 0.0
+v.Is(v.Float64P(&zeroFloat).ZeroOrNil())
+
+// Works with all float variants
+float32Val := float32(3.14)
+v.Is(v.Float32P(&float32Val).Positive())
+
+float64Val := 2.718
+v.Is(v.Float64P(&float64Val).Positive())
+
+// Works with custom float pointer types
+type Price float64
+price := Price(29.99)
+v.Is(v.Float64P(&price).GreaterThan(Price(20.0)))
+```
 
 ## Bool validator
 
@@ -1024,6 +1447,103 @@ var x *time.Time; v.Is(v.TimeP(x).Nil())
 x = new(time.Time); v.Is(v.TimeP(x).NilOrZero())
 ```
 
+## Comparable validator
+
+The `ValidatorComparable[T]` provides functions for setting validation rules for any Go type that implements the Go `comparable` constraint. This validator is optimized for equality comparisons and slice operations with compile-time type safety.
+
+Below is a valid example for every Comparable validator rule.
+
+```go
+// Basic equality comparison
+status := "running"
+v.Is(v.Comparable(status).EqualTo("running"))
+
+// Custom validation function with type safety
+type Status string
+status := Status("running")
+v.Is(v.Comparable(status).Passing(func(s Status) bool {
+    return s == "running" || s == "paused"
+}))
+
+// Check if value exists in a slice
+status := "idle"
+validStatuses := []string{"idle", "paused", "stopped"}
+v.Is(v.Comparable(status).InSlice(validStatuses))
+
+// Works with custom comparable types
+type User struct {
+  ID int
+}
+userA := User{ID: 123}
+userB := User{ID: 123}
+v.Is(v.Comparable(userA).EqualTo(userB))
+```
+
+## Comparable pointer validator
+
+The `ValidatorComparableP[T]` provides functions for setting validation rules for any Go type pointer that implements the `comparable` constraint. This validator is optimized for equality comparisons and slice operations with compile-time type safety.
+
+Below is a valid example for every Comparable pointer validator rule.
+
+```go
+// Basic equality comparison
+status := "running"
+v.Is(v.ComparableP(&status).EqualTo("running"))
+
+// Custom validation function with type safety
+type Status string
+status := Status("running")
+v.Is(v.ComparableP(&status).Passing(func(s *Status) bool {
+    return *s == "running" || *s == "paused"
+}))
+
+// Check if value exists in a slice
+status := "idle"
+validStatuses := []string{"idle", "paused", "stopped"}
+v.Is(v.ComparableP(&status).InSlice(validStatuses))
+
+// Nil validation
+var nilStatus *string
+v.Is(v.ComparableP(nilStatus).Nil())
+
+// Works with custom comparable pointer types
+type User struct {
+    ID int
+}
+userA := &User{ID: 123}
+userB := User{ID: 123}
+v.Is(v.ComparableP(userA).EqualTo(userB))
+```
+
+## Typed validator
+
+The `ValidatorTyped[T]` provides functions for setting validation rules for any Go type with compile-time type safety. This is a type-safe alternative to the `Any` validator, addressing type safety concerns.
+
+Below is a valid example for every Typed validator rule.
+
+```go
+// Type-safe custom validation function
+type Status string
+status := Status("running")
+v.Is(v.Typed(status).Passing(func(s Status) bool {
+    return s == "running" || s == "paused"
+}))
+
+// Nil validation for pointer types
+var s *string
+v.Is(v.Typed(s).Nil())
+
+// Works with any Go type
+type User struct {
+    Name string
+    Age  int
+}
+user := User{"John", 30}
+v.Is(v.Typed(user).Passing(func(u User) bool {
+    return u.Age >= 18
+}))
+```
+
 ## Any validator
 
 With the Any validator, you can set validation rules for any value or pointer.
@@ -1031,37 +1551,21 @@ With the Any validator, you can set validation rules for any value or pointer.
 Below is a valid example of every Any validator rule.
 
 ```go
-v.Is(v.Any("react").EqualTo("react"))
-v.Is(v.Any("svelte").Passing(func(val *bool) bool { return val == "svelte" }))
+v.Is(v.Any("svelte").Passing(func(val any) bool { return val == "svelte" }))
 var x *bool; v.Is(v.Any(x).Nil())
 ```
 
-For the `EqualTo(v any)` rule function, the parameter type must match the type used by the `Any()` function, otherwise it will be invalid. In the following example, since the value passed to the `Any(...)` function is `int`, and `EqualTo(...)` compares it with int64, the validation is invalid.
+**EqualTo (DEPRECATED)**
+`any` is not safely comparable. Do not use `EqualTo` on `ValidatorAny`; use `EqualTo` on `ValidatorComparable` instead. `EqualTo` on `ValidatorAny` will be removed in Valgo v1.0.0.
 
 ```go
-valid := v.Is(v.Any(10).EqualTo(int64(10))).Valid()
-fmt.Println(valid)
-```
-output
-```
-false
+v.Is(v.Any("react").EqualTo("react"))
 ```
 
-If a pointer is used, the same pointer must be passed to `EqualTo(v any)` as it is passed to `Any(v any)`, in order to get a valid validation. The following example illustrates it.
-
-```go
-// Valid since the same pointers are compared
-numberA := 10
-v.Is(v.Any(&numberA).EqualTo(&numberA)).Valid()
-
-// Invalid since different pointers are compared
-numberB := 10
-v.Is(v.Any(&numberA).EqualTo(&numberB)).Valid()
-```
 
 ## Custom type validators
 
-All golang validators allow to pass a custom type based on its value type. Bellow some valid examples.
+All golang validators allow to pass a custom type based on its value type. Below some valid examples.
 
 ```go
 type Status string
@@ -1075,6 +1579,19 @@ val = v.Is(v.Int(level).LessThan(Level(2)))
 type Stage int64
 var stage Stage = 2
 val := v.Is(v.NumberP(&stage).GreaterThan(Stage(1)))
+
+// Using the new type-safe validators
+type UserID int
+userID := UserID(123)
+val = v.Is(v.Int(userID).GreaterThan(UserID(0)))
+
+type Price float32
+price := Price(19.99)
+val = v.Is(v.Float32(price).Positive())
+
+type Status string
+status := Status("running")
+val = v.Is(v.Comparable(status).EqualTo(Status("running")))
 ```
 
 # Or Operator in Validators
@@ -1255,7 +1772,7 @@ output:
   - `FalseOrNil`
   - `Nil`
 
-- `Number` and `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Float32`, `Float64`, `Byte`, `Rune` - for number pointer
+- `Number` - for number types `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Float32`, `Float64`, `Byte`, `Rune`
   - `EqualTo`
   - `GreaterThan`
   - `GreaterOrEqualTo`
@@ -1266,7 +1783,7 @@ output:
   - `InSlice`
   - `Passing`
   
-- `NumberP` and `IntP`, `Int8P`, `Int16P`, `Int32P`, `Int64P`, `UintP`, `Uint8P`, `Uint16P`, `Uint32P`, `Uint64P`, `Float32P`, `Float64P`, `ByteP`, `RuneP` - for number pointer
+- `NumberP` - for number pointer `IntP`, `Int8P`, `Int16P`, `Int32P`, `Int64P`, `UintP`, `Uint8P`, `Uint16P`, `Uint32P`, `Uint64P`, `Float32P`, `Float64P`, `ByteP`, `RuneP`
   - `EqualTo`
   - `GreaterThan`
   - `GreaterOrEqualTo`
@@ -1304,8 +1821,109 @@ output:
   - `NilOrZero`
 
 - `Any` validator
+  - `EqualTo` (Deprecated)
+  - `Passing`
+  - `Nil`
+
+- `Comparable` validator - for `comparable` types
   - `EqualTo`
   - `Passing`
+  - `InSlice`
+
+- `ComparableP` validator - for `comparable` pointer types
+  - `EqualTo`
+  - `Passing`
+  - `InSlice`
+  - `Nil`
+
+- `Typed` validator - for `any` Go type with type safety
+  - `Passing`
+  - `Nil`
+
+- `Float` validator - for `float32` and `float64` types
+  - `EqualTo`
+  - `GreaterThan`
+  - `GreaterOrEqualTo`
+  - `LessThan`
+  - `LessOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Positive`
+  - `Negative`
+  - `Passing`
+  - `InSlice`
+  - `NaN`
+  - `Infinite`
+  - `Finite`
+
+- `FloatP` validator - for `float32` and `float64` pointer types
+  - `EqualTo`
+  - `GreaterThan`
+  - `GreaterOrEqualTo`
+  - `LessThan`
+  - `LessOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Positive`
+  - `Negative`
+  - `Passing`
+  - `InSlice`
+  - `NaN`
+  - `Infinite`
+  - `Finite`
+  - `ZeroOrNil`
+  - `Nil`
+
+- `Int` validator - for `int`, `int8`, `int16`, `int32`, `int64`, and `rune` types
+  - `EqualTo`
+  - `GreaterThan`
+  - `GreaterOrEqualTo`
+  - `LessThan`
+  - `LessOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Positive`
+  - `Negative`
+  - `Passing`
+  - `InSlice`
+
+- `IntP` validator - for `int`, `int8`, `int16`, `int32`, `int64`, and `rune` pointer types
+  - `EqualTo`
+  - `GreaterThan`
+  - `GreaterOrEqualTo`
+  - `LessThan`
+  - `LessOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Positive`
+  - `Negative`
+  - `Passing`
+  - `InSlice`
+  - `ZeroOrNil`
+  - `Nil`
+
+- `Uint` validator - for `uint`, `uint8`, `uint16`, `uint32`, `uint64`, and `byte` types
+  - `EqualTo`
+  - `GreaterThan`
+  - `GreaterOrEqualTo`
+  - `LessThan`
+  - `LessOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Passing`
+  - `InSlice`
+
+- `UintP` validator - for `uint`, `uint8`, `uint16`, `uint32`, `uint64`, and `byte` pointer types
+  - `EqualTo`
+  - `GreaterThan`
+  - `GreaterOrEqualTo`
+  - `LessThan`
+  - `LessOrEqualTo`
+  - `Between`
+  - `Zero`
+  - `Passing`
+  - `InSlice`
+  - `ZeroOrNil`
   - `Nil`
 
 # Github Code Contribution Guide
@@ -1326,6 +1944,6 @@ We welcome contributions to our project! To make the process smooth and efficien
 
 # License
 
-Copyright © 2023 Carlos Forero
+Copyright © 2025 Carlos Forero
 
 Valgo is released under the [MIT License](LICENSE)

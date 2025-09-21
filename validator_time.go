@@ -212,11 +212,11 @@ func (validator *ValidatorTime) Between(min time.Time, max time.Time, template .
 //	zeroTime := time.Time{}
 //	Is(v.Time(zeroTime).Zero()).Valid()
 func (validator *ValidatorTime) Zero(template ...string) *ValidatorTime {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return isTimeZero(validator.context.Value().(time.Time))
 		},
-		ErrorKeyZero, template...)
+		ErrorKeyZero, validator.context.Value(), template...)
 
 	return validator
 }
@@ -231,11 +231,11 @@ func (validator *ValidatorTime) Zero(template ...string) *ValidatorTime {
 //	    return t.Year() == 2023
 //	})).Valid()
 func (validator *ValidatorTime) Passing(function func(v0 time.Time) bool, template ...string) *ValidatorTime {
-	validator.context.Add(
+	validator.context.AddWithValue(
 		func() bool {
 			return function(validator.context.Value().(time.Time))
 		},
-		ErrorKeyPassing, template...)
+		ErrorKeyPassing, validator.context.Value(), template...)
 
 	return validator
 }

@@ -69,4 +69,28 @@ const (
 
 	ErrorKeyZero    = "zero"
 	ErrorKeyNotZero = "not_zero"
+
+	ErrorKeyPositive    = "positive"
+	ErrorKeyNotPositive = "not_positive"
+
+	ErrorKeyNegative    = "negative"
+	ErrorKeyNotNegative = "not_negative"
+
+	ErrorKeyZeroOrNil    = "zero_or_nil"
+	ErrorKeyNotZeroOrNil = "not_zero_or_nil"
+
+	ErrorKeyPositiveOrNil    = "positive_or_nil"
+	ErrorKeyNotPositiveOrNil = "not_positive_or_nil"
+
+	ErrorKeyNegativeOrNil    = "negative_or_nil"
+	ErrorKeyNotNegativeOrNil = "not_negative_or_nil"
+
+	ErrorKeyNaN    = "nan"
+	ErrorKeyNotNaN = "not_nan"
+
+	ErrorKeyInfinite    = "infinite"
+	ErrorKeyNotInfinite = "not_infinite"
+
+	ErrorKeyFinite    = "finite"
+	ErrorKeyNotFinite = "not_finite"
 )
