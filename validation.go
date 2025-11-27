@@ -35,6 +35,7 @@ type Validation struct {
 
 	_locale         *Locale
 	errors          map[string]*valueError
+	invalidateMap   map[string]bool
 	currentIndex    int
 	marshalJsonFunc func(e *Error) ([]byte, error)
 }
@@ -217,10 +218,6 @@ LOOP1:
 // validator. By adding this error message, the [Validation] session will be
 // marked as invalid.
 func (v *Validation) AddErrorMessage(name string, message string) *Validation {
-	if v.errors == nil {
-		v.errors = map[string]*valueError{}
-	}
-
 	v.valid = false
 
 	ev := v.getOrCreateValueError(name, nil)
@@ -233,10 +230,6 @@ func (v *Validation) AddErrorMessage(name string, message string) *Validation {
 func (v *Validation) mergeError(prefix string, err *Error) *Validation {
 
 	if err != nil && len(err.errors) > 0 {
-		if v.errors == nil {
-			v.errors = map[string]*valueError{}
-		}
-
 		v.valid = false
 
 		var _prefix string
@@ -287,10 +280,6 @@ func (v *Validation) MergeErrorInIndex(name string, index int, err *Error) *Vali
 }
 
 func (validation *Validation) invalidate(name *string, title *string, fragment *validatorFragment) {
-	if validation.errors == nil {
-		validation.errors = map[string]*valueError{}
-	}
-
 	validation.valid = false
 
 	var _name string
@@ -403,7 +392,7 @@ func (validation *Validation) ToValgoError(marshalJsonFun ...func(e *Error) ([]b
 
 // Return true if a specific field validator is valid.
 func (validation *Validation) IsValid(name string) bool {
-	if _, isNotValid := validation.errors[name]; isNotValid {
+	if _, isNotValid := validation.invalidateMap[name]; isNotValid {
 		return false
 	}
 
@@ -411,7 +400,13 @@ func (validation *Validation) IsValid(name string) bool {
 }
 
 func (validation *Validation) getOrCreateValueError(name string, title *string) *valueError {
+	if validation.errors == nil {
+		validation.errors = map[string]*valueError{}
+		validation.invalidateMap = map[string]bool{}
+	}
+
 	if _, ok := validation.errors[name]; !ok {
+		validation.addInvalidationNamespaces(name)
 		validation.errors[name] = &valueError{
 			name:           &name,
 			title:          title,
@@ -458,4 +453,46 @@ func newValidation(options ...Options) *Validation {
 	}
 
 	return v
+}
+
+// name examples:
+//
+//	"object.users[1].value"
+//
+// namespaces generated:
+//
+//	"object"
+//	"object.users"
+//	"object.users[1]"
+//	"object.users[1].value"
+func (validation *Validation) addInvalidationNamespaces(name string) {
+	if name == "" {
+		return
+	}
+
+	segStart := 0 // start index of current segment (after last '.')
+	bracketAdded := false
+
+	for i := 0; i < len(name); i++ {
+		switch name[i] {
+		case '[':
+			// First '[' in this segment: add prefix without the index.
+			// e.g. "object.users[1]" -> add "object.users".
+			if !bracketAdded && i > segStart {
+				bracketAdded = true
+				validation.invalidateMap[name[:i]] = true
+			}
+		case '.':
+			// End of segment: add prefix up to this dot.
+			// e.g. "object.users[1].value" at '.' after "[1]" -> add "object.users[1]".
+			if i > 0 {
+				validation.invalidateMap[name[:i]] = true
+			}
+			segStart = i + 1
+			bracketAdded = false
+		}
+	}
+
+	// Always add the full path
+	validation.invalidateMap[name] = true
 }
