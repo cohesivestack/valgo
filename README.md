@@ -298,6 +298,33 @@ output:
 Warning: someone underage is trying to sign up
 ```
 
+When you work with **nested or indexed namespaces** (for example using `In(...)` or `InRow(...)`), `IsValid(...)` also understands **parent paths**:
+if a deeply nested field is invalid, all of its parent namespaces are considered invalid as well.
+
+```go
+val := v.In("person",
+  v.InRow("addresses", 0,
+    v.Is(
+      v.String("", "line1").Not().Blank(), // invalid
+      v.String("Main St", "line2").Not().Blank(),
+    ),
+  ),
+)
+
+// Leaf field is invalid
+_ = val.IsValid("person.addresses[0].line1") // false
+
+// Parent namespaces of that field are also invalid
+_ = val.IsValid("person.addresses[0]") // false
+_ = val.IsValid("person.addresses")    // false
+_ = val.IsValid("person")              // false
+
+// Unrelated namespaces remain valid
+_ = val.IsValid("person.addresses[1]") // true
+```
+
+This lets you write concise checks like `if !val.IsValid("person.addresses") { ... }` without needing to know exactly which nested field failed.
+
 ## `In(...)` function
 
 The `In(...)` function executes one or more validators in a namespace, so the value names in the error result are prefixed with this namespace. This is useful for validating nested structures.
