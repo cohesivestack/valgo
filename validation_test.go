@@ -649,3 +649,45 @@ func TestValidationDo(t *testing.T) {
 	assert.Contains(t, v.Errors(), "role")
 	assert.Equal(t, "Role can't be blank", v.Errors()["role"].Messages()[0])
 }
+
+func TestValidationIsValidWithoutErrors(t *testing.T) {
+	v := New()
+	assert.True(t, v.IsValid("status"))
+	assert.True(t, v.IsValid("name"))
+}
+
+func TestValidationIsValidParentNamespaces(t *testing.T) {
+	v :=
+		In("person",
+			InRow("addresses", 0,
+				Is(
+					String("", "line1").Not().Blank(),
+					String("", "line2").Not().Blank(),
+					String("hello", "line3").Not().Blank(),
+				),
+			).InRow("phones", 0,
+				Is(
+					String("+1234567890", "code").Not().Empty(),
+				),
+			),
+		)
+
+	// The specific fields should be invalid
+	assert.False(t, v.IsValid("person.addresses[0].line1"))
+	assert.False(t, v.IsValid("person.addresses[0].line2"))
+
+	// Parent namespaces should also be marked as invalid
+	assert.False(t, v.IsValid("person"))
+	assert.False(t, v.IsValid("person.addresses"))
+	assert.False(t, v.IsValid("person.addresses[0]"))
+
+	// Unrelated namespaces remain valid
+	assert.True(t, v.IsValid("person.addresses[1]"))
+	assert.True(t, v.IsValid("person.addresses[1].line3"))
+	assert.True(t, v.IsValid("person.addresses[1].line4"))
+	assert.True(t, v.IsValid("person.phones"))
+	assert.True(t, v.IsValid("person.phones[0]"))
+	assert.True(t, v.IsValid("person.phones[0].code"))
+	assert.True(t, v.IsValid("perons.status"))
+	assert.True(t, v.IsValid("user"))
+}
