@@ -82,6 +82,64 @@ func (validation *Validation) If(condition bool, _validation *Validation) *Valid
 	return validation
 }
 
+// [IfValid](...) is similar to [If](...), but merges the given [Validation] session
+// only when the specified field path is valid in the current [Validation] session.
+// When the field is not valid, no operation is performed and the original instance
+// is returned unchanged.
+//
+// See [IsValid](...) for how field paths (including parent namespaces) are evaluated.
+//
+//	v.Is(v.String(username, "username").Not().Blank()).
+//		IfValid("username", v.Is(v.String(role, "role").Equal("admin")))
+func (validation *Validation) IfValid(name string, _validation *Validation) *Validation {
+	if validation.IsValid(name) {
+		return validation.merge("", _validation)
+	}
+	return validation
+}
+
+// [IfAllValid](...) is similar to [If](...), but merges the given [Validation] session
+// only when all provided field paths are valid in the current [Validation] session.
+// When any of the fields is not valid, no operation is performed and the original
+// instance is returned unchanged.
+//
+// When the slice is empty, it behaves like [AreValid](...) called with no arguments,
+// which is equivalent to [Valid]().
+//
+//	v.Is(
+//		v.String(email, "email").Not().Empty(),
+//		v.String(password, "password").Not().Empty(),
+//	).IfAllValid([]string{"email", "password"},
+//		v.Is(v.String(role, "role").Equal("user")),
+//	)
+func (validation *Validation) IfAllValid(names []string, _validation *Validation) *Validation {
+	if validation.AreValid(names...) {
+		return validation.merge("", _validation)
+	}
+	return validation
+}
+
+// [IfAnyValid](...) is similar to [If](...), but merges the given [Validation] session
+// only when at least one of the provided field paths is valid in the current
+// [Validation] session. When none of the fields are valid, no operation is performed
+// and the original instance is returned unchanged.
+//
+// When the slice is empty, it behaves like [IsAnyValid](...) called with no arguments,
+// which returns false.
+//
+//	v.Is(
+//		v.String(email, "email").Email(),
+//		v.String(phone, "phone").Not().Empty(),
+//	).IfAnyValid([]string{"email", "phone"},
+//		v.Is(v.String(preferred, "preferred").InSlice([]string{"email", "phone"})),
+//	)
+func (validation *Validation) IfAnyValid(names []string, _validation *Validation) *Validation {
+	if validation.IsAnyValid(names...) {
+		return validation.merge("", _validation)
+	}
+	return validation
+}
+
 // The [Do](...) function executes the given function with the current
 // [Validation] instance and returns the same instance.
 //
@@ -110,6 +168,66 @@ func (validation *Validation) Do(function func(val *Validation)) *Validation {
 //	})
 func (validation *Validation) When(condition bool, function func(val *Validation)) *Validation {
 	if condition {
+		function(validation)
+	}
+	return validation
+}
+
+// [WhenValid](...) is similar to [When](...), but executes the given function
+// only when the specified field path is valid in the current [Validation] session.
+// When the field is not valid, no operation is performed and the original
+// instance is returned unchanged.
+//
+// See [IsValid](...) for how field paths (including parent namespaces) are evaluated.
+//
+//	v.Is(v.String(username, "username").Not().Blank()).
+//		WhenValid("username", func(val *v.Validation) {
+//			val.Is(v.String(role, "role").Equal("admin"))
+//		})
+func (validation *Validation) WhenValid(name string, function func(val *Validation)) *Validation {
+	if validation.IsValid(name) {
+		function(validation)
+	}
+	return validation
+}
+
+// [WhenAllValid](...) is similar to [When](...), but executes the given function
+// only when all provided field paths are valid in the current [Validation] session.
+// When any of the fields is not valid, no operation is performed and the original
+// instance is returned unchanged.
+//
+// When the slice is empty, it behaves like [AreValid](...) called with no arguments,
+// which is equivalent to [Valid]().
+//
+//	v.Is(
+//		v.String(email, "email").Not().Empty(),
+//		v.String(password, "password").Not().Empty(),
+//	).WhenAllValid([]string{"email", "password"}, func(val *v.Validation) {
+//		val.Is(v.String(role, "role").Equal("user"))
+//	})
+func (validation *Validation) WhenAllValid(names []string, function func(val *Validation)) *Validation {
+	if validation.AreValid(names...) {
+		function(validation)
+	}
+	return validation
+}
+
+// [WhenAnyValid](...) is similar to [When](...), but executes the given function
+// only when at least one of the provided field paths is valid in the current
+// [Validation] session. When none of the fields are valid, no operation is
+// performed and the original instance is returned unchanged.
+//
+// When the slice is empty, it behaves like [IsAnyValid](...) called with no arguments,
+// which returns false.
+//
+//	v.Is(
+//		v.String(email, "email").Email(),
+//		v.String(phone, "phone").Not().Empty(),
+//	).WhenAnyValid([]string{"email", "phone"}, func(val *v.Validation) {
+//		val.Is(v.String(preferred, "preferred").InSlice([]string{"email", "phone"}))
+//	})
+func (validation *Validation) WhenAnyValid(names []string, function func(val *Validation)) *Validation {
+	if validation.IsAnyValid(names...) {
 		function(validation)
 	}
 	return validation

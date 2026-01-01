@@ -796,3 +796,237 @@ func TestValidationIsAnyValidParentNamespaces(t *testing.T) {
 	assert.True(t, v.IsAnyValid("perons.status"))
 	assert.True(t, v.IsAnyValid("user"))
 }
+
+func TestValidationIfValid(t *testing.T) {
+	// IfValid should merge only when the referenced field is valid
+	v := Is(String("test", "name").Not().Blank()).
+		Is(String("", "phone").Not().Blank()).                 // invalid
+		IfValid("name", Is(String("", "email").Not().Blank())) // executes (name is valid)
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "phone")
+	assert.Contains(t, v.Errors(), "email")
+	assert.Equal(t, "Phone can't be blank", v.Errors()["phone"].Messages()[0])
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+}
+
+func TestValidationIfValidWhenFieldIsInvalid(t *testing.T) {
+	// IfValid should not merge when the referenced field is invalid
+	v := Is(String("", "name").Not().Blank()). // invalid
+							IfValid("name", Is(String("", "email").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.NotContains(t, v.Errors(), "email")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestValidationIfAllValid(t *testing.T) {
+	// IfAllValid should merge only when ALL referenced fields are valid
+	v := Is(
+		String("test", "name").Not().Blank(),  // valid
+		String("+123", "phone").Not().Blank(), // valid
+		String("", "email").Not().Blank(),     // invalid
+	).IfAllValid([]string{"name", "phone"}, Is(String("", "role").Not().Blank())) // executes
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "email")
+	assert.Contains(t, v.Errors(), "role")
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+	assert.Equal(t, "Role can't be blank", v.Errors()["role"].Messages()[0])
+}
+
+func TestValidationIfAllValidWhenAnyFieldInvalid(t *testing.T) {
+	// IfAllValid should not merge when ANY referenced field is invalid
+	v := Is(
+		String("", "name").Not().Blank(),      // invalid
+		String("+123", "phone").Not().Blank(), // valid
+	).IfAllValid([]string{"name", "phone"}, Is(String("", "email").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.NotContains(t, v.Errors(), "email")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestValidationIfAllValidWithEmptySliceBehavesLikeValid(t *testing.T) {
+	// IfAllValid with empty slice behaves like AreValid() with no args => v.Valid()
+	v := Is(String("", "name").Not().Blank()). // invalid
+							IfAllValid([]string{}, Is(String("", "email").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.NotContains(t, v.Errors(), "email")
+}
+
+func TestValidationIfAnyValid(t *testing.T) {
+	// IfAnyValid should merge when at least one referenced field is valid
+	v := Is(
+		String("", "name").Not().Blank(),      // invalid
+		String("+123", "phone").Not().Blank(), // valid
+	).IfAnyValid([]string{"name", "phone"}, Is(String("", "email").Not().Blank())) // executes
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Contains(t, v.Errors(), "email")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+}
+
+func TestValidationIfAnyValidWhenNoneValid(t *testing.T) {
+	// IfAnyValid should not merge when none of the referenced fields is valid
+	v := Is(
+		String("", "name").Not().Blank(),  // invalid
+		String("", "phone").Not().Blank(), // invalid
+	).IfAnyValid([]string{"name", "phone"}, Is(String("", "email").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Contains(t, v.Errors(), "phone")
+	assert.NotContains(t, v.Errors(), "email")
+}
+
+func TestValidationIfAnyValidWithEmptySliceIsNoop(t *testing.T) {
+	// IfAnyValid with empty slice behaves like IsAnyValid() with no args => false => no-op
+	v := Is(String("test", "name").Not().Blank()).
+		IfAnyValid([]string{}, Is(String("", "email").Not().Blank()))
+
+	assert.True(t, v.Valid())
+	assert.NotContains(t, v.Errors(), "email")
+}
+
+func TestValidationWhenValid(t *testing.T) {
+	// WhenValid should execute only when the referenced field is valid
+	v := Is(String("test", "name").Not().Blank()).
+		WhenValid("name", func(val *Validation) {
+			val.Is(String("", "email").Not().Blank())
+		})
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "email")
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+
+	// WhenValid should not execute when the referenced field is invalid
+	v2 := Is(String("", "name").Not().Blank()).
+		WhenValid("name", func(val *Validation) {
+			val.Is(String("", "email").Not().Blank())
+		})
+
+	assert.False(t, v2.Valid())
+	assert.Contains(t, v2.Errors(), "name")
+	assert.NotContains(t, v2.Errors(), "email")
+}
+
+func TestValidationWhenAllValid(t *testing.T) {
+	// WhenAllValid should execute only when ALL referenced fields are valid
+	v := Is(
+		String("test", "name").Not().Blank(),
+		String("+123", "phone").Not().Blank(),
+	).WhenAllValid([]string{"name", "phone"}, func(val *Validation) {
+		val.Is(String("", "email").Not().Blank())
+	})
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "email")
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+
+	// WhenAllValid should not execute when ANY referenced field is invalid
+	v2 := Is(
+		String("", "name").Not().Blank(),      // invalid
+		String("+123", "phone").Not().Blank(), // valid
+	).WhenAllValid([]string{"name", "phone"}, func(val *Validation) {
+		val.Is(String("", "email").Not().Blank())
+	})
+
+	assert.False(t, v2.Valid())
+	assert.Contains(t, v2.Errors(), "name")
+	assert.NotContains(t, v2.Errors(), "email")
+}
+
+func TestValidationWhenAllValidWithEmptySliceBehavesLikeValid(t *testing.T) {
+	// WhenAllValid with empty slice behaves like AreValid() with no args => v.Valid()
+	v := Is(String("", "name").Not().Blank()).
+		WhenAllValid([]string{}, func(val *Validation) {
+			val.Is(String("", "email").Not().Blank())
+		})
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.NotContains(t, v.Errors(), "email")
+}
+
+func TestValidationWhenAnyValid(t *testing.T) {
+	// WhenAnyValid should execute when at least one referenced field is valid
+	v := Is(
+		String("", "name").Not().Blank(),      // invalid
+		String("+123", "phone").Not().Blank(), // valid
+	).WhenAnyValid([]string{"name", "phone"}, func(val *Validation) {
+		val.Is(String("", "email").Not().Blank())
+	})
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.Contains(t, v.Errors(), "email")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+
+	// WhenAnyValid should not execute when none are valid
+	v2 := Is(
+		String("", "name").Not().Blank(),
+		String("", "phone").Not().Blank(),
+	).WhenAnyValid([]string{"name", "phone"}, func(val *Validation) {
+		val.Is(String("", "email").Not().Blank())
+	})
+
+	assert.False(t, v2.Valid())
+	assert.Contains(t, v2.Errors(), "name")
+	assert.Contains(t, v2.Errors(), "phone")
+	assert.NotContains(t, v2.Errors(), "email")
+}
+
+func TestValidationWhenAnyValidWithEmptySliceIsNoop(t *testing.T) {
+	// WhenAnyValid with empty slice behaves like IsAnyValid() with no args => false => no-op
+	v := Is(String("test", "name").Not().Blank()).
+		WhenAnyValid([]string{}, func(val *Validation) {
+			val.Is(String("", "email").Not().Blank())
+		})
+
+	assert.True(t, v.Valid())
+	assert.NotContains(t, v.Errors(), "email")
+}
+
+func TestValidationIfWhenValidParentNamespaces(t *testing.T) {
+	// Ensure If*/When* functions respect parent namespace invalidation (IsValid behavior)
+	v :=
+		In("person",
+			InRow("addresses", 0,
+				Is(
+					String("", "line1").Not().Blank(), // invalid
+					String("Main", "line2").Not().Blank(),
+				),
+			),
+		)
+
+	// person.addresses[0] should be invalid due to line1
+	assert.False(t, v.IsValid("person.addresses[0]"))
+
+	// IfValid should NOT execute when parent namespace is invalid
+	v2 := v.IfValid("person.addresses[0]", Is(String("", "email").Not().Blank()))
+	assert.NotContains(t, v2.Errors(), "email")
+
+	// IfAnyValid should execute when at least one is valid
+	v3 := v.IfAnyValid([]string{"person.addresses[0]", "person.addresses[1]"}, Is(String("", "email").Not().Blank()))
+	assert.Contains(t, v3.Errors(), "email")
+
+	// WhenValid should NOT execute when parent namespace is invalid
+	v4 := v.WhenValid("person.addresses[0]", func(val *Validation) {
+		val.Is(String("", "phone").Not().Blank())
+	})
+	assert.NotContains(t, v4.Errors(), "phone")
+
+	// WhenAnyValid should execute when at least one is valid
+	v5 := v.WhenAnyValid([]string{"person.addresses[0]", "person.addresses[1]"}, func(val *Validation) {
+		val.Is(String("", "phone").Not().Blank())
+	})
+	assert.Contains(t, v5.Errors(), "phone")
+}
