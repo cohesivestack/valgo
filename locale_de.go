@@ -94,5 +94,9 @@ func getLocaleDe() *Locale {
 
 		ErrorKeyFinite:    "{{title}} muss endlich sein",
 		ErrorKeyNotFinite: "{{title}} darf nicht endlich sein",
+
+		OrKeyPair:   " oder ",
+		OrKeyMiddle: "; ",
+		OrKeyEnd:    "; oder ",
 	}
 }
