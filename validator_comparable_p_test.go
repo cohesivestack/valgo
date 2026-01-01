@@ -289,3 +289,71 @@ func TestValidatorComparablePOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, _false || false, v.Valid())
 	assert.NotEmpty(t, v.Errors())
 }
+
+func TestValidatorComparablePOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	pending := "pending"
+	active := "active"
+	unknown := "unknown"
+	validStatuses := []string{"active", "inactive"}
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(ComparableP(&pending).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(ComparableP(&active).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(ComparableP(&unknown).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(ComparableP(&unknown).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(ComparableP(&active).Not().EqualTo("pending").OrElse().InSlice([]string{"pending"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(ComparableP(&pending).Not().EqualTo("pending").OrElse().InSlice([]string{"pending"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorComparablePOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	pending := "pending"
+	active := "active"
+	unknown := "unknown"
+	validStatuses := []string{"active", "inactive"}
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(ComparableP(&pending).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(ComparableP(&active).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(ComparableP(&unknown).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(ComparableP(&unknown).EqualTo("pending").OrElse().InSlice(validStatuses))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

@@ -571,3 +571,61 @@ func TestValidatorNumberOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorNumberOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(Number(0).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(Number(7).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(Number(15).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(Number(15).Zero().OrElse().GreaterThan(20).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(Number(1).Not().Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(Number(0).Not().Zero().OrElse().GreaterOrEqualTo(0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorNumberOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(Number(0).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(Number(7).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(Number(15).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(Number(15).Zero().OrElse().GreaterThan(20).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

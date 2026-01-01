@@ -586,3 +586,65 @@ func TestValidatorUintOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorUintOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	// If left succeeds, right side is not evaluated
+	v = Is(Uint(uint(0)).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	// Left fails, so right side (GreaterThan AND LessThan) must both pass
+	v = Is(Uint(uint(7)).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	// Left fails, right side GreaterThan passes but LessThan fails
+	v = Is(Uint(uint(15)).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(Uint(uint(15)).Zero().OrElse().GreaterThan(20).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(Uint(uint(1)).Not().Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(Uint(uint(0)).Not().Zero().OrElse().GreaterOrEqualTo(0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorUintOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Check evaluates all fragments, but OrElse still short-circuits validation logic
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(Uint(uint(0)).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(Uint(uint(7)).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(Uint(uint(15)).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(Uint(uint(15)).Zero().OrElse().GreaterThan(20).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

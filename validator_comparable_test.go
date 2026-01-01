@@ -336,6 +336,64 @@ func TestValidatorComparableOrOperatorWithCheck(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 
+func TestValidatorComparableOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(Comparable("pending").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(Comparable("active").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(Comparable("unknown").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(Comparable("unknown").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(Comparable("active").Not().EqualTo("pending").OrElse().InSlice([]string{"pending"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(Comparable("pending").Not().EqualTo("pending").OrElse().InSlice([]string{"pending"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorComparableOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(Comparable("pending").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(Comparable("active").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(Comparable("unknown").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(Comparable("unknown").EqualTo("pending").OrElse().InSlice([]string{"active", "inactive"}))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}
+
 func TestValidatorComparableWithString(t *testing.T) {
 	var v *Validation
 

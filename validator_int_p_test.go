@@ -844,3 +844,70 @@ func TestValidatorIntPOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorIntPOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	zero := int(0)
+	seven := int(7)
+	fifteen := int(15)
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(IntP(&zero).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(IntP(&seven).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(IntP(&fifteen).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(IntP(&fifteen).Zero().OrElse().GreaterThan(20).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	one := int(1)
+	v = Is(IntP(&one).Not().Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(IntP(&zero).Not().Zero().OrElse().GreaterOrEqualTo(0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorIntPOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	zero := int(0)
+	seven := int(7)
+	fifteen := int(15)
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(IntP(&zero).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(IntP(&seven).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(IntP(&fifteen).Zero().OrElse().GreaterThan(5).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(IntP(&fifteen).Zero().OrElse().GreaterThan(20).LessThan(10))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

@@ -1140,3 +1140,61 @@ func TestValidatorStringOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorStringOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(String("").Empty().OrElse().MinLength(5).EqualTo("test"))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(String("test").Empty().OrElse().MinLength(4).EqualTo("test"))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(String("abc").Empty().OrElse().MinLength(5).EqualTo("test"))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(String("abc").Empty().OrElse().MinLength(10).EqualTo("test"))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(String("test").Not().Empty().OrElse().MinLength(10).EqualTo("test"))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(String("").Not().Empty().OrElse().MinLength(0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorStringOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(String("").Empty().OrElse().MinLength(5).EqualTo("test"))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(String("test").Empty().OrElse().MinLength(4).EqualTo("test"))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(String("abc").Empty().OrElse().MinLength(5).EqualTo("test"))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(String("abc").Empty().OrElse().MinLength(10).EqualTo("test"))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}
