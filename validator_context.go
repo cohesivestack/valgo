@@ -108,9 +108,15 @@ func (ctx *ValidatorContext) validateCheck(validation *Validation) *Validation {
 	return ctx.validate(validation, false)
 }
 
+type invalidFragment struct {
+	fragments []*validatorFragment // When the fragment is part of an "or" operation, this is a list of fragments that are part of the "or" operation
+}
+
 func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool) *Validation {
 	// valid := true
 	validation.currentIndex++
+
+	invalidFragments := []*invalidFragment{}
 
 	// Iterating through each fragment in the context's fragment list
 	for i, fragment := range ctx.fragments {
@@ -132,26 +138,26 @@ func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool)
 		// and the valid flag was true before this evaluation
 		fragment.isValid = fragment.function() == fragment.boolOperation
 
-		// If the current fragment is valid and is part of an "or" operation, we backtrack to mark all preceding
-		// fragments in the "or" operation chain as valid
-		if fragment.isValid && fragment.orOperation {
-			for j := i - 1; j >= 0; j-- {
-				ctx.fragments[j].isValid = true
-				// Breaking the loop when we reach the start of the "or" operation chain
-				if !ctx.fragments[j].orOperation {
-					break
-				}
+		if !fragment.isValid {
+			if fragment.orOperation {
+				invalidFragments[len(invalidFragments)-1].fragments = append(invalidFragments[len(invalidFragments)-1].fragments, fragment)
+			} else {
+				invalidFragments = append(invalidFragments, &invalidFragment{
+					fragments: []*validatorFragment{fragment},
+				})
 			}
+			// If the current fragment is valid and is part of an "or" operation, we remove
+			// the invalid fragment from the invalid fragments list
+		} else if fragment.orOperation {
+			invalidFragments = invalidFragments[:len(invalidFragments)-1]
 		}
 
 		// Setting the validation state of the current fragment
 		// valid = fragment.isValid && valid
 	}
 
-	for _, fragment := range ctx.fragments {
-		if !fragment.isValid {
-			validation.invalidate(ctx.name, ctx.title, fragment)
-		}
+	if len(invalidFragments) > 0 {
+		validation.invalidate(ctx.name, ctx.title, invalidFragments)
 	}
 
 	return validation
