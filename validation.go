@@ -401,13 +401,53 @@ func (validation *Validation) ToValgoError(marshalJsonFun ...func(e *Error) ([]b
 	return nil
 }
 
-// Return true if a specific field validator is valid.
+// IsValid reports whether the validator result for the given field name is valid.
+//
+// A field is considered valid if it does not appear in the internal invalidation
+// map produced during validation.
 func (validation *Validation) IsValid(name string) bool {
 	if _, isNotValid := validation.invalidateMap[name]; isNotValid {
 		return false
 	}
-
 	return true
+}
+
+// AreValid reports whether the provided field names are all valid.
+//
+// When one or more names are provided, AreValid returns true only if every named
+// field is valid (i.e., none of them appear in the invalidation map).
+//
+// When called with no arguments, AreValid returns the overall validation result,
+// equivalent to v.Valid().
+func (v *Validation) AreValid(names ...string) bool {
+	if len(names) == 0 {
+		return v.Valid()
+	}
+	for _, name := range names {
+		if _, invalid := v.invalidateMap[name]; invalid {
+			return false
+		}
+	}
+	return true
+}
+
+// IsAnyValid reports whether at least one of the provided field names is valid.
+//
+// IsAnyValid returns true as soon as it finds a field name that does not appear
+// in the invalidation map.
+//
+// When called with no arguments, IsAnyValid returns false. The caller must
+// explicitly provide the set of fields to evaluate.
+func (v *Validation) IsAnyValid(names ...string) bool {
+	if len(names) == 0 {
+		return false
+	}
+	for _, name := range names {
+		if _, invalid := v.invalidateMap[name]; !invalid {
+			return true
+		}
+	}
+	return false
 }
 
 func (validation *Validation) getOrCreateValueError(name string, title *string) *valueError {
