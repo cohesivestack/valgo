@@ -142,8 +142,10 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
   - [`InCell(...)` function](#incell-function)
   - [`Check(...)` function](#check-function)
   - [`If(...)` function](#if-function)
+  - [`IfValid(...)`, `IfAllValid(...)`, and `IfAnyValid(...)` functions](#ifvalid-ifallvalid-and-ifanyvalid-functions)
   - [`Do(...)` function](#do-function)
   - [`When(...)` function](#when-function)
+  - [`WhenValid(...)`, `WhenAllValid(...)`, and `WhenAnyValid(...)` functions](#whenvalid-whenallvalid-and-whenanyvalid-functions)
   - [`AddErrorMessage(...)` function](#adderrormessage-function)
   - [Merging two `Validation` sessions with `Validation.Merge( ... )`](#merging-two-validation-sessions-with-validationmerge--)
   - [`New()` function](#new-function)
@@ -606,6 +608,50 @@ if !val.Valid() {
 }
 ```
 
+## `IfValid(...)`, `IfAllValid(...)`, and `IfAnyValid(...)` functions
+
+These functions are similar to `If(...)`, but instead of receiving a boolean condition, they evaluate validity of one or more field paths in the current `Validation` result. When the condition is not met, no operation is performed and the original instance is returned unchanged.
+
+### `IfValid(...)`
+
+Merges the given `Validation` session only when the specified field path is valid.
+
+```go
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  IfValid("username", v.Is(v.String(role, "role").EqualTo("admin")))
+```
+
+### `IfAllValid(...)`
+
+Merges the given `Validation` session only when **all** provided field paths are valid.
+
+```go
+val := v.
+  Is(
+    v.String(email, "email").Not().Empty(),
+    v.String(password, "password").Not().Empty(),
+  ).
+  IfAllValid([]string{"email", "password"},
+    v.Is(v.String(role, "role").EqualTo("user")),
+  )
+```
+
+### `IfAnyValid(...)`
+
+Merges the given `Validation` session only when **at least one** of the provided field paths is valid.
+
+```go
+val := v.
+  Is(
+    v.String(email, "email").Email(),
+    v.String(phone, "phone").Not().Empty(),
+  ).
+  IfAnyValid([]string{"email", "phone"},
+    v.Is(v.String(preferred, "preferred").InSlice([]string{"email", "phone"})),
+  )
+```
+
 ## `Do(...)` function
 
 The `Do(...)` function executes the given function with the current `Validation` instance and returns the same instance. This allows you to extend a validation chain with additional or conditional rules in a concise way.
@@ -642,6 +688,52 @@ if !val.Valid() {
   out, _ := json.MarshalIndent(val.ToError(), "", "  ")
   fmt.Println(string(out))
 }
+```
+
+## `WhenValid(...)`, `WhenAllValid(...)`, and `WhenAnyValid(...)` functions
+
+These functions are similar to `When(...)`, but instead of receiving a boolean condition, they evaluate validity of one or more field paths in the current `Validation` result. When the condition is not met, no operation is performed and the original instance is returned unchanged.
+
+### `WhenValid(...)`
+
+Executes the given function only when the specified field path is valid.
+
+```go
+val := v.
+  Is(v.String(username, "username").Not().Blank()).
+  WhenValid("username", func(val *v.Validation) {
+    val.Is(v.String(role, "role").EqualTo("admin"))
+  })
+```
+
+### `WhenAllValid(...)`
+
+Executes the given function only when **all** provided field paths are valid.
+
+```go
+val := v.
+  Is(
+    v.String(email, "email").Not().Empty(),
+    v.String(password, "password").Not().Empty(),
+  ).
+  WhenAllValid([]string{"email", "password"}, func(val *v.Validation) {
+    val.Is(v.String(role, "role").EqualTo("user"))
+  })
+```
+
+### `WhenAnyValid(...)`
+
+Executes the given function only when **at least one** of the provided field paths is valid.
+
+```go
+val := v.
+  Is(
+    v.String(email, "email").Email(),
+    v.String(phone, "phone").Not().Empty(),
+  ).
+  WhenAnyValid([]string{"email", "phone"}, func(val *v.Validation) {
+    val.Is(v.String(preferred, "preferred").InSlice([]string{"email", "phone"}))
+  })
 ```
 
 ## `AddErrorMessage(...)` function
