@@ -691,3 +691,108 @@ func TestValidationIsValidParentNamespaces(t *testing.T) {
 	assert.True(t, v.IsValid("perons.status"))
 	assert.True(t, v.IsValid("user"))
 }
+
+func TestValidationAreValidWithoutErrors(t *testing.T) {
+	v := New()
+
+	// With no arguments, AreValid should be equivalent to Valid().
+	assert.True(t, v.AreValid())
+
+	// With explicit names, all of them should be valid.
+	assert.True(t, v.AreValid("status", "name"))
+	assert.True(t, v.AreValid("status"))
+	assert.True(t, v.AreValid("name"))
+}
+
+func TestValidationAreValidParentNamespaces(t *testing.T) {
+	v :=
+		In("person",
+			InRow("addresses", 0,
+				Is(
+					String("", "line1").Not().Blank(),
+					String("", "line2").Not().Blank(),
+					String("hello", "line3").Not().Blank(),
+				),
+			).InRow("phones", 0,
+				Is(
+					String("+1234567890", "code").Not().Empty(),
+				),
+			),
+		)
+
+	// Overall validation should be false because there are invalid fields.
+	assert.False(t, v.AreValid())
+	assert.False(t, v.Valid())
+
+	// All-of invalid leaf fields should be false.
+	assert.False(t, v.AreValid("person.addresses[0].line1", "person.addresses[0].line2"))
+
+	// Mixing valid + invalid should be false (ALL-of).
+	assert.False(t, v.AreValid("person.phones[0].code", "person.addresses[0].line1"))
+
+	// Parent namespaces are invalid, so ALL-of including them should be false.
+	assert.False(t, v.AreValid("person"))
+	assert.False(t, v.AreValid("person.addresses"))
+	assert.False(t, v.AreValid("person.addresses[0]"))
+
+	// Unrelated / not-present paths remain valid in the current model.
+	assert.True(t, v.AreValid("person.addresses[1]"))
+	assert.True(t, v.AreValid("person.addresses[1].line3", "person.addresses[1].line4"))
+	assert.True(t, v.AreValid("person.phones", "person.phones[0]", "person.phones[0].code"))
+	assert.True(t, v.AreValid("perons.status", "user"))
+}
+
+func TestValidationIsAnyValidWithoutErrors(t *testing.T) {
+	v := New()
+
+	// With no arguments, IsAnyValid must return false by design.
+	assert.False(t, v.IsAnyValid())
+
+	// Any-of: if at least one is valid, it should return true.
+	assert.True(t, v.IsAnyValid("status"))
+	assert.True(t, v.IsAnyValid("name"))
+	assert.True(t, v.IsAnyValid("status", "name"))
+
+	// Unknown paths are considered valid in the current model, so Any-of should be true.
+	assert.True(t, v.IsAnyValid("user"))
+}
+
+func TestValidationIsAnyValidParentNamespaces(t *testing.T) {
+	v :=
+		In("person",
+			InRow("addresses", 0,
+				Is(
+					String("", "line1").Not().Blank(),
+					String("", "line2").Not().Blank(),
+					String("hello", "line3").Not().Blank(),
+				),
+			).InRow("phones", 0,
+				Is(
+					String("+1234567890", "code").Not().Empty(),
+				),
+			),
+		)
+
+	// With no arguments, IsAnyValid must return false by design.
+	assert.False(t, v.IsAnyValid())
+
+	// Any-of two invalid leaf fields => false.
+	assert.False(t, v.IsAnyValid("person.addresses[0].line1", "person.addresses[0].line2"))
+
+	// Any-of invalid parent namespaces => false.
+	assert.False(t, v.IsAnyValid("person"))
+	assert.False(t, v.IsAnyValid("person.addresses"))
+	assert.False(t, v.IsAnyValid("person.addresses[0]"))
+
+	// Any-of valid + invalid => true (ANY-of).
+	assert.True(t, v.IsAnyValid("person.addresses[0].line1", "person.phones[0].code"))
+	assert.True(t, v.IsAnyValid("person", "person.phones[0].code"))
+
+	// Any-of on unrelated/unknown paths => true (considered valid).
+	assert.True(t, v.IsAnyValid("person.addresses[1]"))
+	assert.True(t, v.IsAnyValid("person.addresses[1].line3"))
+	assert.True(t, v.IsAnyValid("person.addresses[1].line4"))
+	assert.True(t, v.IsAnyValid("person.phones"))
+	assert.True(t, v.IsAnyValid("perons.status"))
+	assert.True(t, v.IsAnyValid("user"))
+}
