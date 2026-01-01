@@ -137,7 +137,7 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
   - [`Validation` session](#validation-session)
   - [`Is(...)` function](#is-function)
   - [`Validation.Valid()` function](#validationvalid-function)
-  - [`Validation.IsValid(...)` function](#validationisvalid-function)
+  - [`IsValid(...)`, `AreValid(...)`, and `IsAnyValid(...)` functions](#isvalid-arevalid-and-isanyvalid-functions)
   - [`In(...)` function](#in-function)
   - [`InRow(...)` function](#inrow-function)
   - [`InCell(...)` function](#incell-function)
@@ -175,7 +175,7 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
   - [Typed validator](#typed-validator)
   - [Any validator](#any-validator)
   - [Custom type validators](#custom-type-validators)
-- [Or Operator in Validators](#or-operator-in-validators)
+- [OR Operators in Validators (`Or` and `OrElse`)](#or-operators-in-validators-or-and-orelse)
   - [Overview](#overview)
   - [Usage](#usage)
   - [Key Points](#key-points)
@@ -280,11 +280,13 @@ output:
 }
 ```
 
-## `Validation.IsValid(...)` function
+## `IsValid(...)`, `AreValid(...)`, and `IsAnyValid(...)` functions
 
-This function allows checking if a specific value in a `Validation` session is valid or not. This is very useful for conditional logic.
+Valgo provides lightweight helpers to query the results of a validation session. These functions **do not re-validate** values; they only inspect the outcome of the most recent `Is(...)` / `Check(...)` execution and are particularly useful for conditional logic, UI flows, or partial processing.
 
-The following example prints an error message if the `age` value is invalid.
+### `Validation.IsValid(name string) bool`
+
+`IsValid(...)` checks whether a **single field path** is valid.
 
 ```go
 val := v.Is(v.Number(16, "age").GreaterThan(18)).
@@ -294,13 +296,16 @@ if !val.IsValid("age") {
   fmt.Println("Warning: someone underage is trying to sign up")
 }
 ```
-output:
+
+Output:
+
 ```
 Warning: someone underage is trying to sign up
 ```
 
-When you work with **nested or indexed namespaces** (for example using `In(...)` or `InRow(...)`), `IsValid(...)` also understands **parent paths**:
-if a deeply nested field is invalid, all of its parent namespaces are considered invalid as well.
+#### Parent namespaces and indexed paths
+
+When you work with nested or indexed namespaces (for example using `In(...)` or `InRow(...)`), `IsValid(...)` also understands **parent paths**: if a deeply nested field is invalid, all of its parent namespaces are considered invalid as well.
 
 ```go
 val := v.In("person",
@@ -315,7 +320,7 @@ val := v.In("person",
 // Leaf field is invalid
 _ = val.IsValid("person.addresses[0].line1") // false
 
-// Parent namespaces of that field are also invalid
+// Parent namespaces are also invalid
 _ = val.IsValid("person.addresses[0]") // false
 _ = val.IsValid("person.addresses")    // false
 _ = val.IsValid("person")              // false
@@ -324,7 +329,109 @@ _ = val.IsValid("person")              // false
 _ = val.IsValid("person.addresses[1]") // true
 ```
 
-This lets you write concise checks like `if !val.IsValid("person.addresses") { ... }` without needing to know exactly which nested field failed.
+This lets you write concise checks like:
+
+```go
+if !val.IsValid("person.addresses") {
+  // show “please review your addresses”
+}
+```
+
+without needing to know exactly which nested field failed.
+
+### `Validation.AreValid(names ...string) bool`
+
+`AreValid(...)` checks whether **all** of the provided field paths are valid.
+
+* If **any** of the given names is invalid, it returns `false`.
+* If called with **no arguments**, it returns the overall validation result (equivalent to `val.Valid()`).
+
+#### Examples
+
+```go
+val := v.Is(
+  v.String("john@example.com", "email").Not().Empty(),
+  v.String("", "password").Not().Empty(), // invalid
+)
+
+_ = val.AreValid("email")                 // true
+_ = val.AreValid("password")              // false
+_ = val.AreValid("email", "password")     // false (ALL-of)
+_ = val.AreValid()                        // false (same as val.Valid())
+```
+
+This is useful when you want to gate a workflow on multiple required fields:
+
+```go
+if !val.AreValid("email", "password") {
+  fmt.Println("Cannot continue: email and password are required")
+}
+```
+
+Parent-path behavior is consistent with `IsValid(...)`:
+
+```go
+// If any nested field is invalid, the parent is invalid, so AreValid will return false.
+if !val.AreValid("person.addresses") {
+  // handle “addresses block invalid”
+}
+```
+
+### `Validation.IsAnyValid(names ...string) bool`
+
+`IsAnyValid(...)` checks whether **at least one** of the provided field paths is valid.
+
+* If it finds one valid field, it returns `true` immediately.
+* If called with **no arguments**, it returns `false` by design.
+
+This “explicit set required” behavior avoids ambiguity in nested models (for example: “any valid field where?”).
+
+#### Examples
+
+```go
+val := v.Is(
+  v.String("", "email").Not().Empty(),         // invalid
+  v.String("+3569999999", "phone").Not().Empty(), // valid
+)
+
+_ = val.IsAnyValid("email", "phone") // true (ANY-of)
+_ = val.IsAnyValid("email")          // false
+_ = val.IsAnyValid()                 // false (explicit set required)
+```
+
+This is useful when you allow alternative inputs:
+
+```go
+// Require at least one contact method
+if !val.IsAnyValid("email", "phone") {
+  fmt.Println("Please provide either an email or a phone number")
+}
+```
+
+#### With namespaces / nested paths
+
+`IsAnyValid` works well with nested paths when the set is explicit:
+
+```go
+val := v.In("person",
+  v.InRow("addresses", 0,
+    v.Is(
+      v.String("", "line1").Not().Blank(),      // invalid
+      v.String("Main St", "line2").Not().Blank(), // valid
+    ),
+  ),
+)
+
+_ = val.IsAnyValid("person.addresses[0].line1", "person.addresses[0].line2") // true
+_ = val.IsAnyValid("person.addresses[0]") // false (parent is invalid due to line1)
+```
+
+### Summary: Which function should I use?
+
+* Use `IsValid("field")` when you want to query a single field or namespace.
+* Use `AreValid("a", "b", "c")` when **all** listed fields must be valid.
+* Use `IsAnyValid("a", "b", "c")` when **at least one** listed field must be valid.
+* Use `Valid()` (or `AreValid()` with no args) when you want the overall result of the validation session.
 
 ## `In(...)` function
 
@@ -1628,7 +1735,7 @@ Valgo validator fragments are chained with an implicit **AND**. If you write:
 
 ```go
 Is(Int(1).GreaterThan(0).LessThan(10))
-````
+```
 
 the value is valid only if **all** fragments pass.
 
