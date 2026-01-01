@@ -1645,6 +1645,9 @@ In this case, the validator passes because the boolean value `true` satisfies th
 
 - **Implicit AND Logic**: By default, when validators are chained without specifying the `Or()` operator, they are combined using an AND logic. Each condition must be met for the validation to pass.
 - **No Short-circuiting for `Check`**: Unlike the `Is` function, which evaluates conditions lazily and may short-circuit (stop evaluating once the overall outcome is determined), the `Check` function ensures that all conditions are evaluated, regardless of their order and the use of `Or`.
+- **Error Message Formatting**: When an `Or` operation fails (all conditions in the OR chain fail), the error messages are combined into a single message with appropriate connectors:
+  - For 2 conditions: `"error1 or error2"`
+  - For 3+ conditions: `"error1; error2; or error3"` (semicolons separate intermediate errors, with "or" before the last one)
 
 ## Examples
 
@@ -1662,6 +1665,16 @@ assert.False(t, v.Valid())
 // Validation combining NOT and OR operators
 v = Is(Bool(true).Not().False().Or().False())
 assert.True(t, v.Valid())
+
+// When an OR operation fails, error messages are combined
+v = Is(Int(1).EqualTo(0).Or().EqualTo(2))
+assert.False(t, v.Valid())
+// Error message: "Value 0 must be equal to \"0\" or Value 0 must be equal to \"2\""
+
+// With three or more conditions, semicolons are used
+v = Is(Int(1).EqualTo(0).Or().EqualTo(2).Or().EqualTo(3))
+assert.False(t, v.Valid())
+// Error message: "Value 0 must be equal to \"0\"; Value 0 must be equal to \"2\"; or Value 0 must be equal to \"3\""
 ```
 
 These examples are intended to provide a clear understanding of how to effectively use the `Or` operator in your validations. By leveraging this functionality, you can create more flexible and powerful validation rules, enhancing the robustness and usability of your applications.
