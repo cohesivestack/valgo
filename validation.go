@@ -83,27 +83,43 @@ func (validation *Validation) If(condition bool, _validation *Validation) *Valid
 }
 
 // [IfValid](...) is similar to [If](...), but merges the given [Validation] session
-// only when the specified field path is valid in the current [Validation] session.
-// When the field is not valid, no operation is performed and the original instance
-// is returned unchanged.
+// only when the current [Validation] session is valid (i.e., no validation errors
+// have been produced so far). When the current session is not valid, no operation
+// is performed and the original instance is returned unchanged.
 //
-// See [IsValid](...) for how field paths (including parent namespaces) are evaluated.
+// See [Valid](...) for the predicate used by this method.
 //
 //	v.Is(v.String(username, "username").Not().Blank()).
-//		IfValid("username", v.Is(v.String(role, "role").Equal("admin")))
-func (validation *Validation) IfValid(name string, _validation *Validation) *Validation {
-	if validation.IsValid(name) {
+//		IfValid(v.Is(v.String(role, "role").Equal("admin")))
+func (validation *Validation) IfValid(_validation *Validation) *Validation {
+	if validation.Valid() {
+		return validation.merge("", _validation)
+	}
+	return validation
+}
+
+// [IfPathValid](...) is similar to [If](...), but merges the given [Validation] session
+// only when the specified path is valid in the current [Validation] session.
+// When the path is not valid, no operation is performed and the original instance
+// is returned unchanged.
+//
+// See [PathValid](...) for how paths (including parent namespaces) are evaluated.
+//
+//	v.Is(v.String(username, "username").Not().Blank()).
+//		IfPathValid("username", v.Is(v.String(role, "role").Equal("admin")))
+func (validation *Validation) IfPathValid(path string, _validation *Validation) *Validation {
+	if validation.PathValid(path) {
 		return validation.merge("", _validation)
 	}
 	return validation
 }
 
 // [IfAllValid](...) is similar to [If](...), but merges the given [Validation] session
-// only when all provided field paths are valid in the current [Validation] session.
-// When any of the fields is not valid, no operation is performed and the original
+// only when all provided paths are valid in the current [Validation] session.
+// When any of the paths is not valid, no operation is performed and the original
 // instance is returned unchanged.
 //
-// When the slice is empty, it behaves like [AreValid](...) called with no arguments,
+// When the slice is empty, it behaves like [AllValid](...) called with no arguments,
 // which is equivalent to [Valid]().
 //
 //	v.Is(
@@ -112,19 +128,19 @@ func (validation *Validation) IfValid(name string, _validation *Validation) *Val
 //	).IfAllValid([]string{"email", "password"},
 //		v.Is(v.String(role, "role").Equal("user")),
 //	)
-func (validation *Validation) IfAllValid(names []string, _validation *Validation) *Validation {
-	if validation.AreValid(names...) {
+func (validation *Validation) IfAllValid(paths []string, _validation *Validation) *Validation {
+	if validation.AllValid(paths...) {
 		return validation.merge("", _validation)
 	}
 	return validation
 }
 
 // [IfAnyValid](...) is similar to [If](...), but merges the given [Validation] session
-// only when at least one of the provided field paths is valid in the current
-// [Validation] session. When none of the fields are valid, no operation is performed
+// only when at least one of the provided paths is valid in the current
+// [Validation] session. When none of the paths are valid, no operation is performed
 // and the original instance is returned unchanged.
 //
-// When the slice is empty, it behaves like [IsAnyValid](...) called with no arguments,
+// When the slice is empty, it behaves like [AnyValid](...) called with no arguments,
 // which returns false.
 //
 //	v.Is(
@@ -133,8 +149,8 @@ func (validation *Validation) IfAllValid(names []string, _validation *Validation
 //	).IfAnyValid([]string{"email", "phone"},
 //		v.Is(v.String(preferred, "preferred").InSlice([]string{"email", "phone"})),
 //	)
-func (validation *Validation) IfAnyValid(names []string, _validation *Validation) *Validation {
-	if validation.IsAnyValid(names...) {
+func (validation *Validation) IfAnyValid(paths []string, _validation *Validation) *Validation {
+	if validation.AnyValid(paths...) {
 		return validation.merge("", _validation)
 	}
 	return validation
@@ -174,29 +190,47 @@ func (validation *Validation) When(condition bool, function func(val *Validation
 }
 
 // [WhenValid](...) is similar to [When](...), but executes the given function
-// only when the specified field path is valid in the current [Validation] session.
-// When the field is not valid, no operation is performed and the original
-// instance is returned unchanged.
+// only when the current [Validation] session is valid (i.e., no validation errors
+// have been produced so far). When the current session is not valid, no operation
+// is performed and the original instance is returned unchanged.
 //
-// See [IsValid](...) for how field paths (including parent namespaces) are evaluated.
+// See [Valid](...) for the predicate used by this method.
 //
 //	v.Is(v.String(username, "username").Not().Blank()).
-//		WhenValid("username", func(val *v.Validation) {
+//		WhenValid(func(val *v.Validation) {
 //			val.Is(v.String(role, "role").Equal("admin"))
 //		})
-func (validation *Validation) WhenValid(name string, function func(val *Validation)) *Validation {
-	if validation.IsValid(name) {
+func (validation *Validation) WhenValid(function func(val *Validation)) *Validation {
+	if validation.Valid() {
+		function(validation)
+	}
+	return validation
+}
+
+// [WhenPathValid](...) is similar to [When](...), but executes the given function
+// only when the specified path is valid in the current [Validation] session.
+// When the path is not valid, no operation is performed and the original
+// instance is returned unchanged.
+//
+// See [PathValid](...) for how paths (including parent namespaces) are evaluated.
+//
+//	v.Is(v.String(username, "username").Not().Blank()).
+//		WhenPathValid("username", func(val *v.Validation) {
+//			val.Is(v.String(role, "role").Equal("admin"))
+//		})
+func (validation *Validation) WhenPathValid(path string, function func(val *Validation)) *Validation {
+	if validation.PathValid(path) {
 		function(validation)
 	}
 	return validation
 }
 
 // [WhenAllValid](...) is similar to [When](...), but executes the given function
-// only when all provided field paths are valid in the current [Validation] session.
-// When any of the fields is not valid, no operation is performed and the original
+// only when all provided paths are valid in the current [Validation] session.
+// When any of the paths is not valid, no operation is performed and the original
 // instance is returned unchanged.
 //
-// When the slice is empty, it behaves like [AreValid](...) called with no arguments,
+// When the slice is empty, it behaves like [AllValid](...) called with no arguments,
 // which is equivalent to [Valid]().
 //
 //	v.Is(
@@ -205,19 +239,19 @@ func (validation *Validation) WhenValid(name string, function func(val *Validati
 //	).WhenAllValid([]string{"email", "password"}, func(val *v.Validation) {
 //		val.Is(v.String(role, "role").Equal("user"))
 //	})
-func (validation *Validation) WhenAllValid(names []string, function func(val *Validation)) *Validation {
-	if validation.AreValid(names...) {
+func (validation *Validation) WhenAllValid(paths []string, function func(val *Validation)) *Validation {
+	if validation.AllValid(paths...) {
 		function(validation)
 	}
 	return validation
 }
 
 // [WhenAnyValid](...) is similar to [When](...), but executes the given function
-// only when at least one of the provided field paths is valid in the current
-// [Validation] session. When none of the fields are valid, no operation is
+// only when at least one of the provided paths is valid in the current
+// [Validation] session. When none of the paths are valid, no operation is
 // performed and the original instance is returned unchanged.
 //
-// When the slice is empty, it behaves like [IsAnyValid](...) called with no arguments,
+// When the slice is empty, it behaves like [AnyValid](...) called with no arguments,
 // which returns false.
 //
 //	v.Is(
@@ -226,8 +260,8 @@ func (validation *Validation) WhenAllValid(names []string, function func(val *Va
 //	).WhenAnyValid([]string{"email", "phone"}, func(val *v.Validation) {
 //		val.Is(v.String(preferred, "preferred").InSlice([]string{"email", "phone"}))
 //	})
-func (validation *Validation) WhenAnyValid(names []string, function func(val *Validation)) *Validation {
-	if validation.IsAnyValid(names...) {
+func (validation *Validation) WhenAnyValid(paths []string, function func(val *Validation)) *Validation {
+	if validation.AnyValid(paths...) {
 		function(validation)
 	}
 	return validation
@@ -519,49 +553,119 @@ func (validation *Validation) ToValgoError(marshalJsonFun ...func(e *Error) ([]b
 	return nil
 }
 
-// IsValid reports whether the validator result for the given field name is valid.
+// Deprecated: use PathValid(path) instead.
 //
-// A field is considered valid if it does not appear in the internal invalidation
-// map produced during validation.
-func (validation *Validation) IsValid(name string) bool {
-	if _, isNotValid := validation.invalidateMap[name]; isNotValid {
+// IsValid reports whether the validator result for the given path is valid.
+//
+// A path can be a simple field name (e.g. "email") or a nested/indexed namespace
+// (e.g. "person.addresses[0].line1").
+//
+// A path is considered valid if it does not appear in the internal invalidation
+// map produced during validation. In nested or indexed namespaces, parent paths
+// of an invalid field are also considered invalid.
+func (validation *Validation) IsValid(path string) bool {
+	if _, isNotValid := validation.invalidateMap[path]; isNotValid {
 		return false
 	}
 	return true
 }
 
-// AreValid reports whether the provided field names are all valid.
+// PathValid reports whether the validator result for the given field path is valid.
 //
-// When one or more names are provided, AreValid returns true only if every named
-// field is valid (i.e., none of them appear in the invalidation map).
+// A path can be a simple field name (e.g. "email") or a nested/indexed namespace
+// (e.g. "person.addresses[0].line1").
 //
-// When called with no arguments, AreValid returns the overall validation result,
+// A path is considered valid if it does not appear in the internal invalidation
+// map produced during validation. In nested or indexed namespaces, parent paths
+// of an invalid field are also considered invalid.
+//
+// Note: PathValid does not validate again; it only queries the results of a
+// previous Is(...) or Check(...) call.
+//
+// Example:
+//
+//	val := Is(
+//		String("", "email").Not().Empty(),   // invalid
+//		String("John", "name").Not().Blank(), // valid
+//	)
+//
+//	_ = val.PathValid("email") // false
+//	_ = val.PathValid("name")  // true
+//
+// Example (nested namespaces):
+//
+//	val := In("person",
+//		InRow("addresses", 0,
+//			Is(String("", "line1").Not().Blank()), // invalid
+//		),
+//	)
+//
+//	_ = val.PathValid("person.addresses[0].line1") // false
+//	_ = val.PathValid("person.addresses[0]")       // false (parent path)
+//	_ = val.PathValid("person.addresses")          // false (parent path)
+//	_ = val.PathValid("person")                    // false (parent path)
+//	_ = val.PathValid("person.addresses[1]")       // true  (unrelated path)
+func (validation *Validation) PathValid(path string) bool {
+	if _, isNotValid := validation.invalidateMap[path]; isNotValid {
+		return false
+	}
+	return true
+}
+
+// AllValid reports whether all provided paths are valid.
+//
+// When one or more paths are provided, AllValid returns true only if every path
+// is valid.
+//
+// When called with no arguments, AllValid returns the overall validation result,
 // equivalent to v.Valid().
-func (v *Validation) AreValid(names ...string) bool {
-	if len(names) == 0 {
+//
+// Example:
+//
+//	val := Is(
+//		String("", "email").Not().Empty(),        // invalid
+//		String("+123", "phone").Not().Empty(),    // valid
+//	)
+//
+//	_ = val.AllValid("phone")            // true
+//	_ = val.AllValid("email")            // false
+//	_ = val.AllValid("email", "phone")   // false
+//	_ = val.AllValid()                   // false (same as val.Valid())
+func (v *Validation) AllValid(paths ...string) bool {
+	if len(paths) == 0 {
 		return v.Valid()
 	}
-	for _, name := range names {
-		if _, invalid := v.invalidateMap[name]; invalid {
+	for _, path := range paths {
+		if _, invalid := v.invalidateMap[path]; invalid {
 			return false
 		}
 	}
 	return true
 }
 
-// IsAnyValid reports whether at least one of the provided field names is valid.
+// AnyValid reports whether at least one of the provided paths is valid.
 //
-// IsAnyValid returns true as soon as it finds a field name that does not appear
-// in the invalidation map.
+// AnyValid returns true as soon as it finds a valid path.
 //
-// When called with no arguments, IsAnyValid returns false. The caller must
-// explicitly provide the set of fields to evaluate.
-func (v *Validation) IsAnyValid(names ...string) bool {
-	if len(names) == 0 {
+// When called with no arguments, AnyValid returns false. The caller must
+// explicitly provide the set of paths to evaluate.
+//
+// Example:
+//
+//	val := Is(
+//		String("", "email").Not().Empty(),        // invalid
+//		String("+123", "phone").Not().Empty(),    // valid
+//	)
+//
+//	_ = val.AnyValid("email")           // false
+//	_ = val.AnyValid("email", "phone")  // true
+//	_ = val.AnyValid()                  // false
+func (v *Validation) AnyValid(paths ...string) bool {
+	if len(paths) == 0 {
 		return false
 	}
-	for _, name := range names {
-		if _, invalid := v.invalidateMap[name]; !invalid {
+	for _, path := range paths {
+		if _, invalid := v.invalidateMap[path]; !invalid {
 			return true
 		}
 	}
