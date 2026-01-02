@@ -692,19 +692,61 @@ func TestValidationIsValidParentNamespaces(t *testing.T) {
 	assert.True(t, v.IsValid("user"))
 }
 
-func TestValidationAreValidWithoutErrors(t *testing.T) {
+func TestValidationPathValidWithoutErrors(t *testing.T) {
 	v := New()
-
-	// With no arguments, AreValid should be equivalent to Valid().
-	assert.True(t, v.AreValid())
-
-	// With explicit names, all of them should be valid.
-	assert.True(t, v.AreValid("status", "name"))
-	assert.True(t, v.AreValid("status"))
-	assert.True(t, v.AreValid("name"))
+	assert.True(t, v.PathValid("status"))
+	assert.True(t, v.PathValid("name"))
 }
 
-func TestValidationAreValidParentNamespaces(t *testing.T) {
+func TestValidationPathValidParentNamespaces(t *testing.T) {
+	v :=
+		In("person",
+			InRow("addresses", 0,
+				Is(
+					String("", "line1").Not().Blank(),
+					String("", "line2").Not().Blank(),
+					String("hello", "line3").Not().Blank(),
+				),
+			).InRow("phones", 0,
+				Is(
+					String("+1234567890", "code").Not().Empty(),
+				),
+			),
+		)
+
+	// The specific fields should be invalid
+	assert.False(t, v.PathValid("person.addresses[0].line1"))
+	assert.False(t, v.PathValid("person.addresses[0].line2"))
+
+	// Parent namespaces should also be marked as invalid
+	assert.False(t, v.PathValid("person"))
+	assert.False(t, v.PathValid("person.addresses"))
+	assert.False(t, v.PathValid("person.addresses[0]"))
+
+	// Unrelated namespaces remain valid
+	assert.True(t, v.PathValid("person.addresses[1]"))
+	assert.True(t, v.PathValid("person.addresses[1].line3"))
+	assert.True(t, v.PathValid("person.addresses[1].line4"))
+	assert.True(t, v.PathValid("person.phones"))
+	assert.True(t, v.PathValid("person.phones[0]"))
+	assert.True(t, v.PathValid("person.phones[0].code"))
+	assert.True(t, v.PathValid("perons.status"))
+	assert.True(t, v.PathValid("user"))
+}
+
+func TestValidationAllValidWithoutErrors(t *testing.T) {
+	v := New()
+
+	// With no arguments, AllValid should be equivalent to Valid().
+	assert.True(t, v.AllValid())
+
+	// With explicit paths, all of them should be valid.
+	assert.True(t, v.AllValid("status", "name"))
+	assert.True(t, v.AllValid("status"))
+	assert.True(t, v.AllValid("name"))
+}
+
+func TestValidationAllValidParentNamespaces(t *testing.T) {
 	v :=
 		In("person",
 			InRow("addresses", 0,
@@ -721,43 +763,43 @@ func TestValidationAreValidParentNamespaces(t *testing.T) {
 		)
 
 	// Overall validation should be false because there are invalid fields.
-	assert.False(t, v.AreValid())
+	assert.False(t, v.AllValid())
 	assert.False(t, v.Valid())
 
 	// All-of invalid leaf fields should be false.
-	assert.False(t, v.AreValid("person.addresses[0].line1", "person.addresses[0].line2"))
+	assert.False(t, v.AllValid("person.addresses[0].line1", "person.addresses[0].line2"))
 
 	// Mixing valid + invalid should be false (ALL-of).
-	assert.False(t, v.AreValid("person.phones[0].code", "person.addresses[0].line1"))
+	assert.False(t, v.AllValid("person.phones[0].code", "person.addresses[0].line1"))
 
 	// Parent namespaces are invalid, so ALL-of including them should be false.
-	assert.False(t, v.AreValid("person"))
-	assert.False(t, v.AreValid("person.addresses"))
-	assert.False(t, v.AreValid("person.addresses[0]"))
+	assert.False(t, v.AllValid("person"))
+	assert.False(t, v.AllValid("person.addresses"))
+	assert.False(t, v.AllValid("person.addresses[0]"))
 
 	// Unrelated / not-present paths remain valid in the current model.
-	assert.True(t, v.AreValid("person.addresses[1]"))
-	assert.True(t, v.AreValid("person.addresses[1].line3", "person.addresses[1].line4"))
-	assert.True(t, v.AreValid("person.phones", "person.phones[0]", "person.phones[0].code"))
-	assert.True(t, v.AreValid("perons.status", "user"))
+	assert.True(t, v.AllValid("person.addresses[1]"))
+	assert.True(t, v.AllValid("person.addresses[1].line3", "person.addresses[1].line4"))
+	assert.True(t, v.AllValid("person.phones", "person.phones[0]", "person.phones[0].code"))
+	assert.True(t, v.AllValid("perons.status", "user"))
 }
 
-func TestValidationIsAnyValidWithoutErrors(t *testing.T) {
+func TestValidationAnyValidWithoutErrors(t *testing.T) {
 	v := New()
 
-	// With no arguments, IsAnyValid must return false by design.
-	assert.False(t, v.IsAnyValid())
+	// With no arguments, AnyValid must return false by design.
+	assert.False(t, v.AnyValid())
 
 	// Any-of: if at least one is valid, it should return true.
-	assert.True(t, v.IsAnyValid("status"))
-	assert.True(t, v.IsAnyValid("name"))
-	assert.True(t, v.IsAnyValid("status", "name"))
+	assert.True(t, v.AnyValid("status"))
+	assert.True(t, v.AnyValid("name"))
+	assert.True(t, v.AnyValid("status", "name"))
 
-	// Unknown paths are considered valid in the current model, so Any-of should be true.
-	assert.True(t, v.IsAnyValid("user"))
+	// Unknown paths are considered valid in the current model, so AnyValid should be true.
+	assert.True(t, v.AnyValid("user"))
 }
 
-func TestValidationIsAnyValidParentNamespaces(t *testing.T) {
+func TestValidationAnyValidParentNamespaces(t *testing.T) {
 	v :=
 		In("person",
 			InRow("addresses", 0,
@@ -773,35 +815,57 @@ func TestValidationIsAnyValidParentNamespaces(t *testing.T) {
 			),
 		)
 
-	// With no arguments, IsAnyValid must return false by design.
-	assert.False(t, v.IsAnyValid())
+	// With no arguments, AnyValid must return false by design.
+	assert.False(t, v.AnyValid())
 
 	// Any-of two invalid leaf fields => false.
-	assert.False(t, v.IsAnyValid("person.addresses[0].line1", "person.addresses[0].line2"))
+	assert.False(t, v.AnyValid("person.addresses[0].line1", "person.addresses[0].line2"))
 
 	// Any-of invalid parent namespaces => false.
-	assert.False(t, v.IsAnyValid("person"))
-	assert.False(t, v.IsAnyValid("person.addresses"))
-	assert.False(t, v.IsAnyValid("person.addresses[0]"))
+	assert.False(t, v.AnyValid("person"))
+	assert.False(t, v.AnyValid("person.addresses"))
+	assert.False(t, v.AnyValid("person.addresses[0]"))
 
 	// Any-of valid + invalid => true (ANY-of).
-	assert.True(t, v.IsAnyValid("person.addresses[0].line1", "person.phones[0].code"))
-	assert.True(t, v.IsAnyValid("person", "person.phones[0].code"))
+	assert.True(t, v.AnyValid("person.addresses[0].line1", "person.phones[0].code"))
+	assert.True(t, v.AnyValid("person", "person.phones[0].code"))
 
 	// Any-of on unrelated/unknown paths => true (considered valid).
-	assert.True(t, v.IsAnyValid("person.addresses[1]"))
-	assert.True(t, v.IsAnyValid("person.addresses[1].line3"))
-	assert.True(t, v.IsAnyValid("person.addresses[1].line4"))
-	assert.True(t, v.IsAnyValid("person.phones"))
-	assert.True(t, v.IsAnyValid("perons.status"))
-	assert.True(t, v.IsAnyValid("user"))
+	assert.True(t, v.AnyValid("person.addresses[1]"))
+	assert.True(t, v.AnyValid("person.addresses[1].line3"))
+	assert.True(t, v.AnyValid("person.addresses[1].line4"))
+	assert.True(t, v.AnyValid("person.phones"))
+	assert.True(t, v.AnyValid("perons.status"))
+	assert.True(t, v.AnyValid("user"))
 }
 
 func TestValidationIfValid(t *testing.T) {
-	// IfValid should merge only when the referenced field is valid
+	// IfValid should merge only when the current validation is valid
 	v := Is(String("test", "name").Not().Blank()).
-		Is(String("", "phone").Not().Blank()).                 // invalid
-		IfValid("name", Is(String("", "email").Not().Blank())) // executes (name is valid)
+		IfValid(Is(String("", "email").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "email")
+	assert.NotContains(t, v.Errors(), "name")
+	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
+}
+
+func TestValidationIfValidWhenSessionIsInvalid(t *testing.T) {
+	// IfValid should not merge when the current validation is invalid
+	v := Is(String("", "name").Not().Blank()). // invalid
+							IfValid(Is(String("", "email").Not().Blank()))
+
+	assert.False(t, v.Valid())
+	assert.Contains(t, v.Errors(), "name")
+	assert.NotContains(t, v.Errors(), "email")
+	assert.Equal(t, "Name can't be blank", v.Errors()["name"].Messages()[0])
+}
+
+func TestValidationIfPathValid(t *testing.T) {
+	// IfPathValid should merge only when the referenced path is valid
+	v := Is(String("test", "name").Not().Blank()).
+		Is(String("", "phone").Not().Blank()).                     // invalid
+		IfPathValid("name", Is(String("", "email").Not().Blank())) // executes (name is valid)
 
 	assert.False(t, v.Valid())
 	assert.Contains(t, v.Errors(), "phone")
@@ -810,10 +874,10 @@ func TestValidationIfValid(t *testing.T) {
 	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
 }
 
-func TestValidationIfValidWhenFieldIsInvalid(t *testing.T) {
-	// IfValid should not merge when the referenced field is invalid
+func TestValidationIfPathValidWhenPathIsInvalid(t *testing.T) {
+	// IfPathValid should not merge when the referenced path is invalid
 	v := Is(String("", "name").Not().Blank()). // invalid
-							IfValid("name", Is(String("", "email").Not().Blank()))
+							IfPathValid("name", Is(String("", "email").Not().Blank()))
 
 	assert.False(t, v.Valid())
 	assert.Contains(t, v.Errors(), "name")
@@ -822,7 +886,7 @@ func TestValidationIfValidWhenFieldIsInvalid(t *testing.T) {
 }
 
 func TestValidationIfAllValid(t *testing.T) {
-	// IfAllValid should merge only when ALL referenced fields are valid
+	// IfAllValid should merge only when ALL referenced paths are valid
 	v := Is(
 		String("test", "name").Not().Blank(),  // valid
 		String("+123", "phone").Not().Blank(), // valid
@@ -836,8 +900,8 @@ func TestValidationIfAllValid(t *testing.T) {
 	assert.Equal(t, "Role can't be blank", v.Errors()["role"].Messages()[0])
 }
 
-func TestValidationIfAllValidWhenAnyFieldInvalid(t *testing.T) {
-	// IfAllValid should not merge when ANY referenced field is invalid
+func TestValidationIfAllValidWhenAnyPathInvalid(t *testing.T) {
+	// IfAllValid should not merge when ANY referenced path is invalid
 	v := Is(
 		String("", "name").Not().Blank(),      // invalid
 		String("+123", "phone").Not().Blank(), // valid
@@ -850,7 +914,7 @@ func TestValidationIfAllValidWhenAnyFieldInvalid(t *testing.T) {
 }
 
 func TestValidationIfAllValidWithEmptySliceBehavesLikeValid(t *testing.T) {
-	// IfAllValid with empty slice behaves like AreValid() with no args => v.Valid()
+	// IfAllValid with empty slice behaves like AllValid() with no args => v.Valid()
 	v := Is(String("", "name").Not().Blank()). // invalid
 							IfAllValid([]string{}, Is(String("", "email").Not().Blank()))
 
@@ -860,7 +924,7 @@ func TestValidationIfAllValidWithEmptySliceBehavesLikeValid(t *testing.T) {
 }
 
 func TestValidationIfAnyValid(t *testing.T) {
-	// IfAnyValid should merge when at least one referenced field is valid
+	// IfAnyValid should merge when at least one referenced path is valid
 	v := Is(
 		String("", "name").Not().Blank(),      // invalid
 		String("+123", "phone").Not().Blank(), // valid
@@ -874,7 +938,7 @@ func TestValidationIfAnyValid(t *testing.T) {
 }
 
 func TestValidationIfAnyValidWhenNoneValid(t *testing.T) {
-	// IfAnyValid should not merge when none of the referenced fields is valid
+	// IfAnyValid should not merge when none of the referenced paths is valid
 	v := Is(
 		String("", "name").Not().Blank(),  // invalid
 		String("", "phone").Not().Blank(), // invalid
@@ -887,7 +951,7 @@ func TestValidationIfAnyValidWhenNoneValid(t *testing.T) {
 }
 
 func TestValidationIfAnyValidWithEmptySliceIsNoop(t *testing.T) {
-	// IfAnyValid with empty slice behaves like IsAnyValid() with no args => false => no-op
+	// IfAnyValid with empty slice behaves like AnyValid() with no args => false => no-op
 	v := Is(String("test", "name").Not().Blank()).
 		IfAnyValid([]string{}, Is(String("", "email").Not().Blank()))
 
@@ -895,10 +959,10 @@ func TestValidationIfAnyValidWithEmptySliceIsNoop(t *testing.T) {
 	assert.NotContains(t, v.Errors(), "email")
 }
 
-func TestValidationWhenValid(t *testing.T) {
-	// WhenValid should execute only when the referenced field is valid
+func TestValidationWhenPathValid(t *testing.T) {
+	// WhenPathValid should execute only when the referenced path is valid
 	v := Is(String("test", "name").Not().Blank()).
-		WhenValid("name", func(val *Validation) {
+		WhenPathValid("name", func(val *Validation) {
 			val.Is(String("", "email").Not().Blank())
 		})
 
@@ -906,9 +970,9 @@ func TestValidationWhenValid(t *testing.T) {
 	assert.Contains(t, v.Errors(), "email")
 	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
 
-	// WhenValid should not execute when the referenced field is invalid
+	// WhenPathValid should not execute when the referenced path is invalid
 	v2 := Is(String("", "name").Not().Blank()).
-		WhenValid("name", func(val *Validation) {
+		WhenPathValid("name", func(val *Validation) {
 			val.Is(String("", "email").Not().Blank())
 		})
 
@@ -918,7 +982,7 @@ func TestValidationWhenValid(t *testing.T) {
 }
 
 func TestValidationWhenAllValid(t *testing.T) {
-	// WhenAllValid should execute only when ALL referenced fields are valid
+	// WhenAllValid should execute only when ALL referenced paths are valid
 	v := Is(
 		String("test", "name").Not().Blank(),
 		String("+123", "phone").Not().Blank(),
@@ -930,7 +994,7 @@ func TestValidationWhenAllValid(t *testing.T) {
 	assert.Contains(t, v.Errors(), "email")
 	assert.Equal(t, "Email can't be blank", v.Errors()["email"].Messages()[0])
 
-	// WhenAllValid should not execute when ANY referenced field is invalid
+	// WhenAllValid should not execute when ANY referenced path is invalid
 	v2 := Is(
 		String("", "name").Not().Blank(),      // invalid
 		String("+123", "phone").Not().Blank(), // valid
@@ -944,7 +1008,7 @@ func TestValidationWhenAllValid(t *testing.T) {
 }
 
 func TestValidationWhenAllValidWithEmptySliceBehavesLikeValid(t *testing.T) {
-	// WhenAllValid with empty slice behaves like AreValid() with no args => v.Valid()
+	// WhenAllValid with empty slice behaves like AllValid() with no args => v.Valid()
 	v := Is(String("", "name").Not().Blank()).
 		WhenAllValid([]string{}, func(val *Validation) {
 			val.Is(String("", "email").Not().Blank())
@@ -956,7 +1020,7 @@ func TestValidationWhenAllValidWithEmptySliceBehavesLikeValid(t *testing.T) {
 }
 
 func TestValidationWhenAnyValid(t *testing.T) {
-	// WhenAnyValid should execute when at least one referenced field is valid
+	// WhenAnyValid should execute when at least one referenced path is valid
 	v := Is(
 		String("", "name").Not().Blank(),      // invalid
 		String("+123", "phone").Not().Blank(), // valid
@@ -985,7 +1049,7 @@ func TestValidationWhenAnyValid(t *testing.T) {
 }
 
 func TestValidationWhenAnyValidWithEmptySliceIsNoop(t *testing.T) {
-	// WhenAnyValid with empty slice behaves like IsAnyValid() with no args => false => no-op
+	// WhenAnyValid with empty slice behaves like AnyValid() with no args => false => no-op
 	v := Is(String("test", "name").Not().Blank()).
 		WhenAnyValid([]string{}, func(val *Validation) {
 			val.Is(String("", "email").Not().Blank())
@@ -995,8 +1059,8 @@ func TestValidationWhenAnyValidWithEmptySliceIsNoop(t *testing.T) {
 	assert.NotContains(t, v.Errors(), "email")
 }
 
-func TestValidationIfWhenValidParentNamespaces(t *testing.T) {
-	// Ensure If*/When* functions respect parent namespace invalidation (IsValid behavior)
+func TestValidationIfWhenPathValidParentNamespaces(t *testing.T) {
+	// Ensure If*/When* functions respect parent namespace invalidation (PathValid behavior)
 	v :=
 		In("person",
 			InRow("addresses", 0,
@@ -1008,18 +1072,19 @@ func TestValidationIfWhenValidParentNamespaces(t *testing.T) {
 		)
 
 	// person.addresses[0] should be invalid due to line1
-	assert.False(t, v.IsValid("person.addresses[0]"))
+	assert.False(t, v.IsValid("person.addresses[0]"))   // deprecated predicate still valid to use in this test
+	assert.False(t, v.PathValid("person.addresses[0]")) // new predicate
 
-	// IfValid should NOT execute when parent namespace is invalid
-	v2 := v.IfValid("person.addresses[0]", Is(String("", "email").Not().Blank()))
+	// IfPathValid should NOT execute when parent namespace is invalid
+	v2 := v.IfPathValid("person.addresses[0]", Is(String("", "email").Not().Blank()))
 	assert.NotContains(t, v2.Errors(), "email")
 
 	// IfAnyValid should execute when at least one is valid
 	v3 := v.IfAnyValid([]string{"person.addresses[0]", "person.addresses[1]"}, Is(String("", "email").Not().Blank()))
 	assert.Contains(t, v3.Errors(), "email")
 
-	// WhenValid should NOT execute when parent namespace is invalid
-	v4 := v.WhenValid("person.addresses[0]", func(val *Validation) {
+	// WhenPathValid should NOT execute when parent namespace is invalid
+	v4 := v.WhenPathValid("person.addresses[0]", func(val *Validation) {
 		val.Is(String("", "phone").Not().Blank())
 	})
 	assert.NotContains(t, v4.Errors(), "phone")
