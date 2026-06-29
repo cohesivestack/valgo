@@ -1,0 +1,43 @@
+---
+title: Valgo
+description: Type-safe, expressive validation for Go (without struct tags).
+template: splash
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+
+<section
+  aria-labelledby="valgo-home-title"
+  style={{
+    display: 'grid',
+    minHeight: 'min(34rem, calc(100vh - var(--sl-nav-height) - 8rem))',
+    placeItems: 'center',
+    alignContent: 'center',
+    gap: 'clamp(2rem, 8vw, 4rem)',
+    paddingBlock: 'clamp(3rem, 12vw, 8rem)',
+    textAlign: 'center',
+  }}
+>
+  <h1 id="valgo-home-title" class="sr-only">Valgo</h1>
+  <div style={{ display: 'block', width: 'min(100%, 34rem)' }}>
+    <img
+      className="light:sl-hidden"
+      src="/valgo-logo-dark.png"
+      alt="Valgo"
+      width="689"
+      height="209"
+      style={{ display: 'block', width: '100%', height: 'auto' }}
+    />
+    <img
+      className="dark:sl-hidden"
+      src="/valgo-logo.png"
+      alt=""
+      width="689"
+      height="209"
+      style={{ display: 'block', width: '100%', height: 'auto' }}
+    />
+  </div>
+  <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <LinkButton href="/getting-started/" icon="right-arrow">Get Started</LinkButton>
+  </div>
+</section>
