@@ -1,0 +1,89 @@
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import starlightVersions from 'starlight-versions';
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: 'Valgo',
+      description: 'Type-safe, expressive, and extensible validator library for Go.',
+      logo: {
+        light: './src/assets/valgo-logo.png',
+        dark: './src/assets/valgo-logo-dark.png',
+        alt: 'Valgo',
+        replacesTitle: true,
+      },
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/cohesivestack/valgo',
+        },
+      ],
+      plugins: [
+        starlightVersions({
+          // When you run the site, the plugin will archive the current docs state
+          // under the first configured version slug.
+          versions: [{ slug: '0.7', label: 'v0.7' }],
+          current: { label: 'Latest' },
+        }),
+      ],
+      sidebar: [
+        {
+          label: 'Start Here',
+          items: [
+            { label: 'Getting Started', link: '/getting-started/' },
+            { label: 'Migration Notes', link: '/migration/' },
+          ],
+        },
+        {
+          label: 'Using Valgo',
+          items: [
+            { label: 'Validation Sessions', link: '/using-valgo/validation-sessions/' },
+            { label: 'Namespaces', link: '/using-valgo/namespaces/' },
+            { label: 'Querying Results', link: '/using-valgo/querying-results/' },
+            { label: 'Conditional Flows', link: '/using-valgo/conditional-flows/' },
+            { label: 'Errors & Output', link: '/using-valgo/errors/' },
+            { label: 'Localization & Factory', link: '/using-valgo/localization/' },
+          ],
+        },
+        {
+          label: 'Validators',
+          items: [
+            { label: 'Overview', link: '/validators/overview/' },
+            { label: 'String', link: '/validators/string/' },
+            { label: 'Numbers', link: '/validators/numbers/' },
+            { label: 'Boolean', link: '/validators/boolean/' },
+            { label: 'Time', link: '/validators/time/' },
+            { label: 'Comparable', link: '/validators/comparable/' },
+            { label: 'Typed & Any', link: '/validators/typed-any/' },
+            { label: 'OR Operators (Or / OrElse)', link: '/validators/or-operators/' },
+            { label: 'Rule Index', link: '/validators/rule-index/' },
+          ],
+        },
+        {
+          label: 'Extending',
+          items: [{ label: 'Custom Validators', link: '/extending/custom-validators/' }],
+        },
+        {
+          label: 'Cookbook',
+          items: [
+            { label: 'Overview', link: '/cookbook/' },
+            { label: 'Sign-up Form', link: '/cookbook/signup-form/' },
+            { label: 'Nested Structs', link: '/cookbook/nested-structs/' },
+            { label: 'Slices & Indexed Errors', link: '/cookbook/slices/' },
+            { label: 'Optional Fields (Pointers)', link: '/cookbook/optional-fields/' },
+            { label: 'Conditional Rules', link: '/cookbook/conditional-rules/' },
+            { label: 'Custom Messages', link: '/cookbook/custom-messages/' },
+            { label: 'Localization', link: '/cookbook/localization/' },
+            { label: 'Reusable Validations', link: '/cookbook/reusable-validations/' },
+          ],
+        },
+        {
+          label: 'About',
+          items: [{ label: 'License', link: '/about/license/' }],
+        },
+      ],
+    }),
+  ],
+});
