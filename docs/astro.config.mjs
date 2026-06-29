@@ -8,11 +8,12 @@ export default defineConfig({
       title: 'Valgo',
       description: 'Type-safe, expressive, and extensible validator library for Go.',
       logo: {
-        light: './src/assets/valgo-logo.png',
-        dark: './src/assets/valgo-logo-dark.png',
+        light: './public/valgo-logo.svg',
+        dark: './public/valgo-logo-dark.svg',
         alt: 'Valgo',
         replacesTitle: true,
       },
+      favicon: '/favicon.png',
       social: [
         {
           icon: 'github',
