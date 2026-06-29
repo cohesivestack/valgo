@@ -406,3 +406,70 @@ func TestValidatorTimeOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorTimeOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	timeZero := time.Time{}
+	timeOne := time.Now()
+	timeTwo := timeOne.Add(time.Hour)
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(Time(timeZero).Zero().OrElse().After(timeOne).Before(timeTwo))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(Time(timeOne.Add(30 * time.Minute)).Zero().OrElse().After(timeOne).Before(timeTwo))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(Time(timeTwo.Add(time.Hour)).Zero().OrElse().After(timeOne).Before(timeTwo))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(Time(timeTwo.Add(time.Hour)).Zero().OrElse().After(timeTwo).Before(timeOne))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(Time(timeOne).Not().Zero().OrElse().After(timeTwo).Before(timeOne))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	// timeZero is zero, so Not().Zero() fails (invalid), but Before(timeOne) passes (valid)
+	v = Is(Time(timeZero).Not().Zero().OrElse().Before(timeOne))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorTimeOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	timeZero := time.Time{}
+	timeOne := time.Now()
+	timeTwo := timeOne.Add(time.Hour)
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(Time(timeZero).Zero().OrElse().After(timeOne).Before(timeTwo))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(Time(timeOne.Add(30 * time.Minute)).Zero().OrElse().After(timeOne).Before(timeTwo))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(Time(timeTwo.Add(time.Hour)).Zero().OrElse().After(timeOne).Before(timeTwo))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(Time(timeTwo.Add(time.Hour)).Zero().OrElse().After(timeTwo).Before(timeOne))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

@@ -474,3 +474,67 @@ func TestValidatorBoolPOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorBoolPOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	_true := true
+	_false := false
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(BoolP(&_true).True().OrElse().False())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(BoolP(&_false).True().OrElse().False())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(BoolP(&_true).False().OrElse().False())
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(BoolP(&_false).True().OrElse().True())
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(BoolP(&_false).Not().True().OrElse().False())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(BoolP(&_true).Not().True().OrElse().True())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorBoolPOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	_true := true
+	_false := false
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(BoolP(&_true).True().OrElse().False())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(BoolP(&_false).True().OrElse().False())
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(BoolP(&_true).False().OrElse().False())
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(BoolP(&_false).True().OrElse().True())
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

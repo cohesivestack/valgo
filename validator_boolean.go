@@ -58,18 +58,58 @@ func (validator *ValidatorBool[T]) Not() *ValidatorBool[T] {
 	return validator
 }
 
-// Introduces a logical OR in the chain of validation conditions, affecting the
-// evaluation order and priority of subsequent validators. A value passes the
-// validation if it meets any one condition following the Or() call, adhering to
-// a left-to-right evaluation. This mechanism allows for validating against
-// multiple criteria where satisfying any single criterion is sufficient.
+// Or introduces a logical OR boundary in the current validator chain.
+//
+// Or groups adjacent validation fragments into a single OR-group that is
+// evaluated left-to-right until one fragment succeeds. The OR-group succeeds
+// if any fragment succeeds; it fails only if all fragments fail.
+//
+// Precedence: the OR-group is evaluated as a unit before the implicit AND
+// that continues the chain. For example:
+//
+//	A.Or().B.C   == (A OR B) AND C
+//
+// Error reporting: if the OR-group fails, the error message for that group is
+// a single message composed by joining the failing fragments' messages using
+// the localized OR list format.
+//
 // Example:
 //
-//	// This validator will pass because the input is equals false.
+//	// Passes because input is True (False() OR True()).
 //	input := true
 //	isValid := v.Is(v.Bool(input).False().Or().True()).Valid()
 func (validator *ValidatorBool[T]) Or() *ValidatorBool[T] {
 	validator.context.Or()
+
+	return validator
+}
+
+// OrElse introduces a logical OR boundary with a cut (short-circuit) in the
+// validator chain.
+//
+// OrElse behaves like Or for building an OR-group, but with an additional rule:
+// if the left side (a single fragment, or the entire OR-group accumulated to
+// the left of OrElse) succeeds, validation stops and no fragments to the right
+// of OrElse are evaluated.
+//
+// This is primarily used to express "accept X, otherwise validate the rest"
+// without repeating X across multiple OR fragments.
+//
+// Precedence: OrElse still participates in OR-grouping precedence. For example:
+//
+//	A.OrElse().B.C  == A OR (B AND C)   (with a cut if A succeeds)
+//
+// Error reporting: if the OR-group fails, its message is composed the same way
+// as Or (localized OR list join).
+//
+// Example:
+//
+//	// If input is True, the chain succeeds and False() is not evaluated.
+//	// Otherwise, input must be False.
+//	input := true
+//	isValid := v.Is(v.Bool(input).True().OrElse().False()).Valid()
+func (validator *ValidatorBool[T]) OrElse() *ValidatorBool[T] {
+	validator.context.OrElse()
 
 	return validator
 }

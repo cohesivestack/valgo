@@ -3,6 +3,7 @@ package valgo
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/valyala/fasttemplate"
 )
@@ -23,12 +24,17 @@ type errorTemplate struct {
 	params   map[string]interface{}
 }
 
+type errorTemplateOneOf struct {
+	errorTemplate  *errorTemplate
+	errorTemplates []*errorTemplate // Used for "or" operations
+}
+
 // Contains information about each invalid field value returned by the
 // [Validation] session.
 type valueError struct {
 	name           *string
 	title          *string
-	errorTemplates map[string]*errorTemplate
+	errorTemplates []*errorTemplateOneOf
 	errorMessages  []string
 	messages       []string
 	dirty          bool
@@ -53,8 +59,25 @@ func (ve *valueError) Name() string {
 func (ve *valueError) Messages() []string {
 	if ve.dirty {
 		ve.messages = []string{}
-		for _, et := range ve.errorTemplates {
-			ve.messages = append(ve.messages, ve.buildMessageFromTemplate(et))
+		for _, etOneOf := range ve.errorTemplates {
+			if etOneOf.errorTemplate != nil {
+				ve.messages = append(ve.messages, ve.buildMessageFromTemplate(etOneOf.errorTemplate))
+			} else { // "or" operation
+				message := strings.Builder{}
+				for i, et := range etOneOf.errorTemplates {
+					if i > 0 {
+						if i == 1 && len(etOneOf.errorTemplates) == 2 {
+							message.WriteString(OrKeyPair)
+						} else if i == len(etOneOf.errorTemplates)-1 {
+							message.WriteString(OrKeyEnd)
+						} else {
+							message.WriteString(OrKeyMiddle)
+						}
+					}
+					message.WriteString(ve.buildMessageFromTemplate(et))
+				}
+				ve.messages = append(ve.messages, message.String())
+			}
 		}
 
 		ve.messages = append(ve.messages, ve.errorMessages...)

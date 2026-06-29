@@ -308,3 +308,67 @@ func TestValidatorAnyOrOperatorWithCheck(t *testing.T) {
 	assert.Equal(t, true && false || true, v.Valid())
 	assert.Empty(t, v.Errors())
 }
+
+func TestValidatorAnyOrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	var input *string
+	v = Is(Any(input).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	testStr := "test"
+	v = Is(Any(&testStr).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	otherStr := "other"
+	v = Is(Any(&otherStr).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(Any(&otherStr).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(Any(&testStr).Not().Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "other" }))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(Any(input).Not().Nil().OrElse().Passing(func(v any) bool { return v.(*string) == nil }))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorAnyOrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit
+	var input *string
+	v = Check(Any(input).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	testStr := "test"
+	v = Check(Any(&testStr).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	otherStr := "other"
+	v = Check(Any(&otherStr).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(Any(&otherStr).Nil().OrElse().Passing(func(v any) bool { return v != nil && *v.(*string) == "test" }))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}

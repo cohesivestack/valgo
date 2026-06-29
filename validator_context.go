@@ -6,9 +6,17 @@ type validatorFragment struct {
 	templateParams map[string]any
 	function       func() bool
 	boolOperation  bool
-	orOperation    bool
+	orOperation    orOperationType
 	isValid        bool
 }
+
+type orOperationType uint8
+
+const (
+	orOperationTypeNone   = 0
+	orOperationTypeOr     = 1
+	orOperationTypeOrElse = 2
+)
 
 // The context keeps the state and provides the functions to control a
 // custom validator.
@@ -18,7 +26,7 @@ type ValidatorContext struct {
 	name          *string
 	title         *string
 	boolOperation bool
-	orOperation   bool
+	orOperation   orOperationType
 }
 
 // Create a new [ValidatorContext] to be used by a custom validator.
@@ -28,7 +36,7 @@ func NewContext(value any, nameAndTitle ...string) *ValidatorContext {
 		value:         value,
 		fragments:     []*validatorFragment{},
 		boolOperation: true,
-		orOperation:   false,
+		orOperation:   orOperationTypeNone,
 	}
 
 	sizeNameAndTitle := len(nameAndTitle)
@@ -54,7 +62,15 @@ func (ctx *ValidatorContext) Not() *ValidatorContext {
 // Add Or operation to validation.
 func (ctx *ValidatorContext) Or() *ValidatorContext {
 	if len(ctx.fragments) > 0 {
-		ctx.orOperation = true
+		ctx.orOperation = orOperationTypeOr
+	}
+	return ctx
+}
+
+// Add OrElse operation to validation.
+func (ctx *ValidatorContext) OrElse() *ValidatorContext {
+	if len(ctx.fragments) > 0 {
+		ctx.orOperation = orOperationTypeOrElse
 	}
 	return ctx
 }
@@ -95,7 +111,7 @@ func (ctx *ValidatorContext) AddWithParams(function func() bool, errorKey string
 	}
 	ctx.fragments = append(ctx.fragments, fragment)
 	ctx.boolOperation = true
-	ctx.orOperation = false
+	ctx.orOperation = orOperationTypeNone
 
 	return ctx
 }
@@ -108,23 +124,34 @@ func (ctx *ValidatorContext) validateCheck(validation *Validation) *Validation {
 	return ctx.validate(validation, false)
 }
 
+type invalidFragment struct {
+	fragments []*validatorFragment // When the fragment is part of an "or" operation, this is a list of fragments that are part of the "or" operation
+}
+
 func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool) *Validation {
 	// valid := true
 	validation.currentIndex++
+
+	invalidFragments := []*invalidFragment{}
 
 	// Iterating through each fragment in the context's fragment list
 	for i, fragment := range ctx.fragments {
 
 		// If the previous fragment is not valid, the current fragment is not in an "or" operation, and the short circuit flag is true,
 		// we return the current state of the validation without evaluating the current fragment
-		if i > 0 && !ctx.fragments[i-1].isValid && !fragment.orOperation && shortCircuit {
+		if i > 0 && !ctx.fragments[i-1].isValid && fragment.orOperation == orOperationTypeNone && shortCircuit {
 			break
 		}
 
 		// If the current fragment is a part of an "or" operation and the previous fragment in the "or" operation
 		// is valid, we mark the current fragment as valid and move to the next iteration
-		if fragment.orOperation && ctx.fragments[i-1].isValid {
+		if fragment.orOperation == orOperationTypeOr && ctx.fragments[i-1].isValid {
 			continue
+		}
+
+		//
+		if fragment.orOperation == orOperationTypeOrElse && ctx.fragments[i-1].isValid {
+			break
 		}
 
 		// Evaluating the validation function of the current fragment and updating the valid flag
@@ -132,26 +159,23 @@ func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool)
 		// and the valid flag was true before this evaluation
 		fragment.isValid = fragment.function() == fragment.boolOperation
 
-		// If the current fragment is valid and is part of an "or" operation, we backtrack to mark all preceding
-		// fragments in the "or" operation chain as valid
-		if fragment.isValid && fragment.orOperation {
-			for j := i - 1; j >= 0; j-- {
-				ctx.fragments[j].isValid = true
-				// Breaking the loop when we reach the start of the "or" operation chain
-				if !ctx.fragments[j].orOperation {
-					break
-				}
+		if !fragment.isValid {
+			if fragment.orOperation != orOperationTypeNone {
+				invalidFragments[len(invalidFragments)-1].fragments = append(invalidFragments[len(invalidFragments)-1].fragments, fragment)
+			} else {
+				invalidFragments = append(invalidFragments, &invalidFragment{
+					fragments: []*validatorFragment{fragment},
+				})
 			}
+			// If the current fragment is valid and is part of an "or" operation, we remove
+			// the invalid fragment from the invalid fragments list
+		} else if fragment.orOperation != orOperationTypeNone {
+			invalidFragments = invalidFragments[:len(invalidFragments)-1]
 		}
-
-		// Setting the validation state of the current fragment
-		// valid = fragment.isValid && valid
 	}
 
-	for _, fragment := range ctx.fragments {
-		if !fragment.isValid {
-			validation.invalidate(ctx.name, ctx.title, fragment)
-		}
+	if len(invalidFragments) > 0 {
+		validation.invalidate(ctx.name, ctx.title, invalidFragments)
 	}
 
 	return validation

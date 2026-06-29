@@ -94,5 +94,9 @@ func getLocaleHu() *Locale {
 
 		ErrorKeyFinite:    "{{title}} véges kell legyen",
 		ErrorKeyNotFinite: "{{title}} nem lehet véges",
+
+		OrKeyPair:   " vagy ",
+		OrKeyMiddle: "; ",
+		OrKeyEnd:    "; vagy ",
 	}
 }

@@ -279,35 +279,46 @@ func (v *Validation) MergeErrorInIndex(name string, index int, err *Error) *Vali
 	return v.mergeError(fmt.Sprintf("%s[%v]", name, index), err)
 }
 
-func (validation *Validation) invalidate(name *string, title *string, fragment *validatorFragment) {
+func (validation *Validation) invalidate(name *string, title *string, invalidFragments []*invalidFragment) {
 	validation.valid = false
 
 	var _name string
 	if name == nil {
-		_name = concatString("value_", strconv.Itoa(validation.currentIndex-1))
+		_name = "value_" + strconv.Itoa(validation.currentIndex-1)
 	} else {
 		_name = *name
 	}
 
 	ev := validation.getOrCreateValueError(_name, title)
 
-	errorKey := fragment.errorKey
-
-	if !fragment.boolOperation {
-		errorKey = concatString("not_", errorKey)
-	}
-
-	if _, ok := ev.errorTemplates[errorKey]; !ok {
-		ev.errorTemplates[errorKey] = &errorTemplate{
-			key: errorKey,
+	for _, invalidFragment := range invalidFragments {
+		isOrFragment := len(invalidFragment.fragments) > 1
+		etOneOf := &errorTemplateOneOf{}
+		for i, fragment := range invalidFragment.fragments {
+			errorKey := fragment.errorKey
+			if !fragment.boolOperation {
+				errorKey = "not_" + errorKey
+			}
+			et := &errorTemplate{
+				key:    errorKey,
+				params: fragment.templateParams,
+			}
+			if len(fragment.template) > 0 {
+				et.template = &fragment.template[0]
+			}
+			if i == 0 {
+				if isOrFragment {
+					etOneOf.errorTemplates = []*errorTemplate{}
+				} else {
+					etOneOf.errorTemplate = et
+				}
+			}
+			if isOrFragment {
+				etOneOf.errorTemplates = append(etOneOf.errorTemplates, et)
+			}
 		}
+		ev.errorTemplates = append(ev.errorTemplates, etOneOf)
 	}
-
-	et := ev.errorTemplates[errorKey]
-	if len(fragment.template) > 0 {
-		et.template = &fragment.template[0]
-	}
-	et.params = fragment.templateParams
 }
 
 // Return a map with the information for each invalid field validator
@@ -410,7 +421,7 @@ func (validation *Validation) getOrCreateValueError(name string, title *string) 
 		validation.errors[name] = &valueError{
 			name:           &name,
 			title:          title,
-			errorTemplates: map[string]*errorTemplate{},
+			errorTemplates: []*errorTemplateOneOf{},
 			errorMessages:  []string{},
 			validator:      validation,
 		}

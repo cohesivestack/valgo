@@ -1,6 +1,6 @@
 # Valgo
 
-Valgo is a type-safe, expressive, and extensible validator library for Golang. Valgo is built with generics, so Go 1.18 or higher is required.
+Valgo is a type-safe, expressive, and extensible validator library for Golang.
 
 Valgo differs from other Golang validation libraries in that the rules are written in functions and not in struct tags. This allows greater flexibility and freedom when it comes to where and how data is validated.
 
@@ -129,6 +129,7 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
 
 - [Valgo](#valgo)
 - [Quick example](#quick-example)
+- [Go version support](#go-version-support)
 - [v0.x.x and backward compatibility](#v0xx-and-backward-compatibility)
 - [Table of content](#table-of-content)
 - [Getting started](#getting-started)
@@ -1621,50 +1622,135 @@ status := Status("running")
 val = v.Is(v.Comparable(status).EqualTo(Status("running")))
 ```
 
-# Or Operator in Validators
+# OR Operators in Validators (`Or` and `OrElse`)
 
-The `Or` operator function enables developers to combine validator rules using a logical OR chain. This addition allows for more nuanced validator scenarios, where a value may satisfy one of multiple conditions to be considered valid.
-
-## Overview
-
-In Valgo, validator rules are typically chained together using an implicit AND logic. This means that for a value to be deemed valid, it must satisfy all specified conditions. The `Or` operator provides an alternative by allowing conditions to be linked with OR logic. In such cases, a value is considered valid if it meets at least one of the chained conditions.
-
-The `Or` operator follows a simple left-to-right boolean priority, akin to the Go language's approach to evaluating boolean expressions. Valgo does not have an equivalent to parentheses in API functions, in order to keep the syntax simple and readable. We believe that complex boolean logic becomes harder to read with a Fluent API interface, so for those cases, it is preferred to use imperative Go programming language constructs.
-
-## Usage
-
-To utilize the `Or` operator, simply insert `.Or().` between two conditions within your validator chain. Here's a basic example:
+Valgo validator fragments are chained with an implicit **AND**. If you write:
 
 ```go
-v := Is(Bool(true).True().Or().False())
-```
+Is(Int(1).GreaterThan(0).LessThan(10))
+````
 
-In this case, the validator passes because the boolean value `true` satisfies the first condition before the `Or()` operator.
+the value is valid only if **all** fragments pass.
 
-## Key Points
+Valgo also supports OR logic using `Or()` and a short-circuiting variant `OrElse()`.
 
-- **Implicit AND Logic**: By default, when validators are chained without specifying the `Or()` operator, they are combined using an AND logic. Each condition must be met for the validation to pass.
-- **No Short-circuiting for `Check`**: Unlike the `Is` function, which evaluates conditions lazily and may short-circuit (stop evaluating once the overall outcome is determined), the `Check` function ensures that all conditions are evaluated, regardless of their order and the use of `Or`.
+## Mental Model
 
-## Examples
+Think of a validator chain as a sequence of **fragments**.
 
-Below are examples demonstrating different scenarios using the `Or` operator, including combinations with the `Not` operator and multiple `Or` conditions in sequence. These examples illustrate how you can tailor complex validation logic to suit your needs.
+* Adjacent fragments (no operator between them) behave like **AND**.
+* `Or()` starts/extends an **OR-group** of alternatives.
+* `OrElse()` also participates in the OR-group, but it additionally introduces a **cut**: if the left side succeeds, Valgo stops evaluating anything to the right.
+
+Valgo does not support parentheses in the fluent API. Instead, it uses a fixed, easy-to-learn grouping rule.
+
+## `Or()` — OR-grouping
+
+### What it means
+
+`Or()` joins fragments into an OR-group. The OR-group succeeds if **any** alternative succeeds; it fails only if **all** alternatives fail.
+
+### Precedence rule (important)
+
+An OR-group is evaluated as a unit before the chain continues with AND.
+
+So:
 
 ```go
-// Validation with two valid OR conditions
-v = Is(Bool(true).True().Or().True())
-assert.True(t, v.Valid())
-
-// Validation with a valid OR condition followed by an invalid AND condition
-v = Is(Bool(true).False().Or().True().False())
-assert.False(t, v.Valid())
-
-// Validation combining NOT and OR operators
-v = Is(Bool(true).Not().False().Or().False())
-assert.True(t, v.Valid())
+A.Or().B.C
 ```
 
-These examples are intended to provide a clear understanding of how to effectively use the `Or` operator in your validations. By leveraging this functionality, you can create more flexible and powerful validation rules, enhancing the robustness and usability of your applications.
+is evaluated as:
+
+```
+(A OR B) AND C
+```
+
+### Example
+
+```go
+// Passes because input is zero (GreaterThan(5) OR Zero()).
+input := uint(0)
+valid := Is(Uint(input).GreaterThan(5).Or().Zero()).Valid()
+```
+
+## `OrElse()` — OR + cut (short-circuit boundary)
+
+### What it means
+
+`OrElse()` behaves like `Or()` for building OR-groups, but with one extra rule:
+
+If the **left side** (a single fragment, or the OR-group accumulated to the left of `OrElse()`) succeeds, Valgo **stops** and does **not** evaluate any fragment to the right of `OrElse()`.
+
+This is designed for “accept X, otherwise validate the rest” patterns, without repeating X.
+
+### Canonical example: optional fields
+
+```go
+emailRegex := `...`
+
+// If Empty() passes, the rest is not evaluated.
+// Otherwise, the rest must pass (AND chain).
+v := Is(
+  String(identity.Email, "email").
+    Empty().
+    OrElse().
+    MaxLength(300).
+    MatchingTo(emailRegex),
+)
+```
+
+This expresses:
+
+* If empty: valid (and stop)
+* Else: must satisfy MaxLength AND Matching
+
+### Example: OrElse inside an OR chain
+
+```go
+// If EqualTo(0) or EqualTo(2) passes, stop immediately.
+// Otherwise, evaluate EqualTo(3).
+v := Is(Int(1).EqualTo(0).Or().EqualTo(2).OrElse().EqualTo(3))
+```
+
+## `Is` vs `Check`
+
+* `Is(...)` may short-circuit once the final result is known.
+* `Check(...)` is generally non short-circuited (it tries to evaluate everything to collect errors),
+  **except** `OrElse()` which is an explicit evaluation boundary: if the left side succeeds, the right side is not evaluated.
+
+This keeps `Check` useful for “collect errors” scenarios while still enabling the ergonomic “guard then validate” behavior of `OrElse()`.
+
+## Error Messages for OR-groups
+
+When an OR-group fails (all alternatives fail), Valgo produces **one** error message for that OR-group by joining the alternatives’ messages using localized connectors:
+
+* For 2 alternatives:
+
+  * `error1 or error2`
+* For 3+ alternatives:
+
+  * `error1; error2; or error3`
+
+Examples:
+
+```go
+v := Is(Int(1).EqualTo(0).Or().EqualTo(2))
+/*
+"Value 0 must be equal to \"0\" or Value 0 must be equal to \"2\""
+*/
+
+v := Is(Int(1).EqualTo(0).Or().EqualTo(2).Or().EqualTo(3))
+/*
+"Value 0 must be equal to \"0\"; Value 0 must be equal to \"2\"; or Value 0 must be equal to \"3\""
+*/
+```
+
+`OrElse()` participates in OR-groups exactly like `Or()` for error reporting, so the joined message is the same regardless of whether separators were `Or()` or `OrElse()`.
+
+## When to use imperative Go instead
+
+If the logic becomes hard to read as a fluent chain (deeply nested conditions, complex branching), prefer normal Go control flow (`if`, `switch`) and compose validators imperatively. This keeps intent explicit and maintenance-friendly.
 
 # Extending Valgo with custom validators
 
@@ -1968,6 +2054,8 @@ We welcome contributions to our project! To make the process smooth and efficien
 * **Update golang docs and README to cover your changes**: If you have made changes that affect documentation or the README file, please update them accordingly.
 
 * **Keep a respectful language with a collaborative tune**: We value a positive and collaborative community. Please use respectful language when communicating with other contributors or maintainers.
+
+* **Go version support:**: Valgo supports the Go versions currently supported by the Go project, plus two previous Go major versions when compatible. The minimum supported Go version is declared in `go.mod`.
 
 # License
 

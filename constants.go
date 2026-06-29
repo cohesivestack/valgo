@@ -93,4 +93,8 @@ const (
 
 	ErrorKeyFinite    = "finite"
 	ErrorKeyNotFinite = "not_finite"
+
+	OrKeyPair   = " or "
+	OrKeyMiddle = "; "
+	OrKeyEnd    = "; or "
 )

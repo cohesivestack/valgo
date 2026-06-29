@@ -614,6 +614,64 @@ func TestValidatorFloat64OrOperatorWithCheck(t *testing.T) {
 	assert.Empty(t, v.Errors())
 }
 
+func TestValidatorFloat64OrElseOperatorWithIs(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit (key behavior)
+	v = Is(Float64(float64(0)).Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Is(Float64(7.5).Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Is(Float64(15.0).Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Is(Float64(15.0).Zero().OrElse().GreaterThan(20.0).LessThan(10.0))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with Not() - left valid should short-circuit
+	v = Is(Float64(1.0).Not().Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with Not() - left invalid should continue to right
+	v = Is(Float64(0.0).Not().Zero().OrElse().GreaterOrEqualTo(0.0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+}
+
+func TestValidatorFloat64OrElseOperatorWithCheck(t *testing.T) {
+	var v *Validation
+
+	// Testing OrElse with left side valid - should short-circuit
+	v = Check(Float64(float64(0)).Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left side invalid - should continue to right side
+	v = Check(Float64(7.5).Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.True(t, v.Valid())
+	assert.Empty(t, v.Errors())
+
+	// Testing OrElse with left invalid and right side fails
+	v = Check(Float64(15.0).Zero().OrElse().GreaterThan(5.0).LessThan(10.0))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+
+	// Testing OrElse with both sides invalid
+	v = Check(Float64(15.0).Zero().OrElse().GreaterThan(20.0).LessThan(10.0))
+	assert.False(t, v.Valid())
+	assert.NotEmpty(t, v.Errors())
+}
+
 func TestValidatorFloat64NaNValid(t *testing.T) {
 	var v *Validation
 
