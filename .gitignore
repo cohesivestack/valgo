@@ -30,3 +30,8 @@ _testmain.go
 
 # external packages folder
 vendor/
+
+# Docs (Astro/Starlight)
+docs/node_modules/
+docs/dist/
+docs/.astro/
