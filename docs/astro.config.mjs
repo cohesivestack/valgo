@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightVersions from 'starlight-versions';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   integrations: [
@@ -20,6 +21,9 @@ export default defineConfig({
           label: 'GitHub',
           href: 'https://github.com/cohesivestack/valgo',
         },
+      ],
+      customCss: [
+        "./src/styles/global.css",
       ],
       plugins: [
         starlightVersions({
@@ -87,4 +91,8 @@ export default defineConfig({
       ],
     }),
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
