@@ -2123,6 +2123,39 @@ output:
 }
 ```
 
+## Locale fallback for custom validators
+
+When a custom validator uses its own error keys, it can provide default messages
+with `ValidatorContext.WithLocaleFallback(...)`. These messages are used only
+when the active validation locale does not already define the key, so application
+overrides passed with `Options{Locale: ...}` still take precedence.
+
+```go
+var idLocale = &v.Locale{
+  "id_empty": "{{title}} must include a phone or email",
+}
+
+func IDValue(value ID, nameAndTitle ...string) *ValidatorID {
+  context := v.NewContext(value, nameAndTitle...)
+  context.WithLocaleFallback(idLocale)
+
+  return &ValidatorID{context: context}
+}
+
+func (validator *ValidatorID) Empty(template ...string) *ValidatorID {
+  validator.context.Add(
+    func() bool {
+      id := validator.context.Value().(ID)
+      return len(strings.Trim(id.Phone, " ")) == 0 &&
+        len(strings.Trim(id.Email, " ")) == 0
+    },
+    "id_empty",
+    template...)
+
+  return validator
+}
+```
+
 # List of rules by validator type
 
 - `String` validator
