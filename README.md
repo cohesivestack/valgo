@@ -1,6 +1,6 @@
 # Valgo
 
-Valgo is a type-safe, expressive, and extensible validator library for Golang. Valgo is built with generics, so Go 1.18 or higher is required.
+Valgo is a type-safe, expressive, and extensible validator library for Golang.
 
 Valgo differs from other Golang validation libraries in that the rules are written in functions and not in struct tags. This allows greater flexibility and freedom when it comes to where and how data is validated.
 
@@ -129,6 +129,7 @@ v.String(japanese, "field").MaxBytes(15) // ✅ passes
 
 - [Valgo](#valgo)
 - [Quick example](#quick-example)
+- [Go version support](#go-version-support)
 - [v0.x.x and backward compatibility](#v0xx-and-backward-compatibility)
 - [Table of content](#table-of-content)
 - [Getting started](#getting-started)
@@ -2053,6 +2054,8 @@ We welcome contributions to our project! To make the process smooth and efficien
 * **Update golang docs and README to cover your changes**: If you have made changes that affect documentation or the README file, please update them accordingly.
 
 * **Keep a respectful language with a collaborative tune**: We value a positive and collaborative community. Please use respectful language when communicating with other contributors or maintainers.
+
+* **Go version support:**: Valgo supports the Go versions currently supported by the Go project, plus two previous Go major versions when compatible. The minimum supported Go version is declared in `go.mod`.
 
 # License
 
