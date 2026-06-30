@@ -1,6 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 
 @theme {
   --color-primary: #4A90E2;
+  --color-textGray: #9B9B9B;
+  --color-bgCodeBlock: #237;
+}
+
+.sl-markdown-content {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.title {
+  font-family: 'Roboto Mono', monospace;
+  size: 18px;
+  color: var(--color-textGray);
+}
+
+.sl-markdown-content :is(pre) {
+  font-family: 'Roboto Mono', monospace;
+  border: none;
+  box-shadow: none;
+  padding: 1.5rem;
+  text-align: left;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.sl-markdown-content .expressive-code {
+  width: 100%;
+}
+
+.sl-markdown-content .expressive-code pre {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.sl-markdown-content .expressive-code pre::-webkit-scrollbar {
+  display: none;
+}
+
+.expressive-code.code-block-secondary {
+  --ec-codeBg: #ffffff;
+  --ec-frm-edBg: #ffffff;
+}
+
+.sl-markdown-content .expressive-code.code-block-secondary pre,
+.sl-markdown-content .expressive-code.code-block-secondary .frame {
+  background: #ffffff !important;
+}
+
+html[data-theme="dark"] .code-block-secondary {
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .expressive-code.code-block-secondary {
+  --ec-codeBg: transparent;
+  --ec-frm-edBg: transparent;
+}
+
+html[data-theme="dark"] .sl-markdown-content .expressive-code.code-block-secondary pre,
+html[data-theme="dark"] .sl-markdown-content .expressive-code.code-block-secondary .frame {
+  background: transparent !important;
+}
+
+.index-content-section {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.index-content-group {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.index-content-group h3 {
+  font-family: 'Roboto Mono', monospace;
+  color: var(--color-grayCodeText);
+  font-size: 0.95rem;
+}
+
+.index-content-group ul {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+@media (min-width: 48rem) {
+  .index-content-group ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
 }
