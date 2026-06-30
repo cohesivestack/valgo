@@ -22,10 +22,15 @@ import { docsSidebar } from '../../data/sidebar.mjs';
     minHeight: 'min(34rem, calc(100vh - var(--sl-nav-height) - 8rem))',
   }}
 >
-  <div class="w-[15rem]">
+  <div class="dark:sl-hidden w-[15rem]">
     <img
-      class="dark:sl-hidden"
       src="/valgo-logo.svg"
+      alt="Valgo"
+    />
+  </div>
+  <div class="light:sl-hidden w-[15rem] !mt-0">
+    <img
+      src="/valgo-logo-dark.svg"
       alt="Valgo"
     />
   </div>
