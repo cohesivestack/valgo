@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Fetch Git Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install Go
         uses: actions/setup-go@v6
