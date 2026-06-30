@@ -4,40 +4,94 @@ description: Type-safe, expressive validation for Go (without struct tags).
 template: splash
 ---
 
-import { LinkButton } from '@astrojs/starlight/components';
+import { Code, LinkButton } from '@astrojs/starlight/components';
+import SidebarMenu from '../../components/IndexContentSection.astro';
+import { docsSidebar } from '../../data/sidebar.mjs';
+
+<style is:global>{`
+  main > .content-panel:first-child {
+    display: none;
+  }
+`}</style>
 
 <section
   aria-labelledby="valgo-home-title"
+  class="home-landing flex flex-col max-w-[40rem] w-full items-center gap-[2rem] pt-[4rem]"
   style={{
-    display: 'grid',
+    margin: '0 auto',
     minHeight: 'min(34rem, calc(100vh - var(--sl-nav-height) - 8rem))',
-    placeItems: 'center',
-    alignContent: 'center',
-    gap: 'clamp(2rem, 8vw, 4rem)',
-    paddingBlock: 'clamp(3rem, 12vw, 8rem)',
-    textAlign: 'center',
   }}
 >
-  <h1 id="valgo-home-title" class="sr-only">Valgo</h1>
-  <div style={{ display: 'block', width: 'min(100%, 34rem)' }}>
+  <div class="w-[15rem]">
     <img
-      className="light:sl-hidden"
-      src="/valgo-logo-dark.png"
+      class="dark:sl-hidden"
+      src="/valgo-logo.svg"
       alt="Valgo"
-      width="689"
-      height="209"
-      style={{ display: 'block', width: '100%', height: 'auto' }}
-    />
-    <img
-      className="dark:sl-hidden"
-      src="/valgo-logo.png"
-      alt=""
-      width="689"
-      height="209"
-      style={{ display: 'block', width: '100%', height: 'auto' }}
     />
   </div>
-  <div style={{ display: 'flex', justifyContent: 'center' }}>
-    <LinkButton href="/getting-started/" icon="right-arrow">Get Started</LinkButton>
+  <div class="text-center text-textGray">
+    Expressive  and strong type validator<br />
+    in Golang with i18n support    
+  </div>
+
+  <Code
+    lang="go"
+    class="code-block-secondary"
+    code={`
+  val := v.Is(
+    v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
+    v.Number(17, "age").GreaterThan(18),
+  )
+
+  if !val.Valid() {
+    out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+    fmt.Println(string(out))
+  }
+`}  />
+
+  <Code
+    lang="go"
+    code={`
+{
+    "age": [
+      "Age must be greater than \"18\""
+    ],
+    "full_name": [
+      "Full name must have a length between \"4\" and \"20\""
+    ]
+}
+`} />
+
+  <div>
+    <LinkButton
+      href="/getting-started/"
+      variant="minimal"
+      class="!text-primary">
+      Getting Started
+    </LinkButton>
+  </div>
+  <div class="w-full">
+    <div class="title w-full">Installing</div>
+    <pre class="code-block-secondary">go get github.com/cohesivestack/valgo</pre>
+  </div>
+  <div class="w-full">
+    <SidebarMenu items={docsSidebar} />
+  </div>
+  <div class="flex w-full">
+    <div class="flex-auto">
+      <div class="title">Autor</div>
+      <div class="pl-[1rem]">Carlos Forero</div>
+      <a
+        class="!text-primary pl-[1rem] text-[0.75rem]"
+        href="https://carlosforero.com"
+        target="_blank"
+        rel="noopener noreferrer">
+        {'http://carlosforero.com'}
+      </a>
+    </div>
+    <div class="flex-auto !mt-0">
+      <div class="title">License</div>
+      <div class="pl-[1rem]">MIT</div>
+    </div>
   </div>
 </section>
