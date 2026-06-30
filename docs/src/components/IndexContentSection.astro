@@ -24,7 +24,7 @@ const { items = [] } = Astro.props as Props;
         <ul>
           {group.items.map((item) => (
             <li class="pl-[1rem]">
-              <a class="!text-primary" href={item.link}>{item.label}</a>
+              <a href={item.link}>{item.label}</a>
             </li>
           ))}
         </ul>
