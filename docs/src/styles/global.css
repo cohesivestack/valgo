@@ -3,9 +3,32 @@
 
 
 @theme {
-  --color-primary: #4A90E2;
+  --color-primary: #2275D3;
+  --color-primary-dark: #4A90E2;
   --color-textGray: #9B9B9B;
   --color-bgCodeBlock: #237;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+html[data-theme="dark"] a {
+  color: var(--color-primary-dark);
+}
+
+html[data-theme="light"] .sidebar-content a[aria-current='page'],
+html[data-theme="light"] .sidebar-content a[aria-current='page']:hover,
+html[data-theme="light"] .sidebar-content a[aria-current='page']:focus {
+  background-color: var(--color-primary);
+  color: var(--color-white)
+}
+
+html[data-theme="dark"] .sidebar-content a[aria-current='page'],
+html[data-theme="dark"] .sidebar-content a[aria-current='page']:hover,
+html[data-theme="dark"] .sidebar-content a[aria-current='page']:focus {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white)
 }
 
 .sl-markdown-content {
