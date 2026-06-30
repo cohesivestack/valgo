@@ -9,6 +9,14 @@
   --color-bgCodeBlock: #237;
 }
 
+:root {
+  --sl-color-text-accent: #2275D3;
+}
+
+html[data-theme="dark"] {
+  --sl-color-text-accent: #4A90E2;
+}
+
 a {
   color: var(--color-primary);
 }
@@ -29,6 +37,10 @@ html[data-theme="dark"] .sidebar-content a[aria-current='page']:hover,
 html[data-theme="dark"] .sidebar-content a[aria-current='page']:focus {
   background-color: var(--color-primary-dark);
   color: var(--color-white)
+}
+
+starlight-toc a[aria-current='true'] {
+  font-weight: 700;
 }
 
 .sl-markdown-content {
@@ -111,6 +123,10 @@ html[data-theme="dark"] .sl-markdown-content .expressive-code.code-block-seconda
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+.sl-link-button.primary {
+  color: var(--sl-color-black);
 }
 
 @media (min-width: 48rem) {
