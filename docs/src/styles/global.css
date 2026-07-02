@@ -6,6 +6,7 @@
   --color-primary: #2275D3;
   --color-primary-dark: #4A90E2;
   --color-textGray: #9B9B9B;
+  --color-textGrayDark: #6A6A6A;
   --color-bgCodeBlock: #237;
 }
 
@@ -50,7 +51,7 @@ starlight-toc a[aria-current='true'] {
 .title {
   font-family: 'Roboto Mono', monospace;
   size: 18px;
-  color: var(--color-textGray);
+  color: var(--color-textGrayDark);
 }
 
 .sl-markdown-content :is(pre) {

@@ -16,7 +16,7 @@ import { docsSidebar } from '../../data/sidebar.mjs';
 
 <section
   aria-labelledby="valgo-home-title"
-  class="home-landing flex flex-col max-w-[40rem] w-full items-center gap-[2rem] pt-[4rem]"
+  class="home-landing flex flex-col max-w-[40rem] w-full items-center gap-[0rem] pt-[1rem]"
   style={{
     margin: '0 auto',
     minHeight: 'min(34rem, calc(100vh - var(--sl-nav-height) - 8rem))',
@@ -34,9 +34,8 @@ import { docsSidebar } from '../../data/sidebar.mjs';
       alt="Valgo"
     />
   </div>
-  <div class="text-center text-textGray">
-    Expressive  and strong type validator<br />
-    in Golang with i18n support    
+  <div class="text-center text-textGrayDark text-[1.1rem]">
+    Type-safe, expressive, and extensible Go validator<br />with i18n support.
   </div>
 
   <Code
@@ -59,10 +58,10 @@ import { docsSidebar } from '../../data/sidebar.mjs';
     code={`
 {
     "age": [
-      "Age must be greater than \"18\""
+      "Age must be greater than \\"18\\""
     ],
     "full_name": [
-      "Full name must have a length between \"4\" and \"20\""
+      "Full name must have a length between \\"4\\" and \\"20\\""
     ]
 }
 `} />
