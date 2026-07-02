@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 import { docsSidebar } from './src/data/sidebar.mjs';
 
 export default defineConfig({
+  redirects: {
+    '/0.7': '/0.7/getting-started/',
+  },
   integrations: [
     starlight({
       title: 'Valgo',

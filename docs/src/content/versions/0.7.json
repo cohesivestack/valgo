@@ -4,10 +4,6 @@
       "label": "Start Here",
       "items": [
         {
-          "label": "Introduction",
-          "link": "/"
-        },
-        {
           "label": "Getting Started",
           "link": "/getting-started/"
         },
