@@ -31,7 +31,7 @@ export default defineConfig({
           // When you run the site, the plugin will archive the current docs state
           // under the first configured version slug.
           versions: [{ slug: '0.7', label: 'v0.7' }],
-          current: { label: 'Latest' },
+          current: { label: 'v0.8 Latest' },
         }),
       ],
       sidebar: docsSidebar,

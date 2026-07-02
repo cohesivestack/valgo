@@ -38,9 +38,17 @@ import { docsSidebar } from '../../data/sidebar.mjs';
     Type-safe, expressive, and extensible Go validator<br />with i18n support.
   </div>
 
+  <div>
+    <LinkButton
+      href="/getting-started/"
+      variant="primary">
+      Getting Started
+    </LinkButton>
+  </div>
+
   <Code
     lang="go"
-    class="code-block-secondary"
+    class="code-block-secondary !mt-0"
     code={`
   val := v.Is(
     v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
@@ -55,6 +63,7 @@ import { docsSidebar } from '../../data/sidebar.mjs';
 
   <Code
     lang="go"
+    class="!mt-0"
     code={`
 {
     "age": [
@@ -65,17 +74,9 @@ import { docsSidebar } from '../../data/sidebar.mjs';
     ]
 }
 `} />
-
-  <div>
-    <LinkButton
-      href="/getting-started/"
-      variant="primary">
-      Getting Started
-    </LinkButton>
-  </div>
-  <div class="w-full">
+  <div class="w-full !mt-[4rem]">
     <div class="title w-full">Installing</div>
-    <pre class="code-block-secondary">go get github.com/cohesivestack/valgo</pre>
+    <pre class="code-block-secondary !mt-0">go get github.com/cohesivestack/valgo</pre>
   </div>
   <div class="w-full">
     <SidebarMenu items={docsSidebar} />
