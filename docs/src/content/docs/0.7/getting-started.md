@@ -4,6 +4,14 @@ description: Install Valgo and validate values with Is(), Check(), and New().
 slug: 0.7/getting-started
 ---
 
+## Introduction
+
+Valgo is a type-safe, expressive, and extensible validator for Go with built-in i18n support.
+
+Unlike validation libraries that rely on struct tags, Valgo defines validation rules as functions. This gives you greater flexibility to validate any value, compose rules programmatically, and decide where validation belongs within your application.
+
+Valgo can be customized to fit your application's needs, from overriding validation messages to localizing them for different languages and contexts.
+
 ## Install
 
 ```bash

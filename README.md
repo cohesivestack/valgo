@@ -1,10 +1,10 @@
 # Valgo
 
-Valgo is a type-safe, expressive, and extensible validation library for Go, with built-in i18n support.
+Valgo is a type-safe, expressive, and extensible validator for Go with built-in i18n support.
 
-Valgo differs from other Golang validation libraries in that the rules are written in functions and not in struct tags. This allows greater flexibility and freedom when it comes to where and how data is validated.
+Unlike validation libraries that rely on struct tags, Valgo defines validation rules as functions. This gives you greater flexibility to validate any value, compose rules programmatically, and decide where validation belongs within your application.
 
-Additionally, Valgo supports customizing and localizing validation messages.
+Valgo can be customized to fit your application's needs, from overriding validation messages to localizing them for different languages and contexts.
 
 # Quick example
 
