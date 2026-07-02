@@ -3,13 +3,13 @@ title: License
 description: Valgo license information.
 ---
 
-Copyright © 2025 Carlos Forero
+Copyright © 2026 Carlos Forero
 
-Valgo is released under the [MIT License](https://github.com/cohesivestack/valgo/blob/main/LICENSE).
+Valgo is developed and maintained by Cohesive Stack LLC and released under the [MIT License](https://github.com/cohesivestack/valgo/blob/master/LICENSE).
 
 ## MIT License
 
-Copyright (c) 2018-2025 Carlos Forero
+Copyright (c) 2018-2026 Carlos Forero
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

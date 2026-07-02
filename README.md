@@ -2394,6 +2394,6 @@ We welcome contributions to our project! To make the process smooth and efficien
 
 # License
 
-Copyright © 2025 Carlos Forero
+Copyright © 2026 Carlos Forero
 
-Valgo is released under the [MIT License](LICENSE)
+Valgo is developed and maintained by Cohesive Stack LLC and released under the [MIT License](LICENSE).
