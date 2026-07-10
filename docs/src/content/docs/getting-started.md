@@ -17,7 +17,13 @@ Valgo can be customized to fit your application's needs, from overriding validat
 go get github.com/cohesivestack/valgo
 ```
 
-Go 1.18+ is required (Valgo uses generics).
+## Agent skill
+
+This repository includes a Valgo Agent Skill installable with [`npx skills`](https://github.com/vercel-labs/skills):
+
+```bash
+npx skills add cohesivestack/valgo --skill valgo
+```
 
 ## Your first validation
 

@@ -44,15 +44,23 @@ Output:
 }
 ```
 
+## Website and documentation
+
+[valgo.build](https://valgo.build)
+
 ## Installing
 
 ```bash
 go get github.com/cohesivestack/valgo
 ```
 
-## Website and documentation
+## Agent skill
 
-[valgo.build](https://valgo.build)
+This repository includes a Valgo Agent Skill installable with [`npx skills`](https://github.com/vercel-labs/skills):
+
+```bash
+npx skills add cohesivestack/valgo --skill valgo
+```
 
 ## Docs
 
