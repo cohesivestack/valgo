@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { docsSidebar } from './src/data/sidebar.mjs';
 
 export default defineConfig({
+  site: 'https://valgo.build',
   redirects: {
     '/0.7': '/0.7/getting-started/',
   },
