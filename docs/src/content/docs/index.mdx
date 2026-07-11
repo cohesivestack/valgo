@@ -1,0 +1,97 @@
+---
+title: Valgo
+description: Type-safe, expressive validation for Go (without struct tags).
+template: splash
+---
+
+import { Code, LinkButton } from '@astrojs/starlight/components';
+import SidebarMenu from '../../components/IndexContentSection.astro';
+import { docsSidebar } from '../../data/sidebar.mjs';
+
+<style is:global>{`
+  main > .content-panel:first-child {
+    display: none;
+  }
+`}</style>
+
+<section
+  aria-labelledby="valgo-home-title"
+  class="home-landing flex flex-col max-w-[40rem] w-full items-center gap-[0rem] pt-[1rem]"
+  style={{
+    margin: '0 auto',
+    minHeight: 'min(34rem, calc(100vh - var(--sl-nav-height) - 8rem))',
+  }}
+>
+  <div class="dark:sl-hidden w-[15rem]">
+    <img
+      src="/valgo-logo.svg"
+      alt="Valgo"
+    />
+  </div>
+  <div class="light:sl-hidden w-[15rem] !mt-0">
+    <img
+      src="/valgo-logo-dark.svg"
+      alt="Valgo"
+    />
+  </div>
+  <div class="text-center text-textGrayDark text-[1.1rem]">
+    Type-safe, expressive, and extensible Go validator<br />with i18n support.
+  </div>
+
+  <div>
+    <LinkButton
+      href="/getting-started/"
+      variant="primary">
+      Getting Started
+    </LinkButton>
+  </div>
+
+  <Code
+    lang="go"
+    class="code-block-secondary !mt-0"
+    code={`
+  val := v.Is(
+    v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
+    v.Number(17, "age").GreaterThan(18),
+  )
+
+  if !val.Valid() {
+    out, _ := json.MarshalIndent(val.ToError(), "", "  ")
+    fmt.Println(string(out))
+  }
+`}  />
+
+  <Code
+    lang="go"
+    class="!mt-0"
+    code={`
+{
+    "age": [
+      "Age must be greater than \\"18\\""
+    ],
+    "full_name": [
+      "Full name must have a length between \\"4\\" and \\"20\\""
+    ]
+}
+`} />
+  <div class="w-full !mt-[4rem]">
+    <div class="title w-full">Installing</div>
+    <pre class="code-block-secondary !mt-0">go get github.com/cohesivestack/valgo</pre>
+  </div>
+
+  <div class="w-full !mt-[4rem]">
+    <div class="title w-full">Agent skill</div>
+    <pre class="code-block-secondary !mt-0">npx skills add cohesivestack/valgo --skill valgo</pre>
+  </div>
+
+  <div class="w-full">
+    <SidebarMenu items={docsSidebar} />
+  </div>
+  <footer class="w-full text-textGrayDark text-[0.875rem] leading-[1.6] !mt-[4rem] pb-[2rem]">
+    <p>Copyright © 2026 Carlos Forero</p>
+    <p>
+      Valgo is developed and maintained by <a href="https://cohesivestack.com" target="_blank" rel="noopener noreferrer">Cohesive Stack LLC</a> and released under the{' '}
+      <a href="/about/license">MIT License</a>.
+    </p>
+  </footer>
+</section>

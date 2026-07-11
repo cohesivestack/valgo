@@ -21,12 +21,13 @@ const (
 // The context keeps the state and provides the functions to control a
 // custom validator.
 type ValidatorContext struct {
-	fragments     []*validatorFragment
-	value         any
-	name          *string
-	title         *string
-	boolOperation bool
-	orOperation   orOperationType
+	fragments      []*validatorFragment
+	value          any
+	name           *string
+	title          *string
+	fallbackLocale *Locale
+	boolOperation  bool
+	orOperation    orOperationType
 }
 
 // Create a new [ValidatorContext] to be used by a custom validator.
@@ -71,6 +72,37 @@ func (ctx *ValidatorContext) Or() *ValidatorContext {
 func (ctx *ValidatorContext) OrElse() *ValidatorContext {
 	if len(ctx.fragments) > 0 {
 		ctx.orOperation = orOperationTypeOrElse
+	}
+	return ctx
+}
+
+// WithLocaleFallback adds locale entries to the current validation session as
+// fallbacks.
+//
+// Entries are merged only if the active locale does not already define the key
+// (i.e., it will not override Valgo's built-in locale entries nor any user
+// overrides provided via Options{Locale: ...}).
+//
+// The locales are applied when the validator is executed (Is/Check), not when
+// this method is called.
+func (ctx *ValidatorContext) WithLocaleFallback(locales ...*Locale) *ValidatorContext {
+	if len(locales) == 0 {
+		return ctx
+	}
+	if ctx.fallbackLocale == nil {
+		l := Locale{}
+		ctx.fallbackLocale = &l
+	}
+	for _, l := range locales {
+		if l == nil {
+			continue
+		}
+		// Only keep the first value for a key, so repeated calls are idempotent.
+		for k, v := range *l {
+			if _, exists := (*ctx.fallbackLocale)[k]; !exists {
+				(*ctx.fallbackLocale)[k] = v
+			}
+		}
 	}
 	return ctx
 }
@@ -131,6 +163,30 @@ type invalidFragment struct {
 func (ctx *ValidatorContext) validate(validation *Validation, shortCircuit bool) *Validation {
 	// valid := true
 	validation.currentIndex++
+
+	// Apply fallback locales (if any) without mutating shared locale maps.
+	if ctx.fallbackLocale != nil && validation._locale != nil {
+		// Copy-on-write: only clone when at least one fallback key is missing.
+		needClone := false
+		for k := range *ctx.fallbackLocale {
+			if _, exists := (*validation._locale)[k]; !exists {
+				needClone = true
+				break
+			}
+		}
+		if needClone {
+			localeCopy := make(Locale, len(*validation._locale)+len(*ctx.fallbackLocale))
+			for k, v := range *validation._locale {
+				localeCopy[k] = v
+			}
+			for k, v := range *ctx.fallbackLocale {
+				if _, exists := localeCopy[k]; !exists {
+					localeCopy[k] = v
+				}
+			}
+			validation._locale = &localeCopy
+		}
+	}
 
 	invalidFragments := []*invalidFragment{}
 
