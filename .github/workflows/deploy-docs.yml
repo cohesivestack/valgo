@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - devops/deploy-website
-    paths:
-      - docs/**
-      - .github/workflows/deploy-docs.yml
   workflow_dispatch:
 
 permissions:
