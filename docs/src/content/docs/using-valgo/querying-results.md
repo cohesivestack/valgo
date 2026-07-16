@@ -3,7 +3,12 @@ title: Querying Results
 description: Inspect the last validation outcome with PathValid(), AllValid(), and AnyValid().
 ---
 
-These helpers do not re-run validation. They inspect the latest recorded errors.
+These helpers do not run validation. They query the invalid paths recorded in
+the current `Validation` session.
+
+A path is considered valid when it has not been recorded as invalid. As a
+result, an unknown path or a path that was never validated returns `true` from
+`PathValid()` and can make `AnyValid()` return `true`.
 
 ## PathValid(path)
 
@@ -41,7 +46,7 @@ val := v.Is(
 )
 
 _ = val.AnyValid("email", "phone") // true
-_ = val.AnyValid()                   // false (explicit set required)
+_ = val.AnyValid()                  // false (explicit set required)
 ```
 
 ## IsValid(name) (deprecated)

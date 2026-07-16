@@ -1,19 +1,33 @@
 ---
 title: Comparable
-description: Validate custom comparable types (ordering/equality) and pointers.
+description: Validate comparable Go values with equality, membership, and custom predicates.
 slug: 0.7/validators/comparable
 ---
 
-Comparable validators let you validate any ordered comparable types supported by Valgo.
+`Comparable()` accepts any type satisfying Go's `comparable` constraint. It
+provides `EqualTo()`, `InSlice()`, and `Passing()`; it does not provide ordering
+rules.
 
 ```go
-type Score int
-v.Is(v.Comparable(Score(10), "score").GreaterThan(Score(0)))
+type Point struct {
+  X int
+  Y int
+}
+
+point := Point{X: 1, Y: 2}
+v.Is(v.Comparable(point, "point").EqualTo(Point{X: 1, Y: 2}))
+v.Is(v.Comparable(point, "point").InSlice([]Point{
+  {X: 0, Y: 0},
+  {X: 1, Y: 2},
+}))
 ```
 
-Pointer variant:
+For ordered numeric or string comparisons, use the matching numeric or string
+validator.
+
+Pointer values use `ComparableP()`, which also provides `Nil()`:
 
 ```go
-var s *Score
-v.Is(v.ComparableP(s, "score").Nil())
+var point *Point
+v.Is(v.ComparableP(point, "point").Nil())
 ```

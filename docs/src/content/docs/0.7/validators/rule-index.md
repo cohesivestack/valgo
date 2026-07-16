@@ -1,29 +1,35 @@
 ---
 title: Rule Index
-description: A quick map of common rules by validator family.
+description: A quick map of rules by validator family in Valgo v0.7.
 slug: 0.7/validators/rule-index
 ---
 
-This is a quick index to help you find the right validator page.
+All validators provide `Not()` and `Or()`. `OrElse()` is not available in
+v0.7. Most rule methods accept an optional custom message template.
 
-## String
+## String and StringP
 
-* Equality and ordering: `EqualTo`, `GreaterThan`, `LessOrEqualTo`, `Between`
-* Presence: `Empty`, `Blank`
-* Membership: `InSlice`
-* Length: `MaxBytes`, `MinBytes`, `OfByteLengthBetween`, `MaxLength`, `OfLengthBetween`
-* Regex: `MatchingTo`
+- Ordering/equality: `EqualTo`, `GreaterThan`, `GreaterOrEqualTo`, `LessThan`,
+  `LessOrEqualTo`, `Between`
+- Presence: `Empty`, `Blank`; pointer-only `EmptyOrNil`, `BlankOrNil`, `Nil`
+- Byte length: `MaxBytes`, `MinBytes`, `OfByteLength`, `OfByteLengthBetween`
+- Rune length: `MaxLength`, `MinLength`, `OfLength`, `OfLengthBetween`
+- Other: `InSlice`, `MatchingTo`, `Passing`
 
-See `Validators -> String`.
+## Numeric families
 
-## Numbers
+- Common: `EqualTo`, ordering rules, inclusive `Between`, `Zero`, `InSlice`,
+  `Passing`
+- Signed integers: `Positive`, `Negative`
+- Floats: `Positive`, `Negative`, `NaN`, `Infinite`, `Finite`
+- Pointer variants: `Nil`, `ZeroOrNil`
 
-* Equality and ordering: `EqualTo`, `GreaterThan`, `Between`
-* Zero / sign: `Zero`, `Positive`, `Negative` (family-dependent)
-* Membership: `InSlice`
+## Other families
 
-See `Validators -> Numbers`.
-
-## Time / Boolean / Comparable
-
-See their respective pages.
+- Boolean: `EqualTo`, `True`, `False`, `InSlice`, `Passing`; pointer-only
+  `Nil`, `FalseOrNil`
+- Time: `EqualTo`, `After`, `AfterOrEqualTo`, `Before`, `BeforeOrEqualTo`,
+  `Between`, `Zero`, `InSlice`, `Passing`; pointer-only `Nil`, `NilOrZero`
+- Comparable: `EqualTo`, `InSlice`, `Passing`; pointer-only `Nil`
+- Typed: `Passing`, `Nil`
+- Any: `EqualTo`, `Passing`, `Nil`

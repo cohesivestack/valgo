@@ -74,8 +74,8 @@
           "link": "/validators/typed-any/"
         },
         {
-          "label": "OR Operators (Or / OrElse)",
-          "link": "/validators/or-operators/"
+          "label": "OR Operator",
+          "link": "/validators/or-operator/"
         },
         {
           "label": "Rule Index",

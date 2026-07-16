@@ -35,13 +35,6 @@ val := v.New(v.Options{
 }).Is(v.String(" ", "name").Not().Blank())
 ```
 
-## Custom validator fallback messages
-
-Custom validators can provide default messages for their own error keys with
-`ValidatorContext.WithLocaleFallback(...)`. Fallback entries are merged only
-when the active validation locale does not already define the key, so
-`Options{Locale: ...}` overrides still take precedence.
-
 ## Factory()
 
 Use a factory to set defaults (locale, custom marshaling) once.

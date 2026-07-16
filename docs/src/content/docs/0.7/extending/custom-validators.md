@@ -4,44 +4,47 @@ description: Create your own validator types using ValidatorContext.
 slug: 0.7/extending/custom-validators
 ---
 
-Valgo is designed to be extended. A custom validator typically wraps a `*valgo.ValidatorContext` and exposes rule methods that add checks.
-
-The pattern used in `custom/custom_validator_test.go` looks like this:
+A custom validator wraps a `*valgo.ValidatorContext`, implements `Context()`,
+and exposes rule methods that add checks.
 
 ```go
-var secretWordLocale = &valgo.Locale{
-  "not_valid_secret": "{{title}} is invalid.",
-}
-
 type ValidatorSecretWord struct {
   context *valgo.ValidatorContext
 }
 
-func (v *ValidatorSecretWord) Correct(template ...string) *ValidatorSecretWord {
-  v.context.Add(
+func (validator *ValidatorSecretWord) Correct(template ...string) *ValidatorSecretWord {
+  validator.context.Add(
     func() bool {
-      s := v.context.Value().(string)
-      return s == "cohesive" || s == "stack"
+      value := validator.context.Value().(string)
+      return value == "cohesive" || value == "stack"
     },
     "not_valid_secret",
     template...,
   )
-  return v
+  return validator
 }
 
-func (v *ValidatorSecretWord) Context() *valgo.ValidatorContext {
-  return v.context
+func (validator *ValidatorSecretWord) Context() *valgo.ValidatorContext {
+  return validator.context
 }
 
 func SecretWord(value string, nameAndTitle ...string) *ValidatorSecretWord {
-  context := valgo.NewContext(value, nameAndTitle...)
-  context.WithLocaleFallback(secretWordLocale)
-
-  return &ValidatorSecretWord{context: context}
+  return &ValidatorSecretWord{
+    context: valgo.NewContext(value, nameAndTitle...),
+  }
 }
 ```
 
-`WithLocaleFallback(...)` lets a custom validator provide default messages for
-its own error keys. Fallback entries are used only when the active validation
-locale does not define the key, so consumers can still override
-`not_valid_secret` with `Options{Locale: ...}`.
+The custom error key must exist in the validation locale or the rule must
+receive a template:
+
+```go
+val := valgo.New(valgo.Options{
+  Locale: &valgo.Locale{
+    "not_valid_secret": "{{title}} is invalid.",
+  },
+}).Is(SecretWord("loose", "secret").Correct())
+```
+
+`ValidatorContext.WithLocaleFallback()` was added after v0.7 and is not
+available in this version.

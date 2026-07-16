@@ -28,3 +28,19 @@ Numeric validators are now generic per family:
 - `ValidatorFloat[T ~float32 | ~float64]`
 
 Most call sites remain the same (constructors like `v.Int16(...)` still exist). You mainly need to update declared types.
+
+## v0.8.0 - Go version and validation flow
+
+- Valgo v0.8 is tested with Go 1.23 and later. Using one of these versions is
+  recommended.
+- `Or()` now groups adjacent alternatives and produces one localized, joined
+  message when all alternatives fail.
+- `OrElse()` adds a short-circuiting alternative that skips the rest of the
+  validator chain when its left side succeeds.
+- `PathValid()`, `AllValid()`, and `AnyValid()` query recorded validation
+  results. `IsValid()` remains available but is deprecated in favor of
+  `PathValid()`.
+- The `If*Valid` and `When*Valid` methods conditionally merge validations or
+  execute callbacks based on those recorded results.
+- Custom validators can supply missing message entries through
+  `ValidatorContext.WithLocaleFallback()`.

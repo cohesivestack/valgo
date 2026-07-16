@@ -1,13 +1,11 @@
 ---
 title: Querying Results
-description: Inspect the last validation outcome with PathValid(), AllValid(),
-  and AnyValid().
+description: Inspect recorded validation results with IsValid().
 slug: 0.7/using-valgo/querying-results
 ---
 
-These helpers do not re-run validation. They inspect the latest recorded errors.
-
-## PathValid(path)
+`IsValid(path)` does not run validation. It checks whether the path was marked
+invalid in the current `Validation` session.
 
 ```go
 val := v.Is(
@@ -15,37 +13,23 @@ val := v.Is(
   v.String("John", "name").Not().Blank(),
 )
 
-_ = val.PathValid("email") // false
-_ = val.PathValid("name")  // true
+_ = val.IsValid("email") // false
+_ = val.IsValid("name")  // true
 ```
 
-For nested/indexed paths, parent namespaces are considered invalid when any child is invalid.
-
-## AllValid(paths...)
+Invalid nested and indexed paths also invalidate their parent namespaces. For
+example, an error at `person.addresses[0].line1` makes all of these return
+`false`:
 
 ```go
-val := v.Is(
-  v.String("john@example.com", "email").Not().Empty(),
-  v.String("", "password").Not().Empty(),
-)
-
-_ = val.AllValid("email")             // true
-_ = val.AllValid("email", "password") // false
-_ = val.AllValid()                     // same as val.Valid()
+val.IsValid("person")
+val.IsValid("person.addresses")
+val.IsValid("person.addresses[0]")
+val.IsValid("person.addresses[0].line1")
 ```
 
-## AnyValid(paths...)
+A path that was never marked invalid returns `true`, including an unknown or
+never-validated path.
 
-```go
-val := v.Is(
-  v.String("", "email").Not().Empty(),
-  v.String("+3569999999", "phone").Not().Empty(),
-)
-
-_ = val.AnyValid("email", "phone") // true
-_ = val.AnyValid()                   // false (explicit set required)
-```
-
-## IsValid(name) (deprecated)
-
-`IsValid("path")` is deprecated; use `PathValid("path")`.
+`PathValid()`, `AllValid()`, and `AnyValid()` were added after v0.7 and are not
+available in this version.

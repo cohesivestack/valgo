@@ -13,7 +13,8 @@ A `Validation` session holds one or more validators. You typically build one wit
 
 ## New()
 
-`New()` creates an empty session you can populate conditionally.
+`New()` creates an empty session you can populate conditionally. Its optional
+argument is an `Options` value; it does not accept validators.
 
 ```go
 val := v.New()
@@ -29,7 +30,8 @@ if err := val.ToError(); err != nil {
 
 ## Valid()
 
-`Valid()` reports if any errors were recorded.
+`Valid()` returns `true` when the session has no validation errors and `false`
+when at least one error was recorded.
 
 ```go
 val := v.Is(v.String("", "name").Not().Blank())

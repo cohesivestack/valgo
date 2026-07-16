@@ -49,4 +49,6 @@ for i, tag := range tags {
 }
 ```
 
-Errors target the indexed cell: `tags[0]`.
+`InCell()` collects all messages from the nested validation under the indexed
+cell path, regardless of the nested validators' field names. Errors therefore
+target `tags[0]`, not `tags[0].name`.

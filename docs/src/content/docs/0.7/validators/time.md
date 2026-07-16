@@ -1,17 +1,23 @@
 ---
 title: Time
-description: Validate time.Time and *time.Time (ordering, ranges, nil checks).
+description: Validate time.Time values and pointers with equality, ordering, ranges, and nil checks.
 slug: 0.7/validators/time
 ---
 
-Use `v.Time(t, ...)` and `v.TimeP(&t, ...)`.
+Time ordering uses `After()`, `AfterOrEqualTo()`, `Before()`, and
+`BeforeOrEqualTo()`.
 
 ```go
-v.Is(v.Time(start, "start").LessThan(end))
-v.Is(v.Time(end, "end").GreaterOrEqualTo(start))
+v.Is(v.Time(start, "start").Before(end))
+v.Is(v.Time(end, "end").AfterOrEqualTo(start))
+v.Is(v.Time(now, "created_at").Between(start, end)) // inclusive
 ```
 
+Other rules are `EqualTo()`, `Zero()`, `InSlice()`, and `Passing()`.
+
+`TimeP()` accepts `*time.Time` and adds `Nil()` and `NilOrZero()`:
+
 ```go
-var t *time.Time
-v.Is(v.TimeP(t, "expires_at").Nil())
+var expiresAt *time.Time
+v.Is(v.TimeP(expiresAt, "expires_at").Nil())
 ```

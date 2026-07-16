@@ -1,13 +1,12 @@
 ---
 title: Conditional Flows
-description: Use If(), When(), Do(), and the *Valid() helpers to build fluent
-  conditional validation.
+description: Use If(), When(), and Do() to build conditional validation flows.
 slug: 0.7/using-valgo/conditional-flows
 ---
 
 ## If(condition, validation)
 
-Merge another `Validation` only when the condition is true.
+`If()` merges the supplied validation result only when the condition is true.
 
 ```go
 val := v.
@@ -15,9 +14,12 @@ val := v.
   If(isAdmin, v.Is(v.String(role, "role").EqualTo("admin")))
 ```
 
-## Do(func(\*Validation))
+Go evaluates the supplied validation before calling `If()`. Only its merge is
+conditional. Use `When()` to defer validation work.
 
-Run arbitrary logic in the chain.
+## Do(function)
+
+`Do()` always calls the function with the current validation session.
 
 ```go
 val := v.
@@ -29,9 +31,9 @@ val := v.
   })
 ```
 
-## When(condition, func(\*Validation))
+## When(condition, function)
 
-Like `Do`, but gated by a boolean.
+`When()` calls the function only when the condition is true.
 
 ```go
 val := v.
@@ -41,11 +43,5 @@ val := v.
   })
 ```
 
-## Validity-gated helpers
-
-These evaluate validity from the current result and conditionally merge/execute:
-
-* `IfPathValid`, `IfAllValid`, `IfAnyValid`, `IfValid`
-* `WhenPathValid`, `WhenAllValid`, `WhenAnyValid`, `WhenValid`
-
-Use `WhenValid` when you want to skip costly work if validation already failed.
+The `If*Valid` and `When*Valid` helper families were added after v0.7 and are
+not available in this version.

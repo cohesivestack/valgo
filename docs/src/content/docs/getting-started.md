@@ -17,6 +17,9 @@ Valgo can be customized to fit your application's needs, from overriding validat
 go get github.com/cohesivestack/valgo
 ```
 
+Valgo v0.8 is tested with Go 1.23 and later. Using one of these versions is
+recommended.
+
 ## Agent skill
 
 This repository includes a Valgo Agent Skill installable with [`npx skills`](https://github.com/vercel-labs/skills):
@@ -27,7 +30,10 @@ npx skills add cohesivestack/valgo --skill valgo
 
 ## Your first validation
 
-`Is(...)` creates a validation session and short-circuits per field: once a rule fails for a value, later rules for that value are skipped.
+`Is(...)` creates a validation session. Within each validator chain, rules are
+evaluated from left to right and stop after the first failed rule. OR groups and
+`OrElse()` have their own control-flow behavior; see `Validators -> OR
+Operators`.
 
 ```go
 import (
@@ -49,8 +55,10 @@ if err := val.ToError(); err != nil {
 
 ## When to use Is vs Check
 
-- `Is(...)`: short-circuits rules per value (usually what you want for UX and performance).
-- `Check(...)`: evaluates every rule even if earlier rules fail (useful when you want all messages at once).
+- `Is(...)`: stops a validator chain after its first failed rule.
+- `Check(...)`: continues evaluating rules after failures so it can collect
+  multiple messages. A successful `OrElse()` still cuts the remainder of its
+  chain by design.
 
 ```go
 val := v.Check(

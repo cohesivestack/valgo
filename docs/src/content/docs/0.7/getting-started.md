@@ -18,11 +18,13 @@ Valgo can be customized to fit your application's needs, from overriding validat
 go get github.com/cohesivestack/valgo
 ```
 
-Go 1.18+ is required (Valgo uses generics).
+Go 1.19 or later is required by Valgo v0.7.
 
 ## Your first validation
 
-`Is(...)` creates a validation session and short-circuits per field: once a rule fails for a value, later rules for that value are skipped.
+`Is(...)` creates a validation session. Within each validator chain, evaluation
+normally stops after the first failed rule. Rules connected by `Or()` follow
+the v0.7 OR behavior described under `Validators -> OR Operator`.
 
 ```go
 import (
@@ -44,8 +46,9 @@ if err := val.ToError(); err != nil {
 
 ## When to use Is vs Check
 
-* `Is(...)`: short-circuits rules per value (usually what you want for UX and performance).
-* `Check(...)`: evaluates every rule even if earlier rules fail (useful when you want all messages at once).
+* `Is(...)`: normally stops a validator chain after its first failed rule.
+* `Check(...)`: continues after failures to collect multiple messages. An
+  alternative after `Or()` can still be skipped when its left side succeeds.
 
 ```go
 val := v.Check(

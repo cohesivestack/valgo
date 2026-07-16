@@ -1,14 +1,32 @@
 ---
 title: Typed & Any
-description: Validate with Typed validators or fall back to Any for dynamic values.
+description: Validate arbitrary values with typed or dynamic predicates, equality, and nil checks.
 ---
 
-Use typed validators when you want explicit rule sets for a domain type.
+## Typed
 
-Use `Any` when your value type is dynamic and you want to run custom predicates.
+`Typed()` preserves the compile-time type of any value. `Passing()` therefore
+receives a callback with that exact type. It also provides `Nil()`.
 
 ```go
-v.Is(v.Any(value, "payload").Passing(func(v any) bool {
-  return v != nil
+type Status string
+
+status := Status("running")
+val := v.Is(v.Typed(status, "status").Passing(func(status Status) bool {
+  return status == "running" || status == "paused"
 }))
 ```
+
+## Any
+
+`Any()` stores a dynamic value. It provides `EqualTo()`, `Nil()`, and a
+`Passing()` callback whose argument type is `any`.
+
+```go
+val := v.Is(v.Any(value, "payload").Passing(func(value any) bool {
+  return value != nil
+}))
+```
+
+Use `Comparable()` instead when the type satisfies `comparable` and you need
+type-safe equality or slice membership.

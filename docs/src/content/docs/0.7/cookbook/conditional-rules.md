@@ -18,7 +18,9 @@ val := v.
 val := v.Is(
   v.String(email, "email").Not().Blank(),
   v.String(country, "country").Not().Blank(),
-).WhenValid(func(val *v.Validation) {
+)
+
+val.When(val.Valid(), func(val *v.Validation) {
   vatRate, err := lookupVATRate(country)
   if err != nil {
     val.AddErrorMessage("vat_rate", "Error computing VAT")
