@@ -33,8 +33,9 @@ Most call sites remain the same (constructors like `v.Int16(...)` still exist). 
 
 - Valgo v0.8 is tested with Go 1.23 and later. Using one of these versions is
   recommended.
-- `Or()` now groups adjacent alternatives and produces one localized, joined
-  message when all alternatives fail.
+- When all `Or()` alternatives fail, v0.8 produces one localized message that
+  joins the alternatives. OR grouping and precedence remain consistent with
+  v0.7.
 - `OrElse()` adds a short-circuiting alternative that skips the rest of the
   validator chain when its left side succeeds.
 - `PathValid()`, `AllValid()`, and `AnyValid()` query recorded validation

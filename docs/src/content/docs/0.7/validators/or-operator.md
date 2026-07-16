@@ -16,15 +16,16 @@ val := v.Is(
 )
 ```
 
-The v0.7 implementation follows the usual AND-before-OR precedence. For
-example:
+Adjacent alternatives form an OR group. The group is evaluated before the
+implicit AND rules that precede or follow it:
 
 ```text
-A.B.Or().C  == (A AND B) OR C
-A.Or().B.C  == A OR (B AND C)
+A.Or().B.C  == (A OR B) AND C
+A.B.Or().C  == A AND (B OR C)
 ```
 
-Consequently, a successful rule after `Or()` can rescue an earlier failed AND
-condition. This differs from the OR-group behavior introduced after v0.7.
+A failure before an OR group begins cannot be rescued by a later `Or()`. When
+the left side of `Or()` succeeds, its alternative is skipped, but any implicit
+AND rules after the group are still evaluated.
 
 `OrElse()` is not available in v0.7.
