@@ -419,6 +419,7 @@ func (v *Validation) MergeErrorIn(name string, err *Error) *Validation {
 // DEPRECATED: This method is deprecated in favor of MergeErrorInIndex().
 // The MergeErrorInIndex() method is a generic name to cover errors added by
 // InRow() and InCell() validations.
+// MergeErrorInRow will be removed in v1.0.
 func (v *Validation) MergeErrorInRow(name string, index int, err *Error) *Validation {
 	return v.mergeError(fmt.Sprintf("%s[%v]", name, index), err)
 }
@@ -487,6 +488,7 @@ func (session *Validation) Errors() map[string]*valueError {
 //
 // Use ToError() for standard error handling or ToValgoError() for detailed
 // validation error information.
+// Error will be removed in v1.0.
 func (validation *Validation) Error(marshalJsonFun ...func(e *Error) ([]byte, error)) error {
 	return validation.ToError(marshalJsonFun...)
 }
@@ -553,7 +555,7 @@ func (validation *Validation) ToValgoError(marshalJsonFun ...func(e *Error) ([]b
 	return nil
 }
 
-// Deprecated: use PathValid(path) instead.
+// Deprecated: use PathValid(path) instead. IsValid will be removed in v1.0.
 //
 // IsValid reports whether the validator result for the given path is valid.
 //
