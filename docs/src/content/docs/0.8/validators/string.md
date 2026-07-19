@@ -1,4 +1,5 @@
 ---
+slug: 0.8/validators/string
 title: String
 description: Validate strings and *string pointers, including rune-length and byte-length rules.
 ---
@@ -21,21 +22,15 @@ Byte-based:
 ```go
 v.Is(v.String("123456").MaxBytes(6))
 v.Is(v.String("123").MinBytes(3))
-v.Is(v.String("1234").ByteLength(4))
+v.Is(v.String("1234").OfByteLength(4))
 ```
 
 Rune-based (characters):
 
 ```go
 v.Is(v.String("虎視眈々").MaxLength(4))
-v.Is(v.String("虎視眈々").Length(4))
-v.Is(v.String("虎視眈々").LengthBetween(2, 4))
+v.Is(v.String("虎視眈々").OfLengthBetween(2, 4))
 ```
-
-`OfByteLength`, `OfByteLengthBetween`, `OfLength`, and `OfLengthBetween` are
-deprecated aliases kept for compatibility. Use `ByteLength`,
-`ByteLengthBetween`, `Length`, and `LengthBetween` instead. The `Of*` aliases
-will be removed in v1.0.
 
 ## Regex
 

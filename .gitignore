@@ -13,6 +13,10 @@ vendor
 *.[568vq]
 [568vq].out
 
+# Versioned docs folders can look like Go architecture suffixes.
+!docs/src/content/docs/0.8/
+!docs/src/content/docs/0.8/**
+
 *.cgo1.go
 *.cgo2.c
 _cgo_defun.c

@@ -7,6 +7,7 @@ import { docsSidebar } from './src/data/sidebar.mjs';
 export default defineConfig({
   site: 'https://valgo.build',
   redirects: {
+    '/0.8': '/0.8/getting-started/',
     '/0.7': '/0.7/getting-started/',
   },
   integrations: [
@@ -34,8 +35,11 @@ export default defineConfig({
         starlightVersions({
           // When you run the site, the plugin will archive the current docs state
           // under the first configured version slug.
-          versions: [{ slug: '0.7', label: 'v0.7' }],
-          current: { label: 'v0.8 Latest' },
+          versions: [
+            { slug: '0.8', label: 'v0.8' },
+            { slug: '0.7', label: 'v0.7' },
+          ],
+          current: { label: 'v0.8.1 Latest' },
         }),
       ],
       sidebar: docsSidebar,

@@ -1,4 +1,5 @@
 ---
+slug: 0.8/validators/rule-index
 title: Rule Index
 description: A quick map of rules and constructors by validator family.
 ---
@@ -12,13 +13,10 @@ accept an optional custom message template as their last argument.
   `LessThan`, `LessOrEqualTo`, `Between`
 - Presence: `Empty`, `Blank`; pointer forms also have `EmptyOrNil`,
   `BlankOrNil`, and `Nil`
-- Length in bytes: `MaxBytes`, `MinBytes`, `ByteLength`,
-  `ByteLengthBetween`
-- Length in runes: `MaxLength`, `MinLength`, `Length`, `LengthBetween`
+- Length in bytes: `MaxBytes`, `MinBytes`, `OfByteLength`,
+  `OfByteLengthBetween`
+- Length in runes: `MaxLength`, `MinLength`, `OfLength`, `OfLengthBetween`
 - Other: `InSlice`, `MatchingTo`, `Passing`
-
-Deprecated string length aliases kept until v1.0: `OfByteLength`,
-`OfByteLengthBetween`, `OfLength`, and `OfLengthBetween`.
 
 ## Numeric families
 

@@ -55,7 +55,7 @@ When implementing or reviewing Valgo code:
 - Use `In(...)`, `InRow(...)`, and `InCell(...)` for nested structs and slices instead of hand-building field paths.
 - Use `PathValid`, `AllValid`, and `AnyValid` to inspect validation results without re-validating.
 - Use `Merge(...)` to compose reusable validation functions.
-- For strings, distinguish rune-length rules (`MaxLength`, `OfLengthBetween`) from byte-length rules (`MaxBytes`, `OfByteLengthBetween`).
+- For strings, distinguish rune-length rules (`MaxLength`, `LengthBetween`) from byte-length rules (`MaxBytes`, `ByteLengthBetween`).
 - For optional fields, prefer pointer validators and documented optional-field patterns instead of sentinel values.
 - For domain-specific rules, create custom validators around `*valgo.ValidatorContext` and provide locale fallbacks for custom error keys.
 
@@ -65,7 +65,7 @@ When implementing or reviewing Valgo code:
 func ValidateSignup(input Signup) error {
   val := v.Is(
     v.String(input.Email, "email", "Email").Not().Blank(),
-    v.String(input.Name, "name", "Name").Not().Blank().OfLengthBetween(2, 80),
+    v.String(input.Name, "name", "Name").Not().Blank().LengthBetween(2, 80),
   )
 
   return val.ToError()

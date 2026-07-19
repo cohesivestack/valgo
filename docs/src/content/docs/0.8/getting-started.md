@@ -1,4 +1,5 @@
 ---
+slug: 0.8/getting-started
 title: Getting Started
 description: Install Valgo and validate values with Is(), Check(), and New().
 ---
@@ -17,7 +18,7 @@ Valgo can be customized to fit your application's needs, from overriding validat
 go get github.com/cohesivestack/valgo
 ```
 
-Valgo v0.8.1 is tested with Go 1.23 and later. Using one of these versions is
+Valgo v0.8 is tested with Go 1.23 and later. Using one of these versions is
 recommended.
 
 ## Agent skill
@@ -43,7 +44,7 @@ import (
 )
 
 val := v.Is(
-  v.String("Bob", "full_name").Not().Blank().LengthBetween(4, 20),
+  v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
   v.Number(17, "age").GreaterThan(18),
 )
 
@@ -62,7 +63,7 @@ if err := val.ToError(); err != nil {
 
 ```go
 val := v.Check(
-  v.String("", "full_name").Not().Blank().LengthBetween(4, 20),
+  v.String("", "full_name").Not().Blank().OfLengthBetween(4, 20),
 )
 
 _ = val.Valid() // false, with 2 messages for full_name

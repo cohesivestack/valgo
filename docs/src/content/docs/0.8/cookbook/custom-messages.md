@@ -1,0 +1,15 @@
+---
+slug: 0.8/cookbook/custom-messages
+title: Custom Messages
+description: Override a rule template for a single validator call.
+---
+
+Most rules accept an optional template argument.
+
+```go
+val := v.Is(
+  v.String("", "address_field", "Address").
+    Not().
+    Empty("{{title}} must not be empty. Please provide the value in the input {{name}}."),
+)
+```

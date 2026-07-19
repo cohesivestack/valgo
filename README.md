@@ -20,7 +20,7 @@ import (
 
 func main() {
   val := v.Is(
-    v.String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20),
+    v.String("Bob", "full_name").Not().Blank().LengthBetween(4, 20),
     v.Number(17, "age").GreaterThan(18),
   )
 

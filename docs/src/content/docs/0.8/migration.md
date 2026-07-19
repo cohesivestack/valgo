@@ -1,4 +1,5 @@
 ---
+slug: 0.8/migration
 title: Migration Notes
 description: Breaking changes and behavioral details across Valgo v0 releases.
 ---
@@ -45,15 +46,3 @@ Most call sites remain the same (constructors like `v.Int16(...)` still exist). 
   execute callbacks based on those recorded results.
 - Custom validators can supply missing message entries through
   `ValidatorContext.WithLocaleFallback()`.
-
-## v0.8.1 - Shorter string length validator names
-
-String length validators now have shorter preferred names:
-
-- `ByteLength` replaces `OfByteLength`
-- `ByteLengthBetween` replaces `OfByteLengthBetween`
-- `Length` replaces `OfLength`
-- `LengthBetween` replaces `OfLengthBetween`
-
-The `Of*` methods remain available as deprecated aliases in v0.8.1 for
-compatibility. They will be removed in v1.0.

@@ -1,4 +1,5 @@
 ---
+slug: 0.8/using-valgo/namespaces
 title: Namespaces
 description: Group validations with In(), InRow(), and InCell() to build structured error paths.
 ---
@@ -11,7 +12,7 @@ Use `In("address", ...)` for nested structs.
 
 ```go
 val := v.
-  Is(v.String(p.Name, "name").LengthBetween(4, 20)).
+  Is(v.String(p.Name, "name").OfLengthBetween(4, 20)).
   In("address", v.Is(
     v.String(p.Address.Name, "name").Not().Blank(),
     v.String(p.Address.Street, "street").Not().Blank(),
@@ -25,7 +26,7 @@ Errors use dot notation (e.g. `address.name`).
 Use `InRow("addresses", i, ...)` for a slice of structs:
 
 ```go
-val := v.Is(v.String(p.Name, "name").LengthBetween(4, 20))
+val := v.Is(v.String(p.Name, "name").OfLengthBetween(4, 20))
 for i, a := range p.Addresses {
   val.InRow("addresses", i, v.Is(
     v.String(a.Name, "name").Not().Blank(),
