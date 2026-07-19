@@ -6,7 +6,7 @@ import (
 )
 
 func Example() {
-	val := Is(String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
+	val := Is(String("Bob", "full_name").Not().Blank().LengthBetween(4, 20)).
 		Is(Number(17, "age").GreaterThan(18))
 
 	if !val.Valid() {
@@ -27,7 +27,7 @@ func Example() {
 
 func ExampleIs() {
 
-	val := Is(String("Bob", "full_name").Not().Blank().OfLengthBetween(4, 20)).
+	val := Is(String("Bob", "full_name").Not().Blank().LengthBetween(4, 20)).
 		Is(Number(17, "age").GreaterThan(18)).
 		Is(String("singl", "status").InSlice([]string{"married", "single"}))
 
@@ -83,7 +83,7 @@ func ExampleIn() {
 
 	p := Person{"Bob", Address{"", "1600 Amphitheatre Pkwy"}}
 
-	val := Is(String(p.Name, "name").OfLengthBetween(4, 20)).
+	val := Is(String(p.Name, "name").LengthBetween(4, 20)).
 		In("address", Is(
 			String(p.Address.Name, "name").Not().Blank()).Is(
 			String(p.Address.Street, "street").Not().Blank()))
@@ -124,7 +124,7 @@ func ExampleInRow() {
 		},
 	}
 
-	val := Is(String(p.Name, "name").OfLengthBetween(4, 20))
+	val := Is(String(p.Name, "name").LengthBetween(4, 20))
 
 	for i, a := range p.Addresses {
 		val.InRow("addresses", i, Is(
@@ -153,7 +153,7 @@ func ExampleInRow() {
 }
 
 func ExampleCheck() {
-	val := Check(String("", "full_name").Not().Blank().OfLengthBetween(4, 20))
+	val := Check(String("", "full_name").Not().Blank().LengthBetween(4, 20))
 
 	if !val.Valid() {
 		// NOTE: sortedErrorMarshalForDocs is an optional parameter used here for

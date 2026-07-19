@@ -369,10 +369,10 @@ func (validator *ValidatorString[T]) MinBytes(length int, template ...string) *V
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(slug).OfByteLength(6))
+//	Is(v.String(slug).ByteLength(6))
 //
-// For character count, use `OfLength` instead.
-func (validator *ValidatorString[T]) OfByteLength(length int, template ...string) *ValidatorString[T] {
+// For character count, use `Length` instead.
+func (validator *ValidatorString[T]) ByteLength(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringByteLength(validator.context.Value().(T), length)
@@ -384,14 +384,21 @@ func (validator *ValidatorString[T]) OfByteLength(length int, template ...string
 	return validator
 }
 
+// OfByteLength validates the length (in bytes) of a string.
+//
+// Deprecated: use ByteLength instead. OfByteLength will be removed in v1.0.
+func (validator *ValidatorString[T]) OfByteLength(length int, template ...string) *ValidatorString[T] {
+	return validator.ByteLength(length, template...)
+}
+
 // Validate if the length (in bytes) of a string is within a range (inclusive).
 // For example:
 //
 //	slug := "myname"
-//	Is(v.String(slug).OfByteLengthBetween(2,6))
+//	Is(v.String(slug).ByteLengthBetween(2,6))
 //
-// For character count, use `OfLengthBetween` instead.
-func (validator *ValidatorString[T]) OfByteLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
+// For character count, use `LengthBetween` instead.
+func (validator *ValidatorString[T]) ByteLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringByteLengthBetween(validator.context.Value().(T), min, max)
@@ -401,6 +408,14 @@ func (validator *ValidatorString[T]) OfByteLengthBetween(min int, max int, templ
 		template...)
 
 	return validator
+}
+
+// OfByteLengthBetween validates if the length (in bytes) of a string is within
+// a range (inclusive).
+//
+// Deprecated: use ByteLengthBetween instead. OfByteLengthBetween will be removed in v1.0.
+func (validator *ValidatorString[T]) OfByteLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
+	return validator.ByteLengthBetween(min, max, template...)
 }
 
 // Validate the maximum length (in runes/characters) of a string.
@@ -441,8 +456,8 @@ func (validator *ValidatorString[T]) MinLength(length int, template ...string) *
 // For example:
 //
 //	word := "虎視眈々" // 4 runes, len(word) = 12 bytes
-//	Is(v.String(word).OfLength(4))
-func (validator *ValidatorString[T]) OfLength(length int, template ...string) *ValidatorString[T] {
+//	Is(v.String(word).Length(4))
+func (validator *ValidatorString[T]) Length(length int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringRuneLength(validator.context.Value().(T), length)
@@ -454,12 +469,19 @@ func (validator *ValidatorString[T]) OfLength(length int, template ...string) *V
 	return validator
 }
 
+// OfLength validates the length (in runes/characters) of a string.
+//
+// Deprecated: use Length instead. OfLength will be removed in v1.0.
+func (validator *ValidatorString[T]) OfLength(length int, template ...string) *ValidatorString[T] {
+	return validator.Length(length, template...)
+}
+
 // Validate if the length (in runes/characters) of a string is within a range (inclusive).
 // For example:
 //
 //	word := "虎視眈々" // 4 runes, len(word) = 12 bytes
-//	Is(v.String(word).OfLengthBetween(2,4))
-func (validator *ValidatorString[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
+//	Is(v.String(word).LengthBetween(2,4))
+func (validator *ValidatorString[T]) LengthBetween(min int, max int, template ...string) *ValidatorString[T] {
 	validator.context.AddWithParams(
 		func() bool {
 			return isStringRuneLengthBetween(validator.context.Value().(T), min, max)
@@ -469,6 +491,14 @@ func (validator *ValidatorString[T]) OfLengthBetween(min int, max int, template 
 		template...)
 
 	return validator
+}
+
+// OfLengthBetween validates if the length (in runes/characters) of a string is
+// within a range (inclusive).
+//
+// Deprecated: use LengthBetween instead. OfLengthBetween will be removed in v1.0.
+func (validator *ValidatorString[T]) OfLengthBetween(min int, max int, template ...string) *ValidatorString[T] {
+	return validator.LengthBetween(min, max, template...)
 }
 
 // Validate if the value of a string is within a range (inclusive).
