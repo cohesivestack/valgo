@@ -1,6 +1,6 @@
 ---
-title: Querying Results
-description: Inspect the last validation outcome with PathValid(), AllValid(), and AnyValid().
+title: Query Go Validation Results
+description: Inspect Valgo validation results in Go with PathValid(), AllValid(), AnyValid(), and structured field checks.
 ---
 
 These helpers do not run validation. They query the invalid paths recorded in

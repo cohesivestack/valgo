@@ -7,6 +7,16 @@ export const docsSidebar = [
     ],
   },
   {
+    label: 'Guides',
+    items: [
+      { label: 'Go Validation Without Struct Tags', link: '/guides/go-validation-without-struct-tags/' },
+      { label: 'Valgo vs go-playground/validator', link: '/guides/valgo-vs-go-playground-validator/' },
+      { label: 'Go API Validation', link: '/guides/go-api-validation/' },
+      { label: 'Localized Validation Errors', link: '/guides/localized-validation-errors/' },
+      { label: 'Conditional Validation Rules', link: '/guides/conditional-validation-rules/' },
+    ],
+  },
+  {
     label: 'Using Valgo',
     items: [
       { label: 'Validation Sessions', link: '/using-valgo/validation-sessions/' },

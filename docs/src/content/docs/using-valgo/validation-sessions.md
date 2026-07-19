@@ -1,6 +1,6 @@
 ---
-title: Validation Sessions
-description: The Validation session is the core type for validating one or many values.
+title: Go Validation Sessions
+description: Learn how Valgo validation sessions validate one or many Go values and collect structured validation results.
 ---
 
 ## The Validation session

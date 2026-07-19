@@ -1,6 +1,6 @@
 ---
-title: Typed & Any
-description: Validate arbitrary values with typed or dynamic predicates, equality, and nil checks.
+title: Typed and Any Validators for Go
+description: Validate arbitrary Go values with Valgo typed validators, dynamic predicates, equality checks, nil checks, and custom rules.
 ---
 
 ## Typed

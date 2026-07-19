@@ -1,6 +1,6 @@
 ---
-title: String
-description: Validate strings and *string pointers, including rune-length and byte-length rules.
+title: String Validators for Go
+description: Validate Go strings and *string pointers with Valgo, including blank checks, rune length, byte length, equality, and custom rules.
 ---
 
 Use `v.String(value, name?, title?)` and `v.StringP(&value, ...)`.

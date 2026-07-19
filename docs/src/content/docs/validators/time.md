@@ -1,6 +1,6 @@
 ---
-title: Time
-description: Validate time.Time values and pointers with equality, ordering, ranges, and nil checks.
+title: Time Validators for Go
+description: Validate Go time.Time values and pointers with Valgo equality, ordering, range, nil, and custom time rules.
 ---
 
 Use `Time()` for `time.Time` values. Time ordering uses `After()`,

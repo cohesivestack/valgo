@@ -1,6 +1,6 @@
 ---
-title: License
-description: Valgo license information.
+title: Valgo MIT License
+description: Read the MIT license for Valgo, the type-safe Go validation library.
 ---
 
 Copyright © 2026 Carlos Forero

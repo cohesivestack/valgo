@@ -1,6 +1,6 @@
 ---
-title: OR Operators (Or / OrElse)
-description: Combine rules in a validator chain with OR logic and short-circuiting.
+title: OR Validation Operators in Go
+description: Combine Valgo rules in Go validation chains with Or(), OrElse(), OR logic, and short-circuiting behavior.
 ---
 
 Valgo provides `Or()` and `OrElse()` for expressing alternatives inside a

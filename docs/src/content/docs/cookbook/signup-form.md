@@ -1,6 +1,6 @@
 ---
-title: Sign-up Form
-description: Validate a typical sign-up payload and return structured field errors.
+title: Go Sign-up Form Validation
+description: Validate a Go sign-up form payload with Valgo and return structured field errors for API responses.
 ---
 
 ```go

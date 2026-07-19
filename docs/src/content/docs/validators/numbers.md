@@ -1,6 +1,6 @@
 ---
-title: Numbers
-description: Validate numeric values and pointers with generic and family-specific validators.
+title: Number Validators for Go
+description: Validate Go numeric values and pointers with Valgo generic validators, comparison rules, range checks, and type-specific helpers.
 ---
 
 Valgo provides a generic validator for all supported numeric types and

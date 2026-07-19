@@ -1,6 +1,6 @@
 ---
-title: Nested Structs
-description: Validate nested models with namespaces using In().
+title: Validate Nested Structs in Go
+description: Validate nested Go structs with Valgo namespaces using In() and structured validation error paths.
 ---
 
 ```go

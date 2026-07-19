@@ -1,6 +1,6 @@
 ---
-title: Getting Started
-description: Install Valgo and validate values with Is(), Check(), and New().
+title: Getting Started with Go Validation
+description: Install Valgo, a type-safe Go validation library without struct tags, and learn Is(), Check(), and New() with examples.
 ---
 
 ## Introduction

@@ -1,6 +1,6 @@
 ---
-title: Custom Validators
-description: Create your own validator types using ValidatorContext.
+title: Custom Go Validators
+description: Create custom Valgo validator types in Go with ValidatorContext and reusable validation rules.
 ---
 
 Valgo is designed to be extended. A custom validator typically wraps a `*valgo.ValidatorContext` and exposes rule methods that add checks.

@@ -1,6 +1,6 @@
 ---
-title: Localization & Factory
-description: Localize messages, override templates, and reuse options with a ValidationFactory.
+title: Localized Go Validation Messages
+description: Localize Valgo validation messages, override templates, and reuse validation options with a ValidationFactory in Go.
 ---
 
 Valgo ships with localized messages (English default; also Spanish, German, Hungarian) and lets you provide your own locale entries.

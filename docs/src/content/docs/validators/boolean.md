@@ -1,6 +1,6 @@
 ---
-title: Boolean
-description: Validate bool values and pointers with truth, equality, membership, and nil rules.
+title: Boolean Validators for Go
+description: Validate Go bool values and pointers with Valgo truth, equality, membership, nil, and custom predicate rules.
 ---
 
 `Bool()` supports `True()`, `False()`, `EqualTo()`, `InSlice()`, and

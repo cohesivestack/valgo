@@ -1,6 +1,6 @@
 ---
-title: Slices & Indexed Errors
-description: Validate slices of structs and scalar lists with InRow() and InCell().
+title: Validate Go Slices and Indexed Errors
+description: Validate Go slices, lists, and repeated payloads with Valgo InRow(), InCell(), and indexed validation errors.
 ---
 
 ## Slice of structs

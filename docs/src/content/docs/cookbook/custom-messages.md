@@ -1,6 +1,6 @@
 ---
-title: Custom Messages
-description: Override a rule template for a single validator call.
+title: Custom Go Validation Messages
+description: Override Valgo validation message templates in Go for single validator calls and user-facing API errors.
 ---
 
 Most rules accept an optional template argument.

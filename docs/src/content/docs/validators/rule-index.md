@@ -1,6 +1,6 @@
 ---
-title: Rule Index
-description: A quick map of rules and constructors by validator family.
+title: Go Validation Rule Index
+description: Browse Valgo validation rules and constructors for Go strings, numbers, booleans, times, comparable values, and dynamic values.
 ---
 
 All validators provide `Not()`, `Or()`, and `OrElse()`. Most rule methods also

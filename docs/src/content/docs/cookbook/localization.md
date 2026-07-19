@@ -1,6 +1,6 @@
 ---
-title: Localization
-description: Switch locales and override message keys.
+title: Localized Validation Errors in Go
+description: Switch Valgo locales and override validation message keys to return localized Go validation errors.
 ---
 
 ## Switch locale

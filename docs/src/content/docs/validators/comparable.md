@@ -1,6 +1,6 @@
 ---
-title: Comparable
-description: Validate comparable Go values with equality, membership, and custom predicates.
+title: Comparable Validators for Go
+description: Validate comparable Go values with Valgo equality checks, membership rules, nil checks, and custom predicates.
 ---
 
 `Comparable()` accepts any type satisfying Go's `comparable` constraint,

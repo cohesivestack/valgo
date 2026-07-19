@@ -1,6 +1,6 @@
 ---
-title: Reusable Validations
-description: Extract validation into functions and compose with Merge().
+title: Reusable Go Validation Functions
+description: Extract Valgo validations into reusable Go functions and compose validation sessions with Merge().
 ---
 
 ```go

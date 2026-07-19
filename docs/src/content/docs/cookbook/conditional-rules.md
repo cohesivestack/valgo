@@ -1,6 +1,6 @@
 ---
-title: Conditional Rules
-description: Gate validations based on business logic or on previous validity.
+title: Conditional Validation Rules in Go
+description: Gate Valgo validation rules in Go based on business logic, previous validity, and conditional input requirements.
 ---
 
 ## Only validate when a flag is true

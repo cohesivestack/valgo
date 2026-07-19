@@ -1,6 +1,6 @@
 ---
-title: Errors & Output
-description: Convert a validation session to an error, inspect messages, and customize JSON output.
+title: Go Validation Errors and JSON Output
+description: Convert Valgo validation sessions to Go errors, inspect messages, and customize structured JSON validation output.
 ---
 
 ## ToError() and ToValgoError()

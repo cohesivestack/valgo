@@ -1,6 +1,6 @@
 ---
-title: Migration Notes
-description: Breaking changes and behavioral details across Valgo v0 releases.
+title: Valgo Migration Notes
+description: Review Valgo v0 migration notes, breaking changes, and validation behavior updates for Go applications.
 ---
 
 Valgo is pre-v1.0, so breaking changes can happen.

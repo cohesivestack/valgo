@@ -1,6 +1,6 @@
 ---
-title: Namespaces
-description: Group validations with In(), InRow(), and InCell() to build structured error paths.
+title: Nested Go Validation Paths
+description: Use Valgo namespaces with In(), InRow(), and InCell() to validate nested structs, slices, and structured error paths in Go.
 ---
 
 Namespaces prefix field names in error output.

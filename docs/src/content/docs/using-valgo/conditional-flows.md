@@ -1,6 +1,6 @@
 ---
-title: Conditional Flows
-description: Conditionally merge validations or execute callbacks in a Validation chain.
+title: Conditional Validation in Go
+description: Build conditional Go validation flows with Valgo by merging validations and executing callbacks in validation chains.
 ---
 
 All conditional methods return the same `*Validation`, so they can be used in a
