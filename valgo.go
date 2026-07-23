@@ -1,4 +1,4 @@
-// Valgo is a type-safe, expressive, and extensible validator library for
+// Valgo is a type-safe, expressive, and extensible validation library for
 // Golang. Valgo is built with generics, so Go 1.18 or higher is required.
 //
 // Valgo differs from other Golang validation libraries in that the rules are

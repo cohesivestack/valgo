@@ -15,7 +15,7 @@ export const onRequest = defineRouteMiddleware((context) => {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Valgo',
-        alternateName: ['Valgo Go validator', 'Valgo validation library'],
+        alternateName: ['Valgo Go validation library', 'Valgo validation library'],
         url: 'https://valgo.build/',
       }),
     });
